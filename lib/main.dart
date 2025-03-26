@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hjvyas/splash/splash.dart';
 
 void main() {
   runApp(const MyApp());
@@ -30,7 +31,17 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.redAccent),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      //home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      //home: const SplashPage(),
+      home: Scaffold(
+      body: BackgroundImageWithLogo(
+        backgroundImagePath: 'images/bg.jpg', // Replace with your background image path
+        logoImagePath: 'images/logo.png', // Replace with your logo image path
+        logoWidth: 200, // Optional: customize the logo size
+        logoHeight: 200,
+      ),
+    ),
+
     );
   }
 }
