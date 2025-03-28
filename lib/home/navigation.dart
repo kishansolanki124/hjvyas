@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hjvyas/home/videodemo.dart';
 
 import 'medialisthomepage.dart';
 
@@ -26,7 +27,8 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   List<Widget> screenList = <Widget>[
     PageViewCustom(),
-    Text("Second"),
+//    VideoApp(),
+    Text("Third"),
     Text("Third"),
     Text("Forth"),
     Text("Fifth"),
