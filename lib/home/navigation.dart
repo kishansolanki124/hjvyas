@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 class NavigationBarApp extends StatelessWidget {
@@ -7,7 +5,10 @@ class NavigationBarApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(theme: ThemeData(useMaterial3: true), home: const NavigationExample());
+    return MaterialApp(
+      theme: ThemeData(useMaterial3: true),
+      home: const NavigationExample(),
+    );
   }
 }
 
@@ -20,6 +21,14 @@ class NavigationExample extends StatefulWidget {
 
 class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
+  
+  List<Widget> screenList = <Widget>[
+    Text("First"),
+    Text("Second"),
+    Text("Third"),
+    Text("Forth"),
+    Text("Fifth"),
+  ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -29,142 +38,98 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   @override
   Widget build(BuildContext context) {
-    final ThemeData theme = Theme.of(context);
+    //final ThemeData theme = Theme.of(context);
     return Scaffold(
-      bottomNavigationBar:
-      BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            activeIcon: ImageIcon(AssetImage('icons/home_icon_a.png')),
-            icon: ImageIcon(AssetImage('icons/home_icon.png')), // Home icon from asset
-            label: 'Home',
+      backgroundColor: Colors.yellow,
+      body: Center(child: screenList.elementAt(currentPageIndex)),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.fromLTRB(20.0, 0, 10.0, 0),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Color.fromARGB(157, 255, 255, 255),
+            borderRadius: BorderRadius.circular(50),
           ),
-          BottomNavigationBarItem(
-            activeIcon: ImageIcon(AssetImage('icons/product_icon_a.png')),
-            icon: ImageIcon(AssetImage('icons/product_icon.png')), // Search icon from asset
-            label: 'Search',
-          ),
-          BottomNavigationBarItem(
-            activeIcon: ImageIcon(AssetImage('icons/my_bag_icon_a.png')),
-            icon: ImageIcon(AssetImage('icons/my_bag_icon.png')), // Profile icon from asset
-            label: 'Profile',
-          ),
-        ],
-        currentIndex: currentPageIndex,
-        selectedLabelStyle: TextStyle(color: Colors.blue),
-        //selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-      ),
-
-//       NavigationBar(
-//         onDestinationSelected: (int index) {
-//           setState(() {
-//             currentPageIndex = index;
-//           });
-//         },
-//         backgroundColor: Colors.green,
-//         indicatorColor: Colors.transparent,
-// //indicatorColor: Colors.white,
-//         selectedIndex: currentPageIndex,
-//         destinations: const <Widget>[
-//           NavigationDestination(
-//             selectedIcon: ImageIcon(
-//                 AssetImage("icons/home_icon_a.png")),
-//             icon: ImageIcon(
-//                 AssetImage("icons/home_icon.png")),
-//             label: 'HOME',
-//           ),
-//           NavigationDestination(
-//             icon: Badge(child: Icon(Icons.notifications_sharp)),
-//             label: 'Notifications',
-//           ),
-//           NavigationDestination(
-//             icon: Badge(label: Text('2'), child: Icon(Icons.messenger_sharp)),
-//             label: 'Messages',
-//           ),
-//         ],
-//       ),
-
-
-
-      body:
-      <Widget>[
-        /// Home page
-        Card(
-          shadowColor: Colors.transparent,
-          margin: const EdgeInsets.all(8.0),
-          child: SizedBox.expand(
-            child: Center(child: Text('Home page', style: theme.textTheme.titleLarge)),
-          ),
-        ),
-
-        /// Notifications page
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Column(
-            children: <Widget>[
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 1'),
-                  subtitle: Text('This is a notification'),
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            iconSize: 12.0,
+            selectedFontSize: 12.0,
+            unselectedFontSize: 9.0,
+            elevation: 0,
+            backgroundColor: Colors.transparent,
+            items: <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                icon: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: Image.asset("icons/home_icon.png"),
                 ),
+                activeIcon: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: Image.asset("icons/home_icon_a.png"),
+                ),
+                label: "Home",
               ),
-              Card(
-                child: ListTile(
-                  leading: Icon(Icons.notifications_sharp),
-                  title: Text('Notification 2'),
-                  subtitle: Text('This is a notification'),
+              BottomNavigationBarItem(
+                icon: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: Image.asset("icons/product_icon.png"),
                 ),
+                activeIcon: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: Image.asset("icons/product_icon_a.png"),
+                ),
+                label: "Products",
+              ),
+              BottomNavigationBarItem(
+                icon: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: Image.asset("icons/combo_icon.png"),
+                ),
+                activeIcon: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: Image.asset("icons/combo_icon_a.png"),
+                ),
+                label: "Combo",
+              ),
+              BottomNavigationBarItem(
+                icon: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: Image.asset("icons/my_bag_icon.png"),
+                ),
+                activeIcon: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: Image.asset("icons/my_bag_icon_a.png"),
+                ),
+                label: "My Bags",
+              ),
+              BottomNavigationBarItem(
+                icon: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: Image.asset("icons/about_icon.png"),
+                ),
+                activeIcon: SizedBox(
+                  width: 30,
+                  height: 30,
+                  child: Image.asset("icons/about_icon_a.png"),
+                ),
+                label: "About",
               ),
             ],
+            currentIndex: currentPageIndex,
+            selectedItemColor: Color.fromARGB(255, 101, 115, 169),
+            onTap: _onItemTapped,
           ),
         ),
-
-        /// Messages page
-        ListView.builder(
-          reverse: true,
-          itemCount: 2,
-          itemBuilder: (BuildContext context, int index) {
-            if (index == 0) {
-              return Align(
-                alignment: Alignment.centerRight,
-                child: Container(
-                  margin: const EdgeInsets.all(8.0),
-                  padding: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.primary,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Text(
-                    'Hello',
-                    style: theme.textTheme.bodyLarge!.copyWith(
-                      color: theme.colorScheme.onPrimary,
-                    ),
-                  ),
-                ),
-              );
-            }
-            return Align(
-              alignment: Alignment.centerLeft,
-              child: Container(
-                margin: const EdgeInsets.all(8.0),
-                padding: const EdgeInsets.all(8.0),
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary,
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: Text(
-                  'Hi!',
-                  style: theme.textTheme.bodyLarge!.copyWith(
-                    color: theme.colorScheme.onPrimary,
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      ][currentPageIndex],
+      ),
     );
   }
 }
