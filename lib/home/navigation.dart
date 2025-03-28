@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'medialisthomepage.dart';
+
 class NavigationBarApp extends StatelessWidget {
   const NavigationBarApp({super.key});
 
@@ -21,9 +23,9 @@ class NavigationExample extends StatefulWidget {
 
 class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
-  
+
   List<Widget> screenList = <Widget>[
-    Text("First"),
+    PageViewCustom(),
     Text("Second"),
     Text("Third"),
     Text("Forth"),
