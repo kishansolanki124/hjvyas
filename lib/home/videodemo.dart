@@ -14,6 +14,8 @@ class VideoApp extends StatefulWidget {
 }
 
 class _VideoAppState extends State<VideoApp> {
+
+  bool _videoEnded = false;
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
 
@@ -32,9 +34,24 @@ class _VideoAppState extends State<VideoApp> {
         widget.videoUrl,
       ),
     );
-    _initializeVideoPlayerFuture = _controller.initialize();
+    _initializeVideoPlayerFuture = _controller.initialize().then((_) {
+      _controller.addListener(_videoListener);
+    });
     //_controller.setLooping(true); // Optional: Loop the video
   }
+
+  void _videoListener() {
+    if (_controller.value.position == _controller.value.duration) {
+      setState(() {
+        _videoEnded = true;
+      });
+    } else {
+      setState(() {
+        _videoEnded = false;
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -88,23 +105,38 @@ class _VideoAppState extends State<VideoApp> {
                     aspectRatio: _controller.value.aspectRatio,
                     child: VideoPlayer(_controller),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      setState(() {
-                        if (_controller.value.isPlaying) {
-                          _controller.pause();
-                        } else {
-                          _controller.play();
-                        }
-                      });
-                    },
-                    icon: Icon(
-                      _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                      size: 60.0,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
+                  if (_videoEnded) // Show play button when video ends
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          _videoEnded = false;
+                        });
+                        _controller.seekTo(Duration.zero);
+                        _controller.play();
+                      },
+                      icon: Icon(
+                        Icons.play_arrow, // Change to replay icon if you want
+                        size: 60.0,
+                        color: Colors.white,
+                      ),
+                    )
+                  else
+                    IconButton(
+                      onPressed: () {
+                        setState(() {
+                          if (_controller.value.isPlaying) {
+                            _controller.pause();
+                          } else {
+                            _controller.play();
+                          }
+                        });
+                      },
+                      icon: Icon(
+                        _controller.value.isPlaying ? null : Icons.play_arrow,
+                        size: 60.0,
+                        color: Colors.white,
+                      ),
+                    ),                ],
               );
             } else {
               return Center(child: CircularProgressIndicator());
@@ -117,6 +149,7 @@ class _VideoAppState extends State<VideoApp> {
 
   @override
   void dispose() {
+    _controller.removeListener(_videoListener);
     _controller.dispose();
     super.dispose();
   }
