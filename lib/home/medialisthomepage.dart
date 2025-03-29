@@ -28,21 +28,29 @@ class _PageViewCustomState extends State<PageViewCustom> {
   }
 
   List<Widget> mediaItemList = <Widget>[
+    NetworkImageWithProgress(imageUrl: 'https://images.pexels.com/photos/1496373/pexels-photo-1496373.jpeg?cs=srgb&dl=pexels-arts-1496373.jpg&fm=jpg'),
+    NetworkImageWithProgress(imageUrl: 'https://images.pexels.com/photos/7276946/pexels-photo-7276946.jpeg?cs=srgb&dl=pexels-rachel-claire-7276946.jpg&fm=jpg&w=3648&h=5472'),
+    NetworkImageWithProgress(imageUrl: 'https://images.pexels.com/photos/1526713/pexels-photo-1526713.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1526713.jpg&fm=jpg&w=4000&h=6000'),
+    NetworkImageWithProgress(imageUrl: 'https://cdn.pixabay.com/photo/2016/11/29/05/45/astronomy-1867616_1280.jpg'),
     VideoApp(
       videoUrl: "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4",),
-    homeImageItem('https://picsum.photos/id/5/400/800'),
-    homeImageItem('https://picsum.photos/id/6/400/800'),
+    VideoApp(
+      videoUrl: "https://www.rmp-streaming.com/media/bbb-360p.mp4",),
+    VideoApp(
+      videoUrl: "https://www.learningcontainer.com/wp-content/uploads/2020/05/sample-mp4-file.mp4",),
+    NetworkImageWithProgress(imageUrl: 'https://picsum.photos/id/5/400/800'),
+    NetworkImageWithProgress(imageUrl: 'https://picsum.photos/id/6/400/800'),
     VideoApp(videoUrl: "https://www.w3schools.com/tags/mov_bbb.mp4"),
-    homeImageItem('https://picsum.photos/id/1/400/800'),
-    homeImageItem('https://picsum.photos/id/2/400/800'),
+    NetworkImageWithProgress(imageUrl: 'https://picsum.photos/id/1/400/800'),
+    NetworkImageWithProgress(imageUrl: 'https://picsum.photos/id/2/400/800'),
     VideoApp(
       videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",),
-    homeImageItem('https://picsum.photos/id/3/400/800',),
-    homeImageItem('https://picsum.photos/id/4/400/800',),
+    NetworkImageWithProgress(imageUrl: 'https://picsum.photos/id/3/400/800',),
+    NetworkImageWithProgress(imageUrl: 'https://picsum.photos/id/4/400/800',),
     VideoApp(
       videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",),
-    homeImageItem('https://picsum.photos/id/7/400/800',),
-    homeImageItem('https://picsum.photos/id/8/400/800',),
+    NetworkImageWithProgress(imageUrl: 'https://picsum.photos/id/7/400/800',),
+    NetworkImageWithProgress(imageUrl: 'https://picsum.photos/id/8/400/800',),
     VideoApp(
       videoUrl: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",),
   ];
