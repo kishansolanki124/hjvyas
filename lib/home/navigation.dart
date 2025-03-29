@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hjvyas/home/videodemo.dart';
+import 'package:flutter/services.dart';
 
 import 'medialisthomepage.dart';
 
@@ -8,6 +9,12 @@ class NavigationBarApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor: Colors.black,
+      statusBarIconBrightness: Brightness.light, // For dark icons, use Brightness.dark
+    ));
+
     return MaterialApp(
       theme: ThemeData(useMaterial3: true),
       home: const NavigationExample(),
@@ -45,14 +52,15 @@ class _NavigationExampleState extends State<NavigationExample> {
     //final ThemeData theme = Theme.of(context);
     return Scaffold(
       backgroundColor: Colors.yellow,
-      body: Center(child: screenList.elementAt(currentPageIndex)),
+      body: SafeArea(
+          child: Center(child: screenList.elementAt(currentPageIndex))),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
         padding: const EdgeInsets.fromLTRB(20.0, 0, 10.0, 0),
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: Color.fromARGB(157, 255, 255, 255),
-            borderRadius: BorderRadius.circular(50),
+            borderRadius: BorderRadius.circular(20),
           ),
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,

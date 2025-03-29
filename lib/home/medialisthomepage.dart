@@ -13,14 +13,12 @@ class _PageViewCustomState extends State<PageViewCustom> {
 
   var selectedPage = 0;
 
-  //https://picsum.photos/id/237/400/800
   Widget pageViewBuilder() {
     return PageView.builder(
       itemBuilder: (context, index) {
         return Scaffold(
           //child: Text('$index'),
           body: mediaItemList.elementAt(index),
-          //child: Image.network('https://picsum.photos/250?image=9'),
         );
       },
       itemCount: mediaItemList.length,
@@ -28,11 +26,6 @@ class _PageViewCustomState extends State<PageViewCustom> {
       scrollDirection: Axis.vertical,
       controller: _pageController,
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(body: pageViewBuilder());
   }
 
   List<Widget> mediaItemList = <Widget>[
@@ -110,4 +103,53 @@ class _PageViewCustomState extends State<PageViewCustom> {
           "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
     ),
   ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: <Widget>[
+          // Main content of your body
+          Center(child: pageViewBuilder()),
+
+          // Top right button
+          Positioned(
+            top: 16.0, // Adjust top padding as needed
+            right: 16.0, // Adjust right padding as needed
+
+            child: IconButton(
+              onPressed: () {},
+              icon: Badge(
+                padding: EdgeInsetsDirectional.all(1),
+                largeSize: 20,
+                //largeSize: 20.0,
+                //smallSize: 30.0,
+                backgroundColor: Colors.red,
+                label: Text("1"),
+                textStyle: TextStyle(fontSize: 16),
+                child: IconButton(
+                  icon: Image.asset(
+                    'icons/notification_icon.png',
+                    height: 30,
+                    width: 30,
+                  ),
+                  //iconSize: 10,
+                  onPressed: () {},
+                ),
+              ),
+            ),
+            // child: IconButton(
+            //   icon: Image.asset(
+            //     'icons/notification_icon.png',
+            //     height: 32,
+            //     width: 30,
+            //   ),
+            //   //iconSize: 10,
+            //   onPressed: () {},
+            // ),
+          ),
+        ],
+      ),
+    );
+  }
 }
