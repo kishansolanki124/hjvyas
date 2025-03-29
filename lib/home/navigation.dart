@@ -11,7 +11,7 @@ class NavigationBarApp extends StatelessWidget {
   Widget build(BuildContext context) {
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Colors.black,
+      statusBarColor: Color.fromARGB(255, 32, 47, 80),
       statusBarIconBrightness: Brightness.light, // For dark icons, use Brightness.dark
     ));
 

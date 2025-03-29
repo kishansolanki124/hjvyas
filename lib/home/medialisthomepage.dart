@@ -64,7 +64,7 @@ class _PageViewCustomState extends State<PageViewCustom> {
             //largeSize: 20.0,
             //smallSize: 30.0,
             backgroundColor: Colors.red,
-            label: Text("1"),
+            label: Text("2"),
             textStyle: TextStyle(fontSize: 16),
             child: IconButton(icon: Image.asset(
               'icons/notification_icon.png', height: 30, width: 30,),
