@@ -42,15 +42,16 @@ class _HomeScreenState extends State<HomeScreen> {
               width: 200,
               child: Center(
                 child: Container(
-                  height: 65,
+                  // height: 65,
                   width:
                       MediaQuery.of(context).size.width /
                       1.1, // decoration: BoxDecoration(
-                  //   color: Colors.blueGrey.shade800,
+                     color: Colors.blueGrey.shade800,
                   //   borderRadius: BorderRadius.circular(6.0),
                   // ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  child:
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
                       Spacer(), // Icon(
                       //   Icons.arrow_left,
@@ -65,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           ListWheelScrollView.useDelegate(
-            itemExtent: 50,
+            itemExtent: 40,
             perspective: 0.001,
             diameterRatio: 1.6,
             physics: FixedExtentScrollPhysics(),
