@@ -24,12 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey.shade900, // appBar: AppBar(
-      //   backgroundColor: Colors.blueGrey.shade800,
-      //   title: const Text(
-      //     'Select Language',
-      //   ),
-      // ),
+      backgroundColor: Colors.blueGrey.shade900,
       body: Stack(
         children: [
           Positioned(
@@ -73,7 +68,6 @@ class _HomeScreenState extends State<HomeScreen> {
             squeeze: 1.0,
             useMagnifier: true,
             magnification: 1.3,
-            //* selected state is magnified
             onSelectedItemChanged: (index) {
               setState(() {
                 currentState = states[index].names!;
@@ -93,16 +87,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   backgroundColor: Colors.blueGrey.shade800,
-      //   onPressed: () {
-      //     Navigator.push(
-      //         context,
-      //         MaterialPageRoute(
-      //             builder: (context) => StateSelected(currentState)));
-      //   },
-      //   child: const Text('Next'),
-      // ),
     );
   }
 }
