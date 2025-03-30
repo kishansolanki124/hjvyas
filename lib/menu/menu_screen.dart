@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hjvyas/menu/state_selected.dart';
-import 'package:hjvyas/menu/wheel_tile.dart';
 import 'package:hjvyas/menu/StateModel.dart';
+import 'package:hjvyas/menu/wheel_tile.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -25,8 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey.shade900,
-      // appBar: AppBar(
+      backgroundColor: Colors.blueGrey.shade900, // appBar: AppBar(
       //   backgroundColor: Colors.blueGrey.shade800,
       //   title: const Text(
       //     'Select Language',
@@ -45,25 +43,21 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Center(
                 child: Container(
                   height: 65,
-                  width: MediaQuery.of(context).size.width / 1.1,
-                  // decoration: BoxDecoration(
+                  width:
+                      MediaQuery.of(context).size.width /
+                      1.1, // decoration: BoxDecoration(
                   //   color: Colors.blueGrey.shade800,
                   //   borderRadius: BorderRadius.circular(6.0),
                   // ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: const [
-                      Spacer(),
-                      // Icon(
+                      Spacer(), // Icon(
                       //   Icons.arrow_left,
                       //   size: 38,
                       //   color: Colors.white,
                       // ),
-                      Icon(
-                        Icons.arrow_right,
-                        size: 38,
-                        color: Colors.white,
-                      ),
+                      Icon(Icons.arrow_right, size: 38, color: Colors.white),
                     ],
                   ),
                 ),
@@ -77,7 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
             physics: FixedExtentScrollPhysics(),
             squeeze: 1.0,
             useMagnifier: true,
-            magnification: 1.3, //* selected state is magnified
+            magnification: 1.3,
+            //* selected state is magnified
             onSelectedItemChanged: (index) {
               setState(() {
                 currentState = states[index].names!;
@@ -87,25 +82,26 @@ class _HomeScreenState extends State<HomeScreen> {
               childCount: states.length,
               builder: (context, index) {
                 return WheelTile(
-                    currentState == states[index].names
-                        ? Colors.white
-                        : Colors.white60,
-                    states[index].names!);
+                  currentState == states[index].names
+                      ? Colors.white
+                      : Colors.white60,
+                  states[index].names!,
+                );
               },
             ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.blueGrey.shade800,
-        onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => StateSelected(currentState)));
-        },
-        child: const Text('Next'),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Colors.blueGrey.shade800,
+      //   onPressed: () {
+      //     Navigator.push(
+      //         context,
+      //         MaterialPageRoute(
+      //             builder: (context) => StateSelected(currentState)));
+      //   },
+      //   child: const Text('Next'),
+      // ),
     );
   }
 }
