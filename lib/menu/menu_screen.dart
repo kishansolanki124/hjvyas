@@ -12,6 +12,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   //* List of states
   List<States> states = [];
+  int _selectedIndex = 0;
 
   String currentState = "Andhra Pradesh";
 
