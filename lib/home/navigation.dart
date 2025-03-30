@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hjvyas/home/videodemo.dart';
 import 'package:flutter/services.dart';
 
+import '../menu/menu_screen.dart';
 import 'medialisthomepage.dart';
 
 class NavigationBarApp extends StatelessWidget {
@@ -34,8 +35,9 @@ class _NavigationExampleState extends State<NavigationExample> {
 
   List<Widget> screenList = <Widget>[
     PageViewCustom(),
+    HomeScreen(),
 //    VideoApp(),
-    Text("Third"),
+//    Text("Third"),
     Text("Third"),
     Text("Forth"),
     Text("Fifth"),
