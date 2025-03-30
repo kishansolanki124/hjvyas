@@ -1,10 +1,11 @@
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class NetworkImageWithProgress extends StatefulWidget {
   final String imageUrl;
+  bool isImageTint = false;
 
-  NetworkImageWithProgress({required this.imageUrl});
+  NetworkImageWithProgress({required this.imageUrl, isImageTint = false});
 
   @override
   _NetworkImageWithProgressState createState() =>
@@ -21,13 +22,21 @@ class _NetworkImageWithProgressState extends State<NetworkImageWithProgress> {
       children: <Widget>[
         // Background Color using Container
         Container(
-          color: Color.fromARGB(255, 32, 47, 80), // Replace with your desired color
+          color: Color.fromARGB(
+            255,
+            32,
+            47,
+            80,
+          ), // Replace with your desired color
         ),
         // Background Image
+        // ColorFiltered(
+        // colorFilter: widget.isImageTint ?  ColorFilter.mode(Color.fromARGB(255, 0, 0, 0), BlendMode.darken) :
+        // ColorFilter.mode(Color.fromARGB(0, 0, 0, 0), BlendMode.color),
+        //child:
         Image.network(
           widget.imageUrl,
           fit: BoxFit.cover,
-
           // Cover the entire screen
           loadingBuilder: (
             BuildContext context,
@@ -40,12 +49,13 @@ class _NetworkImageWithProgressState extends State<NetworkImageWithProgress> {
             _progress =
                 loadingProgress.cumulativeBytesLoaded /
                 (loadingProgress.expectedTotalBytes ?? 1); // Calculate progress
-            return Center(child:
-            //CircularProgressIndicator(value: _progress)
-            LoadingAnimationWidget.fourRotatingDots(
-              color: Colors.white,
-              size: 20,
-            )
+            return Center(
+              child:
+              //CircularProgressIndicator(value: _progress)
+              LoadingAnimationWidget.fourRotatingDots(
+                color: Colors.white,
+                size: 20,
+              ),
             );
           },
           errorBuilder: (
@@ -56,6 +66,11 @@ class _NetworkImageWithProgressState extends State<NetworkImageWithProgress> {
             // Handle image loading errors
             return Center(child: Text('Failed to load image'));
           },
+        ),
+        //),
+
+        Container(
+          color: Color.fromARGB(150, 0,0,0),
         ),
 
         // Text at Center Bottom
