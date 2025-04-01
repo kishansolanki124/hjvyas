@@ -10,7 +10,7 @@ class WheelTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Center(
-        child:Row(
+        child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
@@ -21,9 +21,16 @@ class WheelTile extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            if(selectedColor == Colors.white) Icon(Icons.chevron_right,color: Colors.white)
+            if (selectedColor == Colors.white)
+              GestureDetector(
+                onTap: () {
+                  // Add what you want to do on tap
+                  print("on item tapped");
+                },
+                child: Icon(Icons.chevron_right, color: Colors.white),
+              ),
           ],
-        )
+        ),
       ),
     );
   }

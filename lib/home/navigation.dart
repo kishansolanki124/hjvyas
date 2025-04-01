@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:hjvyas/home/videodemo.dart';
 import 'package:flutter/services.dart';
 
 import '../menu/menu_screen.dart';
+import '../product/product_list.dart';
 import 'medialisthomepage.dart';
 
 class NavigationBarApp extends StatelessWidget {
@@ -38,7 +38,8 @@ class _NavigationExampleState extends State<NavigationExample> {
     HomeScreen(),
 //    VideoApp(),
 //    Text("Third"),
-    Text("Third"),
+    GridStateless(),
+    //Text("Third"),
     Text("Forth"),
     Text("Fifth"),
   ];
