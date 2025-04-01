@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../product/product_list.dart';
+
 class WheelTile extends StatelessWidget {
   final String states;
   final Color selectedColor;
@@ -13,22 +15,26 @@ class WheelTile extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              states.toUpperCase(),
-              style: TextStyle(
-                fontSize: 18,
-                color: selectedColor,
-                fontWeight: FontWeight.bold,
+            GestureDetector(
+              onTap: () {
+                if (selectedColor == Colors.white) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => GridStateless()),
+                  );
+                }
+              },
+              child: Text(
+                states.toUpperCase(),
+                style: TextStyle(
+                  fontSize: 18,
+                  color: selectedColor,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
+
             if (selectedColor == Colors.white)
-              GestureDetector(
-                onTap: () {
-                  // Add what you want to do on tap
-                  print("on item tapped");
-                },
-                child: Icon(Icons.chevron_right, color: Colors.white),
-              ),
+              Icon(Icons.chevron_right, color: Colors.white),
           ],
         ),
       ),
