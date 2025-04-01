@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'GridItem.dart';
+import 'GridOddItem.dart';
 
 class TwoItemGridView extends StatelessWidget {
   final List<Map<String, String>> items;
@@ -13,12 +14,22 @@ class TwoItemGridView extends StatelessWidget {
       crossAxisCount: 2,
       childAspectRatio: (1 / 2),
       children:
-          items.map((item) {
-            return GridItem(
-              imageUrl: item['imageUrl']!,
-              title: item['title']!,
-              description: item['description']!,
-            );
+          items.indexed.map((item) {
+            final (index, value) = item;
+
+            if (index % 2 == 0) {
+              return GridItem(
+                imageUrl: value['imageUrl']!,
+                title: value['title']!,
+                description: value['description']!,
+              );
+            } else {
+              return GridOddItem(
+                imageUrl: value['imageUrl']!,
+                title: value['title']!,
+                description: value['description']!,
+              );
+            }
           }).toList(),
     );
   }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class GridItem extends StatelessWidget {
+class GridOddItem extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String description;
 
-  GridItem({
+  GridOddItem({
     required this.imageUrl,
     required this.title,
     required this.description,
@@ -18,7 +18,7 @@ class GridItem extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 50.0),
+            margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 110.0),
             decoration: BoxDecoration(
               border: Border.all(color: Colors.cyan, width: 2),
               borderRadius: BorderRadius.all(Radius.circular(0)),
@@ -28,13 +28,6 @@ class GridItem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              Card(
-                // with Card
-                child: Image.asset("images/circular_demo.png"),
-                elevation: 10.0,
-                shape: const CircleBorder(),
-                clipBehavior: Clip.antiAlias,
-              ),
 
               // Image.network(
               //   imageUrl,
@@ -82,6 +75,14 @@ class GridItem extends StatelessWidget {
                   ),
                 ),
               ),
+              Card(
+                // with Card
+                child: Image.asset("images/circular_demo.png"),
+                elevation: 10.0,
+                shape: const CircleBorder(),
+                clipBehavior: Clip.antiAlias,
+              ),
+
             ],
           ),
         ],
