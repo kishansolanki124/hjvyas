@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class GridOddItem extends StatelessWidget {
+class Gridthirditem extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String description;
 
-  GridOddItem({
+  Gridthirditem({
     required this.imageUrl,
     required this.title,
     required this.description,
@@ -20,7 +20,7 @@ class GridOddItem extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 110.0),
             decoration: BoxDecoration(
-              border: Border.all(color: Color.fromARGB(255, 123,138,195), width: 2),
+              border: Border.all(color: Color.fromARGB(255, 182, 195, 123), width: 2),
               borderRadius: BorderRadius.all(Radius.circular(0)),
             ),
           ),

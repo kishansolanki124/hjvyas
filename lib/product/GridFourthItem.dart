@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class GridOddItem extends StatelessWidget {
+class Gridfourthitem extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String description;
 
-  GridOddItem({
+  Gridfourthitem({
     required this.imageUrl,
     required this.title,
     required this.description,
@@ -18,16 +18,23 @@ class GridOddItem extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 110.0),
+            margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 50.0),
             decoration: BoxDecoration(
-              border: Border.all(color: Color.fromARGB(255, 123,138,195), width: 2),
+              border: Border.all(color: Colors.redAccent, width: 2),
               borderRadius: BorderRadius.all(Radius.circular(0)),
             ),
           ),
 
           Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              Card(
+                // with Card
+                child: Image.asset("images/circular_demo.png"),
+                elevation: 10.0,
+                shape: const CircleBorder(),
+                clipBehavior: Clip.antiAlias,
+              ),
 
               // Image.network(
               //   imageUrl,
@@ -36,7 +43,7 @@ class GridOddItem extends StatelessWidget {
               //   fit: BoxFit.fill,
               // ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 10, 30, 0),
+                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 0),
                 child: Text(
                   title,
                   style: TextStyle(
@@ -46,22 +53,22 @@ class GridOddItem extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
+                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 0),
                 child: Text(
                   description,
                   style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 254),
+                    color: Color.fromARGB(255, 2, 2, 2),
                     fontSize: 14,
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
+                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 0),
                 child: Text(
                   "Product life: 300 days",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 123,138,195),
-                    fontSize: 12,
+                    color: Color.fromARGB(255, 138, 138, 138),
+                    fontSize: 14,
                   ),
                 ),
               ),
@@ -70,19 +77,11 @@ class GridOddItem extends StatelessWidget {
                 child: Text(
                   "Calories: 470",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 123,138,195),
-                    fontSize: 12,
+                    color: Color.fromARGB(255, 138, 138, 138),
+                    fontSize: 14,
                   ),
                 ),
               ),
-              Card(
-                // with Card
-                child: Image.asset("images/circular_demo.png"),
-                elevation: 10.0,
-                shape: const CircleBorder(),
-                clipBehavior: Clip.antiAlias,
-              ),
-
             ],
           ),
         ],

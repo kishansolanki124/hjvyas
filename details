@@ -1,0 +1,11 @@
+Constraintbox widget -> to set min and max height of textview to be set. Textview should be set
+within this widget.
+
+animatedwidget, animated positioned or animatinig padding -> can be used in animation
+
+AnimatedSwitcher to switch (transition) between two Widgets...
+
+User Flex Widget for weight instead.
+
+
+AnimatedList for list animation (insert update delete)

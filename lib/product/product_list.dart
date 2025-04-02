@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'GridFourthItem.dart';
 import 'GridItem.dart';
 import 'GridOddItem.dart';
+import 'GridThirdItem.dart';
 
 class TwoItemGridView extends StatelessWidget {
   final List<Map<String, String>> items;
@@ -17,14 +19,30 @@ class TwoItemGridView extends StatelessWidget {
           items.indexed.map((item) {
             final (index, value) = item;
 
-            if (index % 2 == 0) {
+            if (index % 4 == 0) {
+              print("GridOddItem $index");
               return GridOddItem(
                 imageUrl: value['imageUrl']!,
                 title: value['title']!,
                 description: value['description']!,
               );
-            } else {
+            }else if (index % 4 == 1) {
+              print("GridItem $index");
               return GridItem(
+                imageUrl: value['imageUrl']!,
+                title: value['title']!,
+                description: value['description']!,
+              );
+            } else if (index % 4 == 2) {
+              print("Gridthirditem $index");
+              return Gridthirditem(
+                imageUrl: value['imageUrl']!,
+                title: value['title']!,
+                description: value['description']!,
+              );
+            } else {
+              print("Gridfourthitem $index");
+              return Gridfourthitem(
                 imageUrl: value['imageUrl']!,
                 title: value['title']!,
                 description: value['description']!,
