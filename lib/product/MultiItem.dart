@@ -25,7 +25,7 @@ class AppLogoNameGridView extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Padding(padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+              Padding(padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -59,7 +59,7 @@ class AppLogoNameGridView extends StatelessWidget {
                 // Disable GridView scrolling
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: (1 / 2),
+                  childAspectRatio: (1/1.8),
                 ),
                 itemCount: gridItems.length,
                 itemBuilder: (context, index) {

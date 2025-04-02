@@ -78,7 +78,7 @@ class Gridthirditem extends StatelessWidget {
               Card(
                 // with Card
                 child: Image.asset("images/circular_demo.png"),
-                elevation: 10.0,
+                elevation: 20.0,
                 shape: const CircleBorder(),
                 clipBehavior: Clip.antiAlias,
               ),
