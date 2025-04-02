@@ -6,13 +6,9 @@ import 'GridOddItem.dart';
 import 'GridThirdItem.dart';
 
 class AppLogoNameGridView extends StatelessWidget {
-  final String appLogoUrl;
-  final String appName;
   final List<Map<String, String>> gridItems;
 
   AppLogoNameGridView({
-    required this.appLogoUrl,
-    required this.appName,
     required this.gridItems,
   });
 
@@ -68,28 +64,24 @@ class AppLogoNameGridView extends StatelessWidget {
                 itemCount: gridItems.length,
                 itemBuilder: (context, index) {
                   if (index % 4 == 0) {
-                    print("GridOddItem $index");
                     return GridOddItem(
                       imageUrl: gridItems[index]['imageUrl']!,
                       title: gridItems[index]['title']!,
                       description: gridItems[index]['title']!,
                     );
                   } else if (index % 4 == 1) {
-                    print("GridItem $index");
                     return GridItem(
                       imageUrl: gridItems[index]['imageUrl']!,
                       title: gridItems[index]['title']!,
                       description: gridItems[index]['title']!,
                     );
                   } else if (index % 4 == 2) {
-                    print("Gridthirditem $index");
                     return Gridthirditem(
                       imageUrl: gridItems[index]['imageUrl']!,
                       title: gridItems[index]['title']!,
                       description: gridItems[index]['title']!,
                     );
                   } else {
-                    print("Gridfourthitem $index");
                     return Gridfourthitem(
                       imageUrl: gridItems[index]['imageUrl']!,
                       title: gridItems[index]['title']!,

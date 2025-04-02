@@ -48,7 +48,7 @@ class GridOddItem extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
                 child: Text(
-                  description,
+                  "₹ 900.00 - 300 gram",
                   style: TextStyle(
                     color: Color.fromARGB(255, 255, 255, 254),
                     fontSize: 14,
@@ -66,7 +66,7 @@ class GridOddItem extends StatelessWidget {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 0),
+                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 10),
                 child: Text(
                   "Calories: 470",
                   style: TextStyle(

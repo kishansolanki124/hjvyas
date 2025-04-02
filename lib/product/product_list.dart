@@ -55,18 +55,12 @@ class TwoItemGridView extends StatelessWidget {
 }
 
 class GridStateless extends StatelessWidget {
-
-
-
- @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: AppLogoNameGridView(
-        appLogoUrl: 'https://picsum.photos/id/6/400/800',
-        // Replace with your app logo URL
-        appName: 'My App',
         gridItems: [
-          {'imageUrl': 'https://picsum.photos/id/6/400/800', 'title': 'Item 1'},
+          {'imageUrl': 'https://picsum.photos/id/6/400/800', 'title': 'Standard kachori'},
           {
             'imageUrl':
                 'https://images.unsplash.com/photo-1516035069371-29a1b2bd89dd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
