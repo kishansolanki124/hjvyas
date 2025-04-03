@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
 
+import 'ProductListWidgets.dart';
+
 class GridItem extends StatelessWidget {
   final String imageUrl;
   final String title;
@@ -17,7 +19,7 @@ class GridItem extends StatelessWidget {
     return Container(
       child: Stack(
         children: [
-          // White color box at the bottom (30% height)
+          // White color box at the bottom
           Align(
             alignment: Alignment.bottomCenter,
             child: SizedBox(
@@ -53,18 +55,9 @@ class GridItem extends StatelessWidget {
               //   // width: 100,
               //   fit: BoxFit.fill,
               // ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 10, 30, 0),
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 254),
-                    fontSize: 18,
-                    fontFamily: "Montserrat",
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
+
+              productListTitleWidget(title),
+
               Padding(
                 padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
                 child: Text(

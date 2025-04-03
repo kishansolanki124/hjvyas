@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'ProductListWidgets.dart';
+
 class Gridthirditem extends StatelessWidget {
   final String imageUrl;
   final String title;
@@ -17,21 +19,22 @@ class Gridthirditem extends StatelessWidget {
       //color: Colors.blueGrey,
       child: Stack(
         children: [
-
           Align(
             alignment: Alignment.topCenter,
-            child: SizedBox(
-              height: 85,
-              child: Container(
-                color: Colors.white,
-              ),
-            ),
+            child: SizedBox(height: 85, child: Container(color: Colors.white)),
           ),
 
           Container(
-            margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 110.0),
+            margin: const EdgeInsets.only(
+              left: 20.0,
+              right: 20.0,
+              bottom: 110.0,
+            ),
             decoration: BoxDecoration(
-              border: Border.all(color: Color.fromARGB(255, 123,138,195), width: 2),
+              border: Border.all(
+                color: Color.fromARGB(255, 123, 138, 195),
+                width: 2,
+              ),
               borderRadius: BorderRadius.all(Radius.circular(0)),
             ),
           ),
@@ -39,25 +42,15 @@ class Gridthirditem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-
               // Image.network(
               //   imageUrl,
               //   height: 250, // height: 100, // Adjust height as needed
               //   // width: 100,
               //   fit: BoxFit.fill,
               // ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 10, 30, 0),
-                child: Text(
-                  title,
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 1, 1, 1),
-                    fontSize: 18,
-                    fontFamily: "Montserrat",
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
+
+              productListTitleWidget(title, Color.fromARGB(255, 1, 1, 1)),
+
               Padding(
                 padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
                 child: Text(
@@ -75,7 +68,7 @@ class Gridthirditem extends StatelessWidget {
                 child: Text(
                   "Product life: 300 days",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 123,138,195),
+                    color: Color.fromARGB(255, 123, 138, 195),
                     fontSize: 11,
                     fontFamily: "Montserrat",
                   ),
@@ -86,7 +79,7 @@ class Gridthirditem extends StatelessWidget {
                 child: Text(
                   "Calories: 470",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 123,138,195),
+                    color: Color.fromARGB(255, 123, 138, 195),
                     fontFamily: "Montserrat",
                     fontSize: 11,
                   ),
@@ -99,7 +92,6 @@ class Gridthirditem extends StatelessWidget {
                 shape: const CircleBorder(),
                 clipBehavior: Clip.antiAlias,
               ),
-
             ],
           ),
         ],
