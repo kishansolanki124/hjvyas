@@ -21,18 +21,20 @@ class Gridfourthitem extends StatelessWidget {
         children: [
           Align(
             alignment: Alignment.topCenter,
-            child: SizedBox(
-              height: 85,
-              child: Container(
-                color: Colors.white,
-              ),
-            ),
+            child: SizedBox(height: 85, child: Container(color: Colors.white)),
           ),
           Container(
-            margin: const EdgeInsets.only(top:100,left: 20.0, right: 20.0,
-                bottom: 20),
+            margin: const EdgeInsets.only(
+              top: 100,
+              left: 20.0,
+              right: 20.0,
+              bottom: 20,
+            ),
             decoration: BoxDecoration(
-              border: Border.all(color: Color.fromARGB(255, 123,138,195), width: 2),
+              border: Border.all(
+                color: Color.fromARGB(255, 123, 138, 195),
+                width: 2,
+              ),
               borderRadius: BorderRadius.all(Radius.circular(0)),
             ),
           ),
@@ -42,54 +44,37 @@ class Gridfourthitem extends StatelessWidget {
             children: <Widget>[
               Card(
                 // with Card
-                child: Image.asset("images/circular_demo.png"),
                 elevation: 20.0,
                 shape: const CircleBorder(),
                 clipBehavior: Clip.antiAlias,
-              ),
-              // Image.network(
+                // with Card
+                child: Image.asset("images/circular_demo.png"),
+              ), // Image.network(
+
               //   imageUrl,
               //   height: 250, // height: 100, // Adjust height as needed
               //   // width: 100,
               //   fit: BoxFit.fill,
               // ),
-
               productListTitleWidget(title),
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
-                child: Text(
-                  "₹ 900.00 - 300 gram",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 254),
-                    fontSize: 12,
-                    fontFamily: "Montserrat",
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
-                child: Text(
-                  "Product life: 300 days",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 123,138,195),
-                    fontSize: 11,
-                    fontFamily: "Montserrat",
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 20),
-                child: Text(
-                  "Calories: 470",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 123,138,195),
-                    fontFamily: "Montserrat",
-                    fontSize: 11,
-                  ),
-                ),
-              ),
+              productListVariationWidget("₹ 900.00 - 300 grams"),
+
+              productListLife("Product life: 300 days"),
+
+              productListCalories("Calories: 470"),
+
+              // Padding(
+              //   padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 20),
+              //   child: Text(
+              //     "Calories: 470",
+              //     style: TextStyle(
+              //       color: Color.fromARGB(255, 123, 138, 195),
+              //       fontFamily: "Montserrat",
+              //       fontSize: 11,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
         ],

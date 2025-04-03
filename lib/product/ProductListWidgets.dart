@@ -19,3 +19,52 @@ Widget productListTitleWidget(String title, [Color? color]) {
     ),
   );
 }
+
+Widget productListVariationWidget(String title, [Color? color]) {
+  color ??= Colors.white;
+
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
+    child: Text(
+      title,
+      style: TextStyle(
+        color: color,
+        fontSize: 12,
+        fontFamily: "Montserrat",
+        fontWeight: FontWeight.w600,
+      ),
+    ),
+  );
+}
+
+Widget productListLife(String title, [Color? color]) {
+  color ??= Color.fromARGB(255, 123, 138, 195);
+
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
+    child: Text(
+      title,
+      style: TextStyle(
+        color: color,
+        fontSize: 11,
+        fontFamily: "Montserrat",
+      ),
+    ),
+  );
+}
+
+Widget productListCalories(String text, [Color? color]) {
+  color ??= Color.fromARGB(255, 123, 138, 195);
+
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 10),
+    child: Text(
+      text,
+      style: TextStyle(
+        color: color,
+        fontFamily: "Montserrat",
+        fontSize: 11,
+      ),
+    ),
+  );
+}

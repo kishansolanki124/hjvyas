@@ -48,43 +48,17 @@ class Gridthirditem extends StatelessWidget {
               //   // width: 100,
               //   fit: BoxFit.fill,
               // ),
-
               productListTitleWidget(title, Color.fromARGB(255, 1, 1, 1)),
 
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
-                child: Text(
-                  "₹ 900.00 - 300 gram",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 1, 1, 1),
-                    fontSize: 12,
-                    fontFamily: "Montserrat",
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
+              productListVariationWidget(
+                "₹ 900.00 - 300 grams",
+                Color.fromARGB(255, 1, 1, 1),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
-                child: Text(
-                  "Product life: 300 days",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 123, 138, 195),
-                    fontSize: 11,
-                    fontFamily: "Montserrat",
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 10),
-                child: Text(
-                  "Calories: 470",
-                  style: TextStyle(
-                    color: Color.fromARGB(255, 123, 138, 195),
-                    fontFamily: "Montserrat",
-                    fontSize: 11,
-                  ),
-                ),
-              ),
+
+              productListLife("Product life: 300 days"),
+
+              productListCalories("Calories: 470"),
+
               Card(
                 // with Card
                 child: Image.asset("images/circular_demo.png"),
