@@ -18,11 +18,7 @@ class GridItem extends StatelessWidget {
     return Container(
       child: Stack(
         children: [
-          // White color box at the bottom
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SizedBox(height: 85, child: Container(color: Colors.white)),
-          ),
+          productListWhiteBg(Alignment.bottomCenter),
 
           Container(
             margin: const EdgeInsets.only(

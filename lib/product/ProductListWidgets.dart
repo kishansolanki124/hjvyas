@@ -71,3 +71,10 @@ Widget productListImage(String url) {
     child: Image.asset("images/circular_demo.png"),
   );
 }
+
+Widget productListWhiteBg(AlignmentGeometry alignment) {
+  return Align(
+    alignment: alignment,
+    child: SizedBox(height: 90, child: Container(color: Colors.white)),
+  );
+}
