@@ -18,15 +18,16 @@ class Gridfourthitem extends StatelessWidget {
       child: Stack(
         children: [
           Container(
-            margin: const EdgeInsets.only(left: 20.0, right: 20.0, top: 50.0),
+            margin: const EdgeInsets.only(top:100,left: 20.0, right: 20.0,
+                bottom: 20),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.redAccent, width: 2),
+              border: Border.all(color: Color.fromARGB(255, 123,138,195), width: 2),
               borderRadius: BorderRadius.all(Radius.circular(0)),
             ),
           ),
 
           Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Card(
                 // with Card
@@ -35,7 +36,6 @@ class Gridfourthitem extends StatelessWidget {
                 shape: const CircleBorder(),
                 clipBehavior: Clip.antiAlias,
               ),
-
               // Image.network(
               //   imageUrl,
               //   height: 250, // height: 100, // Adjust height as needed
@@ -43,42 +43,48 @@ class Gridfourthitem extends StatelessWidget {
               //   fit: BoxFit.fill,
               // ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 0),
+                padding: const EdgeInsets.fromLTRB(30.0, 10, 30, 0),
                 child: Text(
                   title,
                   style: TextStyle(
                     color: Color.fromARGB(255, 255, 255, 254),
                     fontSize: 18,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 0),
+                padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
                 child: Text(
-                  description,
+                  "₹ 900.00 - 300 gram",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 2, 2, 2),
-                    fontSize: 14,
+                    color: Color.fromARGB(255, 255, 255, 254),
+                    fontSize: 12,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 0),
+                padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
                 child: Text(
                   "Product life: 300 days",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 138, 138, 138),
-                    fontSize: 14,
+                    color: Color.fromARGB(255, 123,138,195),
+                    fontSize: 11,
+                    fontFamily: "Montserrat",
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 0),
+                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 20),
                 child: Text(
                   "Calories: 470",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 138, 138, 138),
-                    fontSize: 14,
+                    color: Color.fromARGB(255, 123,138,195),
+                    fontFamily: "Montserrat",
+                    fontSize: 11,
                   ),
                 ),
               ),

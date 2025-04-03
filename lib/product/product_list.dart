@@ -69,12 +69,12 @@ class GridStateless extends StatelessWidget {
           {
             'imageUrl':
                 'https://images.unsplash.com/photo-1506794775205-1e26e7f63ebc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-            'title': 'Item 3',
+            'title': 'Hot & Spicy Kachori',
           },
           {
             'imageUrl':
                 'https://images.unsplash.com/photo-1522205469752-16363bc3b0c2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
-            'title': 'Item 4',
+            'title': 'Luscious Bite Kachori',
           },
           {'imageUrl': 'https://picsum.photos/id/4/400/800', 'title': 'Item 5'},
           {'imageUrl': 'https://picsum.photos/id/3/400/800', 'title': 'Item 6'},

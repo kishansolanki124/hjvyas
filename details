@@ -5,7 +5,13 @@ animatedwidget, animated positioned or animatinig padding -> can be used in anim
 
 AnimatedSwitcher to switch (transition) between two Widgets...
 
+AnimatedBuilder to add animation to any widget. (wrap your code in build function and in state widget)
+
 User Flex Widget for weight instead.
 
 
 AnimatedList for list animation (insert update delete)
+
+ValueNotifier : to get an update or changes from any widget and udpate the widget automatically
+when value updated. (ValuelistenableBuilder). Use with InheritableWidgets to access throughout your
+widget tree.

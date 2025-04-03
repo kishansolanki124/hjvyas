@@ -20,7 +20,7 @@ class Gridthirditem extends StatelessWidget {
           Container(
             margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 110.0),
             decoration: BoxDecoration(
-              border: Border.all(color: Color.fromARGB(255, 182, 195, 123), width: 2),
+              border: Border.all(color: Color.fromARGB(255, 123,138,195), width: 2),
               borderRadius: BorderRadius.all(Radius.circular(0)),
             ),
           ),
@@ -42,16 +42,20 @@ class Gridthirditem extends StatelessWidget {
                   style: TextStyle(
                     color: Color.fromARGB(255, 255, 255, 254),
                     fontSize: 18,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
                 child: Text(
-                  description,
+                  "₹ 900.00 - 300 gram",
                   style: TextStyle(
                     color: Color.fromARGB(255, 255, 255, 254),
-                    fontSize: 14,
+                    fontSize: 12,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -61,17 +65,19 @@ class Gridthirditem extends StatelessWidget {
                   "Product life: 300 days",
                   style: TextStyle(
                     color: Color.fromARGB(255, 123,138,195),
-                    fontSize: 12,
+                    fontSize: 11,
+                    fontFamily: "Montserrat",
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 0),
+                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 10),
                 child: Text(
                   "Calories: 470",
                   style: TextStyle(
                     color: Color.fromARGB(255, 123,138,195),
-                    fontSize: 12,
+                    fontFamily: "Montserrat",
+                    fontSize: 11,
                   ),
                 ),
               ),

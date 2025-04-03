@@ -25,7 +25,7 @@ class AppLogoNameGridView extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Padding(padding: const EdgeInsets.fromLTRB(0, 30, 0, 10),
+              Padding(padding: const EdgeInsets.fromLTRB(0, 30, 0,0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -34,8 +34,9 @@ class AppLogoNameGridView extends StatelessWidget {
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.center,
-                    "DryFruit kachori",
-                    style: TextStyle(color: Colors.white,fontSize: 30, fontWeight: FontWeight.bold),
+                    "DryFruit Kachori",
+                    style: TextStyle(color: Colors.white,fontSize: 30,
+                        fontFamily: "Archistico",),
                   )),
 
                   Expanded(
@@ -43,7 +44,7 @@ class AppLogoNameGridView extends StatelessWidget {
                     padding: const EdgeInsets.all(16.0),
                     child: Image.asset(
                       "images/logo.png",
-                      height: 100, // Adjust logo height as needed
+                      height: 80, // Adjust logo height as needed
                     ),
                   ),
                   ),

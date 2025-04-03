@@ -41,6 +41,8 @@ class GridOddItem extends StatelessWidget {
                   style: TextStyle(
                     color: Color.fromARGB(255, 255, 255, 254),
                     fontSize: 18,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
@@ -50,7 +52,9 @@ class GridOddItem extends StatelessWidget {
                   "₹ 900.00 - 300 gram",
                   style: TextStyle(
                     color: Color.fromARGB(255, 255, 255, 254),
-                    fontSize: 14,
+                    fontSize: 12,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -60,7 +64,8 @@ class GridOddItem extends StatelessWidget {
                   "Product life: 300 days",
                   style: TextStyle(
                     color: Color.fromARGB(255, 123,138,195),
-                    fontSize: 12,
+                    fontSize: 11,
+                    fontFamily: "Montserrat",
                   ),
                 ),
               ),
@@ -70,7 +75,8 @@ class GridOddItem extends StatelessWidget {
                   "Calories: 470",
                   style: TextStyle(
                     color: Color.fromARGB(255, 123,138,195),
-                    fontSize: 12,
+                    fontFamily: "Montserrat",
+                    fontSize: 11,
                   ),
                 ),
               ),

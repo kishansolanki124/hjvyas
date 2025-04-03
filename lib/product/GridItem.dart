@@ -18,7 +18,7 @@ class GridItem extends StatelessWidget {
         children: [
           Container(
             margin: const EdgeInsets.only(top:100,left: 20.0, right: 20.0,
-            bottom: 10),
+            bottom: 20),
             decoration: BoxDecoration(
               border: Border.all(color: Color.fromARGB(255, 123,138,195), width: 2),
               borderRadius: BorderRadius.all(Radius.circular(0)),
@@ -48,6 +48,8 @@ class GridItem extends StatelessWidget {
                   style: TextStyle(
                     color: Color.fromARGB(255, 255, 255, 254),
                     fontSize: 18,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w700,
                   ),
                 ),
               ),
@@ -57,7 +59,9 @@ class GridItem extends StatelessWidget {
                   "₹ 900.00 - 300 gram",
                   style: TextStyle(
                     color: Color.fromARGB(255, 255, 255, 254),
-                    fontSize: 14,
+                    fontSize: 12,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -67,22 +71,22 @@ class GridItem extends StatelessWidget {
                   "Product life: 300 days",
                   style: TextStyle(
                     color: Color.fromARGB(255, 123,138,195),
-                    fontSize: 12,
+                    fontSize: 11,
+                    fontFamily: "Montserrat",
                   ),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 10),
+                padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 20),
                 child: Text(
                   "Calories: 470",
                   style: TextStyle(
                     color: Color.fromARGB(255, 123,138,195),
-                    fontSize: 12,
+                    fontFamily: "Montserrat",
+                    fontSize: 11,
                   ),
                 ),
               ),
-
-
             ],
           ),
         ],
