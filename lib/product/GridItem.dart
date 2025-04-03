@@ -19,21 +19,7 @@ class GridItem extends StatelessWidget {
       children: [
         productListWhiteBg(Alignment.bottomCenter),
 
-        Container(
-          margin: const EdgeInsets.only(
-            top: 100,
-            left: 20.0,
-            right: 20.0,
-            bottom: 20,
-          ),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Color.fromARGB(255, 123, 138, 195),
-              width: 2,
-            ),
-            borderRadius: BorderRadius.all(Radius.circular(0)),
-          ),
-        ),
+        productListColoredBorderBox(110, 0),
 
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

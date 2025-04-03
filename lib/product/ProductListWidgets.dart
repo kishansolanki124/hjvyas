@@ -78,3 +78,18 @@ Widget productListWhiteBg(AlignmentGeometry alignment) {
     child: SizedBox(height: 90, child: Container(color: Colors.white)),
   );
 }
+
+Widget productListColoredBorderBox(double marginTop, double marginBottom) {
+  return Container(
+    margin: EdgeInsets.only(
+      left: 20.0,
+      right: 20.0,
+      bottom: marginBottom,
+      top: marginTop,
+    ),
+    decoration: BoxDecoration(
+      border: Border.all(color: Color.fromARGB(255, 123, 138, 195), width: 2),
+      borderRadius: BorderRadius.all(Radius.circular(0)),
+    ),
+  );
+}
