@@ -64,7 +64,7 @@ Widget productListCalories(String text, [Color? color]) {
 Widget productListImage(String url) {
   return Card(
     // with Card
-    elevation: 20.0,
+    elevation: 5.0,
     shape: const CircleBorder(),
     clipBehavior: Clip.antiAlias,
     // with Card
