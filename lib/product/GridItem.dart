@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 
 class GridItem extends StatelessWidget {
@@ -16,6 +17,17 @@ class GridItem extends StatelessWidget {
     return Container(
       child: Stack(
         children: [
+          // White color box at the bottom (30% height)
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SizedBox(
+              height: 85,
+              child: Container(
+                color: Colors.white,
+              ),
+            ),
+          ),
+
           Container(
             margin: const EdgeInsets.only(top:100,left: 20.0, right: 20.0,
             bottom: 20),
@@ -58,7 +70,7 @@ class GridItem extends StatelessWidget {
                 child: Text(
                   "₹ 900.00 - 300 gram",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 254),
+                    color: Color.fromARGB(255, 1, 1, 1),
                     fontSize: 12,
                     fontFamily: "Montserrat",
                     fontWeight: FontWeight.w600,
@@ -70,7 +82,7 @@ class GridItem extends StatelessWidget {
                 child: Text(
                   "Product life: 300 days",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 123,138,195),
+                    color: Color.fromARGB(255, 139, 139, 139),
                     fontSize: 11,
                     fontFamily: "Montserrat",
                   ),
@@ -81,7 +93,7 @@ class GridItem extends StatelessWidget {
                 child: Text(
                   "Calories: 470",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 123,138,195),
+                    color: Color.fromARGB(255, 139, 139, 139),
                     fontFamily: "Montserrat",
                     fontSize: 11,
                   ),

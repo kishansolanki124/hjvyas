@@ -17,6 +17,17 @@ class Gridthirditem extends StatelessWidget {
       //color: Colors.blueGrey,
       child: Stack(
         children: [
+
+          Align(
+            alignment: Alignment.topCenter,
+            child: SizedBox(
+              height: 85,
+              child: Container(
+                color: Colors.white,
+              ),
+            ),
+          ),
+
           Container(
             margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 110.0),
             decoration: BoxDecoration(
@@ -40,7 +51,7 @@ class Gridthirditem extends StatelessWidget {
                 child: Text(
                   title,
                   style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 254),
+                    color: Color.fromARGB(255, 1, 1, 1),
                     fontSize: 18,
                     fontFamily: "Montserrat",
                     fontWeight: FontWeight.w700,
@@ -52,7 +63,7 @@ class Gridthirditem extends StatelessWidget {
                 child: Text(
                   "₹ 900.00 - 300 gram",
                   style: TextStyle(
-                    color: Color.fromARGB(255, 255, 255, 254),
+                    color: Color.fromARGB(255, 1, 1, 1),
                     fontSize: 12,
                     fontFamily: "Montserrat",
                     fontWeight: FontWeight.w600,

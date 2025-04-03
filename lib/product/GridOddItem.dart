@@ -16,6 +16,15 @@ class GridOddItem extends StatelessWidget {
     return Container(
       child: Stack(
         children: [
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SizedBox(
+              height: 85,
+              child: Container(
+                color: Colors.white,
+              ),
+            ),
+          ),
           Container(
             margin: const EdgeInsets.only(left: 20.0, right: 20.0, bottom: 110.0),
             decoration: BoxDecoration(
