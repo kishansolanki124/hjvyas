@@ -44,11 +44,7 @@ Widget productListLife(String title, [Color? color]) {
     padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
     child: Text(
       title,
-      style: TextStyle(
-        color: color,
-        fontSize: 11,
-        fontFamily: "Montserrat",
-      ),
+      style: TextStyle(color: color, fontSize: 11, fontFamily: "Montserrat"),
     ),
   );
 }
@@ -60,11 +56,18 @@ Widget productListCalories(String text, [Color? color]) {
     padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 10),
     child: Text(
       text,
-      style: TextStyle(
-        color: color,
-        fontFamily: "Montserrat",
-        fontSize: 11,
-      ),
+      style: TextStyle(color: color, fontFamily: "Montserrat", fontSize: 11),
     ),
+  );
+}
+
+Widget productListImage(String url) {
+  return Card(
+    // with Card
+    elevation: 20.0,
+    shape: const CircleBorder(),
+    clipBehavior: Clip.antiAlias,
+    // with Card
+    child: Image.asset("images/circular_demo.png"),
   );
 }

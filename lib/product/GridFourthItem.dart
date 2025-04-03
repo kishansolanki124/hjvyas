@@ -42,20 +42,8 @@ class Gridfourthitem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Card(
-                // with Card
-                elevation: 20.0,
-                shape: const CircleBorder(),
-                clipBehavior: Clip.antiAlias,
-                // with Card
-                child: Image.asset("images/circular_demo.png"),
-              ), // Image.network(
+              productListImage(""),
 
-              //   imageUrl,
-              //   height: 250, // height: 100, // Adjust height as needed
-              //   // width: 100,
-              //   fit: BoxFit.fill,
-              // ),
               productListTitleWidget(title),
 
               productListVariationWidget("₹ 900.00 - 300 grams"),
@@ -63,18 +51,6 @@ class Gridfourthitem extends StatelessWidget {
               productListLife("Product life: 300 days"),
 
               productListCalories("Calories: 470"),
-
-              // Padding(
-              //   padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 20),
-              //   child: Text(
-              //     "Calories: 470",
-              //     style: TextStyle(
-              //       color: Color.fromARGB(255, 123, 138, 195),
-              //       fontFamily: "Montserrat",
-              //       fontSize: 11,
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ],

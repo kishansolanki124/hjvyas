@@ -42,12 +42,7 @@ class Gridthirditem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              // Image.network(
-              //   imageUrl,
-              //   height: 250, // height: 100, // Adjust height as needed
-              //   // width: 100,
-              //   fit: BoxFit.fill,
-              // ),
+
               productListTitleWidget(title, Color.fromARGB(255, 1, 1, 1)),
 
               productListVariationWidget(
@@ -59,13 +54,7 @@ class Gridthirditem extends StatelessWidget {
 
               productListCalories("Calories: 470"),
 
-              Card(
-                // with Card
-                child: Image.asset("images/circular_demo.png"),
-                elevation: 20.0,
-                shape: const CircleBorder(),
-                clipBehavior: Clip.antiAlias,
-              ),
+              productListImage(""),
             ],
           ),
         ],

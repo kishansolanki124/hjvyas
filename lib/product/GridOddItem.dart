@@ -43,14 +43,7 @@ class GridOddItem extends StatelessWidget {
 
             productListCalories("Calories: 470"),
 
-            Card(
-              // with Card
-              elevation: 20.0,
-              shape: const CircleBorder(),
-              clipBehavior: Clip.antiAlias,
-              // with Card
-              child: Image.asset("images/circular_demo.png"),
-            ),
+            productListImage(""),
           ],
         ),
       ],
