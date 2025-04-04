@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../combo/Combo.dart';
 import '../menu/menu_screen.dart';
 import '../product/product_list.dart';
 import 'medialisthomepage.dart';
@@ -38,7 +39,7 @@ class _NavigationExampleState extends State<NavigationExample> {
     HomeScreen(),
 //    VideoApp(),
 //    Text("Third"),
-    GridStateless(),
+    ComboStateless(),
     //Text("Third"),
     Text("Forth"),
     Text("Fifth"),

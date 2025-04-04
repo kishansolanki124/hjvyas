@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 
-import 'GridFourthItem.dart';
-import 'GridItem.dart';
-import 'GridOddItem.dart';
-import 'GridThirdItem.dart';
+import 'package:flutter/material.dart';
+import 'package:hjvyas/product/GridFourthItem.dart';
+import 'package:hjvyas/product/GridItem.dart';
+import 'package:hjvyas/product/GridOddItem.dart';
+import 'package:hjvyas/product/GridThirdItem.dart';
+import 'package:hjvyas/product/MultiItem.dart';
 
-class AppLogoNameGridView extends StatelessWidget {
+class Combowidget extends StatelessWidget {
   final List<Map<String, String>> gridItems;
 
-  AppLogoNameGridView({
+  Combowidget({
     required this.gridItems,
   });
 
@@ -34,7 +36,7 @@ class AppLogoNameGridView extends StatelessWidget {
                   Expanded(
                     child: Text(
                       textAlign: TextAlign.center,
-                    "DryFruit Kachori",
+                    "Combo",
                     style: TextStyle(color: Colors.white,fontSize: 30,
                         fontFamily: "Archistico",),
                   )),
