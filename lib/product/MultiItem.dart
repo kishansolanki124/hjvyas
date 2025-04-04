@@ -69,7 +69,7 @@ class AppLogoNameGridView extends StatelessWidget {
                       imageUrl: gridItems[index]['imageUrl']!,
                       title: gridItems[index]['title']!,
                       description: gridItems[index]['title']!,
-                    );
+                      );
                   } else if (index % 4 == 1) {
                     return GridItem(
                       imageUrl: gridItems[index]['imageUrl']!,

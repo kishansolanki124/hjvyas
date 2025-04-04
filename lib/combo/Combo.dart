@@ -1,59 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:hjvyas/product/GridFourthItem.dart';
-import 'package:hjvyas/product/GridItem.dart';
-import 'package:hjvyas/product/GridOddItem.dart';
-import 'package:hjvyas/product/GridThirdItem.dart';
-import 'package:hjvyas/product/MultiItem.dart';
 
 import 'ComboWidget.dart';
-
-class Combo extends StatelessWidget {
-  final List<Map<String, String>> items;
-
-  Combo({required this.items});
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 2,
-      childAspectRatio: (1 / 2),
-      children:
-          items.indexed.map((item) {
-            final (index, value) = item;
-
-            if (index % 4 == 0) {
-              print("GridOddItem $index");
-              return GridOddItem(
-                imageUrl: value['imageUrl']!,
-                title: value['title']!,
-                description: value['description']!,
-              );
-            } else if (index % 4 == 1) {
-              print("GridItem $index");
-              return GridItem(
-                imageUrl: value['imageUrl']!,
-                title: value['title']!,
-                description: value['description']!,
-              );
-            } else if (index % 4 == 2) {
-              print("Gridthirditem $index");
-              return Gridthirditem(
-                imageUrl: value['imageUrl']!,
-                title: value['title']!,
-                description: value['description']!,
-              );
-            } else {
-              print("Gridfourthitem $index");
-              return Gridfourthitem(
-                imageUrl: value['imageUrl']!,
-                title: value['title']!,
-                description: value['description']!,
-              );
-            }
-          }).toList(),
-    );
-  }
-}
 
 class ComboStateless extends StatelessWidget {
   @override

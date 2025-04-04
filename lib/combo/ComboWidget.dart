@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter/material.dart';
-import 'package:hjvyas/product/GridFourthItem.dart';
-import 'package:hjvyas/product/GridItem.dart';
-import 'package:hjvyas/product/GridOddItem.dart';
-import 'package:hjvyas/product/GridThirdItem.dart';
-import 'package:hjvyas/product/MultiItem.dart';
+import 'ComboFirstItem.dart';
+import 'ComboFourthItem.dart';
+import 'ComboSecondItem.dart';
+import 'ComboThirdItem.dart';
 
 class Combowidget extends StatelessWidget {
   final List<Map<String, String>> gridItems;
 
-  Combowidget({
-    required this.gridItems,
-  });
+  Combowidget({required this.gridItems});
 
   @override
   Widget build(BuildContext context) {
@@ -27,33 +23,37 @@ class Combowidget extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
-              Padding(padding: const EdgeInsets.fromLTRB(0, 30, 0,0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  // App Logo
-                  // App Name
-                  Expanded(
-                    child: Text(
-                      textAlign: TextAlign.center,
-                    "Combo",
-                    style: TextStyle(color: Colors.white,fontSize: 30,
-                        fontFamily: "Archistico",),
-                  )),
-
-                  Expanded(
-                    child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Image.asset(
-                      "images/logo.png",
-                      height: 80, // Adjust logo height as needed
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    // App Logo
+                    // App Name
+                    Expanded(
+                      child: Text(
+                        textAlign: TextAlign.center,
+                        "Combo",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 30,
+                          fontFamily: "Archistico",
+                        ),
+                      ),
                     ),
-                  ),
-                  ),
 
-
-                ],
-              ),),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Image.asset(
+                          "images/logo.png",
+                          height: 80, // Adjust logo height as needed
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
               // GridView
               GridView.builder(
@@ -62,30 +62,30 @@ class Combowidget extends StatelessWidget {
                 // Disable GridView scrolling
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: (1/1.8),
+                  childAspectRatio: (1 / 1.8),
                 ),
                 itemCount: gridItems.length,
                 itemBuilder: (context, index) {
                   if (index % 4 == 0) {
-                    return GridOddItem(
+                    return ComboFirstItem(
                       imageUrl: gridItems[index]['imageUrl']!,
                       title: gridItems[index]['title']!,
                       description: gridItems[index]['title']!,
                     );
                   } else if (index % 4 == 1) {
-                    return GridItem(
+                    return ComboSecondItem(
                       imageUrl: gridItems[index]['imageUrl']!,
                       title: gridItems[index]['title']!,
                       description: gridItems[index]['title']!,
                     );
                   } else if (index % 4 == 2) {
-                    return Gridthirditem(
+                    return ComboThirdItem(
                       imageUrl: gridItems[index]['imageUrl']!,
                       title: gridItems[index]['title']!,
                       description: gridItems[index]['title']!,
                     );
                   } else {
-                    return Gridfourthitem(
+                    return ComboFourthItem(
                       imageUrl: gridItems[index]['imageUrl']!,
                       title: gridItems[index]['title']!,
                       description: gridItems[index]['title']!,

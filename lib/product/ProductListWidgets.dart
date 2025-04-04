@@ -61,15 +61,41 @@ Widget productListCalories(String text, [Color? color]) {
   );
 }
 
-Widget productListImage(String url) {
+Widget productListImage(String url, [Color? color]) {
+  //color ??= Color.fromARGB(255, 123, 138, 195);
+  color ??= Colors.transparent;
+
   return Card(
     // with Card
     elevation: 5.0,
     shape: const CircleBorder(),
     clipBehavior: Clip.antiAlias,
     // with Card
-    child: Image.asset("images/circular_demo.png"),
+    child: Center(
+      child: Container(
+        width: 180,
+        height: 180,
+        decoration: BoxDecoration(
+          border: Border.all(color: color, width: 2.0),
+          shape: BoxShape.circle,
+          //color: Colors.blue,
+          image: DecorationImage(
+            image: AssetImage("images/circular_demo.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    ),
   );
+
+  // return Card(
+  //   // with Card
+  //   elevation: 5.0,
+  //   shape: const CircleBorder(),
+  //   clipBehavior: Clip.antiAlias,
+  //   // with Card
+  //   child: Image.asset("images/circular_demo.png"),
+  // );
 }
 
 Widget productListWhiteBg(AlignmentGeometry alignment) {
