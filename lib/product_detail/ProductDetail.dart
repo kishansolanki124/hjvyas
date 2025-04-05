@@ -31,28 +31,26 @@ class ProductDetail extends StatelessWidget {
           "https://via.placeholder.com/50/FFFFFF/000?Text=Eggs",
           "https://via.placeholder.com/50/FFD700/000?Text=Butter",
         ],
-        reviews: "A guaranteed taste, aroma & freshness for 300 days. 7 different kinds of dry fruits give it a very unique sweet & sour taste. Deep fried in pure peanut oil with a thin layer of fine wheat flour. An irresistible zero-cholesterol kachori",
-        nutritionInfo: "nutritionInfo: A guaranteed taste, aroma & freshness for 300 days. 7 different kinds of dry fruits give it a very unique sweet & sour taste. Deep fried in pure peanut oil with a thin layer of fine wheat flour. An irresistible zero-cholesterol kachori",
+        reviews:
+            "A guaranteed taste, aroma & freshness for 300 days. 7 different kinds of dry fruits give it a very unique sweet & sour taste. Deep fried in pure peanut oil with a thin layer of fine wheat flour. An irresistible zero-cholesterol kachori",
+        nutritionInfo:
+            "nutritionInfo: A guaranteed taste, aroma & freshness for 300 days. 7 different kinds of dry fruits give it a very unique sweet & sour taste. Deep fried in pure peanut oil with a thin layer of fine wheat flour. An irresistible zero-cholesterol kachori",
         youMayLikeProducts: [
           {
             "name": "Standard Kachori",
-            "imageUrl":
-                "https://picsum.photos/id/2/400/800",
+            "imageUrl": "https://picsum.photos/id/2/400/800",
           },
           {
             "name": "Jamnagari Chevda",
-            "imageUrl":
-                "https://picsum.photos/id/3/400/800",
+            "imageUrl": "https://picsum.photos/id/3/400/800",
           },
           {
             "name": "Masala Gathiya",
-            "imageUrl":
-                "https://picsum.photos/id/4/400/800",
+            "imageUrl": "https://picsum.photos/id/4/400/800",
           },
           {
             "name": "Kutchi Pakwan",
-            "imageUrl":
-                "https://picsum.photos/id/5/400/800",
+            "imageUrl": "https://picsum.photos/id/5/400/800",
           },
         ],
       ),
@@ -79,7 +77,7 @@ class FoodProductDetailsPage extends StatefulWidget {
     this.availableColors = const [],
     this.ingredientImageUrls = const [],
     this.reviews = "",
-    this.nutritionInfo= "",
+    this.nutritionInfo = "",
     this.youMayLikeProducts = const [],
   });
 
@@ -93,14 +91,24 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
   String? _selectedVariant;
   int _quantity = 1;
   late TabController _tabController;
+  int activeTabIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(
+      length: 2, //initialIndex : 0,
+      vsync: this,
+    );
     if (widget.availableColors.isNotEmpty) {
       _selectedVariant = widget.availableColors.first;
     }
+
+    _tabController.addListener(() {
+      setState(() {
+        activeTabIndex = _tabController.index;
+      });
+    });
   }
 
   void _incrementQuantity() {
@@ -208,10 +216,11 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                       children: <Widget>[
                         Text(
                           'Terms :',
-                          style: TextStyle(fontSize: 16,
-                              color: Colors.white,
-                              fontFamily: "Montserrat",
-                              fontWeight: FontWeight.w700
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontFamily: "Montserrat",
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
                         SizedBox(height: 8),
@@ -231,44 +240,105 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
                   // 7. Tab Layout with Two Tabs
                   Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: TabBar(
-                    controller: _tabController,
-                    tabs: [
-                      Tab(text: 'Description'),
-                      Tab(text: 'Nutrition Value'),
-                    ],
-                  ),
-                  ),
-
-                  Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Container(
-                    height: 200, // Adjust height as needed for tab content
-                    child: TabBarView(
-                      controller: _tabController,
-                      children: [
-                        // Reviews Tab
-                        Text(widget.reviews,
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                            fontFamily: "Montserrat",
+                    padding: const EdgeInsets.all(16.0),
+                    child: TabBar(
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      dividerColor: Colors.transparent,
+                      padding: const EdgeInsets.all(0.0),
+                      indicator: BoxDecoration(
+                        border: Border(
+                          top: BorderSide(
+                            color: Color.fromARGB(255, 123, 138, 195),
+                            width: 6.0,
+                          ),
+                          left: BorderSide(
+                            color: Color.fromARGB(255, 123, 138, 195),
+                            width: 2.0,
+                          ),
+                          right: BorderSide(
+                            color: Color.fromARGB(255, 123, 138, 195),
+                            width: 2.0,
                           ),
                         ),
-                        // Nutrition Info Tab
-                        Text(widget.nutritionInfo,
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.white,
-                            fontFamily: "Montserrat",
+                      ),
+
+                      labelColor: Colors.white,
+                      unselectedLabelColor: Colors.white,
+
+                      controller: _tabController,
+                      tabs: [
+                        //Tab(text: 'Description',),
+                        Tab(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color:
+                                      activeTabIndex == 0
+                                          ? Colors.transparent
+                                          : Color.fromARGB(255, 123, 138, 195),
+                                  width: 2.0,
+                                ),
+                              ),
+                            ),
+                            child: const Align(
+                              alignment: Alignment.center,
+                              child: Text("Description"),
+                            ),
+                          ),
+                        ),
+                        Tab(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color:
+                                      activeTabIndex == 1
+                                          ? Colors.transparent
+                                          : Color.fromARGB(255, 123, 138, 195),
+                                  width: 2.0,
+                                ),
+                              ),
+                            ),
+                            child: const Align(
+                              alignment: Alignment.center,
+                              child: Text("Nutrition Value"),
+                            ),
                           ),
                         ),
                       ],
                     ),
                   ),
+
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Container(
+                      height: 200, // Adjust height as needed for tab content
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          // Reviews Tab
+                          Text(
+                            widget.reviews,
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              fontFamily: "Montserrat",
+                            ),
+                          ), // Nutrition Info Tab
+                          Text(
+                            widget.nutritionInfo,
+                            textAlign: TextAlign.justify,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.white,
+                              fontFamily: "Montserrat",
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
 
                   SizedBox(height: 24),
