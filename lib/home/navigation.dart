@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../combo/Combo.dart';
 import '../menu/menu_screen.dart';
 import '../product/product_list.dart';
+import '../product_detail/ProductDetail.dart';
 import 'medialisthomepage.dart';
 
 class NavigationBarApp extends StatelessWidget {
@@ -40,8 +41,10 @@ class _NavigationExampleState extends State<NavigationExample> {
 //    VideoApp(),
 //    Text("Third"),
     ComboStateless(),
+    ProductDetail(),
     //Text("Third"),
-    Text("Forth"),
+    //Text("Forth"),
+
     Text("Fifth"),
   ];
 
