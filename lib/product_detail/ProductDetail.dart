@@ -31,30 +31,28 @@ class ProductDetail extends StatelessWidget {
           "https://via.placeholder.com/50/FFFFFF/000?Text=Eggs",
           "https://via.placeholder.com/50/FFD700/000?Text=Butter",
         ],
-        reviews: [
-          {"user": "Alice", "comment": "Absolutely loved this cake!"},
-          {"user": "Bob", "comment": "So moist and flavorful."},
-        ],
-        nutritionInfo: [
-          {"name": "Calories", "value": "350 kcal"},
-          {"name": "Fat", "value": "15g"},
-          {"name": "Sugar", "value": "30g"},
-        ],
+        reviews: "A guaranteed taste, aroma & freshness for 300 days. 7 different kinds of dry fruits give it a very unique sweet & sour taste. Deep fried in pure peanut oil with a thin layer of fine wheat flour. An irresistible zero-cholesterol kachori",
+        nutritionInfo: "nutritionInfo: A guaranteed taste, aroma & freshness for 300 days. 7 different kinds of dry fruits give it a very unique sweet & sour taste. Deep fried in pure peanut oil with a thin layer of fine wheat flour. An irresistible zero-cholesterol kachori",
         youMayLikeProducts: [
           {
-            "name": "Strawberry Tart",
+            "name": "Standard Kachori",
             "imageUrl":
-                "https://via.placeholder.com/100/FF69B4/FFFFFF?Text=Tart",
+                "https://picsum.photos/id/2/400/800",
           },
           {
-            "name": "Blueberry Muffin",
+            "name": "Jamnagari Chevda",
             "imageUrl":
-                "https://via.placeholder.com/100/4169E1/FFFFFF?Text=Muffin",
+                "https://picsum.photos/id/3/400/800",
           },
           {
-            "name": "Chocolate Brownie",
+            "name": "Masala Gathiya",
             "imageUrl":
-                "https://via.placeholder.com/100/8B4513/FFFFFF?Text=Brownie",
+                "https://picsum.photos/id/4/400/800",
+          },
+          {
+            "name": "Kutchi Pakwan",
+            "imageUrl":
+                "https://picsum.photos/id/5/400/800",
           },
         ],
       ),
@@ -69,8 +67,8 @@ class FoodProductDetailsPage extends StatefulWidget {
   final String productDescription;
   final List<String> availableColors;
   final List<String> ingredientImageUrls;
-  final List<Map<String, String>> reviews;
-  final List<Map<String, String>> nutritionInfo;
+  final String reviews;
+  final String nutritionInfo;
   final List<Map<String, String>> youMayLikeProducts;
 
   FoodProductDetailsPage({
@@ -80,8 +78,8 @@ class FoodProductDetailsPage extends StatefulWidget {
     required this.productDescription,
     this.availableColors = const [],
     this.ingredientImageUrls = const [],
-    this.reviews = const [],
-    this.nutritionInfo = const [],
+    this.reviews = "",
+    this.nutritionInfo= "",
     this.youMayLikeProducts = const [],
   });
 
@@ -232,63 +230,47 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                   ),
 
                   // 7. Tab Layout with Two Tabs
-                  TabBar(
+                  Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: TabBar(
                     controller: _tabController,
                     tabs: [
-                      Tab(text: 'Reviews (${widget.reviews.length})'),
-                      Tab(text: 'Nutrition Info'),
+                      Tab(text: 'Description'),
+                      Tab(text: 'Nutrition Value'),
                     ],
                   ),
-                  Container(
+                  ),
+
+                  Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Container(
                     height: 200, // Adjust height as needed for tab content
                     child: TabBarView(
                       controller: _tabController,
                       children: [
                         // Reviews Tab
-                        ListView.builder(
-                          padding: const EdgeInsets.all(16.0),
-                          itemCount: widget.reviews.length,
-                          itemBuilder: (context, index) {
-                            final review = widget.reviews[index];
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 16.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    review['user'] ?? 'Anonymous',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(review['comment'] ?? 'No comment'),
-                                ],
-                              ),
-                            );
-                          },
-                        ), // Nutrition Info Tab
-                        ListView.builder(
-                          padding: const EdgeInsets.all(16.0),
-                          itemCount: widget.nutritionInfo.length,
-                          itemBuilder: (context, index) {
-                            final nutrient = widget.nutritionInfo[index];
-                            return Padding(
-                              padding: const EdgeInsets.only(bottom: 8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(nutrient['name'] ?? ''),
-                                  Text(nutrient['value'] ?? ''),
-                                ],
-                              ),
-                            );
-                          },
+                        Text(widget.reviews,
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontFamily: "Montserrat",
+                          ),
+                        ),
+                        // Nutrition Info Tab
+                        Text(widget.nutritionInfo,
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontFamily: "Montserrat",
+                          ),
                         ),
                       ],
                     ),
                   ),
+                  ),
+
                   SizedBox(height: 24),
 
                   // 8. You May Also Like Product Listing Horizontally
@@ -299,10 +281,12 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           child: Text(
-                            'You May Also Like',
+                            'You May Also Like :',
                             style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                                color: Colors.white,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.w700
                             ),
                           ),
                         ),
@@ -320,10 +304,10 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                               return Padding(
                                 padding: const EdgeInsets.only(right: 12.0),
                                 child: Container(
-                                  width: 100,
+                                  width: 120,
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: Colors.grey[300]!,
+                                      color: Color.fromARGB(255, 123, 138, 195),
                                     ),
                                   ),
                                   child: Column(
@@ -332,7 +316,8 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                       if (product['imageUrl'] != null)
                                         Image.network(
                                           product['imageUrl']!,
-                                          height: 60,
+                                          height: 85,
+                                          width: 110,
                                           fit: BoxFit.cover,
                                           errorBuilder: (
                                             context,
@@ -351,7 +336,10 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                         textAlign: TextAlign.center,
                                         overflow: TextOverflow.ellipsis,
                                         maxLines: 2,
-                                        style: TextStyle(fontSize: 12),
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontFamily: "Montserrat",
+                                            fontSize: 12),
                                       ),
                                     ],
                                   ),
@@ -363,6 +351,8 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                         SizedBox(height: 32),
                       ],
                     ),
+
+                  SizedBox(height: 100),
                 ],
               ),
 
