@@ -1,4 +1,3 @@
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 import 'ProductDetailWidget.dart';
@@ -139,27 +138,28 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
               // 1. Image Carousel with Dots
               productDetailViewpager(widget, _onPageChange),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              Padding(padding: EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
                 children:
-                    widget.imageUrls.asMap().entries.map((entry) {
-                      return Container(
-                        width: 8.0,
-                        height: 8.0,
-                        margin: EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 2.0,
-                        ),
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color:
-                              _currentImageIndex == entry.key
-                                  ? Theme.of(context).primaryColor
-                                  : Colors.grey,
-                        ),
-                      );
-                    }).toList(),
-              ),
+                widget.imageUrls.asMap().entries.map((entry) {
+                  return Container(
+                    width: _currentImageIndex == entry.key ? 12.0 : 8.0,
+                    height: _currentImageIndex == entry.key ? 12.0 : 8.0,
+                    margin: EdgeInsets.symmetric(
+                      vertical: 10.0,
+                      horizontal: 2.0,
+                    ),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color:
+                      _currentImageIndex == entry.key
+                          ? Color.fromARGB(255, 230, 12, 11)
+                          : Color.fromARGB(255, 179, 179, 179),
+                    ),
+                  );
+                }).toList(),
+              ),),
 
               Padding(
                 padding: const EdgeInsets.all(16.0),

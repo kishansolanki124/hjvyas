@@ -9,6 +9,7 @@ Widget productDetailViewpager(FoodProductDetailsPage widget, onPageChange) {
             .map(
               (url) => Image.network(
                 url, //fit: BoxFit.cover,
+                fit: BoxFit.fill,
                 width: double.infinity,
                 height: 350,
                 errorBuilder: (context, error, stackTrace) {
