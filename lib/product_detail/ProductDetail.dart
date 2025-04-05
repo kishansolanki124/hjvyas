@@ -19,7 +19,11 @@ class ProductDetail extends StatelessWidget {
         productPrice: "₹ 3000.00 (1 KG)",
         productDescription:
             "Indulge in our rich and decadent chocolate cake, made with the finest cocoa and topped with a luscious ganache. Perfect for any celebration or a sweet treat.",
-        availableColors: ["Chocolate", "Vanilla", "Red Velvet"],
+        availableColors: [
+          "300 GM (900.00) - 12 Pieces",
+          "150 GM (450.00) - 6 Pieces",
+          "100 GM (400.00) - 4 Pieces",
+        ],
         ingredientImageUrls: [
           "https://via.placeholder.com/50/A0522D/FFFFFF?Text=Cocoa",
           "https://via.placeholder.com/50/F0F8FF/000?Text=Flour",
@@ -88,7 +92,7 @@ class FoodProductDetailsPage extends StatefulWidget {
 class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
     with TickerProviderStateMixin {
   int _currentImageIndex = 0;
-  String? _selectedColor;
+  String? _selectedVariant;
   int _quantity = 1;
   late TabController _tabController;
 
@@ -97,13 +101,19 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
     super.initState();
     _tabController = TabController(length: 2, vsync: this);
     if (widget.availableColors.isNotEmpty) {
-      _selectedColor = widget.availableColors.first;
+      _selectedVariant = widget.availableColors.first;
     }
   }
 
   void _incrementQuantity() {
     setState(() {
       _quantity++;
+    });
+  }
+
+  void _onChangedDropDownValue(String newValue) {
+    setState(() {
+      _selectedVariant = newValue;
     });
   }
 
@@ -152,46 +162,25 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                         //name and price
                         productDetailNameAndPrice(widget),
 
-                        // 4. Dropdown of Color and Counter (Horizontal)
+                        // 4. Dropdown of variant and Counter (Horizontal)
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             if (widget.availableColors.isNotEmpty)
-                              DropdownButton<String>(
-                                value: _selectedColor,
-                                hint: Text('Select Color'),
-                                items:
-                                    widget.availableColors.map((String color) {
-                                      return DropdownMenuItem<String>(
-                                        value: color,
-                                        child: Text(color),
-                                      );
-                                    }).toList(),
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    _selectedColor = newValue;
-                                  });
-                                },
+                              productDetailDropDown(
+                                widget,
+                                _selectedVariant,
+                                _onChangedDropDownValue,
                               ),
-                            Row(
-                              children: <Widget>[
-                                IconButton(
-                                  icon: Icon(Icons.remove),
-                                  onPressed: _decrementQuantity,
-                                ),
-                                Text(
-                                  '$_quantity',
-                                  style: TextStyle(fontSize: 18),
-                                ),
-                                IconButton(
-                                  icon: Icon(Icons.add),
-                                  onPressed: _incrementQuantity,
-                                ),
-                              ],
+
+                            productDetailItemCounter(
+                              widget,
+                              _decrementQuantity,
+                              _incrementQuantity,
+                              _quantity,
                             ),
                           ],
                         ),
-                        SizedBox(height: 16),
                       ],
                     ),
                   ),
