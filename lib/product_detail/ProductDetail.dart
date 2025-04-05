@@ -18,7 +18,7 @@ class ProductDetail extends StatelessWidget {
         ],
         productPrice: "₹ 3000.00 (1 KG)",
         productDescription:
-            "Indulge in our rich and decadent chocolate cake, made with the finest cocoa and topped with a luscious ganache. Perfect for any celebration or a sweet treat.",
+            "Prices are Inclusive of Taxes & Exclusive of Shipping Charges. Make Sure it Takes 3 to 4 Days to Reach the Delivery Address after Dispatch 1  from Your Order. Depends on the State, City & Location of Your Delivery Address. Maybe it's Take More Days to Delivered in India & 7-8 Business Days in Abroad",
         availableColors: [
           "300 GM (900.00) - 12 Pieces",
           "150 GM (450.00) - 6 Pieces",
@@ -189,25 +189,41 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                   if (widget.ingredientImageUrls.isNotEmpty)
                     productDetailIngredients(widget),
 
-                  // 6. Product Description
+                  //description
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    child: Text(
+                      'Spices & Condiments Sugar, Iodized Salt, Citric Acid, Asafoetida & Bayleaf.',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontFamily: "Montserrat",
+                      ),
+                    ),
+                  ),
+
+                  //Product Terms
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'Description',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                          'Terms :',
+                          style: TextStyle(fontSize: 16,
+                              color: Colors.white,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w700
                           ),
                         ),
                         SizedBox(height: 8),
                         Text(
                           widget.productDescription,
+                          textAlign: TextAlign.justify,
                           style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[700],
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontFamily: "Montserrat",
                           ),
                         ),
                         SizedBox(height: 24),
