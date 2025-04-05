@@ -25,8 +25,8 @@ class ProductDetail extends StatelessWidget {
           "100 GM (400.00) - 4 Pieces",
         ],
         ingredientImageUrls: [
-          "https://via.placeholder.com/50/A0522D/FFFFFF?Text=Cocoa",
-          "https://via.placeholder.com/50/F0F8FF/000?Text=Flour",
+          "https://www.mithaiwalahjvyas.com/uploads/ingredients_img/7-Asafoetida.jpg",
+          "https://img.lovepik.com/png/20231110/mayo-clipart-cartoon-illustration-of-various-food-items-and-dressings_553233_wh300.png",
           "https://via.placeholder.com/50/FFFF00/000?Text=Sugar",
           "https://via.placeholder.com/50/FFFFFF/000?Text=Eggs",
           "https://via.placeholder.com/50/FFD700/000?Text=Butter",
@@ -187,54 +187,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
                   // 5. Horizontal List of Square Images of Product Ingredients
                   if (widget.ingredientImageUrls.isNotEmpty)
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Text(
-                            'Ingredients',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        SizedBox(
-                          height: 80, // Adjust height as needed
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0,
-                            ),
-                            itemCount: widget.ingredientImageUrls.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(right: 8.0),
-                                child: Container(
-                                  width: 80,
-                                  height: 80,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.grey[300]!,
-                                    ),
-                                  ),
-                                  child: Image.network(
-                                    widget.ingredientImageUrls[index],
-                                    fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Center(child: Text('Err'));
-                                    },
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                        ),
-                        SizedBox(height: 16),
-                      ],
-                    ),
+                    productDetailIngredients(widget),
 
                   // 6. Product Description
                   Padding(
