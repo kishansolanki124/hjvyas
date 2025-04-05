@@ -65,3 +65,34 @@ Widget productDetailCorosoulDots(
     ),
   );
 }
+
+Widget productDetailNameAndPrice(FoodProductDetailsPage widget) {
+  return Column(
+    children: [
+      SizedBox(height: 50),
+
+      Text(
+        widget.productName,
+        style: TextStyle(
+          fontSize: 18,
+          color: Colors.white,
+          fontFamily: "Montserrat",
+          fontWeight: FontWeight.w600,
+        ),
+        textAlign: TextAlign.center,
+      ),
+      SizedBox(height: 8),
+
+      // 3. Product Price
+      Text(
+        widget.productPrice,
+        style: TextStyle(
+          fontSize: 18,
+          fontFamily: "Montserrat",
+          color: Colors.white,
+        ),
+      ),
+      SizedBox(height: 16),
+    ],
+  );
+}

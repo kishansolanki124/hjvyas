@@ -8,7 +8,7 @@ class ProductDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: FoodProductDetailsPage(
-        productName: "Delicious Chocolate Cake",
+        productName: "Luscious Bite",
         imageUrls: [
           "https://images.pexels.com/photos/1496373/pexels-photo-1496373.jpeg?cs=srgb&dl=pexels-arts-1496373.jpg&fm=jpg",
           "https://images.pexels.com/photos/7276946/pexels-photo-7276946.jpeg?cs=srgb&dl=pexels-rachel-claire-7276946.jpg&fm=jpg&w=3648&h=5472",
@@ -16,7 +16,7 @@ class ProductDetail extends StatelessWidget {
           "https://picsum.photos/id/6/400/800",
           "https://images.pexels.com/photos/1526713/pexels-photo-1526713.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1526713.jpg&fm=jpg&w=4000&h=6000",
         ],
-        productPrice: 25.99,
+        productPrice: "₹ 3000.00 (1 KG)",
         productDescription:
             "Indulge in our rich and decadent chocolate cake, made with the finest cocoa and topped with a luscious ganache. Perfect for any celebration or a sweet treat.",
         availableColors: ["Chocolate", "Vanilla", "Red Velvet"],
@@ -61,7 +61,7 @@ class ProductDetail extends StatelessWidget {
 class FoodProductDetailsPage extends StatefulWidget {
   final String productName;
   final List<String> imageUrls;
-  final double productPrice;
+  final String productPrice;
   final String productDescription;
   final List<String> availableColors;
   final List<String> ingredientImageUrls;
@@ -141,6 +141,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                   // 1. Image Carousel with Dots
                   productDetailViewpager(widget, _onPageChange),
 
+                  // 2. Image Carousel Dots
                   productDetailCorosoulDots(widget, _currentImageIndex),
 
                   Padding(
@@ -148,26 +149,8 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        // 2. Product Title in the Center
-                        Text(
-                          widget.productName,
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 8),
-
-                        // 3. Product Price
-                        Text(
-                          '\$${widget.productPrice.toStringAsFixed(2)}',
-                          style: TextStyle(
-                            fontSize: 22,
-                            color: Colors.green[700],
-                          ),
-                        ),
-                        SizedBox(height: 16),
+                        //name and price
+                        productDetailNameAndPrice(widget),
 
                         // 4. Dropdown of Color and Counter (Horizontal)
                         Row(
