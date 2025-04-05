@@ -263,7 +263,8 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                       ),
                       labelColor: Colors.white,
 
-                      indicatorPadding: const EdgeInsets.all(0),
+                      //indicatorPadding: const EdgeInsets.all(0),
+                      indicatorPadding: const EdgeInsets.fromLTRB(0,0,0,2),
                       labelPadding: const EdgeInsets.symmetric(
                         horizontal: 0,
                         vertical: 0,
