@@ -206,8 +206,7 @@ Widget productDetailItemCounter(
   );
 }
 
-
-Widget productDetailIngredients(FoodProductDetailsPage widget,) {
+Widget productDetailIngredients(FoodProductDetailsPage widget) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -228,9 +227,7 @@ Widget productDetailIngredients(FoodProductDetailsPage widget,) {
         height: 120, // Adjust height as needed
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           itemCount: widget.ingredientImageUrls.length,
           itemBuilder: (context, index) {
             return Padding(
@@ -248,11 +245,7 @@ Widget productDetailIngredients(FoodProductDetailsPage widget,) {
                     child: Image.network(
                       widget.ingredientImageUrls[index],
                       fit: BoxFit.cover,
-                      errorBuilder: (
-                          context,
-                          error,
-                          stackTrace,
-                          ) {
+                      errorBuilder: (context, error, stackTrace) {
                         return Center(child: Text('Err'));
                       },
                     ),
@@ -291,10 +284,10 @@ Widget productDetailYouMayLike(FoodProductDetailsPage widget) {
         child: Text(
           'You May Also Like :',
           style: TextStyle(
-              fontSize: 18,
-              color: Colors.white,
-              fontFamily: "Montserrat",
-              fontWeight: FontWeight.w700
+            fontSize: 18,
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontWeight: FontWeight.w700,
           ),
         ),
       ),
@@ -303,9 +296,7 @@ Widget productDetailYouMayLike(FoodProductDetailsPage widget) {
         height: 120, // Adjust height as needed
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(
-            horizontal: 16.0,
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           itemCount: widget.youMayLikeProducts.length,
           itemBuilder: (context, index) {
             final product = widget.youMayLikeProducts[index];
@@ -314,9 +305,7 @@ Widget productDetailYouMayLike(FoodProductDetailsPage widget) {
               child: Container(
                 width: 120,
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Color.fromARGB(255, 123, 138, 195),
-                  ),
+                  border: Border.all(color: Color.fromARGB(255, 123, 138, 195)),
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -327,11 +316,7 @@ Widget productDetailYouMayLike(FoodProductDetailsPage widget) {
                         height: 85,
                         width: 110,
                         fit: BoxFit.cover,
-                        errorBuilder: (
-                            context,
-                            error,
-                            stackTrace,
-                            ) {
+                        errorBuilder: (context, error, stackTrace) {
                           return SizedBox(
                             height: 60,
                             child: Center(child: Text('Err')),
@@ -345,9 +330,10 @@ Widget productDetailYouMayLike(FoodProductDetailsPage widget) {
                       overflow: TextOverflow.ellipsis,
                       maxLines: 2,
                       style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: "Montserrat",
-                          fontSize: 12),
+                        color: Colors.white,
+                        fontFamily: "Montserrat",
+                        fontSize: 12,
+                      ),
                     ),
                   ],
                 ),
@@ -357,5 +343,81 @@ Widget productDetailYouMayLike(FoodProductDetailsPage widget) {
         ),
       ),
     ],
+  );
+}
+
+Widget productDetailTabs(_tabController, activeTabIndex) {
+  return Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: TabBar(
+      indicatorSize: TabBarIndicatorSize.tab,
+      dividerColor: Colors.transparent,
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+      indicator: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Color.fromARGB(255, 123, 138, 195),
+            width: 6.0,
+          ),
+          left: BorderSide(
+            color: Color.fromARGB(255, 123, 138, 195),
+            width: 1.0,
+          ),
+          right: BorderSide(
+            color: Color.fromARGB(255, 123, 138, 195),
+            width: 1.0,
+          ),
+        ),
+      ),
+      labelColor: Colors.white,
+
+      //indicatorPadding: const EdgeInsets.all(0),
+      indicatorPadding: const EdgeInsets.fromLTRB(0, 0, 0, 2),
+      labelPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      unselectedLabelColor: Colors.white,
+      controller: _tabController,
+      tabs: [
+        //Tab(text: 'Description',),
+        Tab(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color:
+                      activeTabIndex == 0
+                          ? Colors.transparent
+                          : Color.fromARGB(255, 123, 138, 195),
+                  width: 1.0,
+                ),
+              ),
+            ),
+            child: const Align(
+              alignment: Alignment.center,
+              child: Text("Description"),
+            ),
+          ),
+        ),
+
+        Tab(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color:
+                      activeTabIndex == 1
+                          ? Colors.transparent
+                          : Color.fromARGB(255, 123, 138, 195),
+                  width: 1.0,
+                ),
+              ),
+            ),
+            child: const Align(
+              alignment: Alignment.center,
+              child: Text("Nutrition Value"),
+            ),
+          ),
+        ),
+      ],
+    ),
   );
 }
