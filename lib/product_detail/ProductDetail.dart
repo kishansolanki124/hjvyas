@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../product/ProductListWidgets.dart';
 import 'ProductDetailWidget.dart';
 
 class ProductDetail extends StatelessWidget {
@@ -132,273 +133,299 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
           ),
         ),
         child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              // 1. Image Carousel with Dots
-              productDetailViewpager(widget, _onPageChange),
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  // 1. Image Carousel with Dots
+                  productDetailViewpager(widget, _onPageChange),
 
-              productDetailCorosoulDots(widget, _currentImageIndex),
+                  productDetailCorosoulDots(widget, _currentImageIndex),
 
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    // 2. Product Title in the Center
-                    Text(
-                      widget.productName,
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: 8),
-
-                    // 3. Product Price
-                    Text(
-                      '\$${widget.productPrice.toStringAsFixed(2)}',
-                      style: TextStyle(fontSize: 22, color: Colors.green[700]),
-                    ),
-                    SizedBox(height: 16),
-
-                    // 4. Dropdown of Color and Counter (Horizontal)
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        if (widget.availableColors.isNotEmpty)
-                          DropdownButton<String>(
-                            value: _selectedColor,
-                            hint: Text('Select Color'),
-                            items:
-                                widget.availableColors.map((String color) {
-                                  return DropdownMenuItem<String>(
-                                    value: color,
-                                    child: Text(color),
-                                  );
-                                }).toList(),
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                _selectedColor = newValue;
-                              });
-                            },
+                        // 2. Product Title in the Center
+                        Text(
+                          widget.productName,
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
                           ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 8),
+
+                        // 3. Product Price
+                        Text(
+                          '\$${widget.productPrice.toStringAsFixed(2)}',
+                          style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.green[700],
+                          ),
+                        ),
+                        SizedBox(height: 16),
+
+                        // 4. Dropdown of Color and Counter (Horizontal)
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: <Widget>[
-                            IconButton(
-                              icon: Icon(Icons.remove),
-                              onPressed: _decrementQuantity,
-                            ),
-                            Text('$_quantity', style: TextStyle(fontSize: 18)),
-                            IconButton(
-                              icon: Icon(Icons.add),
-                              onPressed: _incrementQuantity,
+                            if (widget.availableColors.isNotEmpty)
+                              DropdownButton<String>(
+                                value: _selectedColor,
+                                hint: Text('Select Color'),
+                                items:
+                                    widget.availableColors.map((String color) {
+                                      return DropdownMenuItem<String>(
+                                        value: color,
+                                        child: Text(color),
+                                      );
+                                    }).toList(),
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    _selectedColor = newValue;
+                                  });
+                                },
+                              ),
+                            Row(
+                              children: <Widget>[
+                                IconButton(
+                                  icon: Icon(Icons.remove),
+                                  onPressed: _decrementQuantity,
+                                ),
+                                Text(
+                                  '$_quantity',
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                IconButton(
+                                  icon: Icon(Icons.add),
+                                  onPressed: _incrementQuantity,
+                                ),
+                              ],
                             ),
                           ],
                         ),
+                        SizedBox(height: 16),
                       ],
                     ),
-                    SizedBox(height: 16),
-                  ],
-                ),
-              ),
+                  ),
 
-              // 5. Horizontal List of Square Images of Product Ingredients
-              if (widget.ingredientImageUrls.isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        'Ingredients',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    SizedBox(
-                      height: 80, // Adjust height as needed
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        itemCount: widget.ingredientImageUrls.length,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Container(
-                              width: 80,
-                              height: 80,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey[300]!),
-                              ),
-                              child: Image.network(
-                                widget.ingredientImageUrls[index],
-                                fit: BoxFit.cover,
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Center(child: Text('Err'));
-                                },
-                              ),
+                  // 5. Horizontal List of Square Images of Product Ingredients
+                  if (widget.ingredientImageUrls.isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Text(
+                            'Ingredients',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 16),
-                  ],
-                ),
-
-              // 6. Product Description
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'Description',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    Text(
-                      widget.productDescription,
-                      style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                    ),
-                    SizedBox(height: 24),
-                  ],
-                ),
-              ),
-
-              // 7. Tab Layout with Two Tabs
-              TabBar(
-                controller: _tabController,
-                tabs: [
-                  Tab(text: 'Reviews (${widget.reviews.length})'),
-                  Tab(text: 'Nutrition Info'),
-                ],
-              ),
-              Container(
-                height: 200, // Adjust height as needed for tab content
-                child: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    // Reviews Tab
-                    ListView.builder(
-                      padding: const EdgeInsets.all(16.0),
-                      itemCount: widget.reviews.length,
-                      itemBuilder: (context, index) {
-                        final review = widget.reviews[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                review['user'] ?? 'Anonymous',
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 4),
-                              Text(review['comment'] ?? 'No comment'),
-                            ],
                           ),
-                        );
-                      },
-                    ), // Nutrition Info Tab
-                    ListView.builder(
-                      padding: const EdgeInsets.all(16.0),
-                      itemCount: widget.nutritionInfo.length,
-                      itemBuilder: (context, index) {
-                        final nutrient = widget.nutritionInfo[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(nutrient['name'] ?? ''),
-                              Text(nutrient['value'] ?? ''),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 24),
-
-              // 8. You May Also Like Product Listing Horizontally
-              if (widget.youMayLikeProducts.isNotEmpty)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Text(
-                        'You May Also Like',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
                         ),
-                      ),
-                    ),
-                    SizedBox(height: 8),
-                    SizedBox(
-                      height: 120, // Adjust height as needed
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        itemCount: widget.youMayLikeProducts.length,
-                        itemBuilder: (context, index) {
-                          final product = widget.youMayLikeProducts[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 12.0),
-                            child: Container(
-                              width: 100,
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.grey[300]!),
-                              ),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  if (product['imageUrl'] != null)
-                                    Image.network(
-                                      product['imageUrl']!,
-                                      height: 60,
-                                      fit: BoxFit.cover,
-                                      errorBuilder: (
-                                        context,
-                                        error,
-                                        stackTrace,
-                                      ) {
-                                        return SizedBox(
-                                          height: 60,
-                                          child: Center(child: Text('Err')),
-                                        );
-                                      },
+                        SizedBox(height: 8),
+                        SizedBox(
+                          height: 80, // Adjust height as needed
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                            ),
+                            itemCount: widget.ingredientImageUrls.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Container(
+                                  width: 80,
+                                  height: 80,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey[300]!,
                                     ),
-                                  SizedBox(height: 8),
-                                  Text(
-                                    product['name'] ?? 'Product',
-                                    textAlign: TextAlign.center,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    style: TextStyle(fontSize: 12),
                                   ),
+                                  child: Image.network(
+                                    widget.ingredientImageUrls[index],
+                                    fit: BoxFit.cover,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Center(child: Text('Err'));
+                                    },
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                      ],
+                    ),
+
+                  // 6. Product Description
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'Description',
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          widget.productDescription,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.grey[700],
+                          ),
+                        ),
+                        SizedBox(height: 24),
+                      ],
+                    ),
+                  ),
+
+                  // 7. Tab Layout with Two Tabs
+                  TabBar(
+                    controller: _tabController,
+                    tabs: [
+                      Tab(text: 'Reviews (${widget.reviews.length})'),
+                      Tab(text: 'Nutrition Info'),
+                    ],
+                  ),
+                  Container(
+                    height: 200, // Adjust height as needed for tab content
+                    child: TabBarView(
+                      controller: _tabController,
+                      children: [
+                        // Reviews Tab
+                        ListView.builder(
+                          padding: const EdgeInsets.all(16.0),
+                          itemCount: widget.reviews.length,
+                          itemBuilder: (context, index) {
+                            final review = widget.reviews[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 16.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    review['user'] ?? 'Anonymous',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  SizedBox(height: 4),
+                                  Text(review['comment'] ?? 'No comment'),
                                 ],
                               ),
-                            ),
-                          );
-                        },
-                      ),
+                            );
+                          },
+                        ), // Nutrition Info Tab
+                        ListView.builder(
+                          padding: const EdgeInsets.all(16.0),
+                          itemCount: widget.nutritionInfo.length,
+                          itemBuilder: (context, index) {
+                            final nutrient = widget.nutritionInfo[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(nutrient['name'] ?? ''),
+                                  Text(nutrient['value'] ?? ''),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 32),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: 24),
+
+                  // 8. You May Also Like Product Listing Horizontally
+                  if (widget.youMayLikeProducts.isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          child: Text(
+                            'You May Also Like',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 8),
+                        SizedBox(
+                          height: 120, // Adjust height as needed
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                            ),
+                            itemCount: widget.youMayLikeProducts.length,
+                            itemBuilder: (context, index) {
+                              final product = widget.youMayLikeProducts[index];
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 12.0),
+                                child: Container(
+                                  width: 100,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey[300]!,
+                                    ),
+                                  ),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      if (product['imageUrl'] != null)
+                                        Image.network(
+                                          product['imageUrl']!,
+                                          height: 60,
+                                          fit: BoxFit.cover,
+                                          errorBuilder: (
+                                            context,
+                                            error,
+                                            stackTrace,
+                                          ) {
+                                            return SizedBox(
+                                              height: 60,
+                                              child: Center(child: Text('Err')),
+                                            );
+                                          },
+                                        ),
+                                      SizedBox(height: 8),
+                                      Text(
+                                        product['name'] ?? 'Product',
+                                        textAlign: TextAlign.center,
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                        style: TextStyle(fontSize: 12),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        SizedBox(height: 32),
+                      ],
+                    ),
+                ],
+              ),
+
+              productDetailCenterImageRound(),
             ],
           ),
         ),

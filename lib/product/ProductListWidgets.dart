@@ -119,3 +119,17 @@ Widget productListColoredBorderBox(double marginTop, double marginBottom) {
     ),
   );
 }
+
+
+Widget productDetailCenterImageRound() {
+  return Padding(
+    padding: EdgeInsetsDirectional.fromSTEB(0, 300, 0, 0),
+    child: Align(
+      child: SizedBox(
+        width: 150,
+        height: 150,
+        child: productListImage(""),
+      ),
+    ),
+  );
+}
