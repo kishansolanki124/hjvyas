@@ -244,7 +244,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                     child: TabBar(
                       indicatorSize: TabBarIndicatorSize.tab,
                       dividerColor: Colors.transparent,
-                      padding: const EdgeInsets.all(0.0),
+                      padding: const EdgeInsets.fromLTRB(0,0,0,0),
                       indicator: BoxDecoration(
                         border: Border(
                           top: BorderSide(
@@ -253,22 +253,26 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                           ),
                           left: BorderSide(
                             color: Color.fromARGB(255, 123, 138, 195),
-                            width: 2.0,
+                            width: 1.0,
                           ),
                           right: BorderSide(
                             color: Color.fromARGB(255, 123, 138, 195),
-                            width: 2.0,
+                            width: 1.0,
                           ),
                         ),
                       ),
-
                       labelColor: Colors.white,
-                      unselectedLabelColor: Colors.white,
 
+                      indicatorPadding: const EdgeInsets.all(0),
+                      labelPadding: const EdgeInsets.symmetric(
+                        horizontal: 0,
+                        vertical: 0,
+                      ),
+                      unselectedLabelColor: Colors.white,
                       controller: _tabController,
                       tabs: [
                         //Tab(text: 'Description',),
-                        Tab(
+                    Tab(
                           child: Container(
                             decoration: BoxDecoration(
                               border: Border(
@@ -277,7 +281,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                       activeTabIndex == 0
                                           ? Colors.transparent
                                           : Color.fromARGB(255, 123, 138, 195),
-                                  width: 2.0,
+                                  width: 1.0,
                                 ),
                               ),
                             ),
@@ -287,6 +291,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                             ),
                           ),
                         ),
+
                         Tab(
                           child: Container(
                             decoration: BoxDecoration(
@@ -296,7 +301,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                       activeTabIndex == 1
                                           ? Colors.transparent
                                           : Color.fromARGB(255, 123, 138, 195),
-                                  width: 2.0,
+                                  width: 1.0,
                                 ),
                               ),
                             ),
