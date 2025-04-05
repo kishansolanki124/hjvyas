@@ -38,3 +38,30 @@ Widget productDetailViewpager(FoodProductDetailsPage widget, onPageChange) {
     ),
   );
 }
+
+Widget productDetailCorosoulDots(
+  FoodProductDetailsPage widget,
+  int currentImageIndex,
+) {
+  return Padding(
+    padding: EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children:
+          widget.imageUrls.asMap().entries.map((entry) {
+            return Container(
+              width: currentImageIndex == entry.key ? 10.0 : 8.0,
+              height: currentImageIndex == entry.key ? 10.0 : 8.0,
+              margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 3.0),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color:
+                    currentImageIndex == entry.key
+                        ? Color.fromARGB(255, 230, 12, 11)
+                        : Color.fromARGB(255, 179, 179, 179),
+              ),
+            );
+          }).toList(),
+    ),
+  );
+}
