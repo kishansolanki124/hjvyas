@@ -2,6 +2,29 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:hjvyas/product_detail/ProductDetail.dart';
 
+Widget backButton(_onBackPressed) {
+  return TextButton.icon(
+    onPressed: _onBackPressed,
+    icon: Image.asset(
+      "icons/back_icon.png",
+      width: 24, // Adjust size as needed
+      height: 24,
+    ),
+    label: Text(
+      "Back",
+      style: TextStyle(
+        fontSize: 14,
+        fontFamily: "Montserrat",
+        color: Colors.white, // Inherit text color
+      ),
+    ),
+    style: TextButton.styleFrom(
+      backgroundColor: Colors.transparent,
+      padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)), // Optional rounded border
+    ),
+  );
+}
 Widget productDetailViewpager(FoodProductDetailsPage widget, onPageChange) {
   return CarouselSlider(
     items:
