@@ -88,13 +88,17 @@ class AppLogoNameGridView extends StatelessWidget {
                     lloadWidget = Gridthirditem(
                       imageUrl: gridItems[index]['imageUrl']!,
                       title: gridItems[index]['title']!,
-                      description: gridItems[index]['title']!,
+                      price: gridItems[index]['price']!,
+                      productLife: gridItems[index]['calories']!,
+                      calories: gridItems[index]['productLife']!,
                     );
                   } else {
                     lloadWidget = Gridfourthitem(
                       imageUrl: gridItems[index]['imageUrl']!,
                       title: gridItems[index]['title']!,
-                      description: gridItems[index]['title']!,
+                      price: gridItems[index]['price']!,
+                      productLife: gridItems[index]['calories']!,
+                      calories: gridItems[index]['productLife']!,
                     );
                   }
 

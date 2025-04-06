@@ -5,12 +5,16 @@ import 'ProductListWidgets.dart';
 class Gridfourthitem extends StatelessWidget {
   final String imageUrl;
   final String title;
-  final String description;
+  final String price;
+  final String productLife;
+  final String calories;
 
   Gridfourthitem({
     required this.imageUrl,
     required this.title,
-    required this.description,
+    required this.price,
+    required this.productLife,
+    required this.calories,
   });
 
   @override
@@ -28,11 +32,16 @@ class Gridfourthitem extends StatelessWidget {
 
             productListTitleWidget(title),
 
-            productListVariationWidget("₹ 900.00 - 300 grams"),
+            if (price.isEmpty) soldOutText(),
 
-            productListLife("Product life: 300 days"),
+            //"₹ 900.00 - 300 grams"
+            if (price.isNotEmpty) productListVariationWidget(price),
 
-            productListCalories("Calories: 470"),
+            //"Product life: 300 days"
+            if (price.isNotEmpty) productListLife(productLife),
+
+            //"Calories: 470"
+            if (price.isNotEmpty) productListCalories(calories),
           ],
         ),
       ],

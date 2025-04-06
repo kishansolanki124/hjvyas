@@ -43,14 +43,18 @@ class TwoItemGridView extends StatelessWidget {
               return Gridthirditem(
                 imageUrl: value['imageUrl']!,
                 title: value['title']!,
-                description: value['description']!,
+                price: value['description']!,
+                productLife: value['productLife']!,
+                calories: value['calories']!,
               );
             } else {
               print("Gridfourthitem $index");
               return Gridfourthitem(
                 imageUrl: value['imageUrl']!,
                 title: value['title']!,
-                description: value['description']!,
+                price: value['description']!,
+                productLife: value['productLife']!,
+                calories: value['calories']!,
               );
             }
           }).toList(),
@@ -112,7 +116,7 @@ class GridStateless extends StatelessWidget {
           {
             'imageUrl': 'https://picsum.photos/id/6/400/800',
             'title': 'Item 1',
-            'price': '₹ 900.00 - 300 grams',
+            'price': '',
             'calories': 'Calories: 470',
             'productLife': 'Product life: 300 days',
           },
@@ -120,7 +124,7 @@ class GridStateless extends StatelessWidget {
             'imageUrl':
                 'https://images.unsplash.com/photo-1516035069371-29a1b2bd89dd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80',
             'title': 'Item 2',
-            'price': '₹ 900.00 - 300 grams',
+            'price': '',
             'calories': 'Calories: 470',
             'productLife': 'Product life: 300 days',
           },
