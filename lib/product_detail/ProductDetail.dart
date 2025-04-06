@@ -292,7 +292,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,//todo change this
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,//todo change this
       floatingActionButton: addToCartFullWidthButton("1800.00", _onPressed),
     );
   }
