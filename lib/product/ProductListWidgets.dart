@@ -120,16 +120,37 @@ Widget productListColoredBorderBox(double marginTop, double marginBottom) {
   );
 }
 
-
 Widget productDetailCenterImageRound() {
   return Padding(
     padding: EdgeInsetsDirectional.fromSTEB(0, 300, 0, 0),
     child: Align(
-      child: SizedBox(
-        width: 150,
-        height: 150,
-        child: productListImage(""),
-      ),
+      child: SizedBox(width: 150, height: 150, child: productListImage("")),
     ),
+  );
+}
+
+Widget soldOutText() {
+  return Column(
+    children: [
+      SizedBox(height: 20),
+      Padding(
+        padding: EdgeInsets.fromLTRB(32, 16, 16, 16),
+        child: Container(
+          color: Color.fromARGB(255, 123, 138, 195),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
+            child: Text(
+              "Sold Out",
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 14,
+                fontFamily: "Montserrat",
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+      ),
+    ],
   );
 }

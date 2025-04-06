@@ -10,8 +10,8 @@ Widget backButton(_onBackPressed) {
     onPressed: _onBackPressed,
     icon: Image.asset(
       "icons/back_icon.png",
-      width: 24, // Adjust size as needed
-      height: 24,
+      width: 22, // Adjust size as needed
+      height: 22,
     ),
     label: Text(
       "Back",

@@ -5,12 +5,16 @@ import 'ProductListWidgets.dart';
 class GridItem extends StatelessWidget {
   final String imageUrl;
   final String title;
-  final String description;
+  final String price;
+  final String productLife;
+  final String calories;
 
   GridItem({
     required this.imageUrl,
     required this.title,
-    required this.description,
+    required this.price,
+    required this.productLife,
+    required this.calories,
   });
 
   @override
