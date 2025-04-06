@@ -2,16 +2,19 @@ import 'package:flutter/material.dart';
 
 import '../product/ProductListWidgets.dart';
 
-
 class ComboSecondItem extends StatelessWidget {
   final String imageUrl;
   final String title;
-  final String description;
+  final String price;
+  final String productLife;
+  final String calories;
 
   ComboSecondItem({
     required this.imageUrl,
     required this.title,
-    required this.description,
+    required this.price,
+    required this.productLife,
+    required this.calories,
   });
 
   @override
@@ -25,24 +28,23 @@ class ComboSecondItem extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            productListImage("",Color.fromARGB(255, 123, 138, 195)),
+            productListImage("", Color.fromARGB(255, 123, 138, 195)),
 
             productListTitleWidget(title),
 
-            productListVariationWidget(
-              "₹ 900.00 - 300 grams",
-              Color.fromARGB(255, 1, 1, 1),
-            ),
+            //"₹ 900.00 - 300 grams"
+            if (price.isNotEmpty)
+              productListVariationWidget(price, Color.fromARGB(255, 1, 1, 1)),
 
-            productListLife(
-              "Product life: 300 days",
-              Color.fromARGB(255, 139, 139, 139),
-            ),
+            //"Product life: 300 days"
+            if (price.isNotEmpty)
+              productListLife(productLife, Color.fromARGB(255, 139, 139, 139)),
 
-            productListCalories(
-              "Calories: 470",
-              Color.fromARGB(255, 139, 139, 139),
-            ),
+            //"Calories: 470"
+            if (price.isNotEmpty)
+              productListCalories(calories, Color.fromARGB(255, 139, 139, 139)),
+
+            if (price.isEmpty) soldOutText(),
           ],
         ),
       ],

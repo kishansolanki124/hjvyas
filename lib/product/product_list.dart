@@ -147,7 +147,7 @@ class GridStateless extends StatelessWidget {
           {
             'imageUrl': 'https://picsum.photos/id/4/400/800',
             'title': 'Item 5',
-            'price': '₹ 900.00 - 300 grams',
+            'price': '',
             'calories': 'Calories: 470',
             'productLife': 'Product life: 300 days',
           },

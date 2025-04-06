@@ -70,25 +70,33 @@ class Combowidget extends StatelessWidget {
                     return ComboFirstItem(
                       imageUrl: gridItems[index]['imageUrl']!,
                       title: gridItems[index]['title']!,
-                      description: gridItems[index]['title']!,
+                      price: gridItems[index]['price']!,
+                      productLife: gridItems[index]['productLife']!,
+                      calories: gridItems[index]['calories']!,
                     );
                   } else if (index % 4 == 1) {
                     return ComboSecondItem(
                       imageUrl: gridItems[index]['imageUrl']!,
                       title: gridItems[index]['title']!,
-                      description: gridItems[index]['title']!,
+                      price: gridItems[index]['price']!,
+                      productLife: gridItems[index]['productLife']!,
+                      calories: gridItems[index]['calories']!,
                     );
                   } else if (index % 4 == 2) {
                     return ComboThirdItem(
                       imageUrl: gridItems[index]['imageUrl']!,
                       title: gridItems[index]['title']!,
-                      description: gridItems[index]['title']!,
+                      price: gridItems[index]['price']!,
+                      productLife: gridItems[index]['productLife']!,
+                      calories: gridItems[index]['calories']!,
                     );
                   } else {
                     return ComboFourthItem(
                       imageUrl: gridItems[index]['imageUrl']!,
                       title: gridItems[index]['title']!,
-                      description: gridItems[index]['title']!,
+                      price: gridItems[index]['price']!,
+                      productLife: gridItems[index]['productLife']!,
+                      calories: gridItems[index]['calories']!,
                     );
                   }
                 },

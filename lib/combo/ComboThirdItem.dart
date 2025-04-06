@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
-
 import 'package:hjvyas/product/ProductListWidgets.dart';
 
 class ComboThirdItem extends StatelessWidget {
   final String imageUrl;
   final String title;
-  final String description;
+  final String price;
+  final String productLife;
+  final String calories;
 
   ComboThirdItem({
     required this.imageUrl,
     required this.title,
-    required this.description,
+    required this.price,
+    required this.productLife,
+    required this.calories,
   });
 
   @override
@@ -26,16 +29,19 @@ class ComboThirdItem extends StatelessWidget {
           children: <Widget>[
             productListTitleWidget(title, Color.fromARGB(255, 1, 1, 1)),
 
-            productListVariationWidget(
-              "₹ 900.00 - 300 grams",
-              Color.fromARGB(255, 1, 1, 1),
-            ),
+            //"₹ 900.00 - 300 grams"
+            if (price.isNotEmpty)
+              productListVariationWidget(price, Color.fromARGB(255, 1, 1, 1)),
 
-            productListLife("Product life: 300 days"),
+            //"Product life: 300 days"
+            if (price.isNotEmpty) productListLife(productLife),
 
-            productListCalories("Calories: 470"),
+            //"Calories: 470"
+            if (price.isNotEmpty) productListCalories(calories),
 
-            productListImage("",Color.fromARGB(255, 123, 138, 195)),
+            if (price.isEmpty) soldOutText(),
+
+            productListImage("", Color.fromARGB(255, 123, 138, 195)),
           ],
         ),
       ],
