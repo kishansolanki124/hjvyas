@@ -21,3 +21,5 @@ Transform widget for animation
 Hero widget fo animation between navigation (using tags in widget)
 
 InheritedModel used to pass data to parent widget
+
+AnimatedContainer for animation

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:autoscale_tabbarview/autoscale_tabbarview.dart';
 import '../product/ProductListWidgets.dart';
 import 'ProductDetailWidget.dart';
 
@@ -241,88 +241,10 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                   // 7. Tab Layout with Two Tabs
                   productDetailTabs(_tabController,
                       activeTabIndex),
-                  // Padding(
-                  //   padding: const EdgeInsets.all(16.0),
-                  //   child: TabBar(
-                  //     indicatorSize: TabBarIndicatorSize.tab,
-                  //     dividerColor: Colors.transparent,
-                  //     padding: const EdgeInsets.fromLTRB(0,0,0,0),
-                  //     indicator: BoxDecoration(
-                  //       border: Border(
-                  //         top: BorderSide(
-                  //           color: Color.fromARGB(255, 123, 138, 195),
-                  //           width: 6.0,
-                  //         ),
-                  //         left: BorderSide(
-                  //           color: Color.fromARGB(255, 123, 138, 195),
-                  //           width: 1.0,
-                  //         ),
-                  //         right: BorderSide(
-                  //           color: Color.fromARGB(255, 123, 138, 195),
-                  //           width: 1.0,
-                  //         ),
-                  //       ),
-                  //     ),
-                  //     labelColor: Colors.white,
-                  //
-                  //     //indicatorPadding: const EdgeInsets.all(0),
-                  //     indicatorPadding: const EdgeInsets.fromLTRB(0,0,0,2),
-                  //     labelPadding: const EdgeInsets.symmetric(
-                  //       horizontal: 0,
-                  //       vertical: 0,
-                  //     ),
-                  //     unselectedLabelColor: Colors.white,
-                  //     controller: _tabController,
-                  //     tabs: [
-                  //       //Tab(text: 'Description',),
-                  //   Tab(
-                  //         child: Container(
-                  //           decoration: BoxDecoration(
-                  //             border: Border(
-                  //               bottom: BorderSide(
-                  //                 color:
-                  //                     activeTabIndex == 0
-                  //                         ? Colors.transparent
-                  //                         : Color.fromARGB(255, 123, 138, 195),
-                  //                 width: 1.0,
-                  //               ),
-                  //             ),
-                  //           ),
-                  //           child: const Align(
-                  //             alignment: Alignment.center,
-                  //             child: Text("Description"),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //
-                  //       Tab(
-                  //         child: Container(
-                  //           decoration: BoxDecoration(
-                  //             border: Border(
-                  //               bottom: BorderSide(
-                  //                 color:
-                  //                     activeTabIndex == 1
-                  //                         ? Colors.transparent
-                  //                         : Color.fromARGB(255, 123, 138, 195),
-                  //                 width: 1.0,
-                  //               ),
-                  //             ),
-                  //           ),
-                  //           child: const Align(
-                  //             alignment: Alignment.center,
-                  //             child: Text("Nutrition Value"),
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
 
                   Padding(
                     padding: const EdgeInsets.all(16.0),
-                    child: Container(
-                      height: 200, // Adjust height as needed for tab content
-                      child: TabBarView(
+                    child: AutoScaleTabBarView(
                         controller: _tabController,
                         children: [
                           // Reviews Tab
@@ -347,7 +269,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                         ],
                       ),
                     ),
-                  ),
+                  //),
 
                   SizedBox(height: 24),
 
