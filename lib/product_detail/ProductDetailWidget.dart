@@ -2,6 +2,9 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:hjvyas/product_detail/ProductDetail.dart';
 
+import '../home/HomeImgeItem.dart';
+import 'NetworkImageWithLoading.dart';
+
 Widget backButton(_onBackPressed) {
   return TextButton.icon(
     onPressed: _onBackPressed,
@@ -33,19 +36,20 @@ Widget productDetailViewpager(FoodProductDetailsPage widget, onPageChange) {
     items:
         widget.imageUrls
             .map(
-              (url) => Image.network(
-                url, //fit: BoxFit.cover,
-                fit: BoxFit.fill,
-                width: double.infinity,
-                height: 350,
-                errorBuilder: (context, error, stackTrace) {
-                  return SizedBox(
-                    width: double.infinity,
-                    height: 350,
-                    child: Center(child: Text('Failed to load image')),
-                  );
-                },
-              ),
+              (url) => networkImageWithLoader(url)
+              //     Image.network(
+              //   url, //fit: BoxFit.cover,
+              //   fit: BoxFit.fill,
+              //   width: double.infinity,
+              //   height: 350,
+              //   errorBuilder: (context, error, stackTrace) {
+              //     return SizedBox(
+              //       width: double.infinity,
+              //       height: 350,
+              //       child: Center(child: Text('Failed to load image')),
+              //     );
+              //   },
+              // ),
             )
             .toList(),
     options: CarouselOptions(
@@ -453,5 +457,11 @@ Widget productDetailTabs(_tabController, activeTabIndex) {
         ),
       ],
     ),
+  );
+}
+
+Widget networkImageWithLoader(String url) {
+  return NetworkImageWithLoading(
+      imageUrl: url
   );
 }
