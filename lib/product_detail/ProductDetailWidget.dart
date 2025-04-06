@@ -21,10 +21,13 @@ Widget backButton(_onBackPressed) {
     style: TextButton.styleFrom(
       backgroundColor: Colors.transparent,
       padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)), // Optional rounded border
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8.0),
+      ), // Optional rounded border
     ),
   );
 }
+
 Widget productDetailViewpager(FoodProductDetailsPage widget, onPageChange) {
   return CarouselSlider(
     items:
@@ -94,16 +97,24 @@ Widget productDetailNameAndPrice(FoodProductDetailsPage widget) {
     children: [
       SizedBox(height: 50),
 
-      Text(
-        widget.productName,
-        style: TextStyle(
-          fontSize: 18,
-          color: Colors.white,
-          fontFamily: "Montserrat",
-          fontWeight: FontWeight.w600,
+      Container(
+        color: Color.fromARGB(255, 31, 47, 80),
+        child: Padding(
+          padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
+          child: Text(
+            widget.productName,
+            style: TextStyle(
+              backgroundColor: Color.fromARGB(255, 31, 47, 80),
+              fontSize: 18,
+              color: Colors.white,
+              fontFamily: "Montserrat",
+              fontWeight: FontWeight.w600,
+            ),
+            textAlign: TextAlign.center,
+          ),
         ),
-        textAlign: TextAlign.center,
       ),
+
       SizedBox(height: 8),
 
       // 3. Product Price

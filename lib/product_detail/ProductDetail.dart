@@ -174,7 +174,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                         // 1. Image Carousel with Dots
                         productDetailViewpager(widget, _onPageChange),
 
-                        // 2. Image Carousel Dots
+                        // 2. Image Carousel Dots and volume
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -189,23 +189,185 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                 30,
                                 0,
                               ),
-                              child: Image.asset(height: 30,width: 30,"images/audio_icon.png"),
+                              child: Image.asset(
+                                height: 30,
+                                width: 30,
+                                "images/audio_icon.png",
+                              ),
                             ),
                           ],
                         ),
 
+                        // //3. name and price
+                        // // 4. Dropdown of variant and Counter (Horizontal)
+                        // Padding(
+                        //   padding: const EdgeInsets.all(16.0),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.center,
+                        //     children: <Widget>[
+                        //
+                        //       //3. name and price
+                        //       productDetailNameAndPrice(widget),
+                        //
+                        //       // 4. Dropdown of variant and Counter (Horizontal)
+                        //       Row(
+                        //         mainAxisAlignment:
+                        //             MainAxisAlignment.spaceBetween,
+                        //         children: <Widget>[
+                        //           if (widget.availableColors.isNotEmpty)
+                        //             productDetailDropDown(
+                        //               widget,
+                        //               _selectedVariant,
+                        //               _onChangedDropDownValue,
+                        //             ),
+                        //
+                        //           productDetailItemCounter(
+                        //             widget,
+                        //             _decrementQuantity,
+                        //             _incrementQuantity,
+                        //             _quantity,
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        //
+                        // // 5. Horizontal List of Square Images of Product Ingredients
+                        // if (widget.ingredientImageUrls.isNotEmpty)
+                        //   productDetailIngredients(widget),
+                        //
+                        // //description
+                        // Padding(
+                        //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        //   child: Text(
+                        //     'Spices & Condiments Sugar, Iodized Salt, Citric Acid, Asafoetida & Bayleaf.',
+                        //     style: TextStyle(
+                        //       fontSize: 14,
+                        //       color: Colors.white,
+                        //       fontFamily: "Montserrat",
+                        //     ),
+                        //   ),
+                        // ),
+                        //
+                        // //Product Terms
+                        // Padding(
+                        //   padding: const EdgeInsets.all(16.0),
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     children: <Widget>[
+                        //       Text(
+                        //         'Terms :',
+                        //         style: TextStyle(
+                        //           fontSize: 16,
+                        //           color: Colors.white,
+                        //           fontFamily: "Montserrat",
+                        //           fontWeight: FontWeight.w700,
+                        //         ),
+                        //       ),
+                        //       SizedBox(height: 8),
+                        //       Text(
+                        //         widget.productDescription,
+                        //         textAlign: TextAlign.justify,
+                        //         style: TextStyle(
+                        //           fontSize: 14,
+                        //           color: Colors.white,
+                        //           fontFamily: "Montserrat",
+                        //         ),
+                        //       ),
+                        //       SizedBox(height: 24),
+                        //     ],
+                        //   ),
+                        // ),
+                        //
+                        // // 7. Tab Layout with Two Tabs
+                        // productDetailTabs(_tabController, activeTabIndex),
+                        //
+                        // Padding(
+                        //   padding: const EdgeInsets.all(16.0),
+                        //   child: AutoScaleTabBarView(
+                        //     controller: _tabController,
+                        //     children: [
+                        //       // Reviews Tab
+                        //       Text(
+                        //         widget.reviews,
+                        //         textAlign: TextAlign.justify,
+                        //         style: TextStyle(
+                        //           fontSize: 14,
+                        //           color: Colors.white,
+                        //           fontFamily: "Montserrat",
+                        //         ),
+                        //       ), // Nutrition Info Tab
+                        //       Text(
+                        //         widget.nutritionInfo,
+                        //         textAlign: TextAlign.justify,
+                        //         style: TextStyle(
+                        //           fontSize: 14,
+                        //           color: Colors.white,
+                        //           fontFamily: "Montserrat",
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        //
+                        // SizedBox(height: 24),
+                        //
+                        // // 8. You May Also Like Product Listing Horizontally
+                        // if (widget.youMayLikeProducts.isNotEmpty)
+                        //   productDetailYouMayLike(widget),
+                        //
+                        // SizedBox(height: 100),
+                      ],
+                    ),
+
+                    IgnorePointer(
+                      child: Container(
+                      height: 480,
+                      margin: EdgeInsets.only(
+                        left: 20.0,
+                        right: 20.0,
+                        bottom: 0,
+                      ),
+                      decoration: BoxDecoration(
+                        border: Border(
+                          left: BorderSide(
+                            color: Color.fromARGB(255, 123, 138, 195),
+                            width: 2.0,
+                          ),
+                          bottom: BorderSide(
+                            color: Color.fromARGB(255, 123, 138, 195),
+                            width: 2.0,
+                          ),
+                          right: BorderSide(
+                            color: Color.fromARGB(255, 123, 138, 195),
+                            width: 2.0,
+                          ),
+                        ),
+                        borderRadius: BorderRadius.all(Radius.circular(0)),
+                      ),
+                    )),
+
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: 400,
+                        ),
+                        //3. name and price
+                        // 4. Dropdown of variant and Counter (Horizontal)
                         Padding(
                           padding: const EdgeInsets.all(16.0),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
-                              //name and price
+
+                              //3. name and price
                               productDetailNameAndPrice(widget),
 
                               // 4. Dropdown of variant and Counter (Horizontal)
                               Row(
                                 mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   if (widget.availableColors.isNotEmpty)
                                     productDetailDropDown(
