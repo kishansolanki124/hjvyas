@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:autoscale_tabbarview/autoscale_tabbarview.dart';
+import 'package:flutter/material.dart';
+
 import '../product/ProductListWidgets.dart';
+import 'FullWidthButton.dart';
 import 'ProductDetailWidget.dart';
 
 class ProductDetail extends StatelessWidget {
@@ -137,6 +139,12 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
     });
   }
 
+  void _onPressed() {
+    setState(() {
+      print('Add to Cart button pressed!');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -239,37 +247,35 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                   ),
 
                   // 7. Tab Layout with Two Tabs
-                  productDetailTabs(_tabController,
-                      activeTabIndex),
+                  productDetailTabs(_tabController, activeTabIndex),
 
                   Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: AutoScaleTabBarView(
-                        controller: _tabController,
-                        children: [
-                          // Reviews Tab
-                          Text(
-                            widget.reviews,
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontFamily: "Montserrat",
-                            ),
-                          ), // Nutrition Info Tab
-                          Text(
-                            widget.nutritionInfo,
-                            textAlign: TextAlign.justify,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontFamily: "Montserrat",
-                            ),
+                      controller: _tabController,
+                      children: [
+                        // Reviews Tab
+                        Text(
+                          widget.reviews,
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontFamily: "Montserrat",
                           ),
-                        ],
-                      ),
+                        ), // Nutrition Info Tab
+                        Text(
+                          widget.nutritionInfo,
+                          textAlign: TextAlign.justify,
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontFamily: "Montserrat",
+                          ),
+                        ),
+                      ],
                     ),
-                  //),
+                  ), //),
 
                   SizedBox(height: 24),
 
@@ -286,6 +292,8 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
           ),
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,//todo change this
+      floatingActionButton: addToCartFullWidthButton("1800.00", _onPressed),
     );
   }
 }

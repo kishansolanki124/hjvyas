@@ -5,13 +5,14 @@ Combo Page:
 1. hide bottomsheet on scroll
 
 Product Details:
-2. add to cart floating button
+10. navigation to detaill page from product list page
 3. image loader on top image viewer
 4. shadow elevation in center round image
 5. back button
 6. volume icon
 7. fonts and text size
 8. Test with smaller and larger devices.
+9. hide/show add to cart floating button on scroll
 
 
 For videos:
