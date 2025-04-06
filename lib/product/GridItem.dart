@@ -32,20 +32,22 @@ class GridItem extends StatelessWidget {
 
             productListTitleWidget(title),
 
-            productListVariationWidget(
-              "₹ 900.00 - 300 grams",
+            //"₹ 900.00 - 300 grams"
+            if (price.isNotEmpty) productListVariationWidget(price,
               Color.fromARGB(255, 1, 1, 1),
             ),
 
-            productListLife(
-              "Product life: 300 days",
+            //"Product life: 300 days"
+            if (price.isNotEmpty) productListLife(productLife,
               Color.fromARGB(255, 139, 139, 139),
             ),
 
-            productListCalories(
-              "Calories: 470",
+            //"Calories: 470"
+            if (price.isNotEmpty) productListCalories(calories,
               Color.fromARGB(255, 139, 139, 139),
             ),
+
+            if (price.isEmpty) soldOutText(),
           ],
         ),
       ],

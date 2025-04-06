@@ -34,7 +34,9 @@ class TwoItemGridView extends StatelessWidget {
               return GridItem(
                 imageUrl: value['imageUrl']!,
                 title: value['title']!,
-                description: value['description']!,
+                price: value['description']!,
+                productLife: value['productLife']!,
+                calories: value['calories']!,
               );
             } else if (index % 4 == 2) {
               print("Gridthirditem $index");
@@ -103,9 +105,9 @@ class GridStateless extends StatelessWidget {
           {
             'imageUrl': 'https://picsum.photos/id/3/400/800',
             'title': 'Item 6',
-            'price': '₹ 900.00 - 300 grams',
-            'calories': 'Calories: 470',
-            'productLife': 'Product life: 300 days',
+            'price': '',
+            'calories': '',
+            'productLife': '',
           },
           {
             'imageUrl': 'https://picsum.photos/id/6/400/800',
