@@ -175,7 +175,24 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                         productDetailViewpager(widget, _onPageChange),
 
                         // 2. Image Carousel Dots
-                        productDetailCorosoulDots(widget, _currentImageIndex),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            productDetailCorosoulDots(
+                              widget,
+                              _currentImageIndex,
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                20,
+                                20,
+                                30,
+                                0,
+                              ),
+                              child: Image.asset(height: 30,width: 30,"images/audio_icon.png"),
+                            ),
+                          ],
+                        ),
 
                         Padding(
                           padding: const EdgeInsets.all(16.0),
@@ -287,7 +304,6 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                           ),
                         ),
 
-                        //),
                         SizedBox(height: 24),
 
                         // 8. You May Also Like Product Listing Horizontally

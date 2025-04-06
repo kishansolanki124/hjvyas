@@ -67,7 +67,7 @@ Widget productDetailCorosoulDots(
   int currentImageIndex,
 ) {
   return Padding(
-    padding: EdgeInsetsDirectional.fromSTEB(20, 20, 0, 0),
+    padding: EdgeInsetsDirectional.fromSTEB(30, 20, 0, 0),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children:
