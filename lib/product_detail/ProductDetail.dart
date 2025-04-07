@@ -18,7 +18,8 @@ class ProductDetail extends StatelessWidget {
           "https://picsum.photos/id/6/400/800",
           "https://images.pexels.com/photos/1526713/pexels-photo-1526713.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1526713.jpg&fm=jpg&w=4000&h=6000",
         ],
-        productPrice: "₹ 3000.00 (1 KG)",
+        //productPrice: "₹ 3000.00 (1 KG)",
+        productPrice: "",
         productDescription:
             "Prices are Inclusive of Taxes & Exclusive of Shipping Charges. Make Sure it Takes 3 to 4 Days to Reach the Delivery Address after Dispatch 1  from Your Order. Depends on the State, City & Location of Your Delivery Address. Maybe it's Take More Days to Delivered in India & 7-8 Business Days in Abroad",
         availableColors: [
@@ -197,127 +198,6 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                             ),
                           ],
                         ),
-
-                        // //3. name and price
-                        // // 4. Dropdown of variant and Counter (Horizontal)
-                        // Padding(
-                        //   padding: const EdgeInsets.all(16.0),
-                        //   child: Column(
-                        //     crossAxisAlignment: CrossAxisAlignment.center,
-                        //     children: <Widget>[
-                        //
-                        //       //3. name and price
-                        //       productDetailNameAndPrice(widget),
-                        //
-                        //       // 4. Dropdown of variant and Counter (Horizontal)
-                        //       Row(
-                        //         mainAxisAlignment:
-                        //             MainAxisAlignment.spaceBetween,
-                        //         children: <Widget>[
-                        //           if (widget.availableColors.isNotEmpty)
-                        //             productDetailDropDown(
-                        //               widget,
-                        //               _selectedVariant,
-                        //               _onChangedDropDownValue,
-                        //             ),
-                        //
-                        //           productDetailItemCounter(
-                        //             widget,
-                        //             _decrementQuantity,
-                        //             _incrementQuantity,
-                        //             _quantity,
-                        //           ),
-                        //         ],
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        //
-                        // // 5. Horizontal List of Square Images of Product Ingredients
-                        // if (widget.ingredientImageUrls.isNotEmpty)
-                        //   productDetailIngredients(widget),
-                        //
-                        // //description
-                        // Padding(
-                        //   padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                        //   child: Text(
-                        //     'Spices & Condiments Sugar, Iodized Salt, Citric Acid, Asafoetida & Bayleaf.',
-                        //     style: TextStyle(
-                        //       fontSize: 14,
-                        //       color: Colors.white,
-                        //       fontFamily: "Montserrat",
-                        //     ),
-                        //   ),
-                        // ),
-                        //
-                        // //Product Terms
-                        // Padding(
-                        //   padding: const EdgeInsets.all(16.0),
-                        //   child: Column(
-                        //     crossAxisAlignment: CrossAxisAlignment.start,
-                        //     children: <Widget>[
-                        //       Text(
-                        //         'Terms :',
-                        //         style: TextStyle(
-                        //           fontSize: 16,
-                        //           color: Colors.white,
-                        //           fontFamily: "Montserrat",
-                        //           fontWeight: FontWeight.w700,
-                        //         ),
-                        //       ),
-                        //       SizedBox(height: 8),
-                        //       Text(
-                        //         widget.productDescription,
-                        //         textAlign: TextAlign.justify,
-                        //         style: TextStyle(
-                        //           fontSize: 14,
-                        //           color: Colors.white,
-                        //           fontFamily: "Montserrat",
-                        //         ),
-                        //       ),
-                        //       SizedBox(height: 24),
-                        //     ],
-                        //   ),
-                        // ),
-                        //
-                        // // 7. Tab Layout with Two Tabs
-                        // productDetailTabs(_tabController, activeTabIndex),
-                        //
-                        // Padding(
-                        //   padding: const EdgeInsets.all(16.0),
-                        //   child: AutoScaleTabBarView(
-                        //     controller: _tabController,
-                        //     children: [
-                        //       // Reviews Tab
-                        //       Text(
-                        //         widget.reviews,
-                        //         textAlign: TextAlign.justify,
-                        //         style: TextStyle(
-                        //           fontSize: 14,
-                        //           color: Colors.white,
-                        //           fontFamily: "Montserrat",
-                        //         ),
-                        //       ), // Nutrition Info Tab
-                        //       Text(
-                        //         widget.nutritionInfo,
-                        //         textAlign: TextAlign.justify,
-                        //         style: TextStyle(
-                        //           fontSize: 14,
-                        //           color: Colors.white,
-                        //           fontFamily: "Montserrat",
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        //
-                        // SizedBox(height: 24),
-                        //
-                        // // 8. You May Also Like Product Listing Horizontally
-                        // if (widget.youMayLikeProducts.isNotEmpty)
-                        //   productDetailYouMayLike(widget),
-                        //
-                        // SizedBox(height: 100),
                       ],
                     ),
 
@@ -353,6 +233,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                         SizedBox(
                           height: 400,
                         ),
+
                         //3. name and price
                         // 4. Dropdown of variant and Counter (Horizontal)
                         Padding(
@@ -365,7 +246,8 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                               productDetailNameAndPrice(widget),
 
                               // 4. Dropdown of variant and Counter (Horizontal)
-                              Row(
+                              if(widget.productPrice.isNotEmpty)
+                                Row(
                                 mainAxisAlignment:
                                 MainAxisAlignment.spaceBetween,
                                 children: <Widget>[

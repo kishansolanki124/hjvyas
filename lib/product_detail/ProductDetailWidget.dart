@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hjvyas/product_detail/ProductDetail.dart';
 
-import '../home/HomeImgeItem.dart';
 import 'NetworkImageWithLoading.dart';
 
 Widget backButton(_onBackPressed) {
@@ -23,7 +23,7 @@ Widget backButton(_onBackPressed) {
     ),
     style: TextButton.styleFrom(
       backgroundColor: Colors.transparent,
-      padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.0),
       ), // Optional rounded border
@@ -36,7 +36,7 @@ Widget productDetailViewpager(FoodProductDetailsPage widget, onPageChange) {
     items:
         widget.imageUrls
             .map(
-              (url) => networkImageWithLoader(url)
+              (url) => networkImageWithLoader(url),
               //     Image.network(
               //   url, //fit: BoxFit.cover,
               //   fit: BoxFit.fill,
@@ -122,14 +122,19 @@ Widget productDetailNameAndPrice(FoodProductDetailsPage widget) {
       SizedBox(height: 8),
 
       // 3. Product Price
-      Text(
-        widget.productPrice,
-        style: TextStyle(
-          fontSize: 18,
-          fontFamily: "Montserrat",
-          color: Colors.white,
+      if (widget.productPrice.isNotEmpty)
+        Text(
+          widget.productPrice,
+          style: TextStyle(
+            fontSize: 18,
+            fontFamily: "Montserrat",
+            color: Colors.white,
+          ),
         ),
-      ),
+
+      // 3. Product Price
+      if (widget.productPrice.isEmpty) outOfStockDetail(),
+
       SizedBox(height: 16),
     ],
   );
@@ -461,7 +466,187 @@ Widget productDetailTabs(_tabController, activeTabIndex) {
 }
 
 Widget networkImageWithLoader(String url) {
-  return NetworkImageWithLoading(
-      imageUrl: url
+  return NetworkImageWithLoading(imageUrl: url);
+}
+
+Widget outOfStockDetail() {
+  return Column(
+      crossAxisAlignment: CrossAxisAlignment.start, // Align text to the left
+      children: <Widget>[
+        // 1. "We're Sorry!" text in bold
+        Text(
+          "We're Sorry!",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 16.0, // Adjust size as needed
+            fontWeight: FontWeight.w500,
+            fontFamily: "Montserrat",
+          ),
+        ),
+
+        SizedBox(height: 8.0), // Add some vertical spacing
+        // 2. "This item has sold out" text in normal font
+        Text(
+          "This Item Has Sold Out. We Will Get Back Soon With This Product.",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14.0, // Adjust size as needed
+            fontFamily: "Montserrat",
+          ),
+        ),
+
+        SizedBox(height: 16.0),
+
+        // 3. "Notify Me !" Text with leading email icon
+        Row(
+          children: [
+            Image.asset(width: 24, height: 24, "icons/notify_me_icon.png"),
+            // Use the email icon
+            SizedBox(width: 8.0),
+
+            Text(
+              "Notify Me !",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 16.0, // Adjust size as needed
+                fontWeight: FontWeight.w500,
+                fontFamily: "Montserrat",
+              ),
+            ),
+          ],
+        ),
+
+        SizedBox(height: 8.0),
+
+        // 4. Text "Notify me when Product is Available"
+        Text(
+          "Notify Me When Product Is Available.",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14.0, // Adjust size as needed
+            fontFamily: "Montserrat",
+          ),
+        ),
+
+        SizedBox(height: 8.0),
+
+        // 5. Input text or Edit text with hint "Enter your mobile no."
+        // with 10 digit max length and input type should be only numbers
+        TextField(
+          keyboardType: TextInputType.number,
+          maxLength: 10,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+          // Set text color to white
+          decoration: InputDecoration(
+            hintText: "Enter Your Mobile No.",
+            hintStyle: TextStyle(
+              color: Colors.white,
+              fontFamily: "Montserrat",
+              fontSize: 14,
+            ),
+
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(width: 1,color: Color.fromARGB(255, 123, 138, 195)),
+            ),
+            // disabledBorder: OutlineInputBorder(
+            //   borderRadius: BorderRadius.all(Radius.circular(4)),
+            //   borderSide: BorderSide(width: 1,color: Colors.orange),
+            // ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(width: 1,color: Color.fromARGB(255, 123, 138, 195)),
+            ),
+            // border: OutlineInputBorder(
+            //     borderRadius: BorderRadius.all(Radius.circular(4)),
+            //     borderSide: BorderSide(width: 1,)
+            // ),
+            // errorBorder: OutlineInputBorder(
+            //     borderRadius: BorderRadius.all(Radius.circular(4)),
+            //     borderSide: BorderSide(width: 1,color: Colors.black)
+            // ),
+            // focusedErrorBorder: OutlineInputBorder(
+            //     borderRadius: BorderRadius.all(Radius.circular(4)),
+            //     borderSide: BorderSide(width: 1,color: Colors.yellowAccent)
+            // ),
+
+            contentPadding: EdgeInsets.all(8),
+            isDense: true, //make textfield compact
+          ),
+        ),
+
+
+        // 6. Input text or Edit text with hint "Enter your email id"
+        // with input type email
+        TextField(
+          keyboardType: TextInputType.emailAddress,
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ), decoration: InputDecoration(
+            hintText: "Enter your email id",
+            hintStyle: TextStyle(
+              color: Colors.white,
+              fontFamily: "Montserrat",
+              fontSize: 14,
+            ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(width: 1,color: Color.fromARGB(255, 123, 138, 195)),
+          ),
+          // disabledBorder: OutlineInputBorder(
+          //   borderRadius: BorderRadius.all(Radius.circular(4)),
+          //   borderSide: BorderSide(width: 1,color: Colors.orange),
+          // ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(width: 1,color: Color.fromARGB(255, 123, 138, 195)),
+          ),
+            contentPadding: EdgeInsets.all(8),
+            isDense: true, //make textfield compact
+          ),
+        ),
+
+        SizedBox(height: 24.0),
+
+        // 7. Notify Me square Button in black color text and sky color background
+        SizedBox(
+          child: ElevatedButton(
+            onPressed: () {
+              //  Add your notification logic here
+              print("Notify Me button clicked");
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromARGB(255, 123, 138, 195),
+              // Sky color
+              //foregroundColor: Colors.black,
+              // Black text color
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero, // Square corners
+              ),
+              padding: EdgeInsets.symmetric(
+                vertical: 12.0,
+                horizontal: 16
+              ), // Add some vertical padding
+            ),
+            child: Text(
+              "Notify Me",
+              style: TextStyle(fontSize: 16.0,
+              fontFamily: "Montserrat",
+              fontWeight: FontWeight.w600,
+              color: Colors.black), // Adjust size
+            ),
+          ),
+        ),
+      ],
+
   );
 }
