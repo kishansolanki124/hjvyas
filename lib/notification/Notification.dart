@@ -140,7 +140,7 @@ class NotificationList extends StatelessWidget {
                       child: Container(
                         color: Color.fromARGB(255, 31, 47, 80),
                         child: Padding(
-                          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          padding: EdgeInsets.all(10),
                           child: Text(
                             'Notification',
                             style: TextStyle(
