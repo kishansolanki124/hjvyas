@@ -25,7 +25,6 @@ class ProductDetail extends StatelessWidget {
           "https://picsum.photos/id/6/400/800",
           "https://images.pexels.com/photos/1526713/pexels-photo-1526713.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1526713.jpg&fm=jpg&w=4000&h=6000",
         ],
-        //productPrice: "₹ 3000.00 (1 KG)",
         productPrice: price,
         productDescription:
             "Prices are Inclusive of Taxes & Exclusive of Shipping Charges. Make Sure it Takes 3 to 4 Days to Reach the Delivery Address after Dispatch 1  from Your Order. Depends on the State, City & Location of Your Delivery Address. Maybe it's Take More Days to Delivered in India & 7-8 Business Days in Abroad",
@@ -193,7 +192,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
                                 20,
-                                20,
+                                10,
                                 30,
                                 0,
                               ),
@@ -208,12 +207,13 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                       ],
                     ),
 
+                    //square border app color
                     IgnorePointer(
                       child: Container(
                       height: 480,
                       margin: EdgeInsets.only(
-                        left: 20.0,
-                        right: 20.0,
+                        left: 16.0,
+                        right: 16.0,
                         bottom: 0,
                       ),
                       decoration: BoxDecoration(
@@ -303,7 +303,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                               Text(
                                 'Terms :',
                                 style: TextStyle(
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   color: Colors.white,
                                   fontFamily: "Montserrat",
                                   fontWeight: FontWeight.w700,
@@ -355,7 +355,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                           ),
                         ),
 
-                        SizedBox(height: 24),
+                        SizedBox(height: 18),
 
                         // 8. You May Also Like Product Listing Horizontally
                         if (widget.youMayLikeProducts.isNotEmpty)

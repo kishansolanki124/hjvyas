@@ -37,19 +37,7 @@ Widget productDetailViewpager(FoodProductDetailsPage widget, onPageChange) {
         widget.imageUrls
             .map(
               (url) => networkImageWithLoader(url),
-              //     Image.network(
-              //   url, //fit: BoxFit.cover,
-              //   fit: BoxFit.fill,
-              //   width: double.infinity,
-              //   height: 350,
-              //   errorBuilder: (context, error, stackTrace) {
-              //     return SizedBox(
-              //       width: double.infinity,
-              //       height: 350,
-              //       child: Center(child: Text('Failed to load image')),
-              //     );
-              //   },
-              // ),
+
             )
             .toList(),
     options: CarouselOptions(
@@ -74,7 +62,7 @@ Widget productDetailCorosoulDots(
   int currentImageIndex,
 ) {
   return Padding(
-    padding: EdgeInsetsDirectional.fromSTEB(30, 20, 0, 0),
+    padding: EdgeInsetsDirectional.fromSTEB(30, 0, 0, 0),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children:
@@ -101,6 +89,7 @@ Widget productDetailNameAndPrice(FoodProductDetailsPage widget) {
     children: [
       SizedBox(height: 50),
 
+      //product name
       Container(
         color: Color.fromARGB(255, 31, 47, 80),
         child: Padding(
@@ -109,10 +98,10 @@ Widget productDetailNameAndPrice(FoodProductDetailsPage widget) {
             widget.productName,
             style: TextStyle(
               backgroundColor: Color.fromARGB(255, 31, 47, 80),
-              fontSize: 18,
+              fontSize: 16,
               color: Colors.white,
               fontFamily: "Montserrat",
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
             ),
             textAlign: TextAlign.center,
           ),
@@ -124,15 +113,17 @@ Widget productDetailNameAndPrice(FoodProductDetailsPage widget) {
       // 3. Product Price
       if (widget.productPrice.isNotEmpty)
         Text(
-          widget.productPrice,
+          //widget.productPrice,
+          "₹ 3000.00 (1 KG)",
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 16,
             fontFamily: "Montserrat",
+            fontWeight: FontWeight.w500,
             color: Colors.white,
           ),
         ),
 
-      // 3. Product Price
+      // out of stock
       if (widget.productPrice.isEmpty) outOfStockDetail(),
 
       SizedBox(height: 16),
@@ -256,12 +247,12 @@ Widget productDetailIngredients(FoodProductDetailsPage widget) {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Text(
-          'Ingredients:',
+          'Ingredients :',
           style: TextStyle(
-            fontSize: 16,
+            fontSize: 14,
             color: Colors.white,
             fontFamily: "Montserrat",
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w700,
           ),
         ),
       ),
@@ -327,7 +318,7 @@ Widget productDetailYouMayLike(FoodProductDetailsPage widget) {
         child: Text(
           'You May Also Like :',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 16,
             color: Colors.white,
             fontFamily: "Montserrat",
             fontWeight: FontWeight.w700,
@@ -413,7 +404,6 @@ Widget productDetailTabs(_tabController, activeTabIndex) {
         ),
       ),
       labelColor: Colors.white,
-
       //indicatorPadding: const EdgeInsets.all(0),
       indicatorPadding: const EdgeInsets.fromLTRB(0, 0, 0, 2),
       labelPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
@@ -436,7 +426,13 @@ Widget productDetailTabs(_tabController, activeTabIndex) {
             ),
             child: const Align(
               alignment: Alignment.center,
-              child: Text("Description"),
+              child: Text("Description",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white,
+                  fontFamily: "Montserrat",
+                  fontWeight: FontWeight.w700,
+                ),),
             ),
           ),
         ),
@@ -456,7 +452,13 @@ Widget productDetailTabs(_tabController, activeTabIndex) {
             ),
             child: const Align(
               alignment: Alignment.center,
-              child: Text("Nutrition Value"),
+              child: Text("Nutrition Value",
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+                fontFamily: "Montserrat",
+                fontWeight: FontWeight.w700,
+              ),),
             ),
           ),
         ),
