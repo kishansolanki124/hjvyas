@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../combo/Combo.dart';
 import '../menu/menu_screen.dart';
+import '../notification/Notification.dart';
 import '../product/product_list.dart';
 import '../product_detail/ProductDetail.dart';
 import 'medialisthomepage.dart';
@@ -41,7 +42,7 @@ class _NavigationExampleState extends State<NavigationExample> {
 //    VideoApp(),
 //    Text("Third"),
     ComboStateless(),
-    ProductDetail(parentPrice: "",),
+    NotificationList(),
     //Text("Third"),
     //Text("Forth"),
 
