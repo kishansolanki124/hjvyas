@@ -480,7 +480,7 @@ Widget outOfStockDetail() {
           "We're Sorry!",
           style: TextStyle(
             color: Colors.white,
-            fontSize: 16.0, // Adjust size as needed
+            fontSize: 14.0, // Adjust size as needed
             fontWeight: FontWeight.w500,
             fontFamily: "Montserrat",
           ),
@@ -617,7 +617,7 @@ Widget outOfStockDetail() {
           ),
         ),
 
-        SizedBox(height: 24.0),
+        SizedBox(height: 18.0),
 
         // 7. Notify Me square Button in black color text and sky color background
         SizedBox(
@@ -635,8 +635,8 @@ Widget outOfStockDetail() {
                 borderRadius: BorderRadius.zero, // Square corners
               ),
               padding: EdgeInsets.symmetric(
-                vertical: 12.0,
-                horizontal: 16
+                vertical: 10.0,
+                horizontal: 12
               ), // Add some vertical padding
             ),
             child: Text(
