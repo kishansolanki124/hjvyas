@@ -41,7 +41,7 @@ class _NavigationExampleState extends State<NavigationExample> {
 //    VideoApp(),
 //    Text("Third"),
     ComboStateless(),
-    ProductDetail(),
+    ProductDetail(parentPrice: "",),
     //Text("Third"),
     //Text("Forth"),
 

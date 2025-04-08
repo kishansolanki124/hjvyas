@@ -6,8 +6,15 @@ import 'FullWidthButton.dart';
 import 'ProductDetailWidget.dart';
 
 class ProductDetail extends StatelessWidget {
+  final String parentPrice;
+
+  ProductDetail({
+    required this.parentPrice
+  });
+
   @override
   Widget build(BuildContext context) {
+    String price = parentPrice;
     return Scaffold(
       body: FoodProductDetailsPage(
         productName: "Luscious Bite",
@@ -19,7 +26,7 @@ class ProductDetail extends StatelessWidget {
           "https://images.pexels.com/photos/1526713/pexels-photo-1526713.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1526713.jpg&fm=jpg&w=4000&h=6000",
         ],
         //productPrice: "₹ 3000.00 (1 KG)",
-        productPrice: "",
+        productPrice: price,
         productDescription:
             "Prices are Inclusive of Taxes & Exclusive of Shipping Charges. Make Sure it Takes 3 to 4 Days to Reach the Delivery Address after Dispatch 1  from Your Order. Depends on the State, City & Location of Your Delivery Address. Maybe it's Take More Days to Delivered in India & 7-8 Business Days in Abroad",
         availableColors: [

@@ -83,7 +83,8 @@ class AppLogoNameGridView extends StatelessWidget {
                       title: gridItems[index]['title']!,
                       price: gridItems[index]['price']!,
                       productLife: gridItems[index]['calories']!,
-                      calories: gridItems[index]['productLife']!,                    );
+                      calories: gridItems[index]['productLife']!,
+                    );
                   } else if (index % 4 == 2) {
                     lloadWidget = Gridthirditem(
                       imageUrl: gridItems[index]['imageUrl']!,
@@ -102,7 +103,6 @@ class AppLogoNameGridView extends StatelessWidget {
                     );
                   }
 
-
                   return GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -110,7 +110,12 @@ class AppLogoNameGridView extends StatelessWidget {
                         MaterialPageRoute(
                           builder:
                               (context) => //ProductDetail(item: item),
-                                  ProductDetail(),
+                                  ProductDetail(
+                                parentPrice:
+                                    gridItems[index]['price'] != null
+                                        ? gridItems[index]['price']!
+                                        : "",
+                              ),
                         ),
                       );
                     },
