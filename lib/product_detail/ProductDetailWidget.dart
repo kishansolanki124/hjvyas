@@ -5,7 +5,8 @@ import 'package:hjvyas/product_detail/ProductDetail.dart';
 
 import 'NetworkImageWithLoading.dart';
 
-Widget backButton(_onBackPressed) {
+Widget backButton(Function() _onBackPressed) {
+
   return TextButton.icon(
     onPressed: _onBackPressed,
     icon: Image.asset(

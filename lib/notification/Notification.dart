@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../product_detail/ProductDetailWidget.dart';
 import 'NotificationWidget.dart';
 
 class NotificationListItem extends StatelessWidget {
@@ -80,92 +81,100 @@ class NotificationList extends StatelessWidget {
     },
   ];
 
+  void _onBackPressed(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: <Widget>[
-          // 1. Background Image
-          Image.asset(
-            'images/bg.jpg', // Replace with your image path
-            fit: BoxFit.cover, // Cover the entire screen
-            width: double.infinity,
-            height: double.infinity,
-          ),
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
+          children: <Widget>[
+            // 1. Background Image
+            Image.asset(
+              'images/bg.jpg', // Replace with your image path
+              fit: BoxFit.cover, // Cover the entire screen
+              width: double.infinity,
+              height: double.infinity,
+            ),
 
-          //square border app color
-          IgnorePointer(
-            child: Container(
-              height: 100,
-              margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 0),
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    color: Color.fromARGB(255, 123, 138, 195),
-                    width: 2.0,
+            //square border app color
+            IgnorePointer(
+              child: Container(
+                height: 100,
+                margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 0),
+                decoration: BoxDecoration(
+                  border: Border(
+                    left: BorderSide(
+                      color: Color.fromARGB(255, 123, 138, 195),
+                      width: 2.0,
+                    ),
+                    bottom: BorderSide(
+                      color: Color.fromARGB(255, 123, 138, 195),
+                      width: 2.0,
+                    ),
+                    right: BorderSide(
+                      color: Color.fromARGB(255, 123, 138, 195),
+                      width: 2.0,
+                    ),
                   ),
-                  bottom: BorderSide(
-                    color: Color.fromARGB(255, 123, 138, 195),
-                    width: 2.0,
-                  ),
-                  right: BorderSide(
-                    color: Color.fromARGB(255, 123, 138, 195),
-                    width: 2.0,
-                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(0)),
               ),
             ),
-          ),
 
-          SafeArea(
-            // Use SafeArea to avoid overlapping with system UI
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 60.0),
+            backButton(() => _onBackPressed(context)),
 
-                  // Title
-                  Center(child: Container(
-                    color: Color.fromARGB(255, 31, 47, 80),
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
-                      child: Text(
-                        'Notification',
-                        style: TextStyle(
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold,
-                          color:
-                              Colors
-                                  .white, // Ensure text is visible on the background
+            SafeArea(
+              // Use SafeArea to avoid overlapping with system UI
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(height: 60.0),
+
+                    // Title
+                    Center(
+                      child: Container(
+                        color: Color.fromARGB(255, 31, 47, 80),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(20, 10, 20, 10),
+                          child: Text(
+                            'Notification',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontFamily: "Montserrat",
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    ),
-                  ),
 
-                  SizedBox(height: 8.0), // Description
-                  // 3. Expanded List
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: data.length,
-                      itemBuilder: (context, index) {
-                        final item = data[index];
-                        return NotificationListItem(
-                          description: item['description']!,
-                          date: item['date']!,
-                          time: item['time']!,
-                        );
-                      }, // Use your custom list widget here
+                    SizedBox(height: 8.0), // Description
+                    // 3. Expanded List
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: data.length,
+                        itemBuilder: (context, index) {
+                          final item = data[index];
+                          return NotificationListItem(
+                            description: item['description']!,
+                            date: item['date']!,
+                            time: item['time']!,
+                          );
+                        }, // Use your custom list widget here
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
