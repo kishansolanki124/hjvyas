@@ -87,7 +87,6 @@ class _AboutHomeState extends State<AboutHome> {
 
             //backButton(() => _onBackPressed(context)),
             SafeArea(
-              // Use SafeArea to avoid overlapping with system UI
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
@@ -121,10 +120,12 @@ class _AboutHomeState extends State<AboutHome> {
                       ),
                     ),
 
-                    //about us content (scrollable)
-                    Expanded(
-                      child: SingleChildScrollView(child: AboutUsWidget()),
-                    ),
+                    AboutUsContentWidget(),
+
+                    // //about us content (scrollable)
+                    // Expanded(
+                    //   child: SingleChildScrollView(child: AboutUsWidget()),
+                    // ),
                   ],
                 ),
               ),
