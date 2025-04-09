@@ -121,14 +121,9 @@ class _AboutHomeState extends State<AboutHome> {
                       ),
                     ),
 
+                    //about us content (scrollable)
                     Expanded(
-                      child: SingleChildScrollView(
-                      child: Column(
-                          children: [
-                            AboutUsWidget(),
-                          ],
-                        ),
-                      ),
+                      child: SingleChildScrollView(child: AboutUsWidget()),
                     ),
                   ],
                 ),
