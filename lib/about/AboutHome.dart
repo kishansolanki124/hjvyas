@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../product_detail/ProductDetailWidget.dart';
-
 class AboutHome extends StatefulWidget {
   @override
   State<AboutHome> createState() => _AboutHomeState();
@@ -52,7 +50,7 @@ class _AboutHomeState extends State<AboutHome> {
       child: Scaffold(
         body: Stack(
           children: <Widget>[
-            // 1. Background Image
+            //Background Image
             Image.asset(
               'images/bg.jpg', // Replace with your image path
               fit: BoxFit.cover, // Cover the entire screen
@@ -60,7 +58,7 @@ class _AboutHomeState extends State<AboutHome> {
               height: double.infinity,
             ),
 
-            //square border app color
+            //square border on top
             IgnorePointer(
               child: Container(
                 height: 100,
@@ -85,8 +83,7 @@ class _AboutHomeState extends State<AboutHome> {
               ),
             ),
 
-            backButton(() => _onBackPressed(context)),
-
+            //backButton(() => _onBackPressed(context)),
             SafeArea(
               // Use SafeArea to avoid overlapping with system UI
               child: Padding(
@@ -96,10 +93,9 @@ class _AboutHomeState extends State<AboutHome> {
                   children: <Widget>[
                     SizedBox(height: 60.0),
 
-                    // Title
+                    // Horizontal menu
                     Center(
                       child: Container(
-                        //color: Color.fromARGB(255, 31, 47, 80),
                         child: Padding(
                           padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
                           child: Row(
@@ -160,7 +156,7 @@ Widget _buildSelectItem(
           decoration: BoxDecoration(
             color:
                 isSelected
-                    ? Color.fromARGB(255, 255, 255, 255)
+                    ? Color.fromARGB(180, 255, 255, 255)
                     : Color.fromARGB(
                       255,
                       31,
