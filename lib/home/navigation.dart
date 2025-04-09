@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../about/AboutHome.dart';
 import '../combo/Combo.dart';
 import '../menu/menu_screen.dart';
 import '../notification/Notification.dart';
@@ -46,7 +47,9 @@ class _NavigationExampleState extends State<NavigationExample> {
     //Text("Third"),
     //Text("Forth"),
 
-    Text("Fifth"),
+    //AboutHome(),
+    //SelectableRow(),
+    AboutHome(),
   ];
 
   void _onItemTapped(int index) {
