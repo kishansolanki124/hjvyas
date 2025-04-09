@@ -8,9 +8,9 @@ class AboutHome extends StatefulWidget {
 }
 
 class _AboutHomeState extends State<AboutHome> {
-  void _onBackPressed(BuildContext context) {
-    Navigator.of(context).pop();
-  }
+  // void _onBackPressed(BuildContext context) {
+  //   Navigator.of(context).pop();
+  // }
 
   void _changeIndex(int index) {
     setState(() {
