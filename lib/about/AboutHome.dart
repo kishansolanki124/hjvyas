@@ -171,7 +171,7 @@ Widget _buildSelectItem(
             border: Border.all(
               color:
                   isSelected
-                      ? Color.fromARGB(255, 255, 255, 255)
+                      ? Color.fromARGB(180, 255, 255, 255)
                       : Color.fromARGB(255, 123, 138, 195), // Square border
               width: 1.0,
             ),
@@ -193,6 +193,7 @@ Widget _buildSelectItem(
           child: Center(
             child: Text(
               _tabNames[index],
+              textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12.0,
                 fontFamily: "Montserrat",
