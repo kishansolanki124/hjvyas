@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'AboutWidgets.dart';
+
 class AboutHome extends StatefulWidget {
   @override
   State<AboutHome> createState() => _AboutHomeState();
@@ -119,8 +121,15 @@ class _AboutHomeState extends State<AboutHome> {
                       ),
                     ),
 
-                    SizedBox(height: 8.0), // Description
-                    // 3. Expanded List
+                    Expanded(
+                      child: SingleChildScrollView(
+                      child: Column(
+                          children: [
+                            AboutUsWidget(),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
