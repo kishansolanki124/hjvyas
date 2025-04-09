@@ -62,19 +62,3 @@ Widget AboutUsWidget() {
     ],
   );
 }
-
-// Widget AboutTitleAndContentBorder() {
-//   return Container(
-//       width: double.infinity,
-//       height: double.infinity,
-//       margin: EdgeInsets.all(16),
-//       decoration: BoxDecoration(
-//         border: Border.all(
-//           color: Color.fromARGB(255, 123, 138, 195),
-//           width: 2.0,
-//         ),
-//         borderRadius: BorderRadius.all(Radius.circular(0)),
-//       ),
-//       child: Text("About Us"),
-//   );
-// }
