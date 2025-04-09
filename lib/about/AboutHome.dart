@@ -18,7 +18,7 @@ class _AboutHomeState extends State<AboutHome> {
     });
   }
 
-  int _selectedIndex = -1;
+  int _selectedIndex = 0;
 
   // -1 indicates no item is selected
   final List<String> _imagePaths = [
