@@ -120,7 +120,11 @@ class _AboutHomeState extends State<AboutHome> {
                       ),
                     ),
 
-                    AboutUsContentWidget(),
+                    if(_selectedIndex == 0)
+                      AboutUsContentWidget(),
+
+                    if(_selectedIndex == 1)
+                      ContactUsContentWidget(),
 
                     // //about us content (scrollable)
                     // Expanded(
