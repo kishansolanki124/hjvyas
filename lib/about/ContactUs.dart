@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 
 Widget ContactUsContentWidget() {
   List<String> inquiryType = [
-    'Inquiry type 1',
+    'Inquiry type Inquiry type 1',
     'Inquiry type 2',
     'Inquiry type 3',
   ];
@@ -171,23 +171,35 @@ Widget ContactUsContentWidget() {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Send us an Email"),
+                  //send us an email
+                  Padding(
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+                    child: Text(
+                      "Send us an Email",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontFamily: "Montserrat",
+                      ),
+                    ),
+                  ),
 
                   //dropdown of inquiry
-                  productDetailDropDown(inquiryType, inquiryType.first),
+                  inquiryDropdown(inquiryType, inquiryType.first),
+
+                  SizedBox(height: 20),
 
                   //edittext name
                   TextField(
                     keyboardType: TextInputType.name,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.singleLineFormatter,
-                    ],
+                    textCapitalization: TextCapitalization.words,
+                    // Capitalize each word
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: "Montserrat",
                       fontSize: 14,
                     ),
-                    // Set text color to white
                     decoration: InputDecoration(
                       hintText: "Name",
                       hintStyle: TextStyle(
@@ -232,13 +244,11 @@ Widget ContactUsContentWidget() {
                     ),
                   ),
 
+                  SizedBox(height: 20),
+
                   //edittext email
                   TextField(
                     keyboardType: TextInputType.emailAddress,
-                    //maxLength: 10,
-                    // inputFormatters: <TextInputFormatter>[
-                    //   FilteringTextInputFormatter.digitsOnly,
-                    // ],
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: "Montserrat",
@@ -289,6 +299,8 @@ Widget ContactUsContentWidget() {
                     ),
                   ),
 
+                  SizedBox(height: 20),
+
                   //contact no
                   TextField(
                     keyboardType: TextInputType.number,
@@ -303,6 +315,7 @@ Widget ContactUsContentWidget() {
                     ),
                     // Set text color to white
                     decoration: InputDecoration(
+                      counterText: "",
                       hintText: "Contact No.",
                       hintStyle: TextStyle(
                         color: Colors.white,
@@ -329,36 +342,22 @@ Widget ContactUsContentWidget() {
                         ),
                       ),
 
-                      // border: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //     borderSide: BorderSide(width: 1,)
-                      // ),
-                      // errorBorder: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //     borderSide: BorderSide(width: 1,color: Colors.black)
-                      // ),
-                      // focusedErrorBorder: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //     borderSide: BorderSide(width: 1,color: Colors.yellowAccent)
-                      // ),
                       contentPadding: EdgeInsets.all(8),
                       isDense: true, //make textfield compact
                     ),
                   ),
 
+                  SizedBox(height: 20),
+
                   //city
                   TextField(
                     keyboardType: TextInputType.streetAddress,
-                    //maxLength: 10,
-                    // inputFormatters: <TextInputFormatter>[
-                    //   FilteringTextInputFormatter.digitsOnly,
-                    // ],
+                    textCapitalization: TextCapitalization.words,
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: "Montserrat",
                       fontSize: 14,
                     ),
-                    // Set text color to white
                     decoration: InputDecoration(
                       hintText: "City",
                       hintStyle: TextStyle(
@@ -374,10 +373,6 @@ Widget ContactUsContentWidget() {
                           color: Color.fromARGB(255, 123, 138, 195),
                         ),
                       ),
-                      // disabledBorder: OutlineInputBorder(
-                      //   borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //   borderSide: BorderSide(width: 1,color: Colors.orange),
-                      // ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(0)),
                         borderSide: BorderSide(
@@ -385,31 +380,21 @@ Widget ContactUsContentWidget() {
                           color: Color.fromARGB(255, 123, 138, 195),
                         ),
                       ),
-
-                      // border: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //     borderSide: BorderSide(width: 1,)
-                      // ),
-                      // errorBorder: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //     borderSide: BorderSide(width: 1,color: Colors.black)
-                      // ),
-                      // focusedErrorBorder: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //     borderSide: BorderSide(width: 1,color: Colors.yellowAccent)
-                      // ),
                       contentPadding: EdgeInsets.all(8),
                       isDense: true, //make textfield compact
                     ),
                   ),
 
+                  SizedBox(height: 20),
+
                   //message
                   TextField(
-                    keyboardType: TextInputType.text,
-                    // maxLength: 10,
-                    // inputFormatters: <TextInputFormatter>[
-                    //   FilteringTextInputFormatter.digitsOnly,
-                    // ],
+                    keyboardType: TextInputType.multiline,
+                    // Use multiline input type
+                    maxLines: null,
+                    // Allow unlimited lines
+                    minLines: 4,
+                    // Start with a minimum of 4 lines
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: "Montserrat",
@@ -431,10 +416,7 @@ Widget ContactUsContentWidget() {
                           color: Color.fromARGB(255, 123, 138, 195),
                         ),
                       ),
-                      // disabledBorder: OutlineInputBorder(
-                      //   borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //   borderSide: BorderSide(width: 1,color: Colors.orange),
-                      // ),
+
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(0)),
                         borderSide: BorderSide(
@@ -443,22 +425,12 @@ Widget ContactUsContentWidget() {
                         ),
                       ),
 
-                      // border: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //     borderSide: BorderSide(width: 1,)
-                      // ),
-                      // errorBorder: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //     borderSide: BorderSide(width: 1,color: Colors.black)
-                      // ),
-                      // focusedErrorBorder: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //     borderSide: BorderSide(width: 1,color: Colors.yellowAccent)
-                      // ),
                       contentPadding: EdgeInsets.all(8),
                       isDense: true, //make textfield compact
                     ),
                   ),
+
+                  SizedBox(height: 20),
 
                   //send message button
                   SizedBox(
@@ -481,7 +453,7 @@ Widget ContactUsContentWidget() {
                         ), // Add some vertical padding
                       ),
                       child: Text(
-                        "Notify Me",
+                        "Send Message",
                         style: TextStyle(
                           fontSize: 16.0,
                           fontFamily: "Montserrat",
@@ -539,46 +511,36 @@ Widget _buildSelectItem(_tabNames, _imagePaths, int index) {
   );
 }
 
-Widget productDetailDropDown(
-  List<String> contactUsDropdownList,
-  _selectedVariant,
-) {
+Widget inquiryDropdown(List<String> contactUsDropdownList, _selectedVariant) {
   return Container(
-    height: 35,
+    width: double.infinity, // Full width
+    //height: 40,
+    // Fixed height
     decoration: BoxDecoration(
       border: Border.all(color: Color.fromARGB(255, 123, 138, 195)),
       borderRadius: BorderRadius.circular(0),
       color: Colors.transparent, // Background color
     ),
-    padding: EdgeInsets.symmetric(horizontal: 6.0),
-    // Add some padding inside the border
-    child: DropdownButton<String>(
+    padding: EdgeInsets.symmetric(horizontal: 6.0), // Add horizontal padding
+    child: DropdownButtonFormField<String>(
+      padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+      value: _selectedVariant,
       icon: Image.asset(
         'icons/dropdown_icon.png', // Replace with your icon path
         width: 12, // Adjust width as needed
         height: 12, // Adjust height as needed
       ),
-      // Custom icon
-      value: _selectedVariant,
-      hint: Text(
-        'Select Color',
-        style: TextStyle(
-          backgroundColor: Color.fromARGB(255, 31, 47, 80),
-          fontSize: 12,
-          color: Colors.white,
-          fontFamily: "Montserrat",
-          //fontWeight: FontWeight.w700,
-        ),
-      ),
-      underline: SizedBox(),
-      dropdownColor: Color.fromARGB(255, 31, 47, 80),
-      // This line hides the bottom line
+      onChanged: (newValue) {
+        // setState(() {
+        // _selectedVariant = newValue;
+        // });
+      },
       items:
-          contactUsDropdownList.map((String variation) {
+          contactUsDropdownList.map((String item) {
             return DropdownMenuItem<String>(
-              value: variation,
+              value: item,
               child: Text(
-                variation,
+                item,
                 style: TextStyle(
                   backgroundColor: Color.fromARGB(255, 31, 47, 80),
                   fontSize: 14,
@@ -589,13 +551,18 @@ Widget productDetailDropDown(
               ),
             );
           }).toList(),
-      onChanged: (String? newValue) {
-        //todo here
-        // setState(() {
-        //   _selectedVariant = newValue;
-        // });
-        //onChangedDropDownValue(newValue);
-      },
+      decoration: InputDecoration(
+        border: InputBorder.none, // Remove default border
+        isDense: true, // Make it compact
+        contentPadding: EdgeInsets.zero,
+        // suffixIcon: Image.asset(
+        //   width: 12,
+        //   height: 12,
+        //   'icons/dropdown_icon.png',
+        // ),
+      ),
+      dropdownColor: Color.fromARGB(255, 31, 47, 80),
+      //underline: SizedBox(),
     ),
   );
 }
