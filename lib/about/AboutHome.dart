@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'AboutWidgets.dart';
+import 'ContactUs.dart';
 
 class AboutHome extends StatefulWidget {
   @override
@@ -120,11 +121,9 @@ class _AboutHomeState extends State<AboutHome> {
                       ),
                     ),
 
-                    if(_selectedIndex == 0)
-                      AboutUsContentWidget(),
+                    if (_selectedIndex == 0) AboutUsContentWidget(),
 
-                    if(_selectedIndex == 1)
-                      ContactUsContentWidget(),
+                    if (_selectedIndex == 1) ContactUsContentWidget(),
 
                     // //about us content (scrollable)
                     // Expanded(
