@@ -77,7 +77,7 @@ Widget ContactUsContentWidget() {
                           SizedBox(height: 10),
 
                           Text(
-                            "Address:",
+                            "Address :",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.white,
@@ -98,7 +98,7 @@ Widget ContactUsContentWidget() {
                           SizedBox(height: 10),
 
                           Text(
-                            "Customer Care:",
+                            "Customer Care :",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.white,
@@ -119,7 +119,7 @@ Widget ContactUsContentWidget() {
                           SizedBox(height: 10),
 
                           Text(
-                            "Email:",
+                            "Email :",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.white,
@@ -527,8 +527,8 @@ Widget inquiryDropdown(List<String> contactUsDropdownList, _selectedVariant) {
       value: _selectedVariant,
       icon: Image.asset(
         'icons/dropdown_icon.png', // Replace with your icon path
-        width: 12, // Adjust width as needed
-        height: 12, // Adjust height as needed
+        width: 18, // Adjust width as needed
+        height: 18, // Adjust height as needed
       ),
       onChanged: (newValue) {
         // setState(() {

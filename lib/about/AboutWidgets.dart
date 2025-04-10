@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-Widget AboutUsContentWidget() {
+Widget AboutUsContentWidget(String webpageTitle) {
   return Expanded(
     child: Stack(
       children: [
@@ -64,7 +64,7 @@ Widget AboutUsContentWidget() {
                 child: Padding(
                   padding: EdgeInsets.all(8),
                   child: Text(
-                    "About Us",
+                    webpageTitle,
                     style: TextStyle(
                       color: Colors.white,
                       fontFamily: "Montserrat",

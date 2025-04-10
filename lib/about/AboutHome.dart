@@ -121,9 +121,15 @@ class _AboutHomeState extends State<AboutHome> {
                       ),
                     ),
 
-                    if (_selectedIndex == 0) AboutUsContentWidget(),
+                    if (_selectedIndex == 0) AboutUsContentWidget("About Us"),
 
                     if (_selectedIndex == 1) ContactUsContentWidget(),
+
+                    if (_selectedIndex == 2) AboutUsContentWidget("Refund Policy"),
+
+                    if (_selectedIndex == 3) AboutUsContentWidget("Privacy Policy"),
+
+                    if (_selectedIndex == 4) AboutUsContentWidget("Terms"),
 
                     // //about us content (scrollable)
                     // Expanded(
