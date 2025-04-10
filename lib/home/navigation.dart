@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../about/AboutHome.dart';
+import '../cart/CartHome.dart';
 import '../combo/Combo.dart';
 import '../menu/menu_screen.dart';
 import '../notification/Notification.dart';
@@ -40,15 +41,8 @@ class _NavigationExampleState extends State<NavigationExample> {
   List<Widget> screenList = <Widget>[
     PageViewCustom(),
     HomeScreen(),
-//    VideoApp(),
-//    Text("Third"),
     ComboStateless(),
-    NotificationList(),
-    //Text("Third"),
-    //Text("Forth"),
-
-    //AboutHome(),
-    //SelectableRow(),
+    CartPage(),
     AboutHome(),
   ];
 
