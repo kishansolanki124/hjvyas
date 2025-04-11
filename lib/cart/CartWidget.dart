@@ -31,7 +31,7 @@ Widget CartItemWidget(
         Center(
           child: Container(
             margin: EdgeInsets.fromLTRB(8, 8, 4, 8),
-            height: 160,
+            height: 180,
             decoration: BoxDecoration(
               border: Border.all(
                 color: Color.fromARGB(255, 123, 138, 195),
@@ -78,9 +78,14 @@ Widget CartItemWidget(
                       fontFamily: "Montserrat",
                       color: Colors.white,
                     ),
-                  ), // 4. "+" and "-" Buttons with Count
+                  ),
+
+                  // 4. "+" and "-" Buttons with Count
                   Wrap(
                     children: [
+                      ColoredBox(color: Color.fromARGB(255, 31, 47, 80),
+                      child: Padding(padding: EdgeInsets.symmetric(vertical: 6),
+                      child:
                       Container(
                         height: 35,
                         width: 130,
@@ -135,11 +140,10 @@ Widget CartItemWidget(
                             ),
                           ],
                         ),
-                      ),
+                      ),),),
                     ],
                   ),
 
-                  SizedBox(height: 4.0), // 5. Total Price and Delete Icon
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
