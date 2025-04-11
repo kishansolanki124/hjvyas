@@ -30,26 +30,26 @@ class _CartPageState extends State<CartPage> {
       imageUrl:
           'https://images.pexels.com/photos/1526713/pexels-photo-1526713.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1526713.jpg&fm=jpg&w=4000&h=6000',
       // Replace with your image paths
-      title: 'Fresh Apples',
-      pricePerKg: 2.5,
+      title: 'Sweet Kachori',
+      pricePerKg: 800.00,
     ),
     CartItem(
       imageUrl:
           'https://images.pexels.com/photos/7276946/pexels-photo-7276946.jpeg?cs=srgb&dl=pexels-rachel-claire-7276946.jpg&fm=jpg&w=3648&h=5472',
-      title: 'Organic Bananas',
-      pricePerKg: 1.8,
+      title: 'Luscious Bite Kachori',
+      pricePerKg: 1800.00,
     ),
     CartItem(
       imageUrl:
           'https://images.pexels.com/photos/1496373/pexels-photo-1496373.jpeg?cs=srgb&dl=pexels-arts-1496373.jpg&fm=jpg',
-      title: 'Juicy Oranges',
-      pricePerKg: 3.0,
+      title: 'Kaju Katri',
+      pricePerKg: 2300.00,
     ),
     CartItem(
       imageUrl:
           'https://cdn.pixabay.com/photo/2016/11/29/05/45/astronomy-1867616_1280.jpg',
-      title: 'Sweet Grapes',
-      pricePerKg: 4.2,
+      title: 'Mung Mixture',
+      pricePerKg: 348.00,
     ),
     CartItem(
       imageUrl: 'https://picsum.photos/id/6/400/800',

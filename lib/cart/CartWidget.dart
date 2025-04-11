@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hjvyas/product_detail/NetworkImageWithLoading.dart';
 
 Widget CartItemWidget(
   index,
@@ -12,78 +13,117 @@ Widget CartItemWidget(
     width: double.infinity,
     margin: EdgeInsets.symmetric(vertical: 8.0),
     child: Row(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
         // 1. Fixed Width and Height Image
-        Container(
-          width: 100,
-          height: 100,
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8.0)),
-          child: Image.network(
-            cartItem.imageUrl, // Use NetworkImage
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              // Handle errors, e.g., show a placeholder
-              return Container(
-                color: Colors.grey[300], // Or any error indicator
-                child: Center(child: Text('Error')),
-              );
-            },
-          ),
+        SizedBox(
+          width: 150,
+          height: 150,
+          child: NetworkImageWithLoading(imageUrl: cartItem.imageUrl),
         ),
-        SizedBox(width: 16.0), // Expanded for the right side content
+
         Expanded(
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: <Widget>[
               // 2. Product Title
-              Text(
-                cartItem.title,
-                style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+              Padding(
+                padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
+                child: Text(
+                  cartItem.title,
+                  style: TextStyle(
+                    fontSize: 16.0,
+                    fontFamily: "Montserrat",
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
               ),
-              SizedBox(height: 4.0),
+              SizedBox(height: 2.0),
               // 3. Price per Weight
               Text(
-                '${_formatPrice(cartItem.pricePerKg)} / KG',
-                style: TextStyle(fontSize: 14.0, color: Colors.grey),
+                '${_formatPrice(cartItem.pricePerKg)} (600 GM)',
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontFamily: "Montserrat",
+                  color: Colors.white,
+                ),
               ),
-              SizedBox(height: 8.0),
+              SizedBox(height: 2.0),
               // 4. "+" and "-" Buttons with Count
-              Row(
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.remove),
-                    onPressed: () => _decrementCount(index),
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
-                  ),
-                  SizedBox(width: 8.0),
-                  Text(
-                    cartItem.count.toString(),
-                    style: TextStyle(fontSize: 16.0),
-                  ),
-                  SizedBox(width: 8.0),
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: () => _incrementCount(index),
-                    padding: EdgeInsets.zero,
-                    constraints: BoxConstraints(),
+              Wrap(
+                children: [
+                  Container(
+                    height: 35,
+                    width: 130,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Color.fromARGB(255, 123, 138, 195),
+                      ),
+                      borderRadius: BorderRadius.circular(0),
+                      color: Colors.transparent, // Background color
+                    ),
+                    // Add some padding inside the border
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        IconButton(
+                          iconSize: 18,
+                          icon: Icon(Icons.remove),
+                          color: Colors.white,
+                          onPressed: () => _decrementCount(index),
+                          padding: EdgeInsets.zero,
+                          constraints: BoxConstraints(),
+                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 0, 0),
+                          child: Text(
+                            cartItem.count.toString(),
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontFamily: "Montserrat",
+                            ),
+                          ),
+                        ),
+
+                        IconButton(
+                          iconSize: 18,
+                          icon: Icon(Icons.add),
+                          color: Colors.white,
+                          onPressed: () => _incrementCount(index),
+                          padding: EdgeInsets.zero,
+                          constraints: BoxConstraints(),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
-              SizedBox(height: 8.0),
+
+              SizedBox(height: 4.0),
               // 5. Total Price and Delete Icon
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Text(
-                    'Total: ${_formatPrice(cartItem.totalPrice)}',
-                    style: TextStyle(
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold,
+                  Padding(
+                    padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                    child: Text(
+                      '${_formatPrice(cartItem.totalPrice)}',
+                      style: TextStyle(
+                        fontSize: 16.0,
+                        fontFamily: "Montserrat",
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                   IconButton(
-                    icon: Icon(Icons.delete_outline),
+                    icon: Image.asset(
+                      "icons/delete_icon.png",
+                      height: 24,
+                      width: 24,
+                    ),
                     onPressed: () => _removeItem(index),
                     padding: EdgeInsets.zero,
                     constraints: BoxConstraints(),
