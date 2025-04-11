@@ -24,6 +24,30 @@ Widget CartItemWidget(
               height: 200,
               child: NetworkImageWithLoading(imageUrl: cartItem.imageUrl),
             ),
+          ],
+        ),
+
+        //box border sky blue
+        Center(
+          child: Container(
+            margin: EdgeInsets.fromLTRB(8, 8, 4, 8),
+            height: 160,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Color.fromARGB(255, 123, 138, 195),
+                width: 1,
+              ),
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+            ),
+          ),
+        ),
+
+        //right side portion of item
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            // 1. Fixed Width and Height Image
+            SizedBox(width: 200, height: 200),
 
             Expanded(
               child: Column(
@@ -34,7 +58,9 @@ Widget CartItemWidget(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
                     child: Text(
                       cartItem.title,
+                      textAlign: TextAlign.right,
                       style: TextStyle(
+                        backgroundColor: Color.fromARGB(255, 31, 47, 80),
                         fontSize: 16.0,
                         fontFamily: "Montserrat",
                         color: Colors.white,
@@ -42,18 +68,17 @@ Widget CartItemWidget(
                       ),
                     ),
                   ),
-                  SizedBox(height: 2.0),
+
                   // 3. Price per Weight
                   Text(
                     '${_formatPrice(cartItem.pricePerKg)} (600 GM)',
                     style: TextStyle(
+                      backgroundColor: Color.fromARGB(255, 31, 47, 80),
                       fontSize: 14.0,
                       fontFamily: "Montserrat",
                       color: Colors.white,
                     ),
-                  ),
-                  SizedBox(height: 2.0),
-                  // 4. "+" and "-" Buttons with Count
+                  ), // 4. "+" and "-" Buttons with Count
                   Wrap(
                     children: [
                       Container(
@@ -64,7 +89,12 @@ Widget CartItemWidget(
                             color: Color.fromARGB(255, 123, 138, 195),
                           ),
                           borderRadius: BorderRadius.circular(0),
-                          color: Colors.transparent, // Background color
+                          color: Color.fromARGB(
+                            255,
+                            31,
+                            47,
+                            80,
+                          ), // Background color
                         ),
                         // Add some padding inside the border
                         child: Row(
@@ -109,8 +139,7 @@ Widget CartItemWidget(
                     ],
                   ),
 
-                  SizedBox(height: 4.0),
-                  // 5. Total Price and Delete Icon
+                  SizedBox(height: 4.0), // 5. Total Price and Delete Icon
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
@@ -142,20 +171,6 @@ Widget CartItemWidget(
               ),
             ),
           ],
-        ),
-
-        Center(
-          child: Container(
-            margin: EdgeInsets.fromLTRB(8, 8, 0, 8),
-            height: 160,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Color.fromARGB(255, 123, 138, 195),
-                width: 1,
-              ),
-              borderRadius: BorderRadius.all(Radius.circular(0)),
-            ),
-          ),
         ),
       ],
     ),
