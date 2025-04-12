@@ -51,3 +51,28 @@ Widget addToCartFullWidthButton(String price, onPressed) {
     ),
   );
 }
+
+Widget proceedToCheckOutButtonFullWidth(onPressed) {
+  return SizedBox(
+      width: double.infinity, // Makes the button full width
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color.fromARGB(150, 255, 255, 255),
+          // Semi-transparent white
+          padding: EdgeInsets.symmetric(vertical: 12.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(50.0), // Rounded corners
+          ),
+        ),
+        child: Text("Proceed to Checkout",
+          style: TextStyle(
+            fontSize: 18.0,
+            fontFamily: "Montserrat",
+            color: Colors.black,
+            fontWeight: FontWeight.w600,
+          ),),
+      ),
+
+  );
+}

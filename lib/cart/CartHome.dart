@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../product_detail/FullWidthButton.dart';
 import '../product_detail/NetworkImageWithLoading.dart';
 import 'CartWidget.dart';
 
@@ -79,6 +80,12 @@ class _CartPageState extends State<CartPage> {
   void _incrementCount(int index) {
     setState(() {
       _cartItems[index].count++;
+    });
+  }
+
+  void onPressed() {
+    setState(() {
+
     });
   }
 
@@ -298,6 +305,10 @@ class _CartPageState extends State<CartPage> {
                             },
                           ),
                         ),
+
+                        SizedBox(height: 10),
+                        //proceed to checkout button
+                        proceedToCheckOutButtonFullWidth(onPressed),
 
                         SizedBox(height: 100),
                       ],
