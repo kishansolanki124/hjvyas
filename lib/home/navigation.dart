@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../about/AboutHome.dart';
 import '../cart/CartHome.dart';
+import '../checkout/Checkout.dart';
 import '../combo/Combo.dart';
 import '../menu/menu_screen.dart';
 import '../notification/Notification.dart';
@@ -39,7 +40,8 @@ class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
 
   List<Widget> screenList = <Widget>[
-    PageViewCustom(),
+    Checkout(),
+    //PageViewCustom(),
     HomeScreen(),
     ComboStateless(),
     CartPage(),

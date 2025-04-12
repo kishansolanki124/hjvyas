@@ -3,7 +3,7 @@ Product listing page:
 10. padding and margin
 
 Combo Page:
-1. hide bottomsheet on scroll
+1. hide bottom-sheet on scroll
 2. padding and margin
 
 Product Details:
@@ -19,6 +19,7 @@ For videos:
 Cart:
 2 line title test
 2 line next price line test
+3. text cut on horizontal list item title
 
 General:
 1. keep only portrait mode app
