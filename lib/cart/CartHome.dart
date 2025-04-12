@@ -26,6 +26,8 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  int freeSelectedIndex = -1;
+
   // Sample cart data
   final List<CartItem> _cartItems = [
     CartItem(
@@ -83,10 +85,15 @@ class _CartPageState extends State<CartPage> {
     });
   }
 
-  void onPressed() {
+  // Function to increment item count
+  void _updateFreeSelectedIndex(int index) {
     setState(() {
-
+      freeSelectedIndex = index;
     });
+  }
+
+  void onPressed() {
+    setState(() {});
   }
 
   // Function to decrement item count
@@ -200,94 +207,84 @@ class _CartPageState extends State<CartPage> {
                             scrollDirection: Axis.horizontal,
                             itemCount: _imageList.length,
                             itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 8.0,
-                                ),
-                                child: Stack(
-                                  alignment: Alignment.center,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        //product image
-                                        Padding(
-                                          padding: EdgeInsets.all(4),
-                                          child: SizedBox(
-                                            width: 150,
-                                            height: 150,
-                                            child: NetworkImageWithLoading(
-                                              imageUrl: _imageList[index],
-                                            ),
-                                          ),
-                                        ),
-
-                                        //product text
-                                        Center(
-                                          child: SizedBox(
-                                            width: 150,
-                                            child: Text(
-                                              maxLines: 2,
-                                              textAlign: TextAlign.center,
-                                              overflow: TextOverflow.ellipsis,
-                                              "${_itemNameList[index]}\n",
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: "Montserrat",
-                                                color: Colors.white,
+                              return GestureDetector(
+                                onTap: () {
+                                  _updateFreeSelectedIndex(index);
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0,
+                                  ),
+                                  child: Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          //product image
+                                          Padding(
+                                            padding: EdgeInsets.all(4),
+                                            child: SizedBox(
+                                              width: 150,
+                                              height: 150,
+                                              child: NetworkImageWithLoading(
+                                                imageUrl: _imageList[index],
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
 
-                                    //background border
-                                    Align(
-                                      alignment: Alignment.topCenter,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: Color.fromARGB(
-                                              255,
-                                              123,
-                                              138,
-                                              195,
+                                          //product text
+                                          Center(
+                                            child: SizedBox(
+                                              width: 150,
+                                              child: Text(
+                                                maxLines: 2,
+                                                textAlign: TextAlign.center,
+                                                overflow: TextOverflow.ellipsis,
+                                                "${_itemNameList[index]}\n",
+                                                style: TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "Montserrat",
+                                                  color: Colors.white,
+                                                ),
+                                              ),
                                             ),
-                                            width: 1.0,
                                           ),
-                                          borderRadius: BorderRadius.circular(
-                                            0,
-                                          ),
-                                        ),
-                                        width: 166,
-                                        height: 200,
+                                        ],
                                       ),
-                                    ),
 
-                                    //bottom selector
-                                    Align(
-                                      alignment: Alignment.bottomCenter,
-                                      child: Container(
-                                        width: 35,
-                                        height: 35,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: Color.fromARGB(
-                                            255,
-                                            31,
-                                            47,
-                                            80,
-                                          ),
-                                        ),
+                                      //background border
+                                      Align(
+                                        alignment: Alignment.topCenter,
                                         child: Container(
-                                          width: 30,
-                                          height: 30,
                                           decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: Colors.white,
                                             border: Border.all(
-                                              width: 5,
+                                              color: Color.fromARGB(
+                                                255,
+                                                123,
+                                                138,
+                                                195,
+                                              ),
+                                              width: 1.0,
+                                            ),
+                                            borderRadius: BorderRadius.circular(
+                                              0,
+                                            ),
+                                          ),
+                                          width: 166,
+                                          height: 200,
+                                        ),
+                                      ),
+
+                                      //bottom selector default
+                                      if (freeSelectedIndex != index)
+                                        Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Container(
+                                            width: 35,
+                                            height: 35,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
                                               color: Color.fromARGB(
                                                 255,
                                                 31,
@@ -295,11 +292,58 @@ class _CartPageState extends State<CartPage> {
                                                 80,
                                               ),
                                             ),
+                                            child: Container(
+                                              width: 30,
+                                              height: 30,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.white,
+                                                border: Border.all(
+                                                  width: 5,
+                                                  color: Color.fromARGB(
+                                                    255,
+                                                    31,
+                                                    47,
+                                                    80,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ),
-                                  ],
+
+                                      //bottom selector selected
+                                      if (freeSelectedIndex == index)
+                                        Align(
+                                          alignment: Alignment.bottomCenter,
+                                          child: Container(
+                                            width: 33,
+                                            height: 33,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: Colors.white,
+                                            ),
+                                            child: Container(
+                                              width: 30,
+                                              height: 30,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Color.fromARGB(
+                                                  255,
+                                                  31,
+                                                  47,
+                                                  80,
+                                                ),
+                                                border: Border.all(
+                                                  width: 2,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
                                 ),
                               );
                             },
@@ -307,6 +351,7 @@ class _CartPageState extends State<CartPage> {
                         ),
 
                         SizedBox(height: 10),
+
                         //proceed to checkout button
                         proceedToCheckOutButtonFullWidth(onPressed),
 
