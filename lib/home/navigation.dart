@@ -40,8 +40,7 @@ class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
 
   List<Widget> screenList = <Widget>[
-    Checkout(),
-    //PageViewCustom(),
+    PageViewCustom(),
     HomeScreen(),
     ComboStateless(),
     CartPage(),

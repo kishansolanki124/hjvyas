@@ -52,11 +52,11 @@ Widget addToCartFullWidthButton(String price, onPressed) {
   );
 }
 
-Widget proceedToCheckOutButtonFullWidth(onPressed) {
+Widget proceedToCheckOutButtonFullWidth(proceedToCheckOutClicked) {
   return SizedBox(
       width: double.infinity, // Makes the button full width
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: proceedToCheckOutClicked,
         style: ElevatedButton.styleFrom(
           backgroundColor: Color.fromARGB(150, 255, 255, 255),
           // Semi-transparent white

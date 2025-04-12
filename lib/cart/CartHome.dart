@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hjvyas/checkout/Checkout.dart';
 
 import '../product_detail/FullWidthButton.dart';
 import '../product_detail/NetworkImageWithLoading.dart';
@@ -92,8 +93,14 @@ class _CartPageState extends State<CartPage> {
     });
   }
 
-  void onPressed() {
-    setState(() {});
+  void proceedToCheckOutClicked() {
+    setState(() {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => Checkout(),
+        ),
+      );
+    });
   }
 
   // Function to decrement item count
@@ -353,7 +360,7 @@ class _CartPageState extends State<CartPage> {
                         SizedBox(height: 10),
 
                         //proceed to checkout button
-                        proceedToCheckOutButtonFullWidth(onPressed),
+                        proceedToCheckOutButtonFullWidth(proceedToCheckOutClicked),
 
                         SizedBox(height: 100),
                       ],
