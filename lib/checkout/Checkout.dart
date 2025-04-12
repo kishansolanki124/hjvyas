@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hjvyas/checkout/CheckoutWidgets.dart';
 
 import '../product_detail/ProductDetailWidget.dart';
@@ -13,9 +14,24 @@ class _CheckoutState extends State<Checkout> {
   String? _selectedOptionState;
   String? _selectedOptionCity;
 
+  bool _giftPackisChecked = false;
+  bool _tncChecked = false;
+
   // Keep track of the selected option
   void _onBackPressed(BuildContext context) {
     Navigator.of(context).pop();
+  }
+
+  void _onGiftPackValueUpdate(bool newValue) {
+    setState(() {
+      _giftPackisChecked = newValue;
+    });
+  }
+
+  void _tncCheckedValueUpdate(bool newValue) {
+    setState(() {
+      _tncChecked = newValue;
+    });
   }
 
   void _onValueChangedCountry(String value) {
@@ -107,7 +123,7 @@ class _CheckoutState extends State<Checkout> {
 
                     SizedBox(height: 8.0), // Description
 
-                    SingleChildScrollView(
+                    Expanded(child: SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -133,7 +149,8 @@ class _CheckoutState extends State<Checkout> {
                             ),
                           ),
 
-                          SizedBox(height: 20.0), // Description
+                          SizedBox(height: 20.0),
+                          // Description
                           //your delivery address
                           Text(
                             "Your Delivery Address",
@@ -145,7 +162,8 @@ class _CheckoutState extends State<Checkout> {
                             ),
                           ),
 
-                          SizedBox(height: 10.0), // Description
+                          SizedBox(height: 10.0),
+                          // Description
                           //Select Country
                           Text(
                             "Select Country",
@@ -209,7 +227,8 @@ class _CheckoutState extends State<Checkout> {
                             _selectedOptionCity,
                           ),
 
-                          SizedBox(height: 20.0), // Description
+                          SizedBox(height: 20.0),
+                          // Description
                           //your delivery address
                           Text(
                             "Checkout Details",
@@ -220,8 +239,118 @@ class _CheckoutState extends State<Checkout> {
                               fontWeight: FontWeight.w700,
                             ),
                           ),
+
+                          SizedBox(height: 10.0),
+
+                          //enter your mob no.
+                          // with 10 digit max length and input type should be only numbers
+                          TextField(
+                            keyboardType: TextInputType.number,
+                            maxLength: 10,
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: "Montserrat",
+                              fontSize: 14,
+                            ),
+                            // Set text color to white
+                            decoration: InputDecoration(
+                              hintText: "Enter Mobile No.",
+                              hintStyle: TextStyle(
+                                color: Colors.white,
+                                fontFamily: "Montserrat",
+                                fontSize: 14,
+                              ),
+
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(0),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 123, 138, 195),
+                                ),
+                              ),
+                              // disabledBorder: OutlineInputBorder(
+                              //   borderRadius: BorderRadius.all(Radius.circular(4)),
+                              //   borderSide: BorderSide(width: 1,color: Colors.orange),
+                              // ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(0),
+                                ),
+                                borderSide: BorderSide(
+                                  width: 1,
+                                  color: Color.fromARGB(255, 123, 138, 195),
+                                ),
+                              ),
+
+                              // border: OutlineInputBorder(
+                              //     borderRadius: BorderRadius.all(Radius.circular(4)),
+                              //     borderSide: BorderSide(width: 1,)
+                              // ),
+                              // errorBorder: OutlineInputBorder(
+                              //     borderRadius: BorderRadius.all(Radius.circular(4)),
+                              //     borderSide: BorderSide(width: 1,color: Colors.black)
+                              // ),
+                              // focusedErrorBorder: OutlineInputBorder(
+                              //     borderRadius: BorderRadius.all(Radius.circular(4)),
+                              //     borderSide: BorderSide(width: 1,color: Colors.yellowAccent)
+                              // ),
+                              contentPadding: EdgeInsets.all(8),
+                              isDense: true, //make textfield compact
+                            ),
+                          ),
+
+                          SizedBox(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                //  Add your notification logic here
+                                print("Continue button clicked");
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color.fromARGB(
+                                  255,
+                                  123,
+                                  138,
+                                  195,
+                                ),
+                                // Sky color
+                                //foregroundColor: Colors.black,
+                                // Black text color
+                                shape: RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.zero, // Square corners
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 10.0,
+                                  horizontal: 12,
+                                ), // Add some vertical padding
+                              ),
+                              child: Text(
+                                "Continue",
+                                style: TextStyle(
+                                  fontSize: 16.0,
+                                  fontFamily: "Montserrat",
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                ), // Adjust size
+                              ),
+                            ),
+                          ),
+
+                          SizedBox(height: 10,),
+
+                          CheckoutAddressWidget(_onGiftPackValueUpdate,
+                              _giftPackisChecked,_tncCheckedValueUpdate,
+                            _tncChecked,),
+
+                          SizedBox(height: 100),
                         ],
                       ),
+                    ),
                     ),
                   ],
                 ),

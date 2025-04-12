@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 Widget CartTotalRow(String title, String value, double bottomPadding) {
   return Padding(
@@ -32,8 +33,8 @@ Widget CartTotalRow(String title, String value, double bottomPadding) {
 Widget radioTwoOption(
   String option1,
   String option2,
-    _onValueChanged,
-    _selectedOption
+  _onValueChanged,
+  _selectedOption,
 ) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
@@ -102,6 +103,520 @@ Widget radioTwoOption(
             ),
           ),
         ],
+      ),
+    ],
+  );
+}
+
+Widget CheckoutAddressWidget(_onGiftPackValueUpdate, _giftPackisChecked,
+    _tncCheckedValueUpdate, _tncChecked) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      //edittext name
+      TextField(
+        keyboardType: TextInputType.name,
+        textCapitalization: TextCapitalization.words,
+        // Capitalize each word
+        style: TextStyle(
+          color: Colors.white,
+          fontFamily: "Montserrat",
+          fontSize: 14,
+        ),
+        decoration: InputDecoration(
+          hintText: "Your Name",
+          hintStyle: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+
+          contentPadding: EdgeInsets.all(8),
+          isDense: true, //make textfield compact
+        ),
+      ),
+
+      SizedBox(height: 20),
+
+      //edittext email
+      TextField(
+        keyboardType: TextInputType.emailAddress,
+        style: TextStyle(
+          color: Colors.white,
+          fontFamily: "Montserrat",
+          fontSize: 14,
+        ),
+        // Set text color to white
+        decoration: InputDecoration(
+          hintText: "Your Email",
+          hintStyle: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+
+          contentPadding: EdgeInsets.all(8),
+          isDense: true, //make textfield compact
+        ),
+      ),
+
+      SizedBox(height: 20),
+
+      //area
+      TextField(
+        keyboardType: TextInputType.streetAddress,
+        textCapitalization: TextCapitalization.words,
+        style: TextStyle(
+          color: Colors.white,
+          fontFamily: "Montserrat",
+          fontSize: 14,
+        ),
+        decoration: InputDecoration(
+          hintText: "Area",
+          hintStyle: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+          contentPadding: EdgeInsets.all(8),
+          isDense: true, //make textfield compact
+        ),
+      ),
+
+      SizedBox(height: 20),
+
+      //sub area
+      TextField(
+        keyboardType: TextInputType.streetAddress,
+        textCapitalization: TextCapitalization.words,
+        style: TextStyle(
+          color: Colors.white,
+          fontFamily: "Montserrat",
+          fontSize: 14,
+        ),
+        decoration: InputDecoration(
+          hintText: "Sub Area",
+          hintStyle: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+          contentPadding: EdgeInsets.all(8),
+          isDense: true, //make textfield compact
+        ),
+      ),
+
+      SizedBox(height: 20),
+
+      //Delivery Address
+      TextField(
+        keyboardType: TextInputType.multiline,
+        // Use multiline input type
+        maxLines: null,
+        // Allow unlimited lines
+        minLines: 4,
+        // Start with a minimum of 4 lines
+        style: TextStyle(
+          color: Colors.white,
+          fontFamily: "Montserrat",
+          fontSize: 14,
+        ),
+        // Set text color to white
+        decoration: InputDecoration(
+          hintText: "Delivery Address",
+          hintStyle: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+
+          contentPadding: EdgeInsets.all(8),
+          isDense: true, //make textfield compact
+        ),
+      ),
+
+      SizedBox(height: 20),
+
+      //Zip Code
+      TextField(
+        keyboardType: TextInputType.number,
+        maxLength: 6,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.digitsOnly,
+        ],
+        style: TextStyle(
+          color: Colors.white,
+          fontFamily: "Montserrat",
+          fontSize: 14,
+        ),
+        decoration: InputDecoration(
+          hintText: "Zip Code",
+          hintStyle: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+          contentPadding: EdgeInsets.all(8),
+          isDense: true, //make textfield compact
+        ),
+      ),
+
+      //City
+      TextField(
+        keyboardType: TextInputType.streetAddress,
+        textCapitalization: TextCapitalization.words,
+        style: TextStyle(
+          color: Colors.white,
+          fontFamily: "Montserrat",
+          fontSize: 14,
+        ),
+        decoration: InputDecoration(
+          hintText: "City",
+          hintStyle: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+          contentPadding: EdgeInsets.all(8),
+          isDense: true, //make textfield compact
+        ),
+      ),
+
+      SizedBox(height: 20),
+
+      //State
+      TextField(
+        keyboardType: TextInputType.streetAddress,
+        textCapitalization: TextCapitalization.words,
+        style: TextStyle(
+          color: Colors.white,
+          fontFamily: "Montserrat",
+          fontSize: 14,
+        ),
+        decoration: InputDecoration(
+          hintText: "State",
+          hintStyle: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+          contentPadding: EdgeInsets.all(8),
+          isDense: true, //make textfield compact
+        ),
+      ),
+
+      SizedBox(height: 20),
+
+      //Alternate Mobile no.
+      TextField(
+        keyboardType: TextInputType.number,
+        maxLength: 10,
+        inputFormatters: <TextInputFormatter>[
+          FilteringTextInputFormatter.digitsOnly,
+        ],
+        style: TextStyle(
+          color: Colors.white,
+          fontFamily: "Montserrat",
+          fontSize: 14,
+        ),
+        // Set text color to white
+        decoration: InputDecoration(
+          hintText: "Alternate Mobile No.",
+          hintStyle: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+
+          contentPadding: EdgeInsets.all(8),
+          isDense: true, //make textfield compact
+        ),
+      ),
+
+      //Notes if any
+      TextField(
+        keyboardType: TextInputType.multiline,
+        // Use multiline input type
+        maxLines: null,
+        // Allow unlimited lines
+        minLines: 4,
+        // Start with a minimum of 4 lines
+        style: TextStyle(
+          color: Colors.white,
+          fontFamily: "Montserrat",
+          fontSize: 14,
+        ),
+        // Set text color to white
+        decoration: InputDecoration(
+          hintText: "Notes if any",
+          hintStyle: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(0)),
+            borderSide: BorderSide(
+              width: 1,
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+
+          contentPadding: EdgeInsets.all(8),
+          isDense: true, //make textfield compact
+        ),
+      ),
+
+      SizedBox(height: 10),
+      //gift pack Checkbox
+      Row(
+        children: [
+          Checkbox(
+            value: _giftPackisChecked,
+            onChanged: (newValue) {
+              _onGiftPackValueUpdate(newValue!);
+            },
+            visualDensity: VisualDensity.compact,
+            //remove padding
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            //remove padding
+            checkColor: Color.fromARGB(255, 123, 138, 195),
+            // Color of the tick
+            fillColor: WidgetStatePropertyAll(Colors.white),
+          ),
+
+          GestureDetector(
+            onTap: () {
+              _giftPackisChecked = !_giftPackisChecked;
+              _onGiftPackValueUpdate(_giftPackisChecked);
+            },
+            child: Text(
+              'Gift Packing : (Please mark the checkbox)',
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: "Montserrat",
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ],
+      ),
+
+      SizedBox(height: 10),
+      //TNC Checkbox
+      Row(
+        children: [
+          Checkbox(
+            value: _tncChecked,
+            onChanged: (newValue) {
+              _tncCheckedValueUpdate(newValue!);
+            },
+            visualDensity: VisualDensity.compact,
+            //remove padding
+            materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            //remove padding
+            checkColor: Color.fromARGB(255, 123, 138, 195),
+            // Color of the tick
+            fillColor: WidgetStatePropertyAll(Colors.white),
+          ),
+
+          GestureDetector(
+            onTap: () {
+              _tncChecked = !_tncChecked;
+              _tncCheckedValueUpdate(_tncChecked);
+            },
+            child: Text(
+              'I Agree : (Terms & Conditions)',
+              style: TextStyle(
+                color: Colors.white,
+                fontFamily: "Montserrat",
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ],
+      ),
+
+      SizedBox(height: 20),
+
+      //submit button
+      SizedBox(
+        child: ElevatedButton(
+          onPressed: () {
+            //  Add your notification logic here
+            print("Submit button clicked");
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Color.fromARGB(255, 123, 138, 195),
+            // Sky color
+            //foregroundColor: Colors.black,
+            // Black text color
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.zero, // Square corners
+            ),
+            padding: EdgeInsets.symmetric(
+              vertical: 10.0,
+              horizontal: 12,
+            ), // Add some vertical padding
+          ),
+          child: Text(
+            "Submit",
+            style: TextStyle(
+              fontSize: 16.0,
+              fontFamily: "Montserrat",
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
+            ), // Adjust size
+          ),
+        ),
       ),
     ],
   );
