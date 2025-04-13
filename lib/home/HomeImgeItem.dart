@@ -70,7 +70,7 @@ class _NetworkImageWithProgressState extends State<NetworkImageWithProgress> {
         //),
 
         Container(
-          color: Color.fromARGB(150, 0,0,0),
+          color: Color.fromARGB(50, 0,0,0),
         ),
 
         // Text at Center Bottom
@@ -89,9 +89,10 @@ class _NetworkImageWithProgressState extends State<NetworkImageWithProgress> {
             child: Text(
               "Standard\nKachori",
               style: TextStyle(
-                color: Colors.white,
                 fontSize: 20.0,
-                fontWeight: FontWeight.bold,
+                fontFamily: "Montserrat",
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
               ),
               textAlign: TextAlign.center,
             ),
@@ -99,12 +100,5 @@ class _NetworkImageWithProgressState extends State<NetworkImageWithProgress> {
         ),
       ],
     );
-    // return Image.network(
-    //   url,
-    //   fit: BoxFit.cover,
-    //   height: double.infinity,
-    //   width: double.infinity,
-    //   alignment: Alignment.center,
-    // );
   }
 }
