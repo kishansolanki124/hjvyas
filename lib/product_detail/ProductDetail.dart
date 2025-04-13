@@ -54,7 +54,7 @@ class ProductDetail extends StatelessWidget {
             "imageUrl": "https://picsum.photos/id/3/400/800",
           },
           {
-            "name": "Masala Gathiya",
+            "name": "Ahmedabad special Masala Gathiya",
             "imageUrl": "https://picsum.photos/id/4/400/800",
           },
           {
