@@ -104,16 +104,28 @@ class _NavigationExampleState extends State<NavigationExample>
             _showBottomNavBar
                 ? DecoratedBox(
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(200, 255, 255, 255),
+                    color: Color.fromARGB(225, 255, 255, 255),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child:
                       _showBottomNavBar
                           ? BottomNavigationBar(
+                            unselectedLabelStyle: TextStyle(
+                              fontSize: 10.0,
+                              fontFamily: "Montserrat",
+                              color: Colors.black,
+                              fontWeight: FontWeight.w700,
+                            ),
+                            selectedLabelStyle: TextStyle(
+                              fontSize: 10.0,
+                              fontFamily: "Montserrat",
+                              color: Color.fromARGB(255, 101, 115, 169),
+                              fontWeight: FontWeight.w700,
+                            ),
                             type: BottomNavigationBarType.fixed,
                             iconSize: 12.0,
-                            selectedFontSize: 12.0,
-                            unselectedFontSize: 9.0,
+                            selectedFontSize: 10.0,
+                            unselectedFontSize: 10.0,
                             elevation: 0,
                             backgroundColor: Colors.transparent,
                             items: <BottomNavigationBarItem>[
@@ -128,7 +140,7 @@ class _NavigationExampleState extends State<NavigationExample>
                                   height: 30,
                                   child: Image.asset("icons/home_icon_a.png"),
                                 ),
-                                label: "Home",
+                                label: "HOME",
                               ),
                               BottomNavigationBarItem(
                                 icon: SizedBox(
@@ -143,7 +155,7 @@ class _NavigationExampleState extends State<NavigationExample>
                                     "icons/product_icon_a.png",
                                   ),
                                 ),
-                                label: "Products",
+                                label: "PROUDUCTS",
                               ),
                               BottomNavigationBarItem(
                                 icon: SizedBox(
@@ -156,7 +168,7 @@ class _NavigationExampleState extends State<NavigationExample>
                                   height: 30,
                                   child: Image.asset("icons/combo_icon_a.png"),
                                 ),
-                                label: "Combo",
+                                label: "COMBO",
                               ),
                               BottomNavigationBarItem(
                                 icon: SizedBox(
@@ -169,7 +181,7 @@ class _NavigationExampleState extends State<NavigationExample>
                                   height: 30,
                                   child: Image.asset("icons/my_bag_icon_a.png"),
                                 ),
-                                label: "My Bags",
+                                label: "MY BAG",
                               ),
                               BottomNavigationBarItem(
                                 icon: SizedBox(
@@ -182,7 +194,7 @@ class _NavigationExampleState extends State<NavigationExample>
                                   height: 30,
                                   child: Image.asset("icons/about_icon_a.png"),
                                 ),
-                                label: "About",
+                                label: "ABOUT",
                               ),
                             ],
                             currentIndex: currentPageIndex,

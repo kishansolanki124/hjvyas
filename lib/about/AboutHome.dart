@@ -170,7 +170,7 @@ Widget _buildSelectItem(
           decoration: BoxDecoration(
             color:
                 isSelected
-                    ? Color.fromARGB(180, 255, 255, 255)
+                    ? Color.fromARGB(225, 255, 255, 255)
                     : Color.fromARGB(
                       255,
                       31,
@@ -180,7 +180,7 @@ Widget _buildSelectItem(
             border: Border.all(
               color:
                   isSelected
-                      ? Color.fromARGB(180, 255, 255, 255)
+                      ? Color.fromARGB(225, 255, 255, 255)
                       : Color.fromARGB(255, 123, 138, 195), // Square border
               width: 1.0,
             ),
