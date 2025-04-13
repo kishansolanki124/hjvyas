@@ -95,11 +95,9 @@ class _CartPageState extends State<CartPage> {
 
   void proceedToCheckOutClicked() {
     setState(() {
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => Checkout(),
-        ),
-      );
+      Navigator.of(
+        context,
+      ).push(MaterialPageRoute(builder: (context) => Checkout()));
     });
   }
 
@@ -209,7 +207,7 @@ class _CartPageState extends State<CartPage> {
 
                         //horizontal list of free products
                         SizedBox(
-                          height: 220, // Fixed height for the horizontal list
+                          height: 230, // Fixed height for the horizontal list
                           child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: _imageList.length,
@@ -240,14 +238,15 @@ class _CartPageState extends State<CartPage> {
                                           ),
 
                                           //product text
-                                          Center(
-                                            child: SizedBox(
-                                              width: 150,
+                                          SizedBox(
+                                            width: 150,
+                                            height: 40,
+                                            child: Center(
                                               child: Text(
                                                 maxLines: 2,
                                                 textAlign: TextAlign.center,
                                                 overflow: TextOverflow.ellipsis,
-                                                "${_itemNameList[index]}\n",
+                                                "${_itemNameList[index]}",
                                                 style: TextStyle(
                                                   fontSize: 12,
                                                   fontWeight: FontWeight.w500,
@@ -279,7 +278,7 @@ class _CartPageState extends State<CartPage> {
                                             ),
                                           ),
                                           width: 166,
-                                          height: 200,
+                                          height: 210,
                                         ),
                                       ),
 
@@ -360,7 +359,9 @@ class _CartPageState extends State<CartPage> {
                         SizedBox(height: 10),
 
                         //proceed to checkout button
-                        proceedToCheckOutButtonFullWidth(proceedToCheckOutClicked),
+                        proceedToCheckOutButtonFullWidth(
+                          proceedToCheckOutClicked,
+                        ),
 
                         SizedBox(height: 100),
                       ],
