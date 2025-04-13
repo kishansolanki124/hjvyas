@@ -3,24 +3,27 @@ import 'package:flutter/services.dart';
 
 import '../about/AboutHome.dart';
 import '../cart/CartHome.dart';
-import '../checkout/Checkout.dart';
 import '../combo/Combo.dart';
 import '../menu/menu_screen.dart';
-import '../notification/Notification.dart';
-import '../product/product_list.dart';
-import '../product_detail/ProductDetail.dart';
 import 'medialisthomepage.dart';
 
-class NavigationBarApp extends StatelessWidget {
+class NavigationBarApp extends StatefulWidget {
   const NavigationBarApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<NavigationBarApp> createState() => _NavigationBarAppState();
+}
 
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
-      statusBarColor: Color.fromARGB(255, 32, 47, 80),
-      statusBarIconBrightness: Brightness.light, // For dark icons, use Brightness.dark
-    ));
+class _NavigationBarAppState extends State<NavigationBarApp> {
+  @override
+  Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(
+        statusBarColor: Color.fromARGB(255, 32, 47, 80),
+        statusBarIconBrightness:
+            Brightness.light, // For dark icons, use Brightness.dark
+      ),
+    );
 
     return MaterialApp(
       theme: ThemeData(useMaterial3: true),
@@ -38,14 +41,31 @@ class NavigationExample extends StatefulWidget {
 
 class _NavigationExampleState extends State<NavigationExample> {
   int currentPageIndex = 0;
+  bool _showBottomNavBar = true; //BottomNavigationBar visibility
 
-  List<Widget> screenList = <Widget>[
-    PageViewCustom(),
-    HomeScreen(),
-    ComboStateless(),
-    CartPage(),
-    AboutHome(),
-  ];
+  // This method will be called by ScrollWidget when the user scrolls
+  void _updateBottomNavBarVisibility(bool show) {
+    if (mounted) {
+      //check if the widget is mounted before calling setState
+      setState(() {
+        _showBottomNavBar = show;
+      });
+    }
+  }
+
+  Widget returnWhateverScreen(int index, _updateBottomNavBarVisibility) {
+    List<Widget> screenList = <Widget>[
+      PageViewCustom(),
+      HomeScreen(),
+      ComboStateless(
+        updateBottomNavBarVisibility: _updateBottomNavBarVisibility,
+      ),
+      CartPage(),
+      AboutHome(),
+    ];
+
+    return screenList.elementAt(index);
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -59,7 +79,13 @@ class _NavigationExampleState extends State<NavigationExample> {
     return Scaffold(
       backgroundColor: Colors.yellow,
       body: SafeArea(
-          child: Center(child: screenList.elementAt(currentPageIndex))),
+        child: Center(
+          child: returnWhateverScreen(
+            currentPageIndex,
+            _updateBottomNavBarVisibility,
+          ),
+        ),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
         padding: const EdgeInsets.fromLTRB(20.0, 0, 10.0, 0),
@@ -68,84 +94,87 @@ class _NavigationExampleState extends State<NavigationExample> {
             color: Color.fromARGB(157, 255, 255, 255),
             borderRadius: BorderRadius.circular(20),
           ),
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            iconSize: 12.0,
-            selectedFontSize: 12.0,
-            unselectedFontSize: 9.0,
-            elevation: 0,
-            backgroundColor: Colors.transparent,
-            items: <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: Image.asset("icons/home_icon.png"),
-                ),
-                activeIcon: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: Image.asset("icons/home_icon_a.png"),
-                ),
-                label: "Home",
-              ),
-              BottomNavigationBarItem(
-                icon: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: Image.asset("icons/product_icon.png"),
-                ),
-                activeIcon: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: Image.asset("icons/product_icon_a.png"),
-                ),
-                label: "Products",
-              ),
-              BottomNavigationBarItem(
-                icon: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: Image.asset("icons/combo_icon.png"),
-                ),
-                activeIcon: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: Image.asset("icons/combo_icon_a.png"),
-                ),
-                label: "Combo",
-              ),
-              BottomNavigationBarItem(
-                icon: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: Image.asset("icons/my_bag_icon.png"),
-                ),
-                activeIcon: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: Image.asset("icons/my_bag_icon_a.png"),
-                ),
-                label: "My Bags",
-              ),
-              BottomNavigationBarItem(
-                icon: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: Image.asset("icons/about_icon.png"),
-                ),
-                activeIcon: SizedBox(
-                  width: 30,
-                  height: 30,
-                  child: Image.asset("icons/about_icon_a.png"),
-                ),
-                label: "About",
-              ),
-            ],
-            currentIndex: currentPageIndex,
-            selectedItemColor: Color.fromARGB(255, 101, 115, 169),
-            onTap: _onItemTapped,
-          ),
+          child:
+              _showBottomNavBar
+                  ? BottomNavigationBar(
+                    type: BottomNavigationBarType.fixed,
+                    iconSize: 12.0,
+                    selectedFontSize: 12.0,
+                    unselectedFontSize: 9.0,
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                    items: <BottomNavigationBarItem>[
+                      BottomNavigationBarItem(
+                        icon: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Image.asset("icons/home_icon.png"),
+                        ),
+                        activeIcon: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Image.asset("icons/home_icon_a.png"),
+                        ),
+                        label: "Home",
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Image.asset("icons/product_icon.png"),
+                        ),
+                        activeIcon: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Image.asset("icons/product_icon_a.png"),
+                        ),
+                        label: "Products",
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Image.asset("icons/combo_icon.png"),
+                        ),
+                        activeIcon: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Image.asset("icons/combo_icon_a.png"),
+                        ),
+                        label: "Combo",
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Image.asset("icons/my_bag_icon.png"),
+                        ),
+                        activeIcon: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Image.asset("icons/my_bag_icon_a.png"),
+                        ),
+                        label: "My Bags",
+                      ),
+                      BottomNavigationBarItem(
+                        icon: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Image.asset("icons/about_icon.png"),
+                        ),
+                        activeIcon: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Image.asset("icons/about_icon_a.png"),
+                        ),
+                        label: "About",
+                      ),
+                    ],
+                    currentIndex: currentPageIndex,
+                    selectedItemColor: Color.fromARGB(255, 101, 115, 169),
+                    onTap: _onItemTapped,
+                  )
+                  : null,
         ),
       ),
     );
