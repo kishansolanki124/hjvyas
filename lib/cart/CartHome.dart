@@ -36,7 +36,7 @@ class _CartPageState extends State<CartPage> {
           'https://images.pexels.com/photos/1526713/pexels-photo-1526713.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1526713.jpg&fm=jpg&w=4000&h=6000',
       // Replace with your image paths
       title: 'Sweet Kachori',
-      pricePerKg: 800.00,
+      pricePerKg: 11500.00,
     ),
     CartItem(
       imageUrl:

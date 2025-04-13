@@ -74,6 +74,7 @@ Widget CartItemWidget(
                   // 3. Price per Weight
                   Text(
                     '${_formatPrice(cartItem.pricePerKg)} (600 GM)',
+                    textAlign: TextAlign.right,
                     style: TextStyle(
                       backgroundColor: Color.fromARGB(255, 31, 47, 80),
                       fontSize: 14.0,
