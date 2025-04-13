@@ -1,13 +1,10 @@
 Product listing page:
 9. Test with smaller and larger devices.
-10. padding and margin
 
 Combo Page:
 1. hide bottom-sheet on scroll
-2. padding and margin
 
 Product Details:
-1. black current and other ingredient text in center
 2. you may also like 2 line text title test
 9. hide/show add to cart floating button on scroll
 8. Test with smaller and larger devices.
@@ -26,4 +23,5 @@ Checkout
 
 General:
 1. keep only portrait mode app
+2. Scrolling animation for bottom nav hide/show
 

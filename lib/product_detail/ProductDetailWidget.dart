@@ -290,6 +290,7 @@ Widget productDetailIngredients(FoodProductDetailsPage widget) {
                     width: 80,
                     child: Center(
                       child: Text(
+                        textAlign: TextAlign.center,
                         "Black Currant",
                         style: TextStyle(
                           color: Colors.white,
