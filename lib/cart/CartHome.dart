@@ -58,8 +58,8 @@ class _CartPageState extends State<CartPage> {
     ),
     CartItem(
       imageUrl: 'https://picsum.photos/id/6/400/800',
-      title: 'Kala Khatta',
-      pricePerKg: 6.8,
+      title: 'Samosa Small',
+      pricePerKg: 50,
     ),
   ];
 
