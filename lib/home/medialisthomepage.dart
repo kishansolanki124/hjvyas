@@ -96,10 +96,8 @@ class _PageViewCustomState extends State<PageViewCustom> {
             child: IconButton(
               onPressed: () {},
               icon: Badge(
-                padding: EdgeInsetsDirectional.all(1),
+                offset: Offset.fromDirection(5, -3),
                 largeSize: 20,
-                //largeSize: 20.0,
-                //smallSize: 30.0,
                 backgroundColor: Colors.red,
                 label: Text("2"),
                 textStyle: TextStyle(fontSize: 16),
@@ -120,15 +118,6 @@ class _PageViewCustomState extends State<PageViewCustom> {
                 ),
               ),
             ),
-            // child: IconButton(
-            //   icon: Image.asset(
-            //     'icons/notification_icon.png',
-            //     height: 32,
-            //     width: 30,
-            //   ),
-            //   //iconSize: 10,
-            //   onPressed: () {},
-            // ),
           ),
         ],
       ),
