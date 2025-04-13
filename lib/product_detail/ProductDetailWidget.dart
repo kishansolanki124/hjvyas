@@ -168,7 +168,7 @@ Widget productDetailDropDown(
                 variation,
                 style: TextStyle(
                   backgroundColor: Color.fromARGB(255, 31, 47, 80),
-                  fontSize: 14,
+                  fontSize: 12,
                   color: Colors.white,
                   fontFamily: "Montserrat",
                   //fontWeight: FontWeight.w700,
@@ -204,26 +204,31 @@ Widget productDetailItemCounter(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Padding(
-          padding: EdgeInsets.fromLTRB(0, 0, 5, 0),
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
           child: IconButton(
-            iconSize: 15,
+            iconSize: 12,
             color: Colors.white,
             icon: Icon(Icons.remove),
             onPressed: _decrementQuantity,
           ),
         ),
-        Text(
-          '$_quantity',
-          style: TextStyle(
-            fontSize: 18,
-            color: Colors.white,
-            fontFamily: "Montserrat",
+        SizedBox(
+          width: 20,
+          child: Center(
+          child: Text(
+            '$_quantity',
+            style: TextStyle(
+              fontSize: 12,
+              color: Colors.white,
+              fontFamily: "Montserrat",
+            ),
+          ),
           ),
         ),
         Padding(
-          padding: EdgeInsets.fromLTRB(5, 0, 0, 0),
+          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
           child: IconButton(
-            iconSize: 15,
+            iconSize: 12,
             color: Colors.white,
             icon: Icon(Icons.add),
             onPressed: _incrementQuantity,

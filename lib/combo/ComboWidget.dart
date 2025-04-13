@@ -106,7 +106,7 @@ class _CombowidgetState extends State<Combowidget> {
                 // Disable GridView scrolling
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
-                  childAspectRatio: (1 / 1.8),
+                  childAspectRatio: (1 / 1.9),
                 ),
                 itemCount: widget.gridItems.length,
                 itemBuilder: (context, index) {

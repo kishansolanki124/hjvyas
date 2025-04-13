@@ -20,8 +20,8 @@ Widget CartItemWidget(
           children: <Widget>[
             // 1. Fixed Width and Height Image
             SizedBox(
-              width: 200,
-              height: 200,
+              width: 180,
+              height: 180,
               child: NetworkImageWithLoading(imageUrl: cartItem.imageUrl),
             ),
           ],
@@ -31,7 +31,7 @@ Widget CartItemWidget(
         Center(
           child: Container(
             margin: EdgeInsets.fromLTRB(8, 8, 4, 8),
-            height: 180,
+            height: 170,
             decoration: BoxDecoration(
               border: Border.all(
                 color: Color.fromARGB(255, 123, 138, 195),
@@ -47,7 +47,7 @@ Widget CartItemWidget(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             // 1. Fixed Width and Height Image
-            SizedBox(width: 200, height: 200),
+            SizedBox(width: 180, height: 180),
 
             Expanded(
               child: Column(
@@ -55,7 +55,7 @@ Widget CartItemWidget(
                 children: <Widget>[
                   // 2. Product Title
                   Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 30, 0, 0),
+                    padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                     child: Text(
                       cartItem.title,
                       textAlign: TextAlign.right,
@@ -63,7 +63,7 @@ Widget CartItemWidget(
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         backgroundColor: Color.fromARGB(255, 31, 47, 80),
-                        fontSize: 16.0,
+                        fontSize: 14.0,
                         fontFamily: "Montserrat",
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
@@ -77,7 +77,7 @@ Widget CartItemWidget(
                     textAlign: TextAlign.right,
                     style: TextStyle(
                       backgroundColor: Color.fromARGB(255, 31, 47, 80),
-                      fontSize: 14.0,
+                      fontSize: 12.0,
                       fontFamily: "Montserrat",
                       color: Colors.white,
                     ),
@@ -90,8 +90,8 @@ Widget CartItemWidget(
                       child: Padding(padding: EdgeInsets.symmetric(vertical: 6),
                       child:
                       Container(
-                        height: 35,
-                        width: 130,
+                        height: 30,
+                        width: 120,
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Color.fromARGB(255, 123, 138, 195),
@@ -109,7 +109,7 @@ Widget CartItemWidget(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             IconButton(
-                              iconSize: 18,
+                              iconSize: 16,
                               icon: Icon(Icons.remove),
                               color: Colors.white,
                               onPressed: () => _decrementCount(index),
@@ -126,7 +126,7 @@ Widget CartItemWidget(
                               child: Text(
                                 cartItem.count.toString(),
                                 style: TextStyle(
-                                  fontSize: 18,
+                                  fontSize: 14,
                                   color: Colors.white,
                                   fontFamily: "Montserrat",
                                 ),
@@ -134,7 +134,7 @@ Widget CartItemWidget(
                             ),
 
                             IconButton(
-                              iconSize: 18,
+                              iconSize: 16,
                               icon: Icon(Icons.add),
                               color: Colors.white,
                               onPressed: () => _incrementCount(index),
@@ -155,7 +155,7 @@ Widget CartItemWidget(
                         child: Text(
                           '${_formatPrice(cartItem.totalPrice)}',
                           style: TextStyle(
-                            fontSize: 16.0,
+                            fontSize: 14.0,
                             fontFamily: "Montserrat",
                             color: Colors.white,
                             fontWeight: FontWeight.w500,
