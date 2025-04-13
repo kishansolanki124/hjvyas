@@ -59,6 +59,8 @@ Widget CartItemWidget(
                     child: Text(
                       cartItem.title,
                       textAlign: TextAlign.right,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         backgroundColor: Color.fromARGB(255, 31, 47, 80),
                         fontSize: 16.0,

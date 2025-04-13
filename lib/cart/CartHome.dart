@@ -41,7 +41,7 @@ class _CartPageState extends State<CartPage> {
     CartItem(
       imageUrl:
           'https://images.pexels.com/photos/7276946/pexels-photo-7276946.jpeg?cs=srgb&dl=pexels-rachel-claire-7276946.jpg&fm=jpg&w=3648&h=5472',
-      title: 'Luscious Bite Kachori',
+      title: 'Luscious Bite Kachori and Jalebi',
       pricePerKg: 1800.00,
     ),
     CartItem(
