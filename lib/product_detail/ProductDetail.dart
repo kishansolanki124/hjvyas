@@ -1,11 +1,12 @@
 import 'package:autoscale_tabbarview/autoscale_tabbarview.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import '../product/ProductListWidgets.dart';
 import 'FullWidthButton.dart';
 import 'ProductDetailWidget.dart';
 
-class ProductDetail extends StatelessWidget {
+class ProductDetail extends StatefulWidget {
   final String parentPrice;
 
   ProductDetail({
@@ -13,8 +14,13 @@ class ProductDetail extends StatelessWidget {
   });
 
   @override
+  State<ProductDetail> createState() => _ProductDetailState();
+}
+
+class _ProductDetailState extends State<ProductDetail> {
+  @override
   Widget build(BuildContext context) {
-    String price = parentPrice;
+    String price = widget.parentPrice;
     return Scaffold(
       body: FoodProductDetailsPage(
         productName: "Luscious Bite",
@@ -96,6 +102,9 @@ class FoodProductDetailsPage extends StatefulWidget {
 
 class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
     with TickerProviderStateMixin {
+
+  bool _showBottomNavBar = true; //BottomNavigationBar visibility
+
   int _currentImageIndex = 0;
   String? _selectedVariant;
   int _quantity = 1;
@@ -118,6 +127,46 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
         activeTabIndex = _tabController.index;
       });
     });
+
+    _scrollController.addListener(_onScroll); // Listen to scroll events
+  }
+
+  @override
+  void dispose() {
+    _scrollController.removeListener(_onScroll); // Remove the listener
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  // This method will be called by ScrollWidget when the user scrolls
+  void _updateBottomNavBarVisibility(bool show) {
+    if (mounted) {
+      // //check if the widget is mounted before calling setState
+      setState(() {
+        _showBottomNavBar = show;
+      });
+    }
+  }
+
+  final ScrollController _scrollController = ScrollController();
+
+
+  void _onScroll() {
+    // Check the scroll direction
+    if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.reverse) {
+      // If scrolling down, hide the BottomNavigationBar
+      _updateBottomNavBarVisibility(false);
+    } else if (_scrollController.position.userScrollDirection ==
+        ScrollDirection.forward) {
+      // If scrolling up, show the BottomNavigationBar
+      _updateBottomNavBarVisibility(true);
+    }
+    // You might also want to hide it if the user scrolls to the very bottom or top.
+    if (_scrollController.offset <=
+        _scrollController.position.minScrollExtent) {
+      _updateBottomNavBarVisibility(true);
+    }
   }
 
   void _incrementQuantity() {
@@ -173,6 +222,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
           child: Stack(
             children: [
               SingleChildScrollView(
+                controller: _scrollController, // Attach the scroll controller
                 child: Stack(
                   children: [
                     Column(
@@ -375,7 +425,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: addToCartFullWidthButton("1800.00", _onPressed),
+      floatingActionButton: _showBottomNavBar ? addToCartFullWidthButton("1800.00", _onPressed)  : null,
     );
   }
 }

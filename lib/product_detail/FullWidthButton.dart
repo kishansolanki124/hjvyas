@@ -9,7 +9,7 @@ Widget addToCartFullWidthButton(String price, onPressed) {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(150, 255, 255, 255),
+          backgroundColor: Color.fromARGB(200, 255, 255, 255),
           // Semi-transparent white
           padding: EdgeInsets.symmetric(vertical: 12.0),
           shape: RoundedRectangleBorder(

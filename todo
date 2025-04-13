@@ -2,14 +2,7 @@ Product listing page:
 9. Test with smaller and larger devices.
 
 Product Details:
-9. hide/show add to cart floating button on scroll
 8. Test with smaller and larger devices.
-
-Product List:
-1. Test with smaller and larger devices.
-
-For videos:
-1. set animated icon widget for play and pause
 
 Checkout
 1. visibility like website for checkout fields
@@ -17,4 +10,3 @@ Checkout
 General:
 1. keep only portrait mode app
 2. Scrolling animation for bottom nav hide/show
-
