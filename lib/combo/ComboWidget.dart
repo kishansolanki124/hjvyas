@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import '../product_detail/ProductDetail.dart';
 import 'ComboFirstItem.dart';
 import 'ComboFourthItem.dart';
 import 'ComboSecondItem.dart';
@@ -110,8 +111,9 @@ class _CombowidgetState extends State<Combowidget> {
                 ),
                 itemCount: widget.gridItems.length,
                 itemBuilder: (context, index) {
+                  Widget lloadWidget;
                   if (index % 4 == 0) {
-                    return ComboFirstItem(
+                    lloadWidget = ComboFirstItem(
                       imageUrl: widget.gridItems[index]['imageUrl']!,
                       title: widget.gridItems[index]['title']!,
                       price: widget.gridItems[index]['price']!,
@@ -119,7 +121,7 @@ class _CombowidgetState extends State<Combowidget> {
                       calories: widget.gridItems[index]['calories']!,
                     );
                   } else if (index % 4 == 1) {
-                    return ComboSecondItem(
+                    lloadWidget = ComboSecondItem(
                       imageUrl: widget.gridItems[index]['imageUrl']!,
                       title: widget.gridItems[index]['title']!,
                       price: widget.gridItems[index]['price']!,
@@ -127,7 +129,7 @@ class _CombowidgetState extends State<Combowidget> {
                       calories: widget.gridItems[index]['calories']!,
                     );
                   } else if (index % 4 == 2) {
-                    return ComboThirdItem(
+                    lloadWidget = ComboThirdItem(
                       imageUrl: widget.gridItems[index]['imageUrl']!,
                       title: widget.gridItems[index]['title']!,
                       price: widget.gridItems[index]['price']!,
@@ -135,7 +137,7 @@ class _CombowidgetState extends State<Combowidget> {
                       calories: widget.gridItems[index]['calories']!,
                     );
                   } else {
-                    return ComboFourthItem(
+                    lloadWidget = ComboFourthItem(
                       imageUrl: widget.gridItems[index]['imageUrl']!,
                       title: widget.gridItems[index]['title']!,
                       price: widget.gridItems[index]['price']!,
@@ -143,6 +145,25 @@ class _CombowidgetState extends State<Combowidget> {
                       calories: widget.gridItems[index]['calories']!,
                     );
                   }
+
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => //ProductDetail(item: item),
+                          ProductDetail(
+                            parentPrice:
+                            widget.gridItems[index]['price'] != null
+                                ? widget.gridItems[index]['price']!
+                                : "",
+                          ),
+                        ),
+                      );
+                    },
+                    child: lloadWidget,
+                  );
                 },
               ),
             ],
