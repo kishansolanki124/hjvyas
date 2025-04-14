@@ -12,7 +12,7 @@ class NetworkImageWithLoading extends StatefulWidget {
 }
 
 class _NetworkImageWithLoadingState extends State<NetworkImageWithLoading> {
-  double? _progress; // Nullable double to track progress
+  //double? _progress; // Nullable double to track progress
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +41,9 @@ class _NetworkImageWithLoadingState extends State<NetworkImageWithLoading> {
             if (loadingProgress == null) {
               return child; // Image is fully loaded
             }
-            _progress =
-                loadingProgress.cumulativeBytesLoaded /
-                (loadingProgress.expectedTotalBytes ?? 1); // Calculate progress
+            // _progress =
+            //     loadingProgress.cumulativeBytesLoaded /
+            //     (loadingProgress.expectedTotalBytes ?? 1); // Calculate progress
             return Center(
               child:
               //CircularProgressIndicator(value: _progress)
@@ -59,7 +59,16 @@ class _NetworkImageWithLoadingState extends State<NetworkImageWithLoading> {
             StackTrace? stackTrace,
           ) {
             // Handle image loading errors
-            return Center(child: Text('Failed to load image'));
+            return Center(
+              child: Text(
+                'Image',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 10.0,
+                  fontFamily: "Montserrat",
+                ),
+              ),
+            );
           },
         ), //),
       ],

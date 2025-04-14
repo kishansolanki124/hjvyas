@@ -275,13 +275,7 @@ Widget productDetailIngredients(FoodProductDetailsPage widget) {
                         color: Color.fromARGB(255, 123, 138, 195),
                       ),
                     ),
-                    child: Image.network(
-                      widget.ingredientImageUrls[index],
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) {
-                        return Center(child: Text('Err'));
-                      },
-                    ),
+                    child: NetworkImageWithLoading(imageUrl: widget.ingredientImageUrls[index]),
                   ),
 
                   Container(
