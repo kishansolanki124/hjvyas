@@ -185,15 +185,43 @@ class _NavigationExampleState extends State<NavigationExample>
                                 label: "COMBO",
                               ),
                               BottomNavigationBarItem(
-                                icon: SizedBox(
-                                  width: 30,
-                                  height: 30,
-                                  child: Image.asset("icons/my_bag_icon.png"),
+                                icon: Badge(
+                                  largeSize: 20,
+                                  backgroundColor: Colors.red,
+                                  label: Text(
+                                    "1",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: "Montserrat",
+                                    ),
+                                  ),
+                                  textStyle: TextStyle(fontSize: 16),
+                                  child: SizedBox(
+                                    width: 30,
+                                    height: 30,
+                                    child: Image.asset("icons/my_bag_icon.png"),
+                                  ),
                                 ),
-                                activeIcon: SizedBox(
-                                  width: 30,
-                                  height: 30,
-                                  child: Image.asset("icons/my_bag_icon_a.png"),
+                                activeIcon: Badge(
+                                  largeSize: 20,
+                                  backgroundColor: Colors.red,
+                                  label: Text(
+                                    "1",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: "Montserrat",
+                                    ),
+                                  ),
+                                  textStyle: TextStyle(fontSize: 16),
+                                  child: SizedBox(
+                                    width: 30,
+                                    height: 30,
+                                    child: Image.asset(
+                                      "icons/my_bag_icon_a.png",
+                                    ),
+                                  ),
                                 ),
                                 label: "MY BAG",
                               ),
