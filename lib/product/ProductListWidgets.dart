@@ -101,7 +101,7 @@ Widget productListImage(String url, [Color? color]) {
 Widget productListWhiteBg(AlignmentGeometry alignment) {
   return Align(
     alignment: alignment,
-    child: SizedBox(height: 90, child: Container(color: Colors.white)),
+    child: SizedBox(height: 100, child: Container(color: Colors.white)),
   );
 }
 

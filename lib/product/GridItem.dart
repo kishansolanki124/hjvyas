@@ -30,7 +30,11 @@ class GridItem extends StatelessWidget {
           children: <Widget>[
             productListImage(""),
 
+            SizedBox(height: 10),
+
             productListTitleWidget(title),
+
+            SizedBox(height: 10),
 
             //"₹ 900.00 - 300 grams"
             if (price.isNotEmpty) productListVariationWidget(price,

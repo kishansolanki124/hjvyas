@@ -30,7 +30,11 @@ class ComboSecondItem extends StatelessWidget {
           children: <Widget>[
             productListImage("", Color.fromARGB(255, 123, 138, 195)),
 
+            SizedBox(height: 10),
+
             productListTitleWidget(title),
+
+            SizedBox(height: 10),
 
             //"₹ 900.00 - 300 grams"
             if (price.isNotEmpty)
