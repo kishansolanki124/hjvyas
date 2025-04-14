@@ -192,7 +192,7 @@ class _CartPageState extends State<CartPage> {
                           ),
                         ),
 
-                        SizedBox(height: 10),
+                        SizedBox(height: 5),
 
                         Text(
                           "Please Select Anyone Free Product Tester & Proceed To Checkout Below",

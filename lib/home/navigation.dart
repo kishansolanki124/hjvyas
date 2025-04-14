@@ -1,3 +1,4 @@
+import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -89,11 +90,24 @@ class _NavigationExampleState extends State<NavigationExample>
     //final ThemeData theme = Theme.of(context);
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 32, 47, 80),
-      body: SafeArea(
-        child: Center(
-          child: returnWhateverScreen(
-            currentPageIndex,
-            _updateBottomNavBarVisibility,
+      body: DoubleBackToCloseApp(
+        snackBar: const SnackBar(
+          backgroundColor: Colors.white,
+          content: Text(
+            'Tap back again to exit.',
+            style: TextStyle(
+              fontSize: 14.0,
+              fontFamily: "Montserrat",
+              color: Color.fromARGB(255, 32, 47, 80),
+            ),
+          ),
+        ),
+        child: SafeArea(
+          child: Center(
+            child: returnWhateverScreen(
+              currentPageIndex,
+              _updateBottomNavBarVisibility,
+            ),
           ),
         ),
       ),
