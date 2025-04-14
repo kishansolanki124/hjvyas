@@ -328,7 +328,7 @@ Widget productDetailYouMayLike(FoodProductDetailsPage widget) {
           itemCount: widget.youMayLikeProducts.length,
           itemBuilder: (context, index) {
             final product = widget.youMayLikeProducts[index];
-            return Padding(
+            Widget youMayLikeWidget =  Padding(
               padding: const EdgeInsets.only(right: 12.0),
               child: Container(
                 width: 120,
@@ -377,6 +377,25 @@ Widget productDetailYouMayLike(FoodProductDetailsPage widget) {
                   ],
                 ),
               ),
+            );
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => //ProductDetail(item: item),
+                    ProductDetail(
+                      parentPrice:
+                      product['imageUrl'] != null
+                          ? product['imageUrl']!
+                          : "",
+                    ),
+                  ),
+                );
+              },
+              child: youMayLikeWidget,
             );
           },
         ),
