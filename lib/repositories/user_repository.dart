@@ -1,11 +1,11 @@
-import 'package:hjvyas/api/services/user_service.dart';
+import 'package:hjvyas/api/services/hjvyas_api_service.dart';
 
 import '../api/models/LogoResponse.dart';
 
-class UserRepository {
-  final UserService _userService;
+class HJVyasRepository {
+  final HJVyasApiService _userService;
 
-  UserRepository(this._userService);
+  HJVyasRepository(this._userService);
 
   Future<LogoResponse> getUser() async {
     return await _userService.logo();

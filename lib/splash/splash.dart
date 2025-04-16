@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../api/models/LogoResponse.dart';
-import '../api/services/user_service.dart';
+import '../api/services/hjvyas_api_service.dart';
 import '../home/navigation.dart';
 import '../injection_container.dart';
 import '../product_detail/ImageWithProgress.dart';
 import '../repositories/user_repository.dart';
 
 class SplashScreen extends StatefulWidget {
-  final UserRepository _userRepo = UserRepository(getIt<UserService>());
+  final HJVyasRepository _userRepo = HJVyasRepository(getIt<HJVyasApiService>());
 
   SplashScreen({super.key});
 
@@ -20,24 +20,11 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    // Start a timer that runs for 3 seconds
-    // Timer(Duration(seconds: 1), () {
-    //   // Navigate to the home page after 3 seconds
-    //   Navigator.of(
-    //     context,
-    //     //).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
-    //   ).pushReplacement(
-    //     MaterialPageRoute(builder: (context) => NavigationBarApp()),
-    //   );
-    // });
-  }
+
 
   void startTimer() {
     //Start a timer that runs for 3 seconds
-    Timer(Duration(seconds: 3), () {
+    Timer(Duration(seconds: 1), () {
       // Navigate to the home page after 3 seconds
       Navigator.of(
         context,

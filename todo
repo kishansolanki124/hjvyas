@@ -1,3 +1,6 @@
+1. no internet screen with retry if possible
+2. other error screen
+
 Product listing page:
 9. Test with smaller and larger devices.
 10. Give fix height to each item
