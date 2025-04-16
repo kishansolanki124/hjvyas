@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:hjvyas/splash/splash.dart';
 
+import 'injection_container.dart';
+
 void main() {
+  setupDependencies(); // Initialize GetIt
   runApp(const MyApp());
 }
 
