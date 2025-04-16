@@ -6,7 +6,7 @@ import '../about/AboutHome.dart';
 import '../cart/CartHome.dart';
 import '../combo/Combo.dart';
 import '../menu/menu_screen.dart';
-import 'medialisthomepage.dart';
+import 'HomeView.dart';
 
 class NavigationBarApp extends StatefulWidget {
   const NavigationBarApp({super.key});
@@ -67,7 +67,7 @@ class _NavigationExampleState extends State<NavigationExample>
 
   Widget returnWhateverScreen(int index, _updateBottomNavBarVisibility) {
     List<Widget> screenList = <Widget>[
-      PageViewCustom(),
+      HomeView(),
       HomeScreen(),
       ComboStateless(
         updateBottomNavBarVisibility: _updateBottomNavBarVisibility,

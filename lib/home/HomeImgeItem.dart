@@ -73,31 +73,31 @@ class _NetworkImageWithProgressState extends State<NetworkImageWithProgress> {
           color: Color.fromARGB(50, 0,0,0),
         ),
 
-        // Text at Center Bottom
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            width: double.infinity,
-            padding: EdgeInsets.all(16.0),
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.bottomCenter,
-                end: Alignment.topCenter,
-                colors: [Color.fromARGB(31, 0, 0, 0), Colors.transparent],
-              ),
-            ),
-            child: Text(
-              "Standard\nKachori",
-              style: TextStyle(
-                fontSize: 20.0,
-                fontFamily: "Montserrat",
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ),
-        ),
+        // // Text at Center Bottom
+        // Align(
+        //   alignment: Alignment.bottomCenter,
+        //   child: Container(
+        //     width: double.infinity,
+        //     padding: EdgeInsets.all(16.0),
+        //     decoration: BoxDecoration(
+        //       gradient: LinearGradient(
+        //         begin: Alignment.bottomCenter,
+        //         end: Alignment.topCenter,
+        //         colors: [Color.fromARGB(31, 0, 0, 0), Colors.transparent],
+        //       ),
+        //     ),
+        //     child: Text(
+        //       "Standard\nKachori",
+        //       style: TextStyle(
+        //         fontSize: 20.0,
+        //         fontFamily: "Montserrat",
+        //         color: Colors.white,
+        //         fontWeight: FontWeight.w700,
+        //       ),
+        //       textAlign: TextAlign.center,
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

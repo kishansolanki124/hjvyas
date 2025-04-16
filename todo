@@ -1,5 +1,7 @@
-1. no internet screen with retry if possible
+1. create common progress for screens
+2. no internet screen with retry if possible
 2. other error screen
+3. video player progress change
 
 Product listing page:
 9. Test with smaller and larger devices.
