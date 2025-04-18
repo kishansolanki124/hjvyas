@@ -8,7 +8,7 @@ import '../api/services/hjvyas_api_service.dart';
 import '../home/navigation.dart';
 import '../injection_container.dart';
 import '../product_detail/ImageWithProgress.dart';
-import '../repositories/user_repository.dart';
+import '../repositories/HJVyasRepository.dart';
 
 class SplashScreen extends StatefulWidget {
   final HJVyasRepository _userRepo = HJVyasRepository(getIt<HJVyasApiService>());

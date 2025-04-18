@@ -6,7 +6,6 @@ class NetworkException implements Exception {
 
   @override
   String toString() => message;
-
 }
 
 class ApiResponseException implements Exception {

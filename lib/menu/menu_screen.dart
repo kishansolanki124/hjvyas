@@ -1,51 +1,71 @@
 import 'package:flutter/material.dart';
-import 'package:hjvyas/menu/StateModel.dart';
+import 'package:get/get.dart';
 import 'package:hjvyas/menu/wheel_tile.dart';
 
-import '../home/HomeImgeItem.dart';
+import '../api/models/CategoryListResponse.dart';
+import '../api/services/hjvyas_api_service.dart';
+import '../injection_container.dart';
+import 'CategoryController.dart';
 import 'ImageLoaderWidget.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  HomeScreen({super.key});
+
+  final CategoryController categoryController = CategoryController(
+    getIt<HJVyasApiService>(),
+  );
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  //* List of states
-  List<States> states = [];
-  List<String> images = [
-    'https://cdn.pixabay.com/photo/2016/11/29/05/45/astronomy-1867616_1280.jpg',
-    'https://images.pexels.com/photos/1496373/pexels-photo-1496373.jpeg?cs=srgb&dl=pexels-arts-1496373.jpg&fm=jpg',
-    'https://images.pexels.com/photos/7276946/pexels-photo-7276946.jpeg?cs=srgb&dl=pexels-rachel-claire-7276946.jpg&fm=jpg&w=3648&h=5472',
-    'https://images.pexels.com/photos/1526713/pexels-photo-1526713.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1526713.jpg&fm=jpg&w=4000&h=6000',
-    'https://picsum.photos/id/5/400/800',
-    'https://picsum.photos/id/8/400/800',
-    'https://picsum.photos/id/19/400/800',
-  ];
   int _selectedIndex = 0;
-
-  //String currentState = "Andhra Pradesh";
 
   @override
   void initState() {
     super.initState();
-    states = allStates();
+    widget.categoryController.loadCategories(); // Explicit call
+  }
+
+  void _updateSelectedIndex(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
+    return Obx(() {
+      if (widget.categoryController.isLoading.value) {
+        return Center(child: CircularProgressIndicator());
+      }
+
+      if (widget.categoryController.error.isNotEmpty) {
+        return Center(child: Text('Error: ${widget.categoryController.error}'));
+      }
+
+      return MenuScreen(
+        widget.categoryController.categories,
+        _selectedIndex,
+        _updateSelectedIndex,
+      );
+    });
+  }
+
+  Widget MenuScreen(
+    List<CategoryListItem> categoryList,
+    _selectedIndex,
+    _updateSelectedIndex,
+  ) {
     return Scaffold(
       body: Container(
         color: Colors.blueGrey,
-        // decoration: BoxDecoration(
-        //   image: DecorationImage(image:
-        // NetworkImageWithProgress(imageUrl: images.elementAt(_selectedIndex))),
-        // ),
         child: Stack(
           children: [
-            loadImageWithProgress(images.elementAt(_selectedIndex)),
+            loadImageWithProgress(
+              categoryList.elementAt(_selectedIndex).categoryImage,
+            ),
 
             ListWheelScrollView.useDelegate(
               itemExtent: 40,
@@ -56,20 +76,17 @@ class _HomeScreenState extends State<HomeScreen> {
               useMagnifier: true,
               magnification: 1.3,
               onSelectedItemChanged: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                  //currentState = states[index].names!;
-                });
+                _updateSelectedIndex(index);
               },
               childDelegate: ListWheelChildBuilderDelegate(
-                childCount: states.length,
+                childCount: categoryList.length,
                 builder: (context, index) {
                   return WheelTile(
                     _selectedIndex == index
                         //currentState == states[index].names
                         ? Colors.white
                         : Colors.white60,
-                    states[index].names!,
+                    categoryList.elementAt(index).categoryName,
                   );
                 },
               ),
