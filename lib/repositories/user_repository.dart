@@ -12,7 +12,7 @@ class HJVyasRepository {
     return await _userService.logo();
   }
 
-  Future<HomeMediaResponse> homeMediaApi() async {
-    return await _userService.homeMediaApi();
+  Future<HomeMediaResponse> homeMediaApi(String start, String end) async {
+    return await _userService.homeMediaApi(start, end);
   }
 }

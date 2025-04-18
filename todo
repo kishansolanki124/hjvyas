@@ -3,6 +3,11 @@
 2. other error screen
 3. video player progress change
 
+Home page:
+1. last item blue page and end of list or logo of the app in center
+2. video loader and backgroudn color for the same
+3. APi loading common progress
+
 Product listing page:
 9. Test with smaller and larger devices.
 10. Give fix height to each item

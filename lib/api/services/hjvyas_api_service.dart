@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hjvyas/api/api_client.dart';
 import 'package:hjvyas/api/models/HomeMediaResponse.dart';
 
@@ -14,7 +15,6 @@ class HJVyasApiService {
   HJVyasApiService(Dio dio);
 
   Future<LogoResponse> logo() async {
-
     // First check basic connectivity
     if (!await ConnectivityService.isConnected) {
       throw NetworkException('No internet connection', isConnectionIssue: true);
@@ -22,24 +22,30 @@ class HJVyasApiService {
 
     try {
       final response = await _client.post('/get_logo');
-      print('response is $response');
+      if (kDebugMode) {
+        print('response is $response');
+      }
       return LogoResponse.fromJson(jsonDecode(response.data));
     } on DioException catch (e) {
-      print('DioException is message ${e.message} and erorr is ${e.error}');
+      if (kDebugMode) {
+        print('DioException is message ${e.message} and error is ${e.error}');
+      }
       if (e.response != null) {
-        print('DioException is response ${e.response}');
-        print('e.response!.statusCode ${e.response!.statusCode!}');
+        if (kDebugMode) {
+          print('DioException is response ${e.response}');
+          print('e.response!.statusCode ${e.response!.statusCode!}');
+        }
         throw ApiResponseException(e.message!, e.response!.statusCode!);
       } else {
-        print('No internet connection');
+        if (kDebugMode) {
+          print('No internet connection');
+        }
         throw NetworkException('No internet connection');
       }
     }
   }
 
-
-  Future<HomeMediaResponse> homeMediaApi() async {
-
+  Future<HomeMediaResponse> homeMediaApi(String start, String end) async {
     // First check basic connectivity
     if (!await ConnectivityService.isConnected) {
       throw NetworkException('No internet connection', isConnectionIssue: true);
@@ -47,27 +53,38 @@ class HJVyasApiService {
 
     try {
       // URL-encoded data as a Map
-      final formData = {
-        'start': "0",
-        'end': '2'
-      };
+      final formData = {'start': start, 'end': end};
 
-      final response = await _client.post('/get_slider',
+      if (kDebugMode) {
+        print('formData is: $formData');
+      }
+
+      final response = await _client.post(
+        '/get_slider',
         data: formData,
         options: Options(
           // Explicitly set content-type (Dio often infers this, but be explicit)
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        ),);
-      print('response is $response');
+        ),
+      );
+      if (kDebugMode) {
+        print('response is $response');
+      }
       return HomeMediaResponse.fromJson(jsonDecode(response.data));
     } on DioException catch (e) {
-      print('DioException is message ${e.message} and erorr is ${e.error}');
+      if (kDebugMode) {
+        print('DioException is message ${e.message} and error is ${e.error}');
+      }
       if (e.response != null) {
-        print('DioException is response ${e.response}');
-        print('e.response!.statusCode ${e.response!.statusCode!}');
+        if (kDebugMode) {
+          print('DioException is response ${e.response}');
+          print('e.response!.statusCode ${e.response!.statusCode!}');
+        }
         throw ApiResponseException(e.message!, e.response!.statusCode!);
       } else {
-        print('No internet connection');
+        if (kDebugMode) {
+          print('No internet connection');
+        }
         throw NetworkException('No internet connection');
       }
     }
