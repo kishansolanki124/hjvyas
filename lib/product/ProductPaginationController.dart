@@ -2,38 +2,31 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../api/models/HomeMediaResponse.dart';
+import '../api/models/ProductListResponse.dart';
 import '../api/services/HJVyasApiService.dart'; // Or your state management solution
 
-class PaginationController extends GetxController {
+class ProductPaginationController extends GetxController {
   final HJVyasApiService _service;
-  final PageController pageController = PageController(
-    initialPage: 0,
-    viewportFraction: 0.8,
-  );
+  final PageController pageController = PageController();
 
-  PaginationController(this._service);
+  ProductPaginationController(this._service);
 
-  var items = <SliderListItem>[].obs;
+  var items = <ProductListItem>[].obs;
   var isLoading = false.obs;
+  var categoryId = 1; //todo make this dynamic
   var currentPage = 0;
   var totalItems = 0;
   final int itemsPerPage = 10; // Adjust based on API
-  //
-  // @override
-  // void onInit() {
-  //   loadInitialData(); // Called automatically when controller initializes
-  //   super.onInit();
-  // }
 
   Future<void> loadInitialData() async {
     isLoading(true);
     try {
-      final newItems = await _service.homeMediaApi(
+      final newItems = await _service.getProduct(
         currentPage.toString(),
         itemsPerPage.toString(),
+        categoryId,
       );
-      items.assignAll(newItems.sliderList);
+      items.assignAll(newItems.productList);
       totalItems = newItems.totalRecords;
       currentPage += 10;
     } finally {
@@ -56,13 +49,14 @@ class PaginationController extends GetxController {
 
     isLoading(true);
     try {
-      final newItems = await _service.homeMediaApi(
+      final newItems = await _service.getProduct(
         (currentPage).toString(),
         (currentPage + itemsPerPage).toString(),
+        categoryId,
       );
 
-      if (newItems.sliderList.isNotEmpty) {
-        items.addAll(newItems.sliderList);
+      if (newItems.productList.isNotEmpty) {
+        items.addAll(newItems.productList);
         currentPage += 10;
       }
     } finally {

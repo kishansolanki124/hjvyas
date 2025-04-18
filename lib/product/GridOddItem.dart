@@ -41,7 +41,7 @@ class GridOddItem extends StatelessWidget {
 
             if (price.isEmpty) soldOutText(),
 
-            productListImage(""),
+            productListImage(imageUrl),
           ],
         ),
       ],

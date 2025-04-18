@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hjvyas/product_detail/ImageWithProgress.dart';
 
 Widget productListTitleWidget(String title, [Color? color]) {
   color ??= Colors.white;
@@ -65,25 +66,52 @@ Widget productListImage(String url, [Color? color]) {
   //color ??= Color.fromARGB(255, 123, 138, 195);
   color ??= Colors.transparent;
 
-  return Card(
-    // with Card
-    elevation: 5.0,
-    shape: const CircleBorder(),
-    clipBehavior: Clip.antiAlias,
-    // with Card
-    child: Center(
-      child: Container(
-        width: 180,
-        height: 180,
-        decoration: BoxDecoration(
-          border: Border.all(color: color, width: 2.0),
-          shape: BoxShape.circle,
-          //color: Colors.blue,
-          image: DecorationImage(
-            image: AssetImage("images/circular_demo.png"),
-            fit: BoxFit.cover,
-          ),
+  // return Card(
+  //   // with Card
+  //   elevation: 5.0,
+  //   shape: const CircleBorder(),
+  //   clipBehavior: Clip.antiAlias,
+  //   // with Card
+  //   child: Center(
+  //     child: Container(
+  //       width: 180,
+  //       height: 180,
+  //       // decoration: BoxDecoration(
+  //       //   color: Colors.red,
+  //       //   border: Border.all(color: color, width: 2.0),
+  //       //   shape: BoxShape.circle,
+  //       //   //color: Colors.blue,
+  //       //   // image: DecorationImage(image:
+  //       //   // NetworkImage(url))
+  //       //   // image: DecorationImage(
+  //       //   //   image: AssetImage("images/circular_demo.png"),
+  //       //   //   fit: BoxFit.cover,
+  //       //   // ),
+  //       // ),
+  //       child: ImageWithProgress(imageURL: url,boxFit: BoxFit.fill,),
+  //     ),
+  //   ),
+  // );
+
+
+  return Container(
+    decoration: BoxDecoration(
+      color: Colors.transparent,
+      shape: BoxShape.circle,
+      boxShadow: [
+        BoxShadow(
+          blurRadius: 10,
+          color: Colors.black.withAlpha(20),
+          spreadRadius: 2,
+          offset: Offset(0, 3),
         ),
+      ],
+    ),
+    child: SizedBox(
+      width: 190,
+      height: 190,
+      child: ImageWithProgress(
+        imageURL: url, // Replace with your image URL
       ),
     ),
   );

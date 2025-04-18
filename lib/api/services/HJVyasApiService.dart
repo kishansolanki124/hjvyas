@@ -9,6 +9,7 @@ import '../ConnectivityService.dart';
 import '../exceptions/exceptions.dart';
 import '../models/CategoryListResponse.dart';
 import '../models/LogoResponse.dart';
+import '../models/ProductListResponse.dart';
 
 class HJVyasApiService {
   final Dio _client = apiClient;
@@ -102,6 +103,55 @@ class HJVyasApiService {
         print('response is $response');
       }
       return HomeMediaResponse.fromJson(jsonDecode(response.data));
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print('DioException is message ${e.message} and error is ${e.error}');
+      }
+      if (e.response != null) {
+        if (kDebugMode) {
+          print('DioException is response ${e.response}');
+          print('e.response!.statusCode ${e.response!.statusCode!}');
+        }
+        throw ApiResponseException(e.message!, e.response!.statusCode!);
+      } else {
+        if (kDebugMode) {
+          print('No internet connection');
+        }
+        throw NetworkException('No internet connection');
+      }
+    }
+  }
+
+  Future<ProductListResponse> getProduct(
+    String start,
+    String end,
+    int categoryId,
+  ) async {
+    // First check basic connectivity
+    if (!await ConnectivityService.isConnected) {
+      throw NetworkException('No internet connection', isConnectionIssue: true);
+    }
+
+    try {
+      // URL-encoded data as a Map
+      final formData = {'start': start, 'end': end, 'category_id': categoryId};
+
+      if (kDebugMode) {
+        print('formData is: $formData');
+      }
+
+      final response = await _client.post(
+        '/get_product',
+        data: formData,
+        options: Options(
+          // Explicitly set content-type (Dio often infers this, but be explicit)
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        ),
+      );
+      if (kDebugMode) {
+        print('response is $response');
+      }
+      return ProductListResponse.fromJson(jsonDecode(response.data));
     } on DioException catch (e) {
       if (kDebugMode) {
         print('DioException is message ${e.message} and error is ${e.error}');

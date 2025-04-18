@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:hjvyas/home/videodemo.dart';
 
 import '../api/models/HomeMediaResponse.dart';
-import '../api/services/hjvyas_api_service.dart';
+import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import 'HomeImgeItem.dart';
 import 'PaginationController.dart';

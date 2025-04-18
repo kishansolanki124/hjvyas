@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:hjvyas/menu/wheel_tile.dart';
 
 import '../api/models/CategoryListResponse.dart';
-import '../api/services/hjvyas_api_service.dart';
+import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import 'CategoryController.dart';
 import 'ImageLoaderWidget.dart';
@@ -38,10 +38,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (widget.categoryController.isLoading.value) {
+        //todo change this
         return Center(child: CircularProgressIndicator());
       }
 
       if (widget.categoryController.error.isNotEmpty) {
+        //todo change this
         return Center(child: Text('Error: ${widget.categoryController.error}'));
       }
 

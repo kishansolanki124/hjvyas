@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 
 import '../api/models/CategoryListResponse.dart';
-import '../api/services/hjvyas_api_service.dart';
+import '../api/services/HJVyasApiService.dart';
 
 class CategoryController extends GetxController {
   final HJVyasApiService _service;

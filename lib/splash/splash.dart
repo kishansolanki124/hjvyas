@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../api/models/LogoResponse.dart';
-import '../api/services/hjvyas_api_service.dart';
+import '../api/services/HJVyasApiService.dart';
 import '../home/navigation.dart';
 import '../injection_container.dart';
 import '../product_detail/ImageWithProgress.dart';

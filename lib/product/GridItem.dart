@@ -28,7 +28,7 @@ class GridItem extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            productListImage(""),
+            productListImage(imageUrl),
 
             SizedBox(height: 10),
 
