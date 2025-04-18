@@ -7,6 +7,7 @@ Home page:
 
 Category Page:
 1. top center icon of app
+3. APi loading common progress
 
 Product List:
 1. dynamic id of category. Currently its static from API

@@ -1,31 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hjvyas/menu/wheel_tile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/models/CategoryListResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
+import '../product_detail/ImageWithProgress.dart';
+import '../utils/NetworkImageWithProgress.dart';
 import 'CategoryController.dart';
-import 'ImageLoaderWidget.dart';
+import 'MenuListItem.dart';
 
-class HomeScreen extends StatefulWidget {
-  HomeScreen({super.key});
+class MenuScreen extends StatefulWidget {
+  MenuScreen({super.key});
 
   final CategoryController categoryController = CategoryController(
     getIt<HJVyasApiService>(),
   );
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _MenuScreenState createState() => _MenuScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _MenuScreenState extends State<MenuScreen> {
   int _selectedIndex = 0;
-
+  String logoURL = "";
   @override
   void initState() {
     super.initState();
+    _initPrefs(); // Initialize shared preferences in initState
     widget.categoryController.loadCategories(); // Explicit call
+  }
+
+  // Instance of SharedPreferences
+  late SharedPreferences _prefs;
+
+  // Initialize SharedPreferences
+  Future<void> _initPrefs() async {
+    _prefs = await SharedPreferences.getInstance();
+    getLogo();
+  }
+
+  Future<void> getLogo() async {
+    final myBoolValue = _prefs.getString("logo");
+    setState(() {
+      logoURL = myBoolValue ?? "";
+    });
   }
 
   void _updateSelectedIndex(int index) {
@@ -47,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return Center(child: Text('Error: ${widget.categoryController.error}'));
       }
 
-      return MenuScreen(
+      return menuScreen(
         widget.categoryController.categories,
         _selectedIndex,
         _updateSelectedIndex,
@@ -55,10 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  Widget MenuScreen(
+  Widget menuScreen(
     List<CategoryListItem> categoryList,
-    _selectedIndex,
-    _updateSelectedIndex,
+    selectedIndex,
+    updateSelectedIndex,
   ) {
     return Scaffold(
       body: Container(
@@ -66,9 +85,10 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Stack(
           children: [
             loadImageWithProgress(
-              categoryList.elementAt(_selectedIndex).categoryImage,
+              categoryList.elementAt(selectedIndex).categoryImage,
             ),
 
+            //list of items
             ListWheelScrollView.useDelegate(
               itemExtent: 40,
               perspective: 0.001,
@@ -78,12 +98,12 @@ class _HomeScreenState extends State<HomeScreen> {
               useMagnifier: true,
               magnification: 1.3,
               onSelectedItemChanged: (index) {
-                _updateSelectedIndex(index);
+                updateSelectedIndex(index);
               },
               childDelegate: ListWheelChildBuilderDelegate(
                 childCount: categoryList.length,
                 builder: (context, index) {
-                  return WheelTile(
+                  return MenuListItem(
                     _selectedIndex == index
                         //currentState == states[index].names
                         ? Colors.white
@@ -93,6 +113,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
+
+            //top center logo
+            if (logoURL.isNotEmpty)
+              Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  width: 120,
+                  height: 120,
+                  child: ImageWithProgress(imageURL: logoURL),
+                ),
+              ),
           ],
         ),
       ),

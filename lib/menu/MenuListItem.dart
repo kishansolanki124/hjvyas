@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../product/ProductListGridView.dart';
 
-class WheelTile extends StatelessWidget {
+class MenuListItem extends StatelessWidget {
   final String states;
   final Color selectedColor;
-  const WheelTile(this.selectedColor, this.states, {Key? key})
+  const MenuListItem(this.selectedColor, this.states, {Key? key})
     : super(key: key);
 
   @override
@@ -19,7 +19,9 @@ class WheelTile extends StatelessWidget {
               onTap: () {
                 if (selectedColor == Colors.white) {
                   Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => ProductListGridView()),
+                    MaterialPageRoute(
+                      builder: (context) => ProductListGridView(),
+                    ),
                   );
                 }
               },

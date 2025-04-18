@@ -5,7 +5,7 @@ import 'package:flutter/services.dart';
 import '../about/AboutHome.dart';
 import '../cart/CartHome.dart';
 import '../combo/Combo.dart';
-import '../menu/menu_screen.dart';
+import '../menu/MenuScreen.dart';
 import 'HomeView.dart';
 
 class NavigationBarApp extends StatefulWidget {
@@ -58,7 +58,7 @@ class _NavigationExampleState extends State<NavigationExample>
   Widget returnWhateverScreen(int index, _updateBottomNavBarVisibility) {
     List<Widget> screenList = <Widget>[
       HomeView(),
-      HomeScreen(),
+      MenuScreen(),
       ComboStateless(
         updateBottomNavBarVisibility: _updateBottomNavBarVisibility,
       ),
