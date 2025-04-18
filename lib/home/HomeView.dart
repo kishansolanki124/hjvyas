@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hjvyas/home/VideoViewForHome.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/models/HomeMediaResponse.dart';
 import '../api/services/HJVyasApiService.dart';
@@ -22,10 +23,28 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  String logoURL = "";
   @override
   void initState() {
     super.initState();
+    _initPrefs(); // Initialize shared preferences in initState
     widget.paginationController.loadInitialData(); // Explicit call
+  }
+
+  // Instance of SharedPreferences
+  late SharedPreferences _prefs;
+
+  // Initialize SharedPreferences
+  Future<void> _initPrefs() async {
+    _prefs = await SharedPreferences.getInstance();
+    getLogo();
+  }
+
+  Future<void> getLogo() async {
+    final myBoolValue = _prefs.getString("logo");
+    setState(() {
+      logoURL = myBoolValue ?? "";
+    });
   }
 
   @override
@@ -109,17 +128,15 @@ class _HomeViewState extends State<HomeView> {
                 ),
               ),
 
-              Align(
-                alignment: Alignment.topCenter,
-                child: SizedBox(
-                  width: 120,
-                  height: 120,
-                  child: ImageWithProgress(
-                    imageURL:
-                        "https://www.mithaiwalahjvyas.com/uploads/app_logo_img/1161-logo.png",
+              if (logoURL.isNotEmpty)
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: SizedBox(
+                    width: 120,
+                    height: 120,
+                    child: ImageWithProgress(imageURL: logoURL),
                   ),
                 ),
-              ),
             ],
           ),
         );
