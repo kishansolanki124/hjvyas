@@ -5,6 +5,8 @@ import 'package:hjvyas/home/VideoViewForHome.dart';
 import '../api/models/HomeMediaResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
+import '../notification/Notification.dart';
+import '../product_detail/ImageWithProgress.dart';
 import '../utils/NetworkImageWithProgress.dart';
 import 'PaginationController.dart';
 
@@ -49,25 +51,76 @@ class _HomeViewState extends State<HomeView> {
             }
             return false;
           },
-          child: PageView.builder(
-            padEnds: false,
-            scrollDirection: Axis.vertical,
-            controller: widget.paginationController.pageController,
-            itemCount: widget.paginationController.items.length + 1,
-            // +1 for last item
-            itemBuilder: (context, index) {
-              if (index < widget.paginationController.items.length) {
-                return homePageItem(
-                  widget.paginationController.items[index],
-                );
-              } else {
-                //todo change this last item
-                return ColoredBox(
-                  color: Colors.black,
-                  child: SizedBox(height: double.maxFinite),
-                );
-              }
-            },
+          child: Stack(
+            children: <Widget>[
+              //PageView (list of media)
+              Center(
+                child: PageView.builder(
+                  padEnds: false,
+                  scrollDirection: Axis.vertical,
+                  controller: widget.paginationController.pageController,
+                  itemCount: widget.paginationController.items.length + 1,
+                  // +1 for last item
+                  itemBuilder: (context, index) {
+                    if (index < widget.paginationController.items.length) {
+                      return homePageItem(
+                        widget.paginationController.items[index],
+                      );
+                    } else {
+                      //todo change this last item
+                      return ColoredBox(
+                        color: Colors.black,
+                        child: SizedBox(height: double.maxFinite),
+                      );
+                    }
+                  },
+                ),
+              ),
+
+              // Top right Notification Button with badge
+              Positioned(
+                top: 16.0, // Adjust top padding as needed
+                right: 16.0, // Adjust right padding as needed
+
+                child: IconButton(
+                  onPressed: () {},
+                  icon: Badge(
+                    offset: Offset.fromDirection(6, -4),
+                    largeSize: 18,
+                    backgroundColor: Colors.red,
+                    label: Text("2"),
+                    textStyle: TextStyle(fontSize: 12),
+                    child: IconButton(
+                      icon: Image.asset(
+                        'icons/notification_icon.png',
+                        height: 24,
+                        width: 24,
+                      ),
+                      //iconSize: 10,
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => NotificationList(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ),
+              ),
+
+              Align(
+                alignment: Alignment.topCenter,
+                child: SizedBox(
+                  width: 120,
+                  height: 120,
+                  child: ImageWithProgress(
+                    imageURL:
+                        "https://www.mithaiwalahjvyas.com/uploads/app_logo_img/1161-logo.png",
+                  ),
+                ),
+              ),
+            ],
           ),
         );
       }),
