@@ -84,8 +84,8 @@ class _MenuScreenState extends State<MenuScreen> {
         color: Colors.blueGrey,
         child: Stack(
           children: [
-            loadImageWithProgress(
-              categoryList.elementAt(selectedIndex).categoryImage,
+            NetworkImageWithProgress(
+              imageUrl: categoryList.elementAt(selectedIndex).categoryImage,
             ),
 
             //list of items

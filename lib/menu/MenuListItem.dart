@@ -10,35 +10,39 @@ class MenuListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            GestureDetector(
-              onTap: () {
-                if (selectedColor == Colors.white) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ProductListGridView(),
-                    ),
-                  );
-                }
-              },
-              child: Text(
-                states.toUpperCase(),
-                style: TextStyle(
-                  fontSize: 18,
-                  color: selectedColor,
-                  fontWeight: FontWeight.bold,
-                ),
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.chevron_right, color: Colors.transparent, size: 24),
+
+          GestureDetector(
+            onTap: () {
+              if (selectedColor == Colors.white) {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) => ProductListGridView(),
+                  ),
+                );
+              }
+            },
+            child: Text(
+              states.toUpperCase(),
+              style: TextStyle(
+                fontSize: 18,
+                color: selectedColor,
+                fontFamily: "Montserrat",
+                fontWeight: FontWeight.w700,
               ),
             ),
+          ),
 
-            if (selectedColor == Colors.white)
-              Icon(Icons.chevron_right, color: Colors.white),
-          ],
-        ),
+          if (selectedColor == Colors.white)
+            Icon(Icons.chevron_right, color: Colors.white, size: 24),
+
+          if (selectedColor != Colors.white)
+            Icon(Icons.chevron_right, color: Colors.transparent, size: 24),
+        ],
       ),
     );
   }
