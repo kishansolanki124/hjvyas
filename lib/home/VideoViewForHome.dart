@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoApp extends StatefulWidget {
-
+class VideoViewForHome extends StatefulWidget {
   final String videoUrl;
 
-  VideoApp({required this.videoUrl});
-
-  //const VideoApp({super.key});
+  const VideoViewForHome({required this.videoUrl});
 
   @override
-  _VideoAppState createState() => _VideoAppState();
+  _VideoViewForHomeState createState() => _VideoViewForHomeState();
 }
 
-class _VideoAppState extends State<VideoApp> {
-
+class _VideoViewForHomeState extends State<VideoViewForHome> {
   bool _videoEnded = false;
   late VideoPlayerController _controller;
   late Future<void> _initializeVideoPlayerFuture;
@@ -22,18 +19,8 @@ class _VideoAppState extends State<VideoApp> {
   @override
   void initState() {
     super.initState();
-    // _controller = VideoPlayerController.networkUrl(Uri.parse(
-    //     'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4'))
-    //   ..initialize().then((_) {
-    //     // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-    //     setState(() {});
-    //   });
 
-    _controller = VideoPlayerController.networkUrl(
-      Uri.parse(
-        widget.videoUrl,
-      ),
-    );
+    _controller = VideoPlayerController.networkUrl(Uri.parse(widget.videoUrl));
     _initializeVideoPlayerFuture = _controller.initialize().then((_) {
       _controller.addListener(_videoListener);
     });
@@ -52,47 +39,10 @@ class _VideoAppState extends State<VideoApp> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-    // return FutureBuilder(
-    //   future: _initializeVideoPlayerFuture,
-    //   builder: (context, snapshot) {
-    //     if (snapshot.connectionState == ConnectionState.done) {
-    //       return Stack(
-    //         alignment: Alignment.center,
-    //         children: <Widget>[
-    //           AspectRatio(
-    //             aspectRatio: _controller.value.aspectRatio,
-    //             child: VideoPlayer(_controller),
-    //           ),
-    //           IconButton(
-    //             onPressed: () {
-    //               setState(() {
-    //                 if (_controller.value.isPlaying) {
-    //                   _controller.pause();
-    //                 } else {
-    //                   _controller.play();
-    //                 }
-    //               });
-    //             },
-    //             icon: Icon(
-    //               _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-    //               size: 60.0,
-    //               color: Colors.white,
-    //             ),
-    //           ),
-    //         ],
-    //       );
-    //     } else {
-    //       return Center(child: CircularProgressIndicator());
-    //     }
-    //   },
-    // );
-
-
     return Scaffold(
-      backgroundColor: Colors.black, // Black background
+      backgroundColor: Color.fromARGB(255, 32, 47, 80), // Black background
       body: Center(
         child: FutureBuilder(
           future: _initializeVideoPlayerFuture,
@@ -136,10 +86,17 @@ class _VideoAppState extends State<VideoApp> {
                         size: 60.0,
                         color: Colors.white,
                       ),
-                    ),                ],
+                    ),
+                ],
               );
             } else {
-              return Center(child: CircularProgressIndicator());
+              //loading (buffering) of video
+              return Center(
+                child: LoadingAnimationWidget.fourRotatingDots(
+                  color: Colors.white,
+                  size: 30,
+                ),
+              );
             }
           },
         ),

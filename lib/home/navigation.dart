@@ -45,16 +45,6 @@ class _NavigationExampleState extends State<NavigationExample>
   int currentPageIndex = 0;
   bool _showBottomNavBar = true; //BottomNavigationBar visibility
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
   // This method will be called by ScrollWidget when the user scrolls
   void _updateBottomNavBarVisibility(bool show) {
     if (mounted) {

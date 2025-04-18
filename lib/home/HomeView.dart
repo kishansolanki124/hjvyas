@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:hjvyas/home/videodemo.dart';
+import 'package:hjvyas/home/VideoViewForHome.dart';
 
 import '../api/models/HomeMediaResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
-import 'HomeImgeItem.dart';
+import '../utils/NetworkImageWithProgress.dart';
 import 'PaginationController.dart';
 
 class HomeView extends StatefulWidget {
@@ -54,14 +54,14 @@ class _HomeViewState extends State<HomeView> {
             scrollDirection: Axis.vertical,
             controller: widget.paginationController.pageController,
             itemCount: widget.paginationController.items.length + 1,
-            // +1 for loading indicator
+            // +1 for last item
             itemBuilder: (context, index) {
               if (index < widget.paginationController.items.length) {
-                return HomePageViewWidget(
+                return homePageItem(
                   widget.paginationController.items[index],
                 );
               } else {
-                //todo change this
+                //todo change this last item
                 return ColoredBox(
                   color: Colors.black,
                   child: SizedBox(height: double.maxFinite),
@@ -75,18 +75,12 @@ class _HomeViewState extends State<HomeView> {
   }
 }
 
-Widget HomePageViewWidget(SliderListItem item) {
+Widget homePageItem(SliderListItem item) {
   if (item.type.toString() == "image") {
-    return Scaffold(
-      //child: Text('$index'),
-      body: NetworkImageWithProgress(imageUrl: item.image),
-    );
+    return NetworkImageWithProgress(imageUrl: item.image);
   } else if (item.type.toString() == "video") {
-    return Scaffold(
-      //child: Text('$index'),
-      body: VideoApp(videoUrl: item.image),
-    );
+    return VideoViewForHome(videoUrl: item.image);
   } else {
-    return Text("height: 30,");
+    return SizedBox();
   }
 }
