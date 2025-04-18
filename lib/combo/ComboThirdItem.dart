@@ -41,7 +41,7 @@ class ComboThirdItem extends StatelessWidget {
 
             if (price.isEmpty) soldOutText(),
 
-            productListImage("", Color.fromARGB(255, 123, 138, 195)),
+            productListImage(imageUrl, Color.fromARGB(255, 123, 138, 195)),
           ],
         ),
       ],

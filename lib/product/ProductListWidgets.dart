@@ -93,28 +93,50 @@ Widget productListImage(String url, [Color? color]) {
   //   ),
   // );
 
-
-  return Container(
-    decoration: BoxDecoration(
-      color: Colors.transparent,
-      shape: BoxShape.circle,
-      boxShadow: [
-        BoxShadow(
-          blurRadius: 10,
-          color: Colors.black.withAlpha(20),
-          spreadRadius: 2,
-          offset: Offset(0, 3),
-        ),
-      ],
-    ),
-    child: SizedBox(
-      width: 190,
-      height: 190,
-      child: ImageWithProgress(
-        imageURL: url, // Replace with your image URL
+  if (color == Colors.transparent) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.transparent,
+        shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 10,
+            color: Colors.black.withAlpha(20),
+            spreadRadius: 2,
+            offset: Offset(0, 3),
+          ),
+        ],
       ),
-    ),
-  );
+      child: SizedBox(
+        width: 190,
+        height: 190,
+        child: ImageWithProgress(
+          imageURL: url, // Replace with your image URL
+        ),
+      ),
+    );
+  } else {
+    return Center(
+      child: Container(
+        width: 180,
+        // Adjust size
+        height: 180,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: color, width: 1.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(25),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: ClipOval(child: ImageWithProgress(imageURL: url)),
+      ),
+    );
+  }
 
   // return Card(
   //   // with Card

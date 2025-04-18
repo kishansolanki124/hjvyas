@@ -28,7 +28,7 @@ class ComboSecondItem extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            productListImage("", Color.fromARGB(255, 123, 138, 195)),
+            productListImage(imageUrl, Color.fromARGB(255, 123, 138, 195)),
 
             SizedBox(height: 10),
 

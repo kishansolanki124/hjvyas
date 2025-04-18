@@ -15,7 +15,12 @@ Product List:
 1. dynamic id of category. Currently its static from API
 2. design changes from suggestion and other.
 3. for odd number of total items, add last item as white bottom so that UI looks good.
+4. Product list page ma bottom nav dekhavu joiye
 
+Combo:
+1. hide bottom nav on scroll
+2. space after end of the list
+3. UI changes to make it match mockup and feedback from the PDF file
 
 Product listing page:
 9. Test with smaller and larger devices.
@@ -24,6 +29,7 @@ Product listing page:
 
 Product Details:
 8. Test with smaller and larger devices.
+9. cart button on top right side to navigate to that page.
 
 General:
 1. keep only portrait mode app
