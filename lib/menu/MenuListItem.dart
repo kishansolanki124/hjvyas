@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 
+import '../api/models/CategoryListResponse.dart';
 import '../product/ProductListGridView.dart';
 
 class MenuListItem extends StatelessWidget {
   final String states;
+  CategoryListItem categoryListItem;
   final Color selectedColor;
-  const MenuListItem(this.selectedColor, this.states, {Key? key})
-    : super(key: key);
+
+  MenuListItem(
+    this.categoryListItem,
+    this.selectedColor,
+    this.states, {
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +28,10 @@ class MenuListItem extends StatelessWidget {
               if (selectedColor == Colors.white) {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (context) => ProductListGridView(),
+                    builder:
+                        (context) => ProductListGridView(
+                          categoryListItem: categoryListItem,
+                        ),
                   ),
                 );
               }

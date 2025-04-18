@@ -3,6 +3,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hjvyas/api/models/ProductListResponse.dart';
 import 'package:hjvyas/product/ProductPaginationController.dart';
 
+import '../api/models/CategoryListResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product_detail/ProductDetail.dart';
@@ -15,7 +16,9 @@ class ProductListGridView extends StatefulWidget {
   final ProductPaginationController paginationController =
       ProductPaginationController(getIt<HJVyasApiService>());
 
-  ProductListGridView({super.key});
+  CategoryListItem categoryListItem;
+
+  ProductListGridView({super.key, required this.categoryListItem});
 
   @override
   State<ProductListGridView> createState() => _ProductListGridViewState();
@@ -25,7 +28,9 @@ class _ProductListGridViewState extends State<ProductListGridView> {
   @override
   void initState() {
     super.initState();
-    widget.paginationController.loadInitialData(); // Explicit call
+    widget.paginationController.loadInitialData(
+      int.parse(widget.categoryListItem.categoryId),
+    ); // Explicit call
   }
 
   void _navigateToDetails(int index, ProductListItem item) {
@@ -57,7 +62,9 @@ class _ProductListGridViewState extends State<ProductListGridView> {
               if (notification is ScrollEndNotification &&
                   notification.metrics.pixels ==
                       notification.metrics.maxScrollExtent) {
-                widget.paginationController.loadMore();
+                widget.paginationController.loadMore(
+                  int.parse(widget.categoryListItem.categoryId),
+                );
               }
               return false;
             },
@@ -71,7 +78,7 @@ class _ProductListGridViewState extends State<ProductListGridView> {
               child: Column(
                 children: <Widget>[
                   // A non-scrolling widget at the top
-                  productListTopView(),
+                  productListTopView(widget.categoryListItem.categoryName),
                   // Use Expanded or Flexible to give the CustomScrollView a portion of the space
                   Expanded(
                     child: CustomScrollView(
@@ -119,7 +126,7 @@ class _ProductListGridViewState extends State<ProductListGridView> {
   }
 }
 
-Widget productListTopView() {
+Widget productListTopView(String title) {
   return Padding(
     padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
     child: Row(
@@ -130,7 +137,7 @@ Widget productListTopView() {
         Expanded(
           child: Text(
             textAlign: TextAlign.center,
-            "DryFruit Kachori",
+            title,
             style: TextStyle(
               color: Colors.white,
               fontSize: 30,

@@ -104,6 +104,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 childCount: categoryList.length,
                 builder: (context, index) {
                   return MenuListItem(
+                    categoryList.elementAt(selectedIndex),
                     _selectedIndex == index
                         //currentState == states[index].names
                         ? Colors.white

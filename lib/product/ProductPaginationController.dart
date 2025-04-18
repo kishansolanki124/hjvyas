@@ -13,12 +13,11 @@ class ProductPaginationController extends GetxController {
 
   var items = <ProductListItem>[].obs;
   var isLoading = false.obs;
-  var categoryId = 1; //todo make this dynamic
   var currentPage = 0;
   var totalItems = 0;
   final int itemsPerPage = 10; // Adjust based on API
 
-  Future<void> loadInitialData() async {
+  Future<void> loadInitialData(int categoryId) async {
     isLoading(true);
     try {
       final newItems = await _service.getProduct(
@@ -34,7 +33,7 @@ class ProductPaginationController extends GetxController {
     }
   }
 
-  Future<void> loadMore() async {
+  Future<void> loadMore(int categoryId) async {
     if (isLoading.value) return;
 
     if (totalItems != 0 && items.length >= totalItems) {
