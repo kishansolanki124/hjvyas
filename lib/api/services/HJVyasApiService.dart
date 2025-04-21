@@ -9,6 +9,7 @@ import 'package:hjvyas/api/models/HomeMediaResponse.dart';
 import '../ConnectivityService.dart';
 import '../exceptions/exceptions.dart';
 import '../models/CategoryListResponse.dart';
+import '../models/ContactusResponse.dart';
 import '../models/LogoResponse.dart';
 import '../models/ProductListResponse.dart';
 import '../models/StaticPageResponse.dart';
@@ -61,6 +62,37 @@ class HJVyasApiService {
         print('response is $response');
       }
       return StaticPageResponse.fromJson(jsonDecode(response.data));
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print('DioException is message ${e.message} and error is ${e.error}');
+      }
+      if (e.response != null) {
+        if (kDebugMode) {
+          print('DioException is response ${e.response}');
+          print('e.response!.statusCode ${e.response!.statusCode!}');
+        }
+        throw ApiResponseException(e.message!, e.response!.statusCode!);
+      } else {
+        if (kDebugMode) {
+          print('No internet connection');
+        }
+        throw NetworkException('No internet connection');
+      }
+    }
+  }
+
+  Future<ContactusResponse> getContactus() async {
+    // First check basic connectivity
+    if (!await ConnectivityService.isConnected) {
+      throw NetworkException('No internet connection', isConnectionIssue: true);
+    }
+
+    try {
+      final response = await _client.post('/get_contactus');
+      if (kDebugMode) {
+        print('response is $response');
+      }
+      return ContactusResponse.fromJson(jsonDecode(response.data));
     } on DioException catch (e) {
       if (kDebugMode) {
         print('DioException is message ${e.message} and error is ${e.error}');

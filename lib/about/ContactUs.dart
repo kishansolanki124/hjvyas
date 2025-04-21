@@ -1,19 +1,108 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
-Widget ContactUsContentWidget() {
-  List<String> inquiryType = [
-    'Inquiry type Inquiry type 1',
-    'Inquiry type 2',
-    'Inquiry type 3',
-  ];
+import '../api/models/ContactusResponse.dart';
+import '../api/services/HJVyasApiService.dart';
+import '../injection_container.dart';
+import '../repositories/HJVyasRepository.dart';
 
-  final List<String> _imagePaths = [
+class ContactUs extends StatefulWidget {
+  final HJVyasRepository _userRepo = HJVyasRepository(
+    getIt<HJVyasApiService>(),
+  );
+
+  ContactUs({super.key});
+
+  @override
+  State<ContactUs> createState() => _ContactUsState();
+}
+
+class _ContactUsState extends State<ContactUs> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<ContactusResponse>(
+      future: widget._userRepo.getContactus(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return contactUsContentWidget(
+            snapshot.data!.contactList.elementAt(0),
+          );
+          // return staticPageMainContent(
+          //   _tabNames,
+          //   _imagePaths,
+          //   _imagePathsSelected,
+          //   _selectedIndex,
+          //   _changeIndex,
+          //   snapshot.data!.staticpageList,
+          // );
+        } else if (snapshot.hasError) {
+          if (snapshot.error.toString() == 'No internet connection') {
+            //todo: change this to common error page retry page
+            return Center(child: Text('Error: Internt issue vhala'));
+          } else {
+            //todo: change this to common error page
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+        }
+        //todo: change this to common progress
+        return Center(child: CircularProgressIndicator());
+      },
+    );
+  }
+}
+
+Widget contactUsContentWidget(ContactListItem contactListItem) {
+  // List<String> inquiryType = [
+  //   'Inquiry type Inquiry type 1',
+  //   'Inquiry type 2',
+  //   'Inquiry type 3',
+  // ];
+
+  final List<String> imagePaths = [
     'icons/map_icon.png',
     'icons/whatsapp_icon.png',
     'icons/call_icon.png',
     'icons/e-mail_icon.png',
   ];
+
+  // Function to launch URL
+  Future<void> _launchURL(String url) async {
+    await launchUrl(Uri.parse(contactListItem.googleMap));
+  }
+
+  void callIntent(String phonenumber) {
+    launchUrlString("tel://$phonenumber");
+  }
+
+  void emailIntent(String email) {
+    var url = Uri.parse("mailto:$email?subject=&body=");
+    launchUrl(url);
+  }
+
+  // Function to launch WhatsApp
+  Future<void> openWhatsApp(String phoneNumber) async {
+    await launchUrl(Uri.parse("https://wa.me/$phoneNumber?text="));
+  }
+
+  void _onIconClick(int index, ContactListItem contactListItem) {
+    if (index == 0) {
+      //google map
+      _launchURL(contactListItem.googleMap);
+    } else if (index == 1) {
+      //whatsapp
+      openWhatsApp(contactListItem.whatsappNo);
+    } else if (index == 2) {
+      //call
+      //todo: show 2 call intent options as 2 numbers are available
+      callIntent(contactListItem.mobile1);
+    } else if (index == 3) {
+      //email
+      emailIntent(contactListItem.email);
+    }
+  }
 
   final List<String> _tabNames = ['Google Map', 'WhatsApp', 'Call', 'E-Mail'];
 
@@ -48,13 +137,15 @@ Widget ContactUsContentWidget() {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceAround,
                                   // Distribute items evenly
-                                  children: List.generate(_imagePaths.length, (
+                                  children: List.generate(imagePaths.length, (
                                     index,
                                   ) {
                                     return _buildSelectItem(
+                                      contactListItem,
                                       _tabNames,
-                                      _imagePaths,
+                                      imagePaths,
                                       index,
+                                      _onIconClick,
                                     );
                                   }),
                                 ),
@@ -87,7 +178,7 @@ Widget ContactUsContentWidget() {
                           ),
 
                           Text(
-                            "Address line 1\nAddress line 2\nAddress line 3",
+                            contactListItem.address,
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.white,
@@ -108,7 +199,7 @@ Widget ContactUsContentWidget() {
                           ),
 
                           Text(
-                            "Customer Care line 1\nCustomer Care line 2",
+                            "${contactListItem.mobile1} / ${contactListItem.mobile2}\n(${contactListItem.timing})",
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.white,
@@ -129,7 +220,7 @@ Widget ContactUsContentWidget() {
                           ),
 
                           Text(
-                            "email@gmail.com",
+                            contactListItem.email,
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.white,
@@ -186,7 +277,10 @@ Widget ContactUsContentWidget() {
                   ),
 
                   //dropdown of inquiry
-                  inquiryDropdown(inquiryType, inquiryType.first),
+                  inquiryDropdown(
+                    contactListItem.inquiryType.split(', '),
+                    contactListItem.inquiryType.split(', ').first,
+                  ),
 
                   SizedBox(height: 20),
 
@@ -437,7 +531,9 @@ Widget ContactUsContentWidget() {
                     child: ElevatedButton(
                       onPressed: () {
                         //  Add your notification logic here
-                        print("Notify Me button clicked");
+                        if (kDebugMode) {
+                          print("Notify Me button clicked");
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color.fromARGB(255, 123, 138, 195),
@@ -475,43 +571,54 @@ Widget ContactUsContentWidget() {
   );
 }
 
-Widget _buildSelectItem(_tabNames, _imagePaths, int index) {
-  return Column(
-    children: [
-      Container(
-        width: 70,
-        height: 70, // Fixed width for the square
-        //height: 50,
-        // Fixed height for the square
-        child: Image.asset(
+Widget _buildSelectItem(
+  ContactListItem contactListItem,
+  tabNames,
+  imagePaths,
+  int index,
+  onIconClick,
+) {
+  return GestureDetector(
+    child: Column(
+      children: [
+        SizedBox(
           width: 70,
-          // Fixed width for the square
-          height: 70,
-          _imagePaths[index],
-          fit: BoxFit.fill, // Make the image fit within the square
-          //),
+          height: 70, // Fixed width for the square
+          //height: 50,
+          // Fixed height for the square
+          child: Image.asset(
+            width: 70,
+            // Fixed width for the square
+            height: 70,
+            imagePaths[index],
+            fit: BoxFit.fill, // Make the image fit within the square
+            //),
+          ),
         ),
-      ),
 
-      SizedBox(
-        width: 70,
-        child: Center(
-          child: Text(
-            _tabNames[index],
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 12.0,
-              fontFamily: "Montserrat",
-              color: Colors.white,
+        SizedBox(
+          width: 70,
+          child: Center(
+            child: Text(
+              tabNames[index],
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12.0,
+                fontFamily: "Montserrat",
+                color: Colors.white,
+              ),
             ),
           ),
         ),
-      ),
-    ],
+      ],
+    ),
+    onTap: () {
+      onIconClick(index, contactListItem);
+    },
   );
 }
 
-Widget inquiryDropdown(List<String> contactUsDropdownList, _selectedVariant) {
+Widget inquiryDropdown(List<String> contactUsDropdownList, selectedVariant) {
   return Container(
     width: double.infinity, // Full width
     //height: 40,
@@ -524,7 +631,7 @@ Widget inquiryDropdown(List<String> contactUsDropdownList, _selectedVariant) {
     padding: EdgeInsets.symmetric(horizontal: 6.0), // Add horizontal padding
     child: DropdownButtonFormField<String>(
       padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
-      value: _selectedVariant,
+      value: selectedVariant,
       icon: Image.asset(
         'icons/dropdown_icon.png', // Replace with your icon path
         width: 18, // Adjust width as needed

@@ -3,6 +3,7 @@ import 'package:hjvyas/api/models/StaticPageResponse.dart';
 import 'package:hjvyas/api/services/HJVyasApiService.dart';
 
 import '../api/models/CategoryListResponse.dart';
+import '../api/models/ContactusResponse.dart';
 import '../api/models/LogoResponse.dart';
 
 class HJVyasRepository {
@@ -16,6 +17,10 @@ class HJVyasRepository {
 
   Future<StaticPageResponse> getStaticpage() async {
     return await _userService.getStaticpage();
+  }
+
+  Future<ContactusResponse> getContactus() async {
+    return await _userService.getContactus();
   }
 
   Future<CategoryListResponse> getCategory() async {

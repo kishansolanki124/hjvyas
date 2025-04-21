@@ -31,6 +31,7 @@ Static Pages:
 1. common error page retry page
 2. error page
 3. internet issue retry page
+4. call api only once on first load. currently on each tab its calling
 
 General:
 1. keep only portrait mode app

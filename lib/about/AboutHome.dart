@@ -168,7 +168,7 @@ Widget staticPageMainContent(
                   if (_selectedIndex == 0)
                     AboutUsContentWidget("About Us", staticpageList),
 
-                  if (_selectedIndex == 1) ContactUsContentWidget(),
+                  if (_selectedIndex == 1) ContactUs(),
 
                   if (_selectedIndex == 2)
                     AboutUsContentWidget("Refund Policy", staticpageList),

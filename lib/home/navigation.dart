@@ -134,64 +134,40 @@ class _NavigationExampleState extends State<NavigationExample>
                             backgroundColor: Colors.transparent,
                             items: <BottomNavigationBarItem>[
                               BottomNavigationBarItem(
-                                icon: SizedBox(
-                                  width: 30,
-                                  height: 30,
-                                  child: Image.asset("icons/home_icon.png"),
-                                ),
-                                activeIcon: SizedBox(
-                                  width: 30,
-                                  height: 30,
-                                  child: Image.asset("icons/home_icon_a.png"),
+                                icon: bottomNavIcon("icons/home_icon.png"),
+                                activeIcon: bottomNavIcon(
+                                  "icons/home_icon_a.png",
                                 ),
                                 label: "HOME",
                               ),
                               BottomNavigationBarItem(
-                                icon: SizedBox(
-                                  width: 30,
-                                  height: 30,
-                                  child: Image.asset("icons/product_icon.png"),
-                                ),
-                                activeIcon: SizedBox(
-                                  width: 30,
-                                  height: 30,
-                                  child: Image.asset(
-                                    "icons/product_icon_a.png",
-                                  ),
+                                icon: bottomNavIcon("icons/product_icon.png"),
+                                activeIcon: bottomNavIcon(
+                                  "icons/product_icon_a.png",
                                 ),
                                 label: "PROUDUCTS",
                               ),
                               BottomNavigationBarItem(
-                                icon: SizedBox(
-                                  width: 30,
-                                  height: 30,
-                                  child: Image.asset("icons/combo_icon.png"),
-                                ),
-                                activeIcon: SizedBox(
-                                  width: 30,
-                                  height: 30,
-                                  child: Image.asset("icons/combo_icon_a.png"),
+                                icon: bottomNavIcon("icons/combo_icon.png"),
+                                activeIcon: bottomNavIcon(
+                                  "icons/combo_icon_a.png",
                                 ),
                                 label: "COMBO",
                               ),
                               BottomNavigationBarItem(
                                 icon: Badge(
-                                  largeSize: 20,
+                                  largeSize: 16,
                                   backgroundColor: Colors.red,
                                   label: Text(
                                     "1",
                                     style: TextStyle(
-                                      fontSize: 12,
+                                      fontSize: 10,
                                       fontWeight: FontWeight.w700,
                                       fontFamily: "Montserrat",
                                     ),
                                   ),
                                   textStyle: TextStyle(fontSize: 16),
-                                  child: SizedBox(
-                                    width: 30,
-                                    height: 30,
-                                    child: Image.asset("icons/my_bag_icon.png"),
-                                  ),
+                                  child: bottomNavIcon("icons/my_bag_icon.png"),
                                 ),
                                 activeIcon: Badge(
                                   largeSize: 20,
@@ -205,26 +181,16 @@ class _NavigationExampleState extends State<NavigationExample>
                                     ),
                                   ),
                                   textStyle: TextStyle(fontSize: 16),
-                                  child: SizedBox(
-                                    width: 30,
-                                    height: 30,
-                                    child: Image.asset(
-                                      "icons/my_bag_icon_a.png",
-                                    ),
+                                  child: bottomNavIcon(
+                                    "icons/my_bag_icon_a.png",
                                   ),
                                 ),
                                 label: "MY BAG",
                               ),
                               BottomNavigationBarItem(
-                                icon: SizedBox(
-                                  width: 30,
-                                  height: 30,
-                                  child: Image.asset("icons/about_icon.png"),
-                                ),
-                                activeIcon: SizedBox(
-                                  width: 30,
-                                  height: 30,
-                                  child: Image.asset("icons/about_icon_a.png"),
+                                icon: bottomNavIcon("icons/about_icon.png"),
+                                activeIcon: bottomNavIcon(
+                                  "icons/about_icon_a.png",
                                 ),
                                 label: "ABOUT",
                               ),
@@ -244,4 +210,8 @@ class _NavigationExampleState extends State<NavigationExample>
       ),
     );
   }
+}
+
+Widget bottomNavIcon(String iconPath) {
+  return SizedBox(width: 24, height: 24, child: Image.asset(iconPath));
 }
