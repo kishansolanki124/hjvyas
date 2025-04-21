@@ -11,6 +11,7 @@ import '../exceptions/exceptions.dart';
 import '../models/CategoryListResponse.dart';
 import '../models/LogoResponse.dart';
 import '../models/ProductListResponse.dart';
+import '../models/StaticPageResponse.dart';
 
 class HJVyasApiService {
   final Dio _client = apiClient;
@@ -29,6 +30,37 @@ class HJVyasApiService {
         print('response is $response');
       }
       return LogoResponse.fromJson(jsonDecode(response.data));
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print('DioException is message ${e.message} and error is ${e.error}');
+      }
+      if (e.response != null) {
+        if (kDebugMode) {
+          print('DioException is response ${e.response}');
+          print('e.response!.statusCode ${e.response!.statusCode!}');
+        }
+        throw ApiResponseException(e.message!, e.response!.statusCode!);
+      } else {
+        if (kDebugMode) {
+          print('No internet connection');
+        }
+        throw NetworkException('No internet connection');
+      }
+    }
+  }
+
+  Future<StaticPageResponse> getStaticpage() async {
+    // First check basic connectivity
+    if (!await ConnectivityService.isConnected) {
+      throw NetworkException('No internet connection', isConnectionIssue: true);
+    }
+
+    try {
+      final response = await _client.post('/get_staticpage');
+      if (kDebugMode) {
+        print('response is $response');
+      }
+      return StaticPageResponse.fromJson(jsonDecode(response.data));
     } on DioException catch (e) {
       if (kDebugMode) {
         print('DioException is message ${e.message} and error is ${e.error}');
@@ -172,10 +204,7 @@ class HJVyasApiService {
     }
   }
 
-  Future<ComboListResponse> getCombo(
-    String start,
-    String end,
-  ) async {
+  Future<ComboListResponse> getCombo(String start, String end) async {
     // First check basic connectivity
     if (!await ConnectivityService.isConnected) {
       throw NetworkException('No internet connection', isConnectionIssue: true);

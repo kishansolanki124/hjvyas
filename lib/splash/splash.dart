@@ -57,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<LogoResponse>(
-      future: widget._userRepo.getUser(),
+      future: widget._userRepo.logo(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           startTimer();

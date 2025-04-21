@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_html/flutter_html.dart';
 
-Widget AboutUsContentWidget(String webpageTitle) {
+import '../api/models/StaticPageResponse.dart';
+
+Widget AboutUsContentWidget(
+  String webpageTitle,
+  List<StaticpageListItem> staticpageList,
+) {
   return Expanded(
     child: Stack(
       children: [
@@ -24,29 +29,44 @@ Widget AboutUsContentWidget(String webpageTitle) {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(0),
                     child: SingleChildScrollView(
-                      padding: EdgeInsets.all(16.0),
+                      padding: EdgeInsets.all(8.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 10),
-                          Text(
-                            "We Serve The Best Quality Food",
-                            style: TextStyle(
-                              fontFamily: "Montserrat",
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
+
+                          //load html content
+                          if (webpageTitle == "About Us")
+                            loadHTMLContent(
+                              getItemByName(
+                                staticpageList,
+                                "About Us",
+                              )!.description,
                             ),
-                          ),
-                          Text(
-                            textAlign: TextAlign.justify,
-                            "Discover the Ultimate Sweet Experience with H.J. Vyas Mithaiwala.\n\nPicture yourself savoring the most exquisite sweets, no matter where your adventures take you. From bustling cities to quiet countryside re-treats, whether you're in Tokyo, Sydney, Rio deJaneiro, Cape Town, or Toronto, you can now relish the premium sweets from the 'City of Sweets', Jamnagar, Gujarat, India. It sounds too good to be true, doesn't it?\n\nSince 1908, H.J. Vyas Mithaiwala has been synon-ymous with exceptional quality in sweet manu-facturing. Our commitment to our customers'health and satisfaction ensures that every product meets the highest standards of purity and taste. If you ever have concerns about your order's taste, quality, or quantity, we back our products with a money-back guarantee.\n\nWe are dedicated to maintaining the integrity and excellence of our sweets. With a legacy spanning 116 years, we continue to strengthen our bond with our customers by delivering unparalleled quality. Whether you choose to in",
-                            style: TextStyle(
-                              fontFamily: "Montserrat",
-                              color: Colors.white,
-                              fontSize: 14,
+
+                          if (webpageTitle == "Refund Policy")
+                            loadHTMLContent(
+                              getItemByName(
+                                staticpageList,
+                                "Refund Policy",
+                              )!.description,
                             ),
-                          ),
+
+                          if (webpageTitle == "Privacy Policy")
+                            loadHTMLContent(
+                              getItemByName(
+                                staticpageList,
+                                "Privacy Policy",
+                              )!.description,
+                            ),
+
+                          if (webpageTitle == "Terms")
+                            loadHTMLContent(
+                              getItemByName(
+                                staticpageList,
+                                "Terms",
+                              )!.description,
+                            ),
                         ],
                       ),
                     ),
@@ -79,5 +99,48 @@ Widget AboutUsContentWidget(String webpageTitle) {
         ),
       ],
     ),
+  );
+}
+
+StaticpageListItem? getItemByName(List<StaticpageListItem> items, String name) {
+  for (var item in items) {
+    if (item.name == name) {
+      return item;
+    }
+  }
+  return null; // Return null if no item with the given name is found.
+}
+
+Widget loadHTMLContent(String? stringData) {
+  return Html(
+    data: stringData,
+    style: {
+      //"h1": Style(fontSize: FontSize.xxLarge),
+      "p": Style(
+        fontWeight: FontWeight.w400,
+        //fontSize: 14,
+        fontFamily: "Montserrat",
+        fontSize: FontSize.medium,
+        textAlign: TextAlign.justify,
+        color: Colors.white,
+      ),
+      "strong": Style(
+        fontWeight: FontWeight.w600,
+        //fontSize: 14,
+        fontFamily: "Montserrat",
+        fontSize: FontSize.large,
+        textAlign: TextAlign.justify,
+        color: Colors.white,
+      ),
+      //"a": Style(color: Colors.blue, decoration: TextDecoration.underline),
+      //"table": Style(border: Border.all(color: Colors.grey)),
+      //"th": Style(padding: EdgeInsets.all(8), backgroundColor: Colors.lightBlue),
+      //"td": Style(padding: EdgeInsets.all(8)),
+      //"div": Style(margin: EdgeInsets.only(bottom: 10)),
+      // "img": Style(
+      //   width: Width.percent(100), // Make images responsive.
+      //   height: Height.auto(),
+      // ),
+    },
   );
 }

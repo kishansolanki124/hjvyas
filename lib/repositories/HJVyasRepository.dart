@@ -1,4 +1,5 @@
 import 'package:hjvyas/api/models/HomeMediaResponse.dart';
+import 'package:hjvyas/api/models/StaticPageResponse.dart';
 import 'package:hjvyas/api/services/HJVyasApiService.dart';
 
 import '../api/models/CategoryListResponse.dart';
@@ -9,8 +10,12 @@ class HJVyasRepository {
 
   HJVyasRepository(this._userService);
 
-  Future<LogoResponse> getUser() async {
+  Future<LogoResponse> logo() async {
     return await _userService.logo();
+  }
+
+  Future<StaticPageResponse> getStaticpage() async {
+    return await _userService.getStaticpage();
   }
 
   Future<CategoryListResponse> getCategory() async {
