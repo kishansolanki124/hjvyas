@@ -32,6 +32,10 @@ Static Pages:
 2. error page
 3. internet issue retry page
 4. call api only once on first load. currently on each tab its calling
+5. contact us fields validation with toast/snackbar
+6. api call for contact us
+7. success message dialog and clear entered fields
+8. imoption option next and done for fields
 
 General:
 1. keep only portrait mode app

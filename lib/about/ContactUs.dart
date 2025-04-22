@@ -1,20 +1,19 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../api/models/ContactusResponse.dart';
-import '../api/services/HJVyasApiService.dart';
-import '../injection_container.dart';
-import '../repositories/HJVyasRepository.dart';
+import '../menu/CategoryController.dart';
+import '../utils/NetworkImageWithProgress.dart';
 
 class ContactUs extends StatefulWidget {
-  final HJVyasRepository _userRepo = HJVyasRepository(
-    getIt<HJVyasApiService>(),
-  );
+  final CategoryController categoryController;
 
-  ContactUs({super.key});
+  const ContactUs({super.key, required this.categoryController});
 
   @override
   State<ContactUs> createState() => _ContactUsState();
@@ -22,44 +21,218 @@ class ContactUs extends StatefulWidget {
 
 class _ContactUsState extends State<ContactUs> {
   @override
+  void initState() {
+    super.initState();
+    widget.categoryController.getContactus(); // Explicit call
+  }
+
+  // Controllers for the TextField values
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _phoneController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _messageController = TextEditingController();
+
+  String? _selectedVariantInquiry;
+
+  @override
+  void dispose() {
+    // Dispose the controllers when the widget is disposed
+    _nameController.dispose();
+    _emailController.dispose();
+    _phoneController.dispose();
+    _cityController.dispose();
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  void onSubmitClick() {
+    if (_validateCity(_cityController.text) != null) {
+      showSnackbar(_validateCity(_cityController.text).toString());
+    } else if (_validateEmail(_emailController.text) != null) {
+      showSnackbar(_validateEmail(_emailController.text).toString());
+    } else if (_validateMessage(_messageController.text) != null) {
+      showSnackbar(_validateMessage(_messageController.text).toString());
+    } else if (_validateName(_nameController.text) != null) {
+      showSnackbar(_validateName(_nameController.text).toString());
+    } else if (_validatePhone(_phoneController.text) != null) {
+      showSnackbar(_validatePhone(_phoneController.text).toString());
+    } else {
+      newFunction();
+    }
+  }
+
+  // Function to validate the form fields
+  String? _validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Name is required';
+    }
+    if (value.length < 3) {
+      return 'Name must be at least 3 characters long';
+    }
+    return null; // Return null if the input is valid
+  }
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Email is required';
+    }
+    if (!EmailValidator.validate(value)) {
+      return 'Invalid email address';
+    }
+    return null;
+  }
+
+  String? _validatePhone(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Phone number is required';
+    }
+    if (value.length != 10) {
+      return 'Phone number must be 10 digits';
+    }
+    return null;
+  }
+
+  String? _validateCity(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'City is required';
+    }
+    if (value.length < 2) {
+      return 'City name is too short';
+    }
+    return null;
+  }
+
+  String? _validateMessage(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Message is required';
+    }
+    if (value.length < 3) {
+      return 'Message must be at least 3 characters long';
+    }
+    return null;
+  }
+
+  void selectedVariantInquiry(String text) {
+    if (kDebugMode) {
+      print('selectedVariantInquiry is changed');
+    }
+
+    setState(() {
+      _selectedVariantInquiry = text;
+      if (kDebugMode) {
+        print('_selectedVariantInquiry is $_selectedVariantInquiry');
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return FutureBuilder<ContactusResponse>(
-      future: widget._userRepo.getContactus(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          return contactUsContentWidget(
-            snapshot.data!.contactList.elementAt(0),
-          );
-          // return staticPageMainContent(
-          //   _tabNames,
-          //   _imagePaths,
-          //   _imagePathsSelected,
-          //   _selectedIndex,
-          //   _changeIndex,
-          //   snapshot.data!.staticpageList,
-          // );
-        } else if (snapshot.hasError) {
-          if (snapshot.error.toString() == 'No internet connection') {
-            //todo: change this to common error page retry page
-            return Center(child: Text('Error: Internt issue vhala'));
-          } else {
-            //todo: change this to common error page
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
-        }
-        //todo: change this to common progress
+    return Obx(() {
+      if (widget.categoryController.isLoading.value) {
+        //todo change this
         return Center(child: CircularProgressIndicator());
-      },
+      }
+
+      if (widget.categoryController.error.isNotEmpty) {
+        //todo change this
+        return Center(child: Text('Error: ${widget.categoryController.error}'));
+      }
+
+      final cateogories = widget.categoryController.contactItem.elementAt(0);
+      _selectedVariantInquiry = cateogories.inquiryType.split(', ').first;
+      return contactUsContentWidget(
+        widget.categoryController,
+        cateogories,
+        _nameController,
+        _emailController,
+        _phoneController,
+        _cityController,
+        _messageController,
+        onSubmitClick,
+        selectedVariantInquiry,
+      );
+    });
+  }
+
+  void showSnackbar(String s) {
+    var snackBar = SnackBar(
+      backgroundColor: Colors.white,
+      content: Text(
+        s,
+        style: TextStyle(
+          fontSize: 14.0,
+          fontFamily: "Montserrat",
+          color: Color.fromARGB(255, 32, 47, 80),
+        ),
+      ),
     );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void newFunction() async {
+    // Show loading on button
+    widget.categoryController.adInquiryLoading.value = true;
+
+    try {
+      // Call API
+      await widget.categoryController.addInquiry(
+        _selectedVariantInquiry!,
+        _nameController.text,
+        _phoneController.text,
+        _emailController.text,
+        _cityController.text,
+        _messageController.text,
+      );
+
+      // Check if widget is still mounted before showing dialog
+      if (mounted) {
+        _nameController.text = "";
+        _emailController.text = "";
+        _phoneController.text = "";
+        _cityController.text = "";
+        _messageController.text = "";
+
+        //todo: issue on ok click, dialog not dismissing
+        showAlertWithCallback(
+          context: context,
+          title: 'Success',
+          message: widget.categoryController.addInquiryResponse.value!.message,
+          onOkPressed: () {
+            // Optional callback after dialog dismissal
+            if (kDebugMode) {
+              print('User acknowledged success');
+            }
+          },
+        );
+      }
+    } finally {
+      // Hide loading regardless of success/failure
+      if (mounted) {
+        widget.categoryController.adInquiryLoading.value = false;
+      }
+    }
   }
 }
 
-Widget contactUsContentWidget(ContactListItem contactListItem) {
-  // List<String> inquiryType = [
-  //   'Inquiry type Inquiry type 1',
-  //   'Inquiry type 2',
-  //   'Inquiry type 3',
-  // ];
+Widget contactUsWidget(ContactListItem? contactListItem) {
+  if (kDebugMode) {
+    print('contactListItem $contactListItem');
+  }
+  return Text("Hello ererr");
+}
+
+Widget contactUsContentWidget(
+  CategoryController contactUsController,
+  ContactListItem contactListItem,
+  _nameController,
+  _emailController,
+  _phoneController,
+  _cityController,
+  _messageController,
+  onSubmitClick,
+  selectedVariantInquiry,
+) {
 
   final List<String> imagePaths = [
     'icons/map_icon.png',
@@ -280,12 +453,14 @@ Widget contactUsContentWidget(ContactListItem contactListItem) {
                   inquiryDropdown(
                     contactListItem.inquiryType.split(', '),
                     contactListItem.inquiryType.split(', ').first,
+                    selectedVariantInquiry,
                   ),
 
                   SizedBox(height: 20),
 
                   //edittext name
                   TextField(
+                    controller: _nameController,
                     keyboardType: TextInputType.name,
                     textCapitalization: TextCapitalization.words,
                     // Capitalize each word
@@ -321,18 +496,6 @@ Widget contactUsContentWidget(ContactListItem contactListItem) {
                         ),
                       ),
 
-                      // border: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //     borderSide: BorderSide(width: 1,)
-                      // ),
-                      // errorBorder: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //     borderSide: BorderSide(width: 1,color: Colors.black)
-                      // ),
-                      // focusedErrorBorder: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //     borderSide: BorderSide(width: 1,color: Colors.yellowAccent)
-                      // ),
                       contentPadding: EdgeInsets.all(8),
                       isDense: true, //make textfield compact
                     ),
@@ -342,6 +505,7 @@ Widget contactUsContentWidget(ContactListItem contactListItem) {
 
                   //edittext email
                   TextField(
+                    controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     style: TextStyle(
                       color: Colors.white,
@@ -364,10 +528,7 @@ Widget contactUsContentWidget(ContactListItem contactListItem) {
                           color: Color.fromARGB(255, 123, 138, 195),
                         ),
                       ),
-                      // disabledBorder: OutlineInputBorder(
-                      //   borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //   borderSide: BorderSide(width: 1,color: Colors.orange),
-                      // ),
+
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(0)),
                         borderSide: BorderSide(
@@ -376,18 +537,7 @@ Widget contactUsContentWidget(ContactListItem contactListItem) {
                         ),
                       ),
 
-                      // border: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //     borderSide: BorderSide(width: 1,)
-                      // ),
-                      // errorBorder: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //     borderSide: BorderSide(width: 1,color: Colors.black)
-                      // ),
-                      // focusedErrorBorder: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //     borderSide: BorderSide(width: 1,color: Colors.yellowAccent)
-                      // ),
+
                       contentPadding: EdgeInsets.all(8),
                       isDense: true, //make textfield compact
                     ),
@@ -397,6 +547,7 @@ Widget contactUsContentWidget(ContactListItem contactListItem) {
 
                   //contact no
                   TextField(
+                    controller: _phoneController,
                     keyboardType: TextInputType.number,
                     maxLength: 10,
                     inputFormatters: <TextInputFormatter>[
@@ -424,10 +575,7 @@ Widget contactUsContentWidget(ContactListItem contactListItem) {
                           color: Color.fromARGB(255, 123, 138, 195),
                         ),
                       ),
-                      // disabledBorder: OutlineInputBorder(
-                      //   borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //   borderSide: BorderSide(width: 1,color: Colors.orange),
-                      // ),
+
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.all(Radius.circular(0)),
                         borderSide: BorderSide(
@@ -445,6 +593,7 @@ Widget contactUsContentWidget(ContactListItem contactListItem) {
 
                   //city
                   TextField(
+                    controller: _cityController,
                     keyboardType: TextInputType.streetAddress,
                     textCapitalization: TextCapitalization.words,
                     style: TextStyle(
@@ -483,6 +632,7 @@ Widget contactUsContentWidget(ContactListItem contactListItem) {
 
                   //message
                   TextField(
+                    controller: _messageController,
                     keyboardType: TextInputType.multiline,
                     // Use multiline input type
                     maxLines: null,
@@ -533,6 +683,7 @@ Widget contactUsContentWidget(ContactListItem contactListItem) {
                         //  Add your notification logic here
                         if (kDebugMode) {
                           print("Notify Me button clicked");
+                          onSubmitClick();
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -548,15 +699,27 @@ Widget contactUsContentWidget(ContactListItem contactListItem) {
                           horizontal: 12,
                         ), // Add some vertical padding
                       ),
-                      child: Text(
-                        "Send Message",
-                        style: TextStyle(
-                          fontSize: 16.0,
-                          fontFamily: "Montserrat",
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
-                        ), // Adjust size
-                      ),
+                      child: Obx(() {
+                        if (contactUsController.adInquiryLoading.value) {
+                          return SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          );
+                        }
+                        return Text(
+                          "Send Message",
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontFamily: "Montserrat",
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ), // Adjust size
+                        );
+                      }),
                     ),
                   ),
 
@@ -618,7 +781,11 @@ Widget _buildSelectItem(
   );
 }
 
-Widget inquiryDropdown(List<String> contactUsDropdownList, selectedVariant) {
+Widget inquiryDropdown(
+  List<String> contactUsDropdownList,
+  selectedVariant,
+  selectedVariantInquiry,
+) {
   return Container(
     width: double.infinity, // Full width
     //height: 40,
@@ -639,7 +806,10 @@ Widget inquiryDropdown(List<String> contactUsDropdownList, selectedVariant) {
       ),
       onChanged: (newValue) {
         // setState(() {
-        // _selectedVariant = newValue;
+        selectedVariantInquiry = newValue;
+        if (kDebugMode) {
+          print('selectedVariantInquiry $selectedVariantInquiry');
+        }
         // });
       },
       items:

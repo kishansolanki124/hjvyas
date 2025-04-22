@@ -3,11 +3,17 @@ import 'package:hjvyas/api/models/StaticPageResponse.dart';
 
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
+import '../menu/CategoryController.dart';
 import '../repositories/HJVyasRepository.dart';
 import 'AboutWidgets.dart';
 import 'ContactUs.dart';
 
 class AboutHome extends StatefulWidget {
+
+  final CategoryController categoryController = CategoryController(
+    getIt<HJVyasApiService>(),
+  );
+
   final HJVyasRepository _userRepo = HJVyasRepository(
     getIt<HJVyasApiService>(),
   );
@@ -64,6 +70,7 @@ class _AboutHomeState extends State<AboutHome> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return staticPageMainContent(
+            widget.categoryController,
             _tabNames,
             _imagePaths,
             _imagePathsSelected,
@@ -88,6 +95,7 @@ class _AboutHomeState extends State<AboutHome> {
 }
 
 Widget staticPageMainContent(
+    categoryController,
   _tabNames,
   _imagePaths,
   _imagePathsSelected,
@@ -168,7 +176,7 @@ Widget staticPageMainContent(
                   if (_selectedIndex == 0)
                     AboutUsContentWidget("About Us", staticpageList),
 
-                  if (_selectedIndex == 1) ContactUs(),
+                  if (_selectedIndex == 1) ContactUs(categoryController: categoryController,),
 
                   if (_selectedIndex == 2)
                     AboutUsContentWidget("Refund Policy", staticpageList),

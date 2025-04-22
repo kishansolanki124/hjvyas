@@ -75,6 +75,32 @@ Widget errorImagePlaceholder() {
   );
 }
 
+void showAlertWithCallback({
+  required BuildContext context,
+  required String title,
+  required String message,
+  VoidCallback? onOkPressed,
+}) {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder:
+        (_) => AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                onOkPressed?.call();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        ),
+  );
+}
+
 // Widget loadImageWithProgress(String imageUrl) {
 //   return Stack(
 //     fit: StackFit.expand, // Make the Stack fill the screen
