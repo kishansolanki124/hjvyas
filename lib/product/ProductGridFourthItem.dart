@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'ProductListWidgets.dart';
 
-class GridOddItem extends StatelessWidget {
+class ProductGridFourthItem extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String price;
   final String productLife;
   final String calories;
 
-  GridOddItem({
+  ProductGridFourthItem({
     required this.imageUrl,
     required this.title,
     required this.price,
@@ -21,14 +21,18 @@ class GridOddItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        productListWhiteBg(Alignment.bottomCenter),
+        productListWhiteBg(Alignment.topCenter),
 
-        productListColoredBorderBox(0, 110.0),
+        productListColoredBorderBox(110, 0),
 
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
+            productListImage(imageUrl),
+
             productListTitleWidget(title),
+
+            if (price.isEmpty) soldOutText(),
 
             //"₹ 900.00 - 300 grams"
             if (price.isNotEmpty) productListVariationWidget(price),
@@ -38,10 +42,6 @@ class GridOddItem extends StatelessWidget {
 
             //"Calories: 470"
             if (price.isNotEmpty) productListCalories(calories),
-
-            if (price.isEmpty) soldOutText(),
-
-            productListImage(imageUrl),
           ],
         ),
       ],

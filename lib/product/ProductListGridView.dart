@@ -7,10 +7,10 @@ import '../api/models/CategoryListResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product_detail/ProductDetail.dart';
-import 'GridFourthItem.dart';
-import 'GridItem.dart';
-import 'GridOddItem.dart';
-import 'GridThirdItem.dart';
+import 'ProductGridFourthItem.dart';
+import 'ProductGridSecondItem.dart';
+import 'ProductGridFirstItem.dart';
+import 'ProductGridThirdItem.dart';
 
 class ProductListGridView extends StatefulWidget {
   final ProductPaginationController paginationController =
@@ -164,7 +164,7 @@ Widget productListItem(ProductListItem item, int index, navigateToDetails) {
   Widget lloadWidget;
 
   if (index % 4 == 0) {
-    lloadWidget = GridOddItem(
+    lloadWidget = ProductGridFirstItem(
       imageUrl: item.productImage,
       title: item.productName,
       price: item.productPrice,
@@ -172,7 +172,7 @@ Widget productListItem(ProductListItem item, int index, navigateToDetails) {
       calories: item.productCalories,
     );
   } else if (index % 4 == 1) {
-    lloadWidget = GridItem(
+    lloadWidget = ProductGridSecondItem(
       imageUrl: item.productImage,
       title: item.productName,
       price: item.productPrice,
@@ -180,7 +180,7 @@ Widget productListItem(ProductListItem item, int index, navigateToDetails) {
       calories: item.productCalories,
     );
   } else if (index % 4 == 2) {
-    lloadWidget = Gridthirditem(
+    lloadWidget = ProductGridThirdItem(
       imageUrl: item.productImage,
       title: item.productName,
       price: item.productPrice,
@@ -188,7 +188,7 @@ Widget productListItem(ProductListItem item, int index, navigateToDetails) {
       calories: item.productCalories,
     );
   } else {
-    lloadWidget = Gridfourthitem(
+    lloadWidget = ProductGridFourthItem(
       imageUrl: item.productImage,
       title: item.productName,
       price: item.productPrice,

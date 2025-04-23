@@ -11,6 +11,7 @@ Widget productListTitleWidget(String title, [Color? color]) {
       overflow: TextOverflow.ellipsis,
       maxLines: 2,
       style: TextStyle(
+        height: 1.2,
         color: color,
         //color: Color.fromARGB(255, 255, 255, 254),
         fontSize: 16,

@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'ProductListWidgets.dart';
 
-class Gridthirditem extends StatelessWidget {
+class ProductGridThirdItem extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String price;
   final String productLife;
   final String calories;
 
-  Gridthirditem({
+  ProductGridThirdItem({
     required this.imageUrl,
     required this.title,
     required this.price,
