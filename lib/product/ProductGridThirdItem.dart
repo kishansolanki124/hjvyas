@@ -6,6 +6,7 @@ class ProductGridThirdItem extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String price;
+  final String productWeight;
   final String productLife;
   final String calories;
 
@@ -13,6 +14,7 @@ class ProductGridThirdItem extends StatelessWidget {
     required this.imageUrl,
     required this.title,
     required this.price,
+    required this.productWeight,
     required this.productLife,
     required this.calories,
   });
@@ -31,7 +33,7 @@ class ProductGridThirdItem extends StatelessWidget {
             productListTitleWidget(title, Color.fromARGB(255, 1, 1, 1)),
 
             //"₹ 900.00 - 300 grams"
-            if (price.isNotEmpty) productListVariationWidget(price,
+            if (price.isNotEmpty) productListVariationWidget(price, productWeight,
               Color.fromARGB(255, 1, 1, 1),
             ),
 

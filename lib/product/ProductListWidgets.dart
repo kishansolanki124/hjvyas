@@ -22,13 +22,13 @@ Widget productListTitleWidget(String title, [Color? color]) {
   );
 }
 
-Widget productListVariationWidget(String title, [Color? color]) {
+Widget productListVariationWidget(String price, String productWeight, [Color? color]) {
   color ??= Colors.white;
 
   return Padding(
     padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
     child: Text(
-      title,
+      "₹ $price - $productWeight",
       style: TextStyle(
         color: color,
         fontSize: 12,
@@ -39,25 +39,25 @@ Widget productListVariationWidget(String title, [Color? color]) {
   );
 }
 
-Widget productListLife(String title, [Color? color]) {
+Widget productListLife(String life, [Color? color]) {
   color ??= Color.fromARGB(255, 123, 138, 195);
 
   return Padding(
     padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
     child: Text(
-      title,
+      "Product Life : $life",
       style: TextStyle(color: color, fontSize: 11, fontFamily: "Montserrat"),
     ),
   );
 }
 
-Widget productListCalories(String text, [Color? color]) {
+Widget productListCalories(String calories, [Color? color]) {
   color ??= Color.fromARGB(255, 123, 138, 195);
 
   return Padding(
     padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 10),
     child: Text(
-      text,
+      "Calories : $calories",
       style: TextStyle(color: color, fontFamily: "Montserrat", fontSize: 11),
     ),
   );

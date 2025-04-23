@@ -6,6 +6,7 @@ class ProductGridFourthItem extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String price;
+  final String productWeight;
   final String productLife;
   final String calories;
 
@@ -13,6 +14,7 @@ class ProductGridFourthItem extends StatelessWidget {
     required this.imageUrl,
     required this.title,
     required this.price,
+    required this.productWeight,
     required this.productLife,
     required this.calories,
   });
@@ -35,7 +37,7 @@ class ProductGridFourthItem extends StatelessWidget {
             if (price.isEmpty) soldOutText(),
 
             //"₹ 900.00 - 300 grams"
-            if (price.isNotEmpty) productListVariationWidget(price),
+            if (price.isNotEmpty) productListVariationWidget(price, productWeight),
 
             //"Product life: 300 days"
             if (price.isNotEmpty) productListLife(productLife),

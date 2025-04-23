@@ -31,7 +31,7 @@ class ComboFirstItem extends StatelessWidget {
             productListTitleWidget(title),
 
             //"₹ 900.00 - 300 grams"
-            if (price.isNotEmpty) productListVariationWidget(price),
+            if (price.isNotEmpty) productListVariationWidget(price, "productWeight"),
 
             //"Product life: 300 days"
             if (price.isNotEmpty) productListLife(productLife),

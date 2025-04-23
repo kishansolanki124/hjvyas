@@ -168,6 +168,7 @@ Widget productListItem(ProductListItem item, int index, navigateToDetails) {
       imageUrl: item.productImage,
       title: item.productName,
       price: item.productPrice,
+      productWeight: item.productWeight,
       productLife: item.productLife,
       calories: item.productCalories,
     );
@@ -176,6 +177,7 @@ Widget productListItem(ProductListItem item, int index, navigateToDetails) {
       imageUrl: item.productImage,
       title: item.productName,
       price: item.productPrice,
+      productWeight: item.productWeight,
       productLife: item.productLife,
       calories: item.productCalories,
     );
@@ -184,6 +186,7 @@ Widget productListItem(ProductListItem item, int index, navigateToDetails) {
       imageUrl: item.productImage,
       title: item.productName,
       price: item.productPrice,
+      productWeight: item.productWeight,
       productLife: item.productLife,
       calories: item.productCalories,
     );
@@ -192,6 +195,7 @@ Widget productListItem(ProductListItem item, int index, navigateToDetails) {
       imageUrl: item.productImage,
       title: item.productName,
       price: item.productPrice,
+      productWeight: item.productWeight,
       productLife: item.productLife,
       calories: item.productCalories,
     );

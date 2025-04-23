@@ -12,6 +12,7 @@ Product List:
 2. design changes from suggestion and other.
 3. for odd number of total items, add last item as white bottom so that UI looks good.
 4. Product list page ma bottom nav dekhavu joiye
+5. add padding or margin at the end of the list
 
 Combo:
 1. hide bottom nav on scroll

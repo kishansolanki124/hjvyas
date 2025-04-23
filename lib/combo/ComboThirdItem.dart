@@ -31,7 +31,7 @@ class ComboThirdItem extends StatelessWidget {
 
             //"₹ 900.00 - 300 grams"
             if (price.isNotEmpty)
-              productListVariationWidget(price, Color.fromARGB(255, 1, 1, 1)),
+              productListVariationWidget(price, "",Color.fromARGB(255, 1, 1, 1)),
 
             //"Product life: 300 days"
             if (price.isNotEmpty) productListLife(productLife),
