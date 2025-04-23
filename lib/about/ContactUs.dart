@@ -861,11 +861,11 @@ Widget _buildSelectItem(
           //height: 50,
           // Fixed height for the square
           child: Image.asset(
-            width: 70,
+            width: 60,
             // Fixed width for the square
-            height: 70,
+            height: 60,
             imagePaths[index],
-            fit: BoxFit.fill, // Make the image fit within the square
+            fit: BoxFit.cover, // Make the image fit within the square
             //),
           ),
         ),
@@ -873,13 +873,17 @@ Widget _buildSelectItem(
         SizedBox(
           width: 70,
           child: Center(
-            child: Text(
-              tabNames[index],
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 12.0,
-                fontFamily: "Montserrat",
-                color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+              child: Text(
+                tabNames[index],
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 11.0,
+                  fontFamily: "Montserrat",
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
