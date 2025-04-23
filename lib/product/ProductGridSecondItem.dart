@@ -23,9 +23,9 @@ class ProductGridSecondItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        productListWhiteBg(Alignment.bottomCenter),
+        productListWhiteBg(Alignment.bottomCenter, 100),
 
-        productListColoredBorderBox(110, 10),
+        productListColoredBorderBox(110, 20),
 
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

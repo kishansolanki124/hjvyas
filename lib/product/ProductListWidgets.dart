@@ -23,7 +23,11 @@ Widget productListTitleWidget(String title, [Color? color, double? topMargin]) {
   );
 }
 
-Widget productListVariationWidget(String price, String productWeight, [Color? color]) {
+Widget productListVariationWidget(
+  String price,
+  String productWeight, [
+  Color? color,
+]) {
   color ??= Colors.white;
 
   return Padding(
@@ -96,24 +100,26 @@ Widget productListImage(String url, [Color? color]) {
   // );
 
   if (color == Colors.transparent) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.transparent,
-        shape: BoxShape.circle,
-        boxShadow: [
-          BoxShadow(
-            blurRadius: 10,
-            color: Colors.black.withAlpha(20),
-            spreadRadius: 2,
-            offset: Offset(0, 3),
+    return Center(
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.transparent,
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 10,
+              color: Colors.black.withAlpha(20),
+              spreadRadius: 2,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: SizedBox(
+          width: 190,
+          height: 190,
+          child: ImageWithProgress(
+            imageURL: url, // Replace with your image URL
           ),
-        ],
-      ),
-      child: SizedBox(
-        width: 190,
-        height: 190,
-        child: ImageWithProgress(
-          imageURL: url, // Replace with your image URL
         ),
       ),
     );
@@ -149,10 +155,11 @@ Widget productListImage(String url, [Color? color]) {
   // );
 }
 
-Widget productListWhiteBg(AlignmentGeometry alignment) {
+Widget productListWhiteBg(AlignmentGeometry alignment, [double? bgHeight]) {
+  bgHeight ??= 110;
   return Align(
     alignment: alignment,
-    child: SizedBox(height: 115, child: Container(color: Colors.white)),
+    child: SizedBox(height: bgHeight, child: Container(color: Colors.white)),
   );
 }
 

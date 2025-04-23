@@ -25,7 +25,7 @@ class ProductGridFourthItem extends StatelessWidget {
       children: [
         productListWhiteBg(Alignment.topCenter),
 
-        productListColoredBorderBox(110, 0),
+        productListColoredBorderBox(110, 20),
 
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

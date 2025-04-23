@@ -23,7 +23,7 @@ class ProductGridFirstItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        productListWhiteBg(Alignment.bottomCenter),
+        productListWhiteBg(Alignment.bottomCenter, 100),
 
         productListColoredBorderBox(0, 110.0),
 
@@ -33,7 +33,8 @@ class ProductGridFirstItem extends StatelessWidget {
             productListTitleWidget(title),
 
             //"₹ 900.00 - 300 grams"
-            if (price.isNotEmpty) productListVariationWidget(price, productWeight),
+            if (price.isNotEmpty)
+              productListVariationWidget(price, productWeight),
 
             //"Product life: 300 days"
             if (price.isNotEmpty) productListLife(productLife),
