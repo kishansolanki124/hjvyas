@@ -81,6 +81,8 @@ void showAlertWithCallback({
   required String message,
   VoidCallback? onOkPressed,
 }) {
+  //todo: optimise its design
+  //todo: test in iOS
   showDialog(
     context: context,
     barrierDismissible: false,
@@ -91,8 +93,8 @@ void showAlertWithCallback({
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.pop(context);
                 onOkPressed?.call();
+                Navigator.of(context, rootNavigator: true).pop();
               },
               child: Text('OK'),
             ),

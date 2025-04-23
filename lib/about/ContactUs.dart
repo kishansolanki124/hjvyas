@@ -33,7 +33,55 @@ class _ContactUsState extends State<ContactUs> {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _messageController = TextEditingController();
 
-  String? _selectedVariantInquiry;
+  String? _selectedVariantInquiry = null;
+
+  final List<String> imagePaths = [
+    'icons/map_icon.png',
+    'icons/whatsapp_icon.png',
+    'icons/call_icon.png',
+    'icons/e-mail_icon.png',
+  ];
+
+  // Function to launch URL
+  Future<void> _launchURL(String url) async {
+    await launchUrl(Uri.parse(url));
+  }
+
+  void callIntent(String phonenumber) {
+    launchUrlString("tel://$phonenumber");
+  }
+
+  void emailIntent(String email) {
+    var url = Uri.parse("mailto:$email?subject=&body=");
+    launchUrl(url);
+  }
+
+  // Function to launch WhatsApp
+  Future<void> openWhatsApp(String phoneNumber) async {
+    await launchUrl(Uri.parse("https://wa.me/$phoneNumber?text="));
+  }
+
+  void _onIconClick(int index, ContactListItem contactListItem) {
+    if (index == 0) {
+      //google map
+      _launchURL(contactListItem.googleMap);
+    } else if (index == 1) {
+      //whatsapp
+      openWhatsApp(contactListItem.whatsappNo);
+    } else if (index == 2) {
+      //call
+      showTwoPhoneCallOptionDialog(
+        contactListItem.mobile1,
+        contactListItem.mobile2,
+      );
+      //callIntent(contactListItem.mobile1);
+    } else if (index == 3) {
+      //email
+      emailIntent(contactListItem.email);
+    }
+  }
+
+  final List<String> _tabNames = ['Google Map', 'WhatsApp', 'Call', 'E-Mail'];
 
   @override
   void dispose() {
@@ -47,19 +95,61 @@ class _ContactUsState extends State<ContactUs> {
   }
 
   void onSubmitClick() {
-    if (_validateCity(_cityController.text) != null) {
-      showSnackbar(_validateCity(_cityController.text).toString());
+    if (_validateName(_nameController.text) != null) {
+      showSnackbar(_validateName(_nameController.text).toString());
     } else if (_validateEmail(_emailController.text) != null) {
       showSnackbar(_validateEmail(_emailController.text).toString());
-    } else if (_validateMessage(_messageController.text) != null) {
-      showSnackbar(_validateMessage(_messageController.text).toString());
-    } else if (_validateName(_nameController.text) != null) {
-      showSnackbar(_validateName(_nameController.text).toString());
     } else if (_validatePhone(_phoneController.text) != null) {
       showSnackbar(_validatePhone(_phoneController.text).toString());
+    } else if (_validateCity(_cityController.text) != null) {
+      showSnackbar(_validateCity(_cityController.text).toString());
+    } else if (_validateMessage(_messageController.text) != null) {
+      showSnackbar(_validateMessage(_messageController.text).toString());
     } else {
       newFunction();
     }
+  }
+
+  void showTwoPhoneCallOptionDialog(String phoneNumber1, String phoneNumber2) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Call Number'),
+          content: const Text('Choose a number to call:'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                callIntent(phoneNumber1); // Call the first number
+              },
+              child: Text(
+                phoneNumber1,
+                style: TextStyle(
+                  color: Color.fromARGB(255, 31, 47, 80),
+                  fontWeight: FontWeight.w600,
+                  fontFamily: "Montserrat",
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+                callIntent(phoneNumber2); // Call the second number
+              },
+              child: Text(
+                phoneNumber2,
+                style: TextStyle(
+                  color: Color.fromARGB(255, 31, 47, 80),
+                  fontWeight: FontWeight.w600,
+                  fontFamily: "Montserrat",
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   // Function to validate the form fields
@@ -85,10 +175,10 @@ class _ContactUsState extends State<ContactUs> {
 
   String? _validatePhone(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Phone number is required';
+      return 'Contact number is required';
     }
     if (value.length != 10) {
-      return 'Phone number must be 10 digits';
+      return 'Contact number must be 10 digits';
     }
     return null;
   }
@@ -140,18 +230,552 @@ class _ContactUsState extends State<ContactUs> {
       }
 
       final cateogories = widget.categoryController.contactItem.elementAt(0);
-      _selectedVariantInquiry = cateogories.inquiryType.split(', ').first;
-      return contactUsContentWidget(
-        widget.categoryController,
-        cateogories,
-        _nameController,
-        _emailController,
-        _phoneController,
-        _cityController,
-        _messageController,
-        onSubmitClick,
-        selectedVariantInquiry,
+      _selectedVariantInquiry ??= cateogories.inquiryType.split(', ').first;
+
+      return Expanded(
+        child: SingleChildScrollView(
+          child: Stack(
+            children: [
+              Column(
+                children: [
+                  //contact us upper half portion
+                  Stack(
+                    children: [
+                      Container(
+                        margin: EdgeInsets.only(top: 20),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Color.fromARGB(255, 123, 138, 195),
+                          ),
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                        child: Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(8, 30, 8, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              //contact us 4 icons top horizontal
+                              Wrap(
+                                children: [
+                                  Center(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      // Distribute items evenly
+                                      children: List.generate(
+                                        imagePaths.length,
+                                        (index) {
+                                          return _buildSelectItem(
+                                            cateogories,
+                                            _tabNames,
+                                            imagePaths,
+                                            index,
+                                            _onIconClick,
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              SizedBox(height: 20),
+
+                              Text(
+                                "Get in Touch",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: "Montserrat",
+                                ),
+                              ),
+
+                              SizedBox(height: 10),
+
+                              Text(
+                                "Address :",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: "Montserrat",
+                                ),
+                              ),
+
+                              Text(
+                                cateogories.address,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontFamily: "Montserrat",
+                                ),
+                              ),
+
+                              SizedBox(height: 10),
+
+                              Text(
+                                "Customer Care :",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: "Montserrat",
+                                ),
+                              ),
+
+                              GestureDetector(
+                                onTap: () {
+                                  showTwoPhoneCallOptionDialog(
+                                    cateogories.mobile1,
+                                    cateogories.mobile2,
+                                  );
+                                },
+                                child: Text(
+                                  "${cateogories.mobile1} / ${cateogories.mobile2}\n(${cateogories.timing})",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontFamily: "Montserrat",
+                                  ),
+                                ),
+                              ),
+
+                              SizedBox(height: 10),
+
+                              Text(
+                                "Email :",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: "Montserrat",
+                                ),
+                              ),
+
+                              Text(
+                                cateogories.email,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                  fontFamily: "Montserrat",
+                                ),
+                              ),
+
+                              SizedBox(height: 10),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      Wrap(
+                        children: [
+                          Center(
+                            child: Container(
+                              color: Color.fromARGB(255, 31, 47, 80),
+                              child: Padding(
+                                padding: EdgeInsets.all(8),
+                                child: Text(
+                                  "Contact Us",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontFamily: "Montserrat",
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+
+                  //contact us bottom half portion
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //send us an email
+                      Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
+                        child: Text(
+                          "Send us an Email",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: "Montserrat",
+                          ),
+                        ),
+                      ),
+
+                      //dropdown of inquiry
+                      Container(
+                        width: double.infinity,
+                        // Full width
+                        //height: 40,
+                        // Fixed height
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Color.fromARGB(255, 123, 138, 195),
+                          ),
+                          borderRadius: BorderRadius.circular(0),
+                          color: Colors.transparent, // Background color
+                        ),
+                        padding: EdgeInsets.symmetric(horizontal: 6.0),
+                        // Add horizontal padding
+                        child: DropdownButtonFormField<String>(
+                          padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+                          value: cateogories.inquiryType.split(', ').first,
+                          icon: Image.asset(
+                            'icons/dropdown_icon.png', // Replace with your icon path
+                            width: 18, // Adjust width as needed
+                            height: 18, // Adjust height as needed
+                          ),
+                          onChanged: (newValue) {
+                            // setState(() {
+                            selectedVariantInquiry(newValue!);
+                            //selectedVariantInquiry = newValue;
+                            if (kDebugMode) {
+                              print(
+                                'selectedVariantInquiry $selectedVariantInquiry',
+                              );
+                            }
+                            // });
+                          },
+                          items:
+                              cateogories.inquiryType.split(', ').map((
+                                String item,
+                              ) {
+                                return DropdownMenuItem<String>(
+                                  value: item,
+                                  child: Text(
+                                    item,
+                                    style: TextStyle(
+                                      backgroundColor: Color.fromARGB(
+                                        255,
+                                        31,
+                                        47,
+                                        80,
+                                      ),
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontFamily: "Montserrat",
+                                      //fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                          decoration: InputDecoration(
+                            border: InputBorder.none, // Remove default border
+                            isDense: true, // Make it compact
+                            contentPadding: EdgeInsets.zero,
+                            // suffixIcon: Image.asset(
+                            //   width: 12,
+                            //   height: 12,
+                            //   'icons/dropdown_icon.png',
+                            // ),
+                          ),
+                          dropdownColor: Color.fromARGB(255, 31, 47, 80),
+                          //underline: SizedBox(),
+                        ),
+                      ), // inquiryDropdown(
+                      //   contactListItem.inquiryType.split(', '),
+                      //   contactListItem.inquiryType.split(', ').first,
+                      //   selectedVariantInquiry,
+                      // ),
+                      SizedBox(height: 20),
+
+                      //edittext name
+                      TextField(
+                        controller: _nameController,
+                        keyboardType: TextInputType.name,
+                        textCapitalization: TextCapitalization.words,
+                        // Capitalize each word
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "Montserrat",
+                          fontSize: 14,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: "Name",
+                          hintStyle: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Montserrat",
+                            fontSize: 14,
+                          ),
+
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(0)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Color.fromARGB(255, 123, 138, 195),
+                            ),
+                          ),
+                          // disabledBorder: OutlineInputBorder(
+                          //   borderRadius: BorderRadius.all(Radius.circular(4)),
+                          //   borderSide: BorderSide(width: 1,color: Colors.orange),
+                          // ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(0)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Color.fromARGB(255, 123, 138, 195),
+                            ),
+                          ),
+
+                          contentPadding: EdgeInsets.all(8),
+                          isDense: true, //make textfield compact
+                        ),
+                      ),
+
+                      SizedBox(height: 20),
+
+                      //edittext email
+                      TextField(
+                        controller: _emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "Montserrat",
+                          fontSize: 14,
+                        ),
+                        // Set text color to white
+                        decoration: InputDecoration(
+                          hintText: "E-mail",
+                          hintStyle: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Montserrat",
+                            fontSize: 14,
+                          ),
+
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(0)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Color.fromARGB(255, 123, 138, 195),
+                            ),
+                          ),
+
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(0)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Color.fromARGB(255, 123, 138, 195),
+                            ),
+                          ),
+
+                          contentPadding: EdgeInsets.all(8),
+                          isDense: true, //make textfield compact
+                        ),
+                      ),
+
+                      SizedBox(height: 20),
+
+                      //contact no
+                      TextField(
+                        controller: _phoneController,
+                        keyboardType: TextInputType.number,
+                        maxLength: 10,
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "Montserrat",
+                          fontSize: 14,
+                        ),
+                        // Set text color to white
+                        decoration: InputDecoration(
+                          counterText: "",
+                          hintText: "Contact No.",
+                          hintStyle: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Montserrat",
+                            fontSize: 14,
+                          ),
+
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(0)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Color.fromARGB(255, 123, 138, 195),
+                            ),
+                          ),
+
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(0)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Color.fromARGB(255, 123, 138, 195),
+                            ),
+                          ),
+
+                          contentPadding: EdgeInsets.all(8),
+                          isDense: true, //make textfield compact
+                        ),
+                      ),
+
+                      SizedBox(height: 20),
+
+                      //city
+                      TextField(
+                        controller: _cityController,
+                        keyboardType: TextInputType.streetAddress,
+                        textCapitalization: TextCapitalization.words,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "Montserrat",
+                          fontSize: 14,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: "City",
+                          hintStyle: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Montserrat",
+                            fontSize: 14,
+                          ),
+
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(0)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Color.fromARGB(255, 123, 138, 195),
+                            ),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(0)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Color.fromARGB(255, 123, 138, 195),
+                            ),
+                          ),
+                          contentPadding: EdgeInsets.all(8),
+                          isDense: true, //make textfield compact
+                        ),
+                      ),
+
+                      SizedBox(height: 20),
+
+                      //message
+                      TextField(
+                        controller: _messageController,
+                        keyboardType: TextInputType.multiline,
+                        // Use multiline input type
+                        maxLines: null,
+                        // Allow unlimited lines
+                        minLines: 4,
+                        // Start with a minimum of 4 lines
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "Montserrat",
+                          fontSize: 14,
+                        ),
+                        // Set text color to white
+                        decoration: InputDecoration(
+                          hintText: "Message",
+                          hintStyle: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Montserrat",
+                            fontSize: 14,
+                          ),
+
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(0)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Color.fromARGB(255, 123, 138, 195),
+                            ),
+                          ),
+
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(0)),
+                            borderSide: BorderSide(
+                              width: 1,
+                              color: Color.fromARGB(255, 123, 138, 195),
+                            ),
+                          ),
+
+                          contentPadding: EdgeInsets.all(8),
+                          isDense: true, //make textfield compact
+                        ),
+                      ),
+
+                      SizedBox(height: 20),
+
+                      //send message button
+                      SizedBox(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            //  Add your notification logic here
+                            if (kDebugMode) {
+                              print("Notify Me button clicked");
+                              onSubmitClick();
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color.fromARGB(255, 123, 138, 195),
+                            // Sky color
+                            //foregroundColor: Colors.black,
+                            // Black text color
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.zero, // Square corners
+                            ),
+                            padding: EdgeInsets.symmetric(
+                              vertical: 10.0,
+                              horizontal: 12,
+                            ), // Add some vertical padding
+                          ),
+                          child: Obx(() {
+                            if (widget
+                                .categoryController
+                                .adInquiryLoading
+                                .value) {
+                              return SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Colors.white,
+                                ),
+                              );
+                            }
+                            return Text(
+                              "Send Message",
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ), // Adjust size
+                            );
+                          }),
+                        ),
+                      ),
+
+                      SizedBox(height: 100),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       );
+      // return contactUsContentWidget(
+      //   widget.categoryController,
+      //   cateogories,
+      //   _nameController,
+      //   _emailController,
+      //   _phoneController,
+      //   _cityController,
+      //   _messageController,
+      //   onSubmitClick,
+      //   selectedVariantInquiry,
+      // );
     });
   }
 
@@ -193,7 +817,6 @@ class _ContactUsState extends State<ContactUs> {
         _cityController.text = "";
         _messageController.text = "";
 
-        //todo: issue on ok click, dialog not dismissing
         showAlertWithCallback(
           context: context,
           title: 'Success',
@@ -220,518 +843,6 @@ Widget contactUsWidget(ContactListItem? contactListItem) {
     print('contactListItem $contactListItem');
   }
   return Text("Hello ererr");
-}
-
-Widget contactUsContentWidget(
-  CategoryController contactUsController,
-  ContactListItem contactListItem,
-  _nameController,
-  _emailController,
-  _phoneController,
-  _cityController,
-  _messageController,
-  onSubmitClick,
-  selectedVariantInquiry,
-) {
-
-  final List<String> imagePaths = [
-    'icons/map_icon.png',
-    'icons/whatsapp_icon.png',
-    'icons/call_icon.png',
-    'icons/e-mail_icon.png',
-  ];
-
-  // Function to launch URL
-  Future<void> _launchURL(String url) async {
-    await launchUrl(Uri.parse(contactListItem.googleMap));
-  }
-
-  void callIntent(String phonenumber) {
-    launchUrlString("tel://$phonenumber");
-  }
-
-  void emailIntent(String email) {
-    var url = Uri.parse("mailto:$email?subject=&body=");
-    launchUrl(url);
-  }
-
-  // Function to launch WhatsApp
-  Future<void> openWhatsApp(String phoneNumber) async {
-    await launchUrl(Uri.parse("https://wa.me/$phoneNumber?text="));
-  }
-
-  void _onIconClick(int index, ContactListItem contactListItem) {
-    if (index == 0) {
-      //google map
-      _launchURL(contactListItem.googleMap);
-    } else if (index == 1) {
-      //whatsapp
-      openWhatsApp(contactListItem.whatsappNo);
-    } else if (index == 2) {
-      //call
-      //todo: show 2 call intent options as 2 numbers are available
-      callIntent(contactListItem.mobile1);
-    } else if (index == 3) {
-      //email
-      emailIntent(contactListItem.email);
-    }
-  }
-
-  final List<String> _tabNames = ['Google Map', 'WhatsApp', 'Call', 'E-Mail'];
-
-  return Expanded(
-    child: SingleChildScrollView(
-      child: Stack(
-        children: [
-          Column(
-            children: [
-              //contact us upper half portion
-              Stack(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(top: 20),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Color.fromARGB(255, 123, 138, 195),
-                      ),
-                      borderRadius: BorderRadius.circular(0),
-                    ),
-                    child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(8, 30, 8, 0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          //contact us 4 icons top horizontal
-                          Wrap(
-                            children: [
-                              Center(
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  // Distribute items evenly
-                                  children: List.generate(imagePaths.length, (
-                                    index,
-                                  ) {
-                                    return _buildSelectItem(
-                                      contactListItem,
-                                      _tabNames,
-                                      imagePaths,
-                                      index,
-                                      _onIconClick,
-                                    );
-                                  }),
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          SizedBox(height: 20),
-
-                          Text(
-                            "Get in Touch",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: "Montserrat",
-                            ),
-                          ),
-
-                          SizedBox(height: 10),
-
-                          Text(
-                            "Address :",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: "Montserrat",
-                            ),
-                          ),
-
-                          Text(
-                            contactListItem.address,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontFamily: "Montserrat",
-                            ),
-                          ),
-
-                          SizedBox(height: 10),
-
-                          Text(
-                            "Customer Care :",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: "Montserrat",
-                            ),
-                          ),
-
-                          Text(
-                            "${contactListItem.mobile1} / ${contactListItem.mobile2}\n(${contactListItem.timing})",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontFamily: "Montserrat",
-                            ),
-                          ),
-
-                          SizedBox(height: 10),
-
-                          Text(
-                            "Email :",
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                              fontFamily: "Montserrat",
-                            ),
-                          ),
-
-                          Text(
-                            contactListItem.email,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontFamily: "Montserrat",
-                            ),
-                          ),
-
-                          SizedBox(height: 10),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                  Wrap(
-                    children: [
-                      Center(
-                        child: Container(
-                          color: Color.fromARGB(255, 31, 47, 80),
-                          child: Padding(
-                            padding: EdgeInsets.all(8),
-                            child: Text(
-                              "Contact Us",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontFamily: "Montserrat",
-                                fontWeight: FontWeight.w500,
-                                fontSize: 18,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-
-              //contact us bottom half portion
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //send us an email
-                  Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 10),
-                    child: Text(
-                      "Send us an Email",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: "Montserrat",
-                      ),
-                    ),
-                  ),
-
-                  //dropdown of inquiry
-                  inquiryDropdown(
-                    contactListItem.inquiryType.split(', '),
-                    contactListItem.inquiryType.split(', ').first,
-                    selectedVariantInquiry,
-                  ),
-
-                  SizedBox(height: 20),
-
-                  //edittext name
-                  TextField(
-                    controller: _nameController,
-                    keyboardType: TextInputType.name,
-                    textCapitalization: TextCapitalization.words,
-                    // Capitalize each word
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: "Montserrat",
-                      fontSize: 14,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: "Name",
-                      hintStyle: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Montserrat",
-                        fontSize: 14,
-                      ),
-
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Color.fromARGB(255, 123, 138, 195),
-                        ),
-                      ),
-                      // disabledBorder: OutlineInputBorder(
-                      //   borderRadius: BorderRadius.all(Radius.circular(4)),
-                      //   borderSide: BorderSide(width: 1,color: Colors.orange),
-                      // ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Color.fromARGB(255, 123, 138, 195),
-                        ),
-                      ),
-
-                      contentPadding: EdgeInsets.all(8),
-                      isDense: true, //make textfield compact
-                    ),
-                  ),
-
-                  SizedBox(height: 20),
-
-                  //edittext email
-                  TextField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: "Montserrat",
-                      fontSize: 14,
-                    ),
-                    // Set text color to white
-                    decoration: InputDecoration(
-                      hintText: "E-mail",
-                      hintStyle: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Montserrat",
-                        fontSize: 14,
-                      ),
-
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Color.fromARGB(255, 123, 138, 195),
-                        ),
-                      ),
-
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Color.fromARGB(255, 123, 138, 195),
-                        ),
-                      ),
-
-
-                      contentPadding: EdgeInsets.all(8),
-                      isDense: true, //make textfield compact
-                    ),
-                  ),
-
-                  SizedBox(height: 20),
-
-                  //contact no
-                  TextField(
-                    controller: _phoneController,
-                    keyboardType: TextInputType.number,
-                    maxLength: 10,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: "Montserrat",
-                      fontSize: 14,
-                    ),
-                    // Set text color to white
-                    decoration: InputDecoration(
-                      counterText: "",
-                      hintText: "Contact No.",
-                      hintStyle: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Montserrat",
-                        fontSize: 14,
-                      ),
-
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Color.fromARGB(255, 123, 138, 195),
-                        ),
-                      ),
-
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Color.fromARGB(255, 123, 138, 195),
-                        ),
-                      ),
-
-                      contentPadding: EdgeInsets.all(8),
-                      isDense: true, //make textfield compact
-                    ),
-                  ),
-
-                  SizedBox(height: 20),
-
-                  //city
-                  TextField(
-                    controller: _cityController,
-                    keyboardType: TextInputType.streetAddress,
-                    textCapitalization: TextCapitalization.words,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: "Montserrat",
-                      fontSize: 14,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: "City",
-                      hintStyle: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Montserrat",
-                        fontSize: 14,
-                      ),
-
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Color.fromARGB(255, 123, 138, 195),
-                        ),
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Color.fromARGB(255, 123, 138, 195),
-                        ),
-                      ),
-                      contentPadding: EdgeInsets.all(8),
-                      isDense: true, //make textfield compact
-                    ),
-                  ),
-
-                  SizedBox(height: 20),
-
-                  //message
-                  TextField(
-                    controller: _messageController,
-                    keyboardType: TextInputType.multiline,
-                    // Use multiline input type
-                    maxLines: null,
-                    // Allow unlimited lines
-                    minLines: 4,
-                    // Start with a minimum of 4 lines
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: "Montserrat",
-                      fontSize: 14,
-                    ),
-                    // Set text color to white
-                    decoration: InputDecoration(
-                      hintText: "Message",
-                      hintStyle: TextStyle(
-                        color: Colors.white,
-                        fontFamily: "Montserrat",
-                        fontSize: 14,
-                      ),
-
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Color.fromARGB(255, 123, 138, 195),
-                        ),
-                      ),
-
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
-                        borderSide: BorderSide(
-                          width: 1,
-                          color: Color.fromARGB(255, 123, 138, 195),
-                        ),
-                      ),
-
-                      contentPadding: EdgeInsets.all(8),
-                      isDense: true, //make textfield compact
-                    ),
-                  ),
-
-                  SizedBox(height: 20),
-
-                  //send message button
-                  SizedBox(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        //  Add your notification logic here
-                        if (kDebugMode) {
-                          print("Notify Me button clicked");
-                          onSubmitClick();
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 123, 138, 195),
-                        // Sky color
-                        //foregroundColor: Colors.black,
-                        // Black text color
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero, // Square corners
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 10.0,
-                          horizontal: 12,
-                        ), // Add some vertical padding
-                      ),
-                      child: Obx(() {
-                        if (contactUsController.adInquiryLoading.value) {
-                          return SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
-                          );
-                        }
-                        return Text(
-                          "Send Message",
-                          style: TextStyle(
-                            fontSize: 16.0,
-                            fontFamily: "Montserrat",
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ), // Adjust size
-                        );
-                      }),
-                    ),
-                  ),
-
-                  SizedBox(height: 100),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
-    ),
-  );
 }
 
 Widget _buildSelectItem(
@@ -778,68 +889,5 @@ Widget _buildSelectItem(
     onTap: () {
       onIconClick(index, contactListItem);
     },
-  );
-}
-
-Widget inquiryDropdown(
-  List<String> contactUsDropdownList,
-  selectedVariant,
-  selectedVariantInquiry,
-) {
-  return Container(
-    width: double.infinity, // Full width
-    //height: 40,
-    // Fixed height
-    decoration: BoxDecoration(
-      border: Border.all(color: Color.fromARGB(255, 123, 138, 195)),
-      borderRadius: BorderRadius.circular(0),
-      color: Colors.transparent, // Background color
-    ),
-    padding: EdgeInsets.symmetric(horizontal: 6.0), // Add horizontal padding
-    child: DropdownButtonFormField<String>(
-      padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
-      value: selectedVariant,
-      icon: Image.asset(
-        'icons/dropdown_icon.png', // Replace with your icon path
-        width: 18, // Adjust width as needed
-        height: 18, // Adjust height as needed
-      ),
-      onChanged: (newValue) {
-        // setState(() {
-        selectedVariantInquiry = newValue;
-        if (kDebugMode) {
-          print('selectedVariantInquiry $selectedVariantInquiry');
-        }
-        // });
-      },
-      items:
-          contactUsDropdownList.map((String item) {
-            return DropdownMenuItem<String>(
-              value: item,
-              child: Text(
-                item,
-                style: TextStyle(
-                  backgroundColor: Color.fromARGB(255, 31, 47, 80),
-                  fontSize: 14,
-                  color: Colors.white,
-                  fontFamily: "Montserrat",
-                  //fontWeight: FontWeight.w700,
-                ),
-              ),
-            );
-          }).toList(),
-      decoration: InputDecoration(
-        border: InputBorder.none, // Remove default border
-        isDense: true, // Make it compact
-        contentPadding: EdgeInsets.zero,
-        // suffixIcon: Image.asset(
-        //   width: 12,
-        //   height: 12,
-        //   'icons/dropdown_icon.png',
-        // ),
-      ),
-      dropdownColor: Color.fromARGB(255, 31, 47, 80),
-      //underline: SizedBox(),
-    ),
   );
 }
