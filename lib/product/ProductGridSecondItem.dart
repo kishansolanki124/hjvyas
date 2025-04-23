@@ -25,33 +25,32 @@ class ProductGridSecondItem extends StatelessWidget {
       children: [
         productListWhiteBg(Alignment.bottomCenter),
 
-        productListColoredBorderBox(110, 0),
+        productListColoredBorderBox(110, 10),
 
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             productListImage(imageUrl),
 
-            SizedBox(height: 10),
-
-            productListTitleWidget(title),
+            productListTitleWidget(title, Colors.white, 0.0),
 
             SizedBox(height: 10),
 
             //"₹ 900.00 - 300 grams"
-            if (price.isNotEmpty) productListVariationWidget(price, productWeight,
-              Color.fromARGB(255, 1, 1, 1),
-            ),
+            if (price.isNotEmpty)
+              productListVariationWidget(
+                price,
+                productWeight,
+                Color.fromARGB(255, 1, 1, 1),
+              ),
 
             //"Product life: 300 days"
-            if (price.isNotEmpty) productListLife(productLife,
-              Color.fromARGB(255, 139, 139, 139),
-            ),
+            if (price.isNotEmpty)
+              productListLife(productLife, Color.fromARGB(255, 139, 139, 139)),
 
             //"Calories: 470"
-            if (price.isNotEmpty) productListCalories(calories,
-              Color.fromARGB(255, 139, 139, 139),
-            ),
+            if (price.isNotEmpty)
+              productListCalories(calories, Color.fromARGB(255, 139, 139, 139)),
 
             if (price.isEmpty) soldOutText(),
           ],

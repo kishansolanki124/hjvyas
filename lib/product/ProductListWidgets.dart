@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hjvyas/product_detail/ImageWithProgress.dart';
 
-Widget productListTitleWidget(String title, [Color? color]) {
+Widget productListTitleWidget(String title, [Color? color, double? topMargin]) {
   color ??= Colors.white;
+  topMargin ??= 10.0;
 
   return Padding(
-    padding: const EdgeInsets.fromLTRB(30.0, 10, 20, 0),
+    padding: EdgeInsets.fromLTRB(30.0, topMargin, 20, 0),
     child: Text(
       '$title\n',
       overflow: TextOverflow.ellipsis,
@@ -33,7 +34,7 @@ Widget productListVariationWidget(String price, String productWeight, [Color? co
         color: color,
         fontSize: 12,
         fontFamily: "Montserrat",
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
       ),
     ),
   );
@@ -120,7 +121,6 @@ Widget productListImage(String url, [Color? color]) {
     return Center(
       child: Container(
         width: 180,
-        // Adjust size
         height: 180,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
@@ -152,7 +152,7 @@ Widget productListImage(String url, [Color? color]) {
 Widget productListWhiteBg(AlignmentGeometry alignment) {
   return Align(
     alignment: alignment,
-    child: SizedBox(height: 100, child: Container(color: Colors.white)),
+    child: SizedBox(height: 115, child: Container(color: Colors.white)),
   );
 }
 
