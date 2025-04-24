@@ -190,7 +190,6 @@ Widget productDetailCenterImageRound() {
 Widget soldOutText() {
   return Column(
     children: [
-      SizedBox(height: 20),
       Padding(
         padding: EdgeInsets.fromLTRB(32, 16, 16, 16),
         child: Container(

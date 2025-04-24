@@ -172,6 +172,7 @@ Widget productListItem(ProductListItem item, int index, navigateToDetails) {
       productWeight: item.productWeight,
       productLife: item.productLife,
       calories: item.productCalories,
+      productSoldout: item.productSoldout,
     );
   } else if (index % 4 == 1) {
     lloadWidget = ProductGridSecondItem(
@@ -181,6 +182,7 @@ Widget productListItem(ProductListItem item, int index, navigateToDetails) {
       productWeight: item.productWeight,
       productLife: item.productLife,
       calories: item.productCalories,
+      productSoldout: item.productSoldout,
     );
   } else if (index % 4 == 2) {
     lloadWidget = ProductGridThirdItem(
@@ -190,6 +192,7 @@ Widget productListItem(ProductListItem item, int index, navigateToDetails) {
       productWeight: item.productWeight,
       productLife: item.productLife,
       calories: item.productCalories,
+      productSoldout: item.productSoldout,
     );
   } else {
     lloadWidget = ProductGridFourthItem(
@@ -199,6 +202,7 @@ Widget productListItem(ProductListItem item, int index, navigateToDetails) {
       productWeight: item.productWeight,
       productLife: item.productLife,
       calories: item.productCalories,
+      productSoldout: item.productSoldout,
     );
   }
 

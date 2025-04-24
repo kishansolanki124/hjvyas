@@ -9,6 +9,7 @@ class ProductGridSecondItem extends StatelessWidget {
   final String productWeight;
   final String productLife;
   final String calories;
+  final String productSoldout;
 
   ProductGridSecondItem({
     required this.imageUrl,
@@ -17,6 +18,7 @@ class ProductGridSecondItem extends StatelessWidget {
     required this.productWeight,
     required this.productLife,
     required this.calories,
+    required this.productSoldout,
   });
 
   @override
@@ -39,7 +41,7 @@ class ProductGridSecondItem extends StatelessWidget {
               SizedBox(height: 10),
 
               //"₹ 900.00 - 300 grams"
-              if (price.isNotEmpty)
+              if (productSoldout.isEmpty)
                 productListVariationWidget(
                   price,
                   productWeight,
@@ -47,14 +49,14 @@ class ProductGridSecondItem extends StatelessWidget {
                 ),
 
               //"Product life: 300 days"
-              if (price.isNotEmpty)
+              if (productSoldout.isEmpty)
                 productListLife(productLife, Color.fromARGB(255, 139, 139, 139)),
 
               //"Calories: 470"
-              if (price.isNotEmpty)
+              if (productSoldout.isEmpty)
                 productListCalories(calories, Color.fromARGB(255, 139, 139, 139)),
 
-              if (price.isEmpty) soldOutText(),
+              if (productSoldout.isNotEmpty) soldOutText(),
             ],
           ),
         ],
