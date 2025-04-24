@@ -39,7 +39,7 @@ class ComboSecondItem extends StatelessWidget {
             SizedBox(height: 5),
 
             //"₹ 900.00 - 300 grams"
-            if (price.isNotEmpty)
+            if (comboSoldout.isEmpty)
               productListVariationWidget(
                 price,
                 comboWeight,
@@ -47,13 +47,13 @@ class ComboSecondItem extends StatelessWidget {
               ),
 
             //"Calories: 470"
-            if (price.isNotEmpty)
+            if (comboSoldout.isEmpty)
               productComboSpecification(
                 comboSpecification,
                 Color.fromARGB(255, 139, 139, 139),
               ),
 
-            if (price.isEmpty) soldOutText(),
+            if (comboSoldout.isNotEmpty) soldOutText(),
           ],
         ),
       ],

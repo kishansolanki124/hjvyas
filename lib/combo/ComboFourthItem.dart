@@ -33,14 +33,14 @@ class ComboFourthItem extends StatelessWidget {
 
             productListTitleWidget(title),
 
-            if (price.isEmpty) soldOutText(),
+            if (comboSoldout.isNotEmpty) soldOutText(),
 
             //"₹ 900.00 - 300 grams"
-            if (price.isNotEmpty) productListVariationWidget(price, comboWeight),
+            if (comboSoldout.isEmpty) productListVariationWidget(price, comboWeight),
 
 
             //"Calories: 470"
-            if (price.isNotEmpty) productComboSpecification(comboSpecification),
+            if (comboSoldout.isEmpty) productComboSpecification(comboSpecification),
           ],
         ),
       ],

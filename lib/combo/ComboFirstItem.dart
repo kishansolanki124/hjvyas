@@ -33,14 +33,14 @@ class ComboFirstItem extends StatelessWidget {
             productListTitleWidget(title),
 
             //"₹ 900.00 - 300 grams"
-            if (price.isNotEmpty) productListVariationWidget(price, comboWeight),
+            if (comboSoldout.isEmpty) productListVariationWidget(price, comboWeight),
 
 
 
             //"Calories: 470"
-            if (price.isNotEmpty) productComboSpecification(comboSpecification),
+            if (comboSoldout.isEmpty) productComboSpecification(comboSpecification),
 
-            if (price.isEmpty) soldOutText(),
+            if (comboSoldout.isNotEmpty) soldOutText(),
 
             productListImage(imageUrl, Color.fromARGB(255, 123, 138, 195)),
           ],
