@@ -92,14 +92,10 @@ class _NavigationExampleState extends State<NavigationExample>
             ),
           ),
         ),
-        child: SafeArea(
-          child: Center(
-            child: returnWhateverScreen(
+        child: returnWhateverScreen(
               currentPageIndex,
               _updateBottomNavBarVisibility,
             ),
-          ),
-        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(

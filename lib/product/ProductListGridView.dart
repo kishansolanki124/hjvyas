@@ -49,8 +49,7 @@ class _ProductListGridViewState extends State<ProductListGridView> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
+    return Scaffold(
         body: Obx(() {
           if (widget.paginationController.items.isEmpty &&
               widget.paginationController.isLoading.value) {
@@ -121,8 +120,7 @@ class _ProductListGridViewState extends State<ProductListGridView> {
             ),
           );
         }),
-      ),
-    );
+      );
   }
 }
 
