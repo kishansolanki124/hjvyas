@@ -24,7 +24,7 @@ class ComboFourthItem extends StatelessWidget {
       children: [
         productListWhiteBg(Alignment.topCenter),
 
-        productListColoredBorderBox(110, 0),
+        productListColoredBorderBox(110, 10),
 
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
