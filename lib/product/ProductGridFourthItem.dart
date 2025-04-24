@@ -21,32 +21,35 @@ class ProductGridFourthItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        productListWhiteBg(Alignment.topCenter),
+    return SizedBox(
+      height: 200,
+      child: Stack(
+        children: [
+          productListWhiteBg(Alignment.topCenter),
 
-        productListColoredBorderBox(110, 20),
+          productListColoredBorderBox(110, 20),
 
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            productListImage(imageUrl),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              productListImage(imageUrl),
 
-            productListTitleWidget(title),
+              productListTitleWidget(title),
 
-            if (price.isEmpty) soldOutText(),
+              if (price.isEmpty) soldOutText(),
 
-            //"₹ 900.00 - 300 grams"
-            if (price.isNotEmpty) productListVariationWidget(price, productWeight),
+              //"₹ 900.00 - 300 grams"
+              if (price.isNotEmpty) productListVariationWidget(price, productWeight),
 
-            //"Product life: 300 days"
-            if (price.isNotEmpty) productListLife(productLife),
+              //"Product life: 300 days"
+              if (price.isNotEmpty) productListLife(productLife),
 
-            //"Calories: 470"
-            if (price.isNotEmpty) productListCalories(calories),
-          ],
-        ),
-      ],
+              //"Calories: 470"
+              if (price.isNotEmpty) productListCalories(calories),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

@@ -21,34 +21,40 @@ class ProductGridThirdItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        productListWhiteBg(Alignment.topCenter),
+    return SizedBox(
+      height: 200,
+      child: Stack(
+        children: [
+          productListWhiteBg(Alignment.topCenter),
 
-        productListColoredBorderBox(0, 110.0),
+          productListColoredBorderBox(0, 120.0),
 
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            productListTitleWidget(title, Color.fromARGB(255, 1, 1, 1)),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              productListTitleWidget(title, Color.fromARGB(255, 1, 1, 1)),
 
-            //"₹ 900.00 - 300 grams"
-            if (price.isNotEmpty) productListVariationWidget(price, productWeight,
-              Color.fromARGB(255, 1, 1, 1),
-            ),
+              //"₹ 900.00 - 300 grams"
+              if (price.isNotEmpty)
+                productListVariationWidget(
+                  price,
+                  productWeight,
+                  Color.fromARGB(255, 1, 1, 1),
+                ),
 
-            //"Product life: 300 days"
-            if (price.isNotEmpty) productListLife(productLife),
+              //"Product life: 300 days"
+              if (price.isNotEmpty) productListLife(productLife),
 
-            //"Calories: 470"
-            if (price.isNotEmpty) productListCalories(calories),
+              //"Calories: 470"
+              if (price.isNotEmpty) productListCalories(calories),
 
-            if (price.isEmpty) soldOutText(),
+              if (price.isEmpty) soldOutText(),
 
-            productListImage(imageUrl),
-          ],
-        ),
-      ],
+              productListImage(imageUrl),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

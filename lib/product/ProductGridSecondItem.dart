@@ -21,41 +21,44 @@ class ProductGridSecondItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        productListWhiteBg(Alignment.bottomCenter, 100),
+    return SizedBox(
+      height: 200,
+      child: Stack(
+        children: [
+          productListWhiteBg(Alignment.bottomCenter, 120),
 
-        productListColoredBorderBox(110, 20),
+          productListColoredBorderBox(110, 20),
 
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            productListImage(imageUrl),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              productListImage(imageUrl),
 
-            productListTitleWidget(title, Colors.white, 0.0),
+              productListTitleWidget(title, Colors.white, 0.0),
 
-            SizedBox(height: 10),
+              SizedBox(height: 10),
 
-            //"₹ 900.00 - 300 grams"
-            if (price.isNotEmpty)
-              productListVariationWidget(
-                price,
-                productWeight,
-                Color.fromARGB(255, 1, 1, 1),
-              ),
+              //"₹ 900.00 - 300 grams"
+              if (price.isNotEmpty)
+                productListVariationWidget(
+                  price,
+                  productWeight,
+                  Color.fromARGB(255, 1, 1, 1),
+                ),
 
-            //"Product life: 300 days"
-            if (price.isNotEmpty)
-              productListLife(productLife, Color.fromARGB(255, 139, 139, 139)),
+              //"Product life: 300 days"
+              if (price.isNotEmpty)
+                productListLife(productLife, Color.fromARGB(255, 139, 139, 139)),
 
-            //"Calories: 470"
-            if (price.isNotEmpty)
-              productListCalories(calories, Color.fromARGB(255, 139, 139, 139)),
+              //"Calories: 470"
+              if (price.isNotEmpty)
+                productListCalories(calories, Color.fromARGB(255, 139, 139, 139)),
 
-            if (price.isEmpty) soldOutText(),
-          ],
-        ),
-      ],
+              if (price.isEmpty) soldOutText(),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
