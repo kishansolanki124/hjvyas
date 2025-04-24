@@ -18,10 +18,7 @@ class Combowidget extends StatefulWidget {
 
   final void Function(bool) updateBottomNavBarVisibility; // Callback function
 
-  final List<Map<String, String>> gridItems;
-
   Combowidget({super.key,
-    required this.gridItems,
     required this.updateBottomNavBarVisibility,
   });
 
@@ -115,7 +112,7 @@ class _CombowidgetState extends State<Combowidget> {
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2, // 2 columns
                                 childAspectRatio:
-                                    (1 / 1.8), // Adjust item aspect ratio
+                                    (1 / 1.9), // Adjust item aspect ratio
                               ),
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
@@ -151,125 +148,6 @@ class _CombowidgetState extends State<Combowidget> {
       ),
     );
   }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     body: Container(
-  //       decoration: BoxDecoration(
-  //         image: DecorationImage(
-  //           image: AssetImage("images/bg.jpg"),
-  //           fit: BoxFit.cover,
-  //         ),
-  //       ),
-  //       child: SingleChildScrollView(
-  //         controller: _scrollController, // Attach the scroll controller
-  //         child: Column(
-  //           children: <Widget>[
-  //             Padding(
-  //               padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-  //               child: Row(
-  //                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //                 children: [
-  //                   // App Logo
-  //                   // App Name
-  //                   Expanded(
-  //                     child: Text(
-  //                       textAlign: TextAlign.center,
-  //                       "Combo",
-  //                       style: TextStyle(
-  //                         color: Colors.white,
-  //                         fontSize: 30,
-  //                         fontFamily: "Archistico",
-  //                       ),
-  //                     ),
-  //                   ),
-  //
-  //                   Expanded(
-  //                     child: Padding(
-  //                       padding: const EdgeInsets.all(16.0),
-  //                       child: Image.asset(
-  //                         "images/logo.png",
-  //                         height: 80, // Adjust logo height as needed
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 ],
-  //               ),
-  //             ),
-  //
-  //             // GridView
-  //             GridView.builder(
-  //               shrinkWrap: true,
-  //               physics: NeverScrollableScrollPhysics(),
-  //               // Disable GridView scrolling
-  //               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-  //                 crossAxisCount: 2,
-  //                 childAspectRatio: (1 / 1.9),
-  //               ),
-  //               itemCount: widget.gridItems.length,
-  //               itemBuilder: (context, index) {
-  //                 Widget lloadWidget;
-  //                 if (index % 4 == 0) {
-  //                   lloadWidget = ComboFirstItem(
-  //                     imageUrl: widget.gridItems[index]['imageUrl']!,
-  //                     title: widget.gridItems[index]['title']!,
-  //                     price: widget.gridItems[index]['price']!,
-  //                     productLife: widget.gridItems[index]['productLife']!,
-  //                     calories: widget.gridItems[index]['calories']!,
-  //                   );
-  //                 } else if (index % 4 == 1) {
-  //                   lloadWidget = ComboSecondItem(
-  //                     imageUrl: widget.gridItems[index]['imageUrl']!,
-  //                     title: widget.gridItems[index]['title']!,
-  //                     price: widget.gridItems[index]['price']!,
-  //                     productLife: widget.gridItems[index]['productLife']!,
-  //                     calories: widget.gridItems[index]['calories']!,
-  //                   );
-  //                 } else if (index % 4 == 2) {
-  //                   lloadWidget = ComboThirdItem(
-  //                     imageUrl: widget.gridItems[index]['imageUrl']!,
-  //                     title: widget.gridItems[index]['title']!,
-  //                     price: widget.gridItems[index]['price']!,
-  //                     productLife: widget.gridItems[index]['productLife']!,
-  //                     calories: widget.gridItems[index]['calories']!,
-  //                   );
-  //                 } else {
-  //                   lloadWidget = ComboFourthItem(
-  //                     imageUrl: widget.gridItems[index]['imageUrl']!,
-  //                     title: widget.gridItems[index]['title']!,
-  //                     price: widget.gridItems[index]['price']!,
-  //                     productLife: widget.gridItems[index]['productLife']!,
-  //                     calories: widget.gridItems[index]['calories']!,
-  //                   );
-  //                 }
-  //
-  //                 return GestureDetector(
-  //                   onTap: () {
-  //                     Navigator.push(
-  //                       context,
-  //                       MaterialPageRoute(
-  //                         builder:
-  //                             (context) => //ProductDetail(item: item),
-  //                         ProductDetail(
-  //                           parentPrice:
-  //                           widget.gridItems[index]['price'] != null
-  //                               ? widget.gridItems[index]['price']!
-  //                               : "",
-  //                         ),
-  //                       ),
-  //                     );
-  //                   },
-  //                   child: lloadWidget,
-  //                 );
-  //               },
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
 }
 
 Widget productListTopView() {
@@ -278,8 +156,7 @@ Widget productListTopView() {
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        // App Logo
-        // App Name
+        //combo top text
         Expanded(
           child: Text(
             textAlign: TextAlign.center,
@@ -292,6 +169,7 @@ Widget productListTopView() {
           ),
         ),
 
+        // App Logo
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
