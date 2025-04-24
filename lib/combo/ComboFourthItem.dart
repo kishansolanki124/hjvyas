@@ -5,15 +5,17 @@ class ComboFourthItem extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String price;
-  final String productLife;
-  final String calories;
+  final String comboWeight;
+  final String comboSoldout;
+  final String comboSpecification;
 
   ComboFourthItem({
     required this.imageUrl,
     required this.title,
     required this.price,
-    required this.productLife,
-    required this.calories,
+    required this.comboWeight,
+    required this.comboSoldout,
+    required this.comboSpecification,
   });
 
   @override
@@ -34,13 +36,11 @@ class ComboFourthItem extends StatelessWidget {
             if (price.isEmpty) soldOutText(),
 
             //"₹ 900.00 - 300 grams"
-            if (price.isNotEmpty) productListVariationWidget(price, "productWeight"),
+            if (price.isNotEmpty) productListVariationWidget(price, comboWeight),
 
-            //"Product life: 300 days"
-            if (price.isNotEmpty) productListLife(productLife),
 
             //"Calories: 470"
-            if (price.isNotEmpty) productListCalories(calories),
+            if (price.isNotEmpty) productComboSpecification(comboSpecification),
           ],
         ),
       ],

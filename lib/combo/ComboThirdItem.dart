@@ -5,15 +5,17 @@ class ComboThirdItem extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String price;
-  final String productLife;
-  final String calories;
+  final String comboWeight;
+  final String comboSoldout;
+  final String comboSpecification;
 
   ComboThirdItem({
     required this.imageUrl,
     required this.title,
     required this.price,
-    required this.productLife,
-    required this.calories,
+    required this.comboWeight,
+    required this.comboSoldout,
+    required this.comboSpecification,
   });
 
   @override
@@ -31,13 +33,11 @@ class ComboThirdItem extends StatelessWidget {
 
             //"₹ 900.00 - 300 grams"
             if (price.isNotEmpty)
-              productListVariationWidget(price, "",Color.fromARGB(255, 1, 1, 1)),
+              productListVariationWidget(price, comboWeight,Color.fromARGB(255, 1, 1, 1)),
 
-            //"Product life: 300 days"
-            if (price.isNotEmpty) productListLife(productLife),
 
             //"Calories: 470"
-            if (price.isNotEmpty) productListCalories(calories),
+            if (price.isNotEmpty) productComboSpecification(comboSpecification),
 
             if (price.isEmpty) soldOutText(),
 

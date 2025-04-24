@@ -18,9 +18,7 @@ class Combowidget extends StatefulWidget {
 
   final void Function(bool) updateBottomNavBarVisibility; // Callback function
 
-  Combowidget({super.key,
-    required this.updateBottomNavBarVisibility,
-  });
+  Combowidget({super.key, required this.updateBottomNavBarVisibility});
 
   @override
   State<Combowidget> createState() => _CombowidgetState();
@@ -112,7 +110,7 @@ class _CombowidgetState extends State<Combowidget> {
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2, // 2 columns
                                 childAspectRatio:
-                                    (1 / 1.9), // Adjust item aspect ratio
+                                    (1 / 1.8), // Adjust item aspect ratio
                               ),
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
@@ -192,32 +190,36 @@ Widget comboListItem(ComboListItem item, int index, navigateToDetails) {
       imageUrl: item.comboImage,
       title: item.comboName,
       price: item.comboPrice,
-      productLife: item.comboWeight,
-      calories: item.comboSpecification,
+      comboWeight: item.comboWeight,
+      comboSoldout: item.comboSoldout,
+      comboSpecification: item.comboSpecification,
     );
   } else if (index % 4 == 1) {
     lloadWidget = ComboSecondItem(
       imageUrl: item.comboImage,
       title: item.comboName,
       price: item.comboPrice,
-      productLife: item.comboWeight,
-      calories: item.comboSpecification,
+      comboWeight: item.comboWeight,
+      comboSoldout: item.comboSoldout,
+      comboSpecification: item.comboSpecification,
     );
   } else if (index % 4 == 2) {
     lloadWidget = ComboThirdItem(
       imageUrl: item.comboImage,
       title: item.comboName,
       price: item.comboPrice,
-      productLife: item.comboWeight,
-      calories: item.comboSpecification,
+      comboWeight: item.comboWeight,
+      comboSoldout: item.comboSoldout,
+      comboSpecification: item.comboSpecification,
     );
   } else {
     lloadWidget = ComboFourthItem(
       imageUrl: item.comboImage,
       title: item.comboName,
       price: item.comboPrice,
-      productLife: item.comboWeight,
-      calories: item.comboSpecification,
+      comboWeight: item.comboWeight,
+      comboSoldout: item.comboSoldout,
+      comboSpecification: item.comboSpecification,
     );
   }
 

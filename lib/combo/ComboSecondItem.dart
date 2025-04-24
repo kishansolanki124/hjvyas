@@ -6,24 +6,26 @@ class ComboSecondItem extends StatelessWidget {
   final String imageUrl;
   final String title;
   final String price;
-  final String productLife;
-  final String calories;
+  final String comboWeight;
+  final String comboSoldout;
+  final String comboSpecification;
 
   ComboSecondItem({
     required this.imageUrl,
     required this.title,
     required this.price,
-    required this.productLife,
-    required this.calories,
+    required this.comboWeight,
+    required this.comboSoldout,
+    required this.comboSpecification,
   });
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        productListWhiteBg(Alignment.bottomCenter),
+        productListWhiteBg(Alignment.bottomCenter, 100),
 
-        productListColoredBorderBox(110, 0),
+        productListColoredBorderBox(110, 20),
 
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -34,19 +36,22 @@ class ComboSecondItem extends StatelessWidget {
 
             productListTitleWidget(title),
 
-            SizedBox(height: 10),
+            SizedBox(height: 5),
 
             //"₹ 900.00 - 300 grams"
             if (price.isNotEmpty)
-              productListVariationWidget(price, "",Color.fromARGB(255, 1, 1, 1)),
-
-            //"Product life: 300 days"
-            if (price.isNotEmpty)
-              productListLife(productLife, Color.fromARGB(255, 139, 139, 139)),
+              productListVariationWidget(
+                price,
+                comboWeight,
+                Color.fromARGB(255, 1, 1, 1),
+              ),
 
             //"Calories: 470"
             if (price.isNotEmpty)
-              productListCalories(calories, Color.fromARGB(255, 139, 139, 139)),
+              productComboSpecification(
+                comboSpecification,
+                Color.fromARGB(255, 139, 139, 139),
+              ),
 
             if (price.isEmpty) soldOutText(),
           ],

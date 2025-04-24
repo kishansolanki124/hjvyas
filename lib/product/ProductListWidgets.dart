@@ -68,6 +68,18 @@ Widget productListCalories(String calories, [Color? color]) {
   );
 }
 
+Widget productComboSpecification(String calories, [Color? color]) {
+  color ??= Color.fromARGB(255, 123, 138, 195);
+
+  return Padding(
+    padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 10),
+    child: Text(
+        calories,
+      style: TextStyle(color: color, fontFamily: "Montserrat", fontSize: 11),
+    ),
+  );
+}
+
 Widget productListImage(String url, [Color? color]) {
   //color ??= Color.fromARGB(255, 123, 138, 195);
   color ??= Colors.transparent;
