@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hjvyas/api/models/ProductListResponse.dart';
@@ -95,13 +96,70 @@ class _ProductListGridViewState extends State<ProductListGridView> {
                             ),
                         delegate: SliverChildBuilderDelegate(
                           (context, index) {
-                            return productListItem(
-                              widget.paginationController.items[index],
-                              index,
-                              _navigateToDetails,
-                            );
+                            final isOddCount =
+                                widget.paginationController.items.length % 2 !=
+                                0;
+                            if (isOddCount &&
+                                index ==
+                                    widget.paginationController.items.length &&
+                                widget.paginationController.items.length ==
+                                    widget.paginationController.totalItems) {
+                              if (kDebugMode) {
+                                print(
+                                  'isOddCount $isOddCount and length is'
+                                  ' ${widget.paginationController.items.length}',
+                                );
+                              }
+
+                              if ((widget.paginationController.items.length +
+                                          1) %
+                                      4 ==
+                                  0) {
+                                return Stack(
+                                  children: [
+                                    SizedBox(
+                                      height: 110,
+                                      child: Container(color: Colors.white),
+                                    ),
+                                  ],
+                                );
+                              } else {
+                                return SizedBox(
+                                  height: 200,
+                                  child: Align(
+                                    alignment: Alignment.bottomCenter,
+                                    child: Stack(
+                                      children: [
+                                        SizedBox(
+                                          height: 120,
+                                          child: Container(color: Colors.white),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }
+                            }
+
+                            // Return normal items
+                            if (index <
+                                widget.paginationController.items.length) {
+                              return productListItem(
+                                widget.paginationController.items[index],
+                                index,
+                                _navigateToDetails,
+                              );
+                            }
+
+                            return null;
                           },
-                          childCount: widget.paginationController.items.length,
+                          childCount:
+                              widget.paginationController.items.length +
+                              (widget.paginationController.items.length % 2) +
+                              (widget.paginationController.items.length ==
+                                      widget.paginationController.totalItems
+                                  ? 1
+                                  : 0),
                         ),
                       ),
                       SliverToBoxAdapter(
