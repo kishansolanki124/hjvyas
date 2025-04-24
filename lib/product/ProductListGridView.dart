@@ -113,7 +113,8 @@ class _ProductListGridViewState extends State<ProductListGridView> {
                                     child: CircularProgressIndicator(),
                                   ),
                                 )
-                                : SizedBox.shrink(),
+                                //: SizedBox.shrink(),
+                                : SizedBox(height: 100,),
                       ),
                     ],
                   ),
