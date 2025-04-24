@@ -114,7 +114,7 @@ class _ProductListGridViewState extends State<ProductListGridView> {
                                   ),
                                 )
                                 //: SizedBox.shrink(),
-                                : SizedBox(height: 100,),
+                                : SizedBox(height: 100),
                       ),
                     ],
                   ),
