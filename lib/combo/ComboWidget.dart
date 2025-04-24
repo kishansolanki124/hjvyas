@@ -133,7 +133,8 @@ class _CombowidgetState extends State<Combowidget> {
                                       child: CircularProgressIndicator(),
                                     ),
                                   )
-                                  : SizedBox.shrink(),
+                                  //: SizedBox.shrink(),
+                                  : SizedBox(height: 100),
                         ),
                       ],
                     ),
