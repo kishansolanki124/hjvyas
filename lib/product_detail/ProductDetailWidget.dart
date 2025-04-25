@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hjvyas/product_detail/ProductDetail.dart';
 
+import '../api/models/ProductDetailResponse.dart';
 import 'NetworkImageWithLoading.dart';
 
 Widget backButton(Function() _onBackPressed) {
@@ -31,9 +32,15 @@ Widget backButton(Function() _onBackPressed) {
   );
 }
 
-Widget productDetailViewpager(FoodProductDetailsPage widget, onPageChange) {
+Widget productDetailViewpager(
+  List<ProductGalleryListItem> galleryList,
+  onPageChange,
+) {
   return CarouselSlider(
-    items: widget.imageUrls.map((url) => networkImageWithLoader(url)).toList(),
+    items:
+        galleryList
+            .map((item) => networkImageWithLoader(item.upProImg))
+            .toList(),
     options: CarouselOptions(
       height: 350,
       viewportFraction: 1,
@@ -52,7 +59,7 @@ Widget productDetailViewpager(FoodProductDetailsPage widget, onPageChange) {
 }
 
 Widget productDetailCorosoulDots(
-  FoodProductDetailsPage widget,
+  List<ProductGalleryListItem> galleryList,
   int currentImageIndex,
 ) {
   return Padding(
@@ -60,7 +67,7 @@ Widget productDetailCorosoulDots(
     child: Row(
       mainAxisAlignment: MainAxisAlignment.start,
       children:
-          widget.imageUrls.asMap().entries.map((entry) {
+          galleryList.asMap().entries.map((entry) {
             return Container(
               width: currentImageIndex == entry.key ? 10.0 : 8.0,
               height: currentImageIndex == entry.key ? 10.0 : 8.0,
@@ -78,7 +85,7 @@ Widget productDetailCorosoulDots(
   );
 }
 
-Widget productDetailNameAndPrice(FoodProductDetailsPage widget) {
+Widget productDetailNameAndPrice(String name, String price) {
   return Column(
     children: [
       SizedBox(height: 50),
@@ -89,7 +96,7 @@ Widget productDetailNameAndPrice(FoodProductDetailsPage widget) {
         child: Padding(
           padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
           child: Text(
-            widget.productName,
+            name,
             style: TextStyle(
               backgroundColor: Color.fromARGB(255, 31, 47, 80),
               fontSize: 16,
@@ -105,10 +112,9 @@ Widget productDetailNameAndPrice(FoodProductDetailsPage widget) {
       SizedBox(height: 8),
 
       // 3. Product Price
-      if (widget.productPrice.isNotEmpty)
+      if (price.isNotEmpty)
         Text(
-          //widget.productPrice,
-          "₹ 3000.00 (1 KG)",
+          price,
           style: TextStyle(
             fontSize: 16,
             fontFamily: "Montserrat",
@@ -117,8 +123,8 @@ Widget productDetailNameAndPrice(FoodProductDetailsPage widget) {
           ),
         ),
 
-      // out of stock
-      if (widget.productPrice.isEmpty) outOfStockDetail(),
+      //todo: out of stock
+      if (price.isEmpty) outOfStockDetail(),
 
       SizedBox(height: 16),
     ],
@@ -126,7 +132,7 @@ Widget productDetailNameAndPrice(FoodProductDetailsPage widget) {
 }
 
 Widget productDetailDropDown(
-  FoodProductDetailsPage widget,
+  List<ProductPackingListItem> productPackingList,
   _selectedVariant,
   onChangedDropDownValue,
 ) {
@@ -139,7 +145,7 @@ Widget productDetailDropDown(
     ),
     padding: EdgeInsets.symmetric(horizontal: 6.0),
     // Add some padding inside the border
-    child: DropdownButton<String>(
+    child: DropdownButton<ProductPackingListItem>(
       icon: Image.asset(
         'icons/dropdown_icon.png', // Replace with your icon path
         width: 12, // Adjust width as needed
@@ -148,7 +154,7 @@ Widget productDetailDropDown(
       // Custom icon
       value: _selectedVariant,
       hint: Text(
-        'Select Color',
+        'Select Variant',
         style: TextStyle(
           backgroundColor: Color.fromARGB(255, 31, 47, 80),
           fontSize: 12,
@@ -161,11 +167,12 @@ Widget productDetailDropDown(
       dropdownColor: Color.fromARGB(255, 31, 47, 80),
       // This line hides the bottom line
       items:
-          widget.availableColors.map((String variation) {
-            return DropdownMenuItem<String>(
+          productPackingList.map((ProductPackingListItem variation) {
+            return DropdownMenuItem<ProductPackingListItem>(
               value: variation,
               child: Text(
-                variation,
+                "${variation.productWeight} ${variation.productWeightType} "
+                "(${variation.productPackingPrice}) - ${variation.productPieces} Pieces",
                 style: TextStyle(
                   backgroundColor: Color.fromARGB(255, 31, 47, 80),
                   fontSize: 12,
@@ -176,7 +183,7 @@ Widget productDetailDropDown(
               ),
             );
           }).toList(),
-      onChanged: (String? newValue) {
+      onChanged: (ProductPackingListItem? newValue) {
         // setState(() {
         //   _selectedVariant = newValue;
         // });
@@ -215,14 +222,14 @@ Widget productDetailItemCounter(
         SizedBox(
           width: 20,
           child: Center(
-          child: Text(
-            '$_quantity',
-            style: TextStyle(
-              fontSize: 12,
-              color: Colors.white,
-              fontFamily: "Montserrat",
+            child: Text(
+              '$_quantity',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.white,
+                fontFamily: "Montserrat",
+              ),
             ),
-          ),
           ),
         ),
         Padding(
@@ -239,7 +246,9 @@ Widget productDetailItemCounter(
   );
 }
 
-Widget productDetailIngredients(FoodProductDetailsPage widget) {
+Widget productDetailIngredients(
+  List<ProductIngredientsListItem> productIngredients,
+) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -261,7 +270,7 @@ Widget productDetailIngredients(FoodProductDetailsPage widget) {
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          itemCount: widget.ingredientImageUrls.length,
+          itemCount: productIngredients.length,
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.only(right: 8.0),
@@ -275,7 +284,12 @@ Widget productDetailIngredients(FoodProductDetailsPage widget) {
                         color: Color.fromARGB(255, 123, 138, 195),
                       ),
                     ),
-                    child: NetworkImageWithLoading(imageUrl: widget.ingredientImageUrls[index]),
+                    child: NetworkImageWithLoading(
+                      imageUrl:
+                          productIngredients
+                              .elementAt(index)
+                              .productIngredientsIcon,
+                    ),
                   ),
 
                   Container(
@@ -283,7 +297,9 @@ Widget productDetailIngredients(FoodProductDetailsPage widget) {
                     child: Center(
                       child: Text(
                         textAlign: TextAlign.center,
-                        "Black Currant",
+                        productIngredients
+                            .elementAt(index)
+                            .productIngredientsName,
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 12,
@@ -303,7 +319,7 @@ Widget productDetailIngredients(FoodProductDetailsPage widget) {
   );
 }
 
-Widget productDetailYouMayLike(FoodProductDetailsPage widget) {
+Widget productDetailYouMayLike(List<ProductMoreListItem> moreItemList) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -325,10 +341,10 @@ Widget productDetailYouMayLike(FoodProductDetailsPage widget) {
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          itemCount: widget.youMayLikeProducts.length,
+          itemCount: moreItemList.length,
           itemBuilder: (context, index) {
-            final product = widget.youMayLikeProducts[index];
-            Widget youMayLikeWidget =  Padding(
+            final product = moreItemList.elementAt(index);
+            Widget youMayLikeWidget = Padding(
               padding: const EdgeInsets.only(right: 12.0),
               child: Container(
                 width: 120,
@@ -337,14 +353,14 @@ Widget productDetailYouMayLike(FoodProductDetailsPage widget) {
                 ),
                 child: Column(
                   children: [
-                    if (product['imageUrl'] != null)
+                    if (product.productImage != null)
                       SizedBox(
                         height: 110,
                         width: 110,
                         child: Padding(
                           padding: EdgeInsets.only(top: 4),
                           child: Image.network(
-                            product['imageUrl']!,
+                            product.productImage,
                             height: 110,
                             width: 110,
                             fit: BoxFit.cover,
@@ -363,7 +379,7 @@ Widget productDetailYouMayLike(FoodProductDetailsPage widget) {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 2),
                       child: Text(
-                        "${product['name']}" ?? '',
+                        product.productName ?? '',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
@@ -386,12 +402,12 @@ Widget productDetailYouMayLike(FoodProductDetailsPage widget) {
                   MaterialPageRoute(
                     builder:
                         (context) => //ProductDetail(item: item),
-                    ProductDetail(
-                      parentPrice:
-                      product['imageUrl'] != null
-                          ? product['imageUrl']!
-                          : "",
-                    ),
+                            ProductDetail(
+                          parentPrice:
+                              product.productImage != null
+                                  ? product.productImage!
+                                  : "",
+                        ),
                   ),
                 );
               },

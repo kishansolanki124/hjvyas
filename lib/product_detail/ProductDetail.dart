@@ -1,7 +1,13 @@
 import 'package:autoscale_tabbarview/autoscale_tabbarview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:hjvyas/product_detail/ImageWithProgress.dart';
+import 'package:hjvyas/product_detail/ProductDetailController.dart';
 
+import '../api/models/ProductDetailResponse.dart';
+import '../api/services/HJVyasApiService.dart';
+import '../injection_container.dart';
 import '../product/ProductListWidgets.dart';
 import 'FullWidthButton.dart';
 import 'ProductDetailWidget.dart';
@@ -9,9 +15,7 @@ import 'ProductDetailWidget.dart';
 class ProductDetail extends StatefulWidget {
   final String parentPrice;
 
-  ProductDetail({
-    required this.parentPrice
-  });
+  ProductDetail({required this.parentPrice});
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
@@ -74,6 +78,10 @@ class _ProductDetailState extends State<ProductDetail> {
 }
 
 class FoodProductDetailsPage extends StatefulWidget {
+  final ProductDetailController categoryController = ProductDetailController(
+    getIt<HJVyasApiService>(),
+  );
+
   final String productName;
   final List<String> imageUrls;
   final String productPrice;
@@ -102,11 +110,12 @@ class FoodProductDetailsPage extends StatefulWidget {
 
 class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
     with TickerProviderStateMixin {
-
   bool _showBottomNavBar = true; //BottomNavigationBar visibility
 
   int _currentImageIndex = 0;
-  String? _selectedVariant;
+
+  //String? _selectedVariant;
+  ProductPackingListItem? _selectedVariant;
   int _quantity = 1;
   late TabController _tabController;
   int activeTabIndex = 0;
@@ -114,13 +123,16 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
   @override
   void initState() {
     super.initState();
+    //todo change this product id
+    widget.categoryController.getProductDetail("2"); // Explicit call
+
     _tabController = TabController(
       length: 2, //initialIndex : 0,
       vsync: this,
     );
-    if (widget.availableColors.isNotEmpty) {
-      _selectedVariant = widget.availableColors.first;
-    }
+    // if (widget.availableColors.isNotEmpty) {
+    //   _selectedVariant = widget.availableColors.first;
+    // }
 
     _tabController.addListener(() {
       setState(() {
@@ -150,7 +162,6 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
   final ScrollController _scrollController = ScrollController();
 
-
   void _onScroll() {
     // Check the scroll direction
     if (_scrollController.position.userScrollDirection ==
@@ -175,7 +186,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
     });
   }
 
-  void _onChangedDropDownValue(String newValue) {
+  void _onChangedDropDownValue(ProductPackingListItem newValue) {
     setState(() {
       _selectedVariant = newValue;
     });
@@ -209,223 +220,277 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      //appBar: AppBar(title: Text(widget.productName)),
-      body: Container(
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/bg.jpg"),
-            fit: BoxFit.cover,
+    return Obx(() {
+      if (widget.categoryController.loading.value) {
+        //todo change this
+        return Center(child: CircularProgressIndicator());
+      }
+
+      if (widget.categoryController.error.value.isNotEmpty) {
+        //todo change this
+        return Center(child: Text('Error: ${widget.categoryController.error}'));
+      }
+
+      final productDetailResponse =
+          widget.categoryController.productDetailResponse.value;
+      //_selectedVariantInquiry ??= cateogories.inquiryType.split(', ').first;
+      return Scaffold(
+        //appBar: AppBar(title: Text(widget.productName)),
+        body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("images/bg.jpg"),
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Stack(
-            children: [
-              SingleChildScrollView(
-                controller: _scrollController, // Attach the scroll controller
-                child: Stack(
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        // 1. Image Carousel with Dots
-                        productDetailViewpager(widget, _onPageChange),
-
-                        // 2. Image Carousel Dots and volume
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            productDetailCorosoulDots(
-                              widget,
-                              _currentImageIndex,
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                20,
-                                10,
-                                30,
-                                0,
-                              ),
-                              child: Image.asset(
-                                height: 30,
-                                width: 30,
-                                "images/audio_icon.png",
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-
-                    //square border app color
-                    IgnorePointer(
-                      child: Container(
-                      height: 480,
-                      margin: EdgeInsets.only(
-                        left: 16.0,
-                        right: 16.0,
-                        bottom: 0,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          left: BorderSide(
-                            color: Color.fromARGB(255, 123, 138, 195),
-                            width: 2.0,
+          child: SafeArea(
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  controller: _scrollController, // Attach the scroll controller
+                  child: Stack(
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          // 1. Image Carousel with Dots
+                          productDetailViewpager(
+                            productDetailResponse!.productGalleryList,
+                            _onPageChange,
                           ),
-                          bottom: BorderSide(
-                            color: Color.fromARGB(255, 123, 138, 195),
-                            width: 2.0,
-                          ),
-                          right: BorderSide(
-                            color: Color.fromARGB(255, 123, 138, 195),
-                            width: 2.0,
-                          ),
-                        ),
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
-                      ),
-                    )),
 
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: 400,
-                        ),
-
-                        //3. name and price
-                        // 4. Dropdown of variant and Counter (Horizontal)
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-
-                              //3. name and price
-                              productDetailNameAndPrice(widget),
-
-                              // 4. Dropdown of variant and Counter (Horizontal)
-                              if(widget.productPrice.isNotEmpty)
-                                Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  if (widget.availableColors.isNotEmpty)
-                                    productDetailDropDown(
-                                      widget,
-                                      _selectedVariant,
-                                      _onChangedDropDownValue,
-                                    ),
-
-                                  productDetailItemCounter(
-                                    widget,
-                                    _decrementQuantity,
-                                    _incrementQuantity,
-                                    _quantity,
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        // 5. Horizontal List of Square Images of Product Ingredients
-                        if (widget.ingredientImageUrls.isNotEmpty)
-                          productDetailIngredients(widget),
-
-                        //description
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                          child: Text(
-                            'Spices & Condiments Sugar, Iodized Salt, Citric Acid, Asafoetida & Bayleaf.',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.white,
-                              fontFamily: "Montserrat",
-                            ),
-                          ),
-                        ),
-
-                        //Product Terms
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Terms :',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              SizedBox(height: 8),
-                              Text(
-                                widget.productDescription,
-                                textAlign: TextAlign.justify,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                  fontFamily: "Montserrat",
-                                ),
-                              ),
-                              SizedBox(height: 24),
-                            ],
-                          ),
-                        ),
-
-                        // 7. Tab Layout with Two Tabs
-                        productDetailTabs(_tabController, activeTabIndex),
-
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: AutoScaleTabBarView(
-                            controller: _tabController,
+                          // 2. Image Carousel Dots and volume
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              // Reviews Tab
-                              Text(
-                                widget.reviews,
-                                textAlign: TextAlign.justify,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                  fontFamily: "Montserrat",
+                              productDetailCorosoulDots(
+                                productDetailResponse.productGalleryList,
+                                _currentImageIndex,
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                  20,
+                                  10,
+                                  30,
+                                  0,
                                 ),
-                              ), // Nutrition Info Tab
-                              Text(
-                                widget.nutritionInfo,
-                                textAlign: TextAlign.justify,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                  fontFamily: "Montserrat",
+                                child: Image.asset(
+                                  height: 30,
+                                  width: 30,
+                                  "images/audio_icon.png",
                                 ),
                               ),
                             ],
                           ),
+                        ],
+                      ),
+
+                      //square border app color
+                      IgnorePointer(
+                        child: Container(
+                          height: 480,
+                          margin: EdgeInsets.only(
+                            left: 16.0,
+                            right: 16.0,
+                            bottom: 0,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              left: BorderSide(
+                                color: Color.fromARGB(255, 123, 138, 195),
+                                width: 2.0,
+                              ),
+                              bottom: BorderSide(
+                                color: Color.fromARGB(255, 123, 138, 195),
+                                width: 2.0,
+                              ),
+                              right: BorderSide(
+                                color: Color.fromARGB(255, 123, 138, 195),
+                                width: 2.0,
+                              ),
+                            ),
+                            borderRadius: BorderRadius.all(Radius.circular(0)),
+                          ),
                         ),
+                      ),
 
-                        SizedBox(height: 18),
+                      Column(
+                        children: [
+                          SizedBox(height: 400),
 
-                        // 8. You May Also Like Product Listing Horizontally
-                        if (widget.youMayLikeProducts.isNotEmpty)
-                          productDetailYouMayLike(widget),
+                          //3. name and price
+                          // 4. Dropdown of variant and Counter (Horizontal)
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                //3. name and price
+                                productDetailNameAndPrice(
+                                  productDetailResponse.productDetail
+                                      .elementAt(0)
+                                      .productName,
+                                  productDetailResponse.productDetail
+                                      .elementAt(0)
+                                      .productPrice,
+                                ),
 
-                        SizedBox(height: 100),
-                      ],
-                    ),
+                                // 4. Dropdown of variant and Counter (Horizontal)
+                                if (widget.productPrice.isNotEmpty)
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      if (widget.availableColors.isNotEmpty)
+                                        productDetailDropDown(
+                                          productDetailResponse
+                                              .productPackingList,
+                                          _selectedVariant,
+                                          _onChangedDropDownValue,
+                                        ),
 
-                    productDetailCenterImageRound(),
-                  ],
+                                      productDetailItemCounter(
+                                        widget,
+                                        _decrementQuantity,
+                                        _incrementQuantity,
+                                        _quantity,
+                                      ),
+                                    ],
+                                  ),
+                              ],
+                            ),
+                          ),
+
+                          // 5. Horizontal List of Square Images of Product Ingredients
+                          if (widget.ingredientImageUrls.isNotEmpty)
+                            productDetailIngredients(
+                              productDetailResponse.productIngredientsList,
+                            ),
+
+                          // //description
+                          // Padding(
+                          //   padding: const EdgeInsets.symmetric(
+                          //     horizontal: 16.0,
+                          //   ),
+                          //   child: Text(
+                          //     productDetailResponse.productDetail.elementAt(0).detail,
+                          //     style: TextStyle(
+                          //       fontSize: 14,
+                          //       color: Colors.white,
+                          //       fontFamily: "Montserrat",
+                          //     ),
+                          //   ),
+                          // ),
+
+                          //Product Terms
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Terms :',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontFamily: "Montserrat",
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  productDetailResponse.productDetail
+                                      .elementAt(0)
+                                      .productTerms,
+                                  textAlign: TextAlign.justify,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontFamily: "Montserrat",
+                                  ),
+                                ),
+                                SizedBox(height: 24),
+                              ],
+                            ),
+                          ),
+
+                          // 7. Tab Layout with Two Tabs
+                          productDetailTabs(_tabController, activeTabIndex),
+
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: AutoScaleTabBarView(
+                              controller: _tabController,
+                              children: [
+                                // Description Tab (tab 1)
+                                Text(
+                                  productDetailResponse.productDetail
+                                      .elementAt(0)
+                                      .productDescription,
+                                  textAlign: TextAlign.justify,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.white,
+                                    fontFamily: "Montserrat",
+                                  ),
+                                ),
+                                // Nutrition Info Tab
+
+                                //todo: change this image size and make it zoomable
+                                SizedBox(
+                                  height: 200,
+                                  child: ImageWithProgress(
+                                    imageURL:
+                                        productDetailResponse.productDetail
+                                            .elementAt(0)
+                                            .productNutritionImage,
+                                  ),
+                                ),
+
+                                // Text(
+                                //   widget.nutritionInfo,
+                                //   textAlign: TextAlign.justify,
+                                //   style: TextStyle(
+                                //     fontSize: 14,
+                                //     color: Colors.white,
+                                //     fontFamily: "Montserrat",
+                                //   ),
+                                // ),
+                              ],
+                            ),
+                          ),
+
+                          SizedBox(height: 18),
+
+                          // 8. You May Also Like Product Listing Horizontally
+                          if (widget.youMayLikeProducts.isNotEmpty)
+                            productDetailYouMayLike(
+                              productDetailResponse.productMoreList,
+                            ),
+
+                          SizedBox(height: 100),
+                        ],
+                      ),
+
+                      productDetailCenterImageRound(
+                        productDetailResponse.productDetail
+                            .elementAt(0)
+                            .productImage,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              backButton(_onBackPressed),
-            ],
+                backButton(_onBackPressed),
+              ],
+            ),
           ),
         ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: _showBottomNavBar ? addToCartFullWidthButton("1800.00", _onPressed)  : null,
-    );
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButton:
+            _showBottomNavBar
+                ? addToCartFullWidthButton("1800.00", _onPressed)
+                : null,
+      );
+    });
   }
 }
