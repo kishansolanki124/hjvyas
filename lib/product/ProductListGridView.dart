@@ -115,29 +115,29 @@ class _ProductListGridViewState extends State<ProductListGridView> {
                                           1) %
                                       4 ==
                                   0) {
-                                return Stack(
-                                  children: [
-                                    SizedBox(
-                                      height: 110,
-                                      child: Container(color: Colors.white),
-                                    ),
-                                  ],
-                                );
+                                // return Stack(
+                                //   children: [
+                                //     SizedBox(
+                                //       height: 110,
+                                //       child: Container(color: Colors.white),
+                                //     ),
+                                //   ],
+                                // );
                               } else {
-                                return SizedBox(
-                                  height: 200,
-                                  child: Align(
-                                    alignment: Alignment.bottomCenter,
-                                    child: Stack(
-                                      children: [
-                                        SizedBox(
-                                          height: 120,
-                                          child: Container(color: Colors.white),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
+                                // return SizedBox(
+                                //   height: 200,
+                                //   child: Align(
+                                //     alignment: Alignment.bottomCenter,
+                                //     child: Stack(
+                                //       children: [
+                                //         SizedBox(
+                                //           height: 120,
+                                //           child: Container(color: Colors.white),
+                                //         ),
+                                //       ],
+                                //     ),
+                                //   ),
+                                // );
                               }
                             }
 

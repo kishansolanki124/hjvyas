@@ -34,15 +34,18 @@ class ProductGridThirdItem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              productListTitleWidget(title, Color.fromARGB(255, 1, 1, 1)),
+              productListTitleWidget(title,
+                  //Color.fromARGB(255, 1, 1, 1)
+                   ),
 
               //"₹ 900.00 - 300 grams"
               if (productSoldout.isEmpty)
                 productListVariationWidget(
                   price,
-                  productWeight,
-                  Color.fromARGB(255, 1, 1, 1),
-                ),
+                  productWeight),
+                  //,
+                  //Color.fromARGB(255, 1, 1, 1),),
+
 
               //"Product life: 300 days"
               if (productSoldout.isEmpty) productListLife(productLife),

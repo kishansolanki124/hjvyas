@@ -171,7 +171,8 @@ Widget productListWhiteBg(AlignmentGeometry alignment, [double? bgHeight]) {
   bgHeight ??= 110;
   return Align(
     alignment: alignment,
-    child: SizedBox(height: bgHeight, child: Container(color: Colors.white)),
+    //child: SizedBox(height: bgHeight, child: Container(color: Colors.white)),
+    child: SizedBox(height: bgHeight, child: Container(color: Colors.transparent)),
   );
 }
 

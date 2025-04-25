@@ -45,16 +45,20 @@ class ProductGridSecondItem extends StatelessWidget {
                 productListVariationWidget(
                   price,
                   productWeight,
-                  Color.fromARGB(255, 1, 1, 1),
+                  //Color.fromARGB(255, 1, 1, 1),
                 ),
 
               //"Product life: 300 days"
               if (productSoldout.isEmpty)
-                productListLife(productLife, Color.fromARGB(255, 139, 139, 139)),
+                productListLife(productLife,
+                    //Color.fromARGB(255, 139, 139, 139)
+                ),
 
               //"Calories: 470"
               if (productSoldout.isEmpty)
-                productListCalories(calories, Color.fromARGB(255, 139, 139, 139)),
+                productListCalories(calories,
+                    //Color.fromARGB(255, 139, 139, 139)
+                    ),
 
               if (productSoldout.isNotEmpty) soldOutText(),
             ],

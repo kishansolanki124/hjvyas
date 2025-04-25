@@ -9,21 +9,14 @@ Menu or Category Page:
 3. APi loading common progress
 
 Product List:
-2. design changes from suggestion and other.
-3. for odd number of total items, add last item as white bottom so that UI looks good.
 4. Product list page ma bottom nav dekhavu joiye
-5. add padding or margin at the end of the list
-6. soldout testing
 
 Combo:
 1. hide bottom nav on scroll
-2. space after end of the list
-3. UI changes to make it match mockup and feedback from the PDF file
 
 Product listing page:
 9. Test with smaller and larger devices.
 10. Give fix height to each item
-
 
 Product Details:
 8. Test with smaller and larger devices.
@@ -34,9 +27,6 @@ Static Pages:
 2. error page
 3. internet issue retry page
 4. call api only once on first load. currently on each tab its calling
-5. contact us fields validation with toast/snackbar
-6. api call for contact us
-7. success message dialog and clear entered fields
 8. imoption option next and done for fields
 
 General:
