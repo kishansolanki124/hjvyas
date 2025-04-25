@@ -82,11 +82,15 @@ class _ProductListGridViewState extends State<ProductListGridView> {
             child: Column(
               children: <Widget>[
                 // A non-scrolling widget at the top
-                productListTopView(widget.categoryListItem.categoryName),
                 // Use Expanded or Flexible to give the CustomScrollView a portion of the space
                 Expanded(
                   child: CustomScrollView(
                     slivers: [
+
+                      SliverToBoxAdapter(
+                        child: productListTopView(widget.categoryListItem.categoryName),
+                      ),
+
                       SliverGrid(
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
@@ -188,7 +192,7 @@ class _ProductListGridViewState extends State<ProductListGridView> {
 
 Widget productListTopView(String title) {
   return Padding(
-    padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+    padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [

@@ -29,11 +29,15 @@ class ComboThirdItem extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            productListTitleWidget(title, Color.fromARGB(255, 1, 1, 1)),
+            productListTitleWidget(title,
+                //Color.fromARGB(255, 1, 1, 1)
+                ),
 
             //"₹ 900.00 - 300 grams"
             if (comboSoldout.isEmpty)
-              productListVariationWidget(price, comboWeight,Color.fromARGB(255, 1, 1, 1)),
+              productListVariationWidget(price, comboWeight,
+                  //Color.fromARGB(255, 1, 1, 1)
+                  ),
 
 
             //"Calories: 470"

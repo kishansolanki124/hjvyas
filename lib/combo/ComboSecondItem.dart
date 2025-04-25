@@ -43,14 +43,14 @@ class ComboSecondItem extends StatelessWidget {
               productListVariationWidget(
                 price,
                 comboWeight,
-                Color.fromARGB(255, 1, 1, 1),
+                //Color.fromARGB(255, 1, 1, 1),
               ),
 
             //"Calories: 470"
             if (comboSoldout.isEmpty)
               productComboSpecification(
                 comboSpecification,
-                Color.fromARGB(255, 139, 139, 139),
+                //Color.fromARGB(255, 139, 139, 139),
               ),
 
             if (comboSoldout.isNotEmpty) soldOutText(),

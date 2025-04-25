@@ -99,12 +99,15 @@ class _CombowidgetState extends State<Combowidget> {
               ),
               child: Column(
                 children: <Widget>[
-                  // A non-scrolling widget at the top
-                  productListTopView(),
                   // Use Expanded or Flexible to give the CustomScrollView a portion of the space
                   Expanded(
                     child: CustomScrollView(
                       slivers: [
+
+                        SliverToBoxAdapter(
+                          child: productListTopView(),
+                        ),
+
                         SliverGrid(
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
@@ -151,7 +154,7 @@ class _CombowidgetState extends State<Combowidget> {
 
 Widget productListTopView() {
   return Padding(
-    padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+    padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
