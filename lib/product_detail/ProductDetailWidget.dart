@@ -192,7 +192,6 @@ Widget productDetailDropDown(
 }
 
 Widget productDetailItemCounter(
-  FoodProductDetailsPage widget,
   decrementQuantity,
   incrementQuantity,
   quantity,
