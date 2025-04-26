@@ -193,9 +193,9 @@ Widget productDetailDropDown(
 
 Widget productDetailItemCounter(
   FoodProductDetailsPage widget,
-  _decrementQuantity,
-  _incrementQuantity,
-  _quantity,
+  decrementQuantity,
+  incrementQuantity,
+  quantity,
 ) {
   return Container(
     height: 35,
@@ -208,20 +208,24 @@ Widget productDetailItemCounter(
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Padding(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+        //minus icon
+        SizedBox(
+          width: 40,
+          height: 40,
           child: IconButton(
             iconSize: 12,
+            padding: EdgeInsets.zero,
             color: Colors.white,
             icon: Icon(Icons.remove),
-            onPressed: _decrementQuantity,
+            onPressed: decrementQuantity,
           ),
         ),
+        //counter text
         SizedBox(
-          width: 20,
+          width: 30,
           child: Center(
             child: Text(
-              '$_quantity',
+              '$quantity',
               style: TextStyle(
                 fontSize: 12,
                 color: Colors.white,
@@ -230,13 +234,17 @@ Widget productDetailItemCounter(
             ),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+        //plus icon
+        SizedBox(
+          width: 40,
+          height: 40,
           child: IconButton(
             iconSize: 12,
+            padding: EdgeInsets.zero,
+            constraints: BoxConstraints(),
             color: Colors.white,
             icon: Icon(Icons.add),
-            onPressed: _incrementQuantity,
+            onPressed: incrementQuantity,
           ),
         ),
       ],
