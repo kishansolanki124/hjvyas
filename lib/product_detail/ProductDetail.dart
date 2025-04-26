@@ -17,6 +17,7 @@ import '../api/models/ProductDetailResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product/ProductListWidgets.dart';
+import '../utils/FloatingImageViewer.dart';
 import 'AudioFilesDialog.dart';
 import 'FullWidthButton.dart';
 import 'ProductDetailWidget.dart';
@@ -33,7 +34,7 @@ class ProductDetail extends StatefulWidget {
 class _ProductDetailState extends State<ProductDetail> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: FoodProductDetailsPage(productId: widget.productId,));
+    return Scaffold(body: FoodProductDetailsPage(productId: widget.productId));
   }
 }
 
@@ -135,10 +136,10 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
     }
 
     //setState(() {
-      selectedItemQuantity = initialQuantity;
-      floatingButtonPrice =
-          double.parse(_selectedVariant!.productPackingPrice) *
-          selectedItemQuantity;
+    selectedItemQuantity = initialQuantity;
+    floatingButtonPrice =
+        double.parse(_selectedVariant!.productPackingPrice) *
+        selectedItemQuantity;
     //});
   }
 
@@ -214,7 +215,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
   ProductPackingListItem? _selectedVariant;
   ProductDetailResponse? productDetailResponse;
-
+  ProductDetailItem? productDetailItem;
   late TabController _tabController;
   int activeTabIndex = 0;
 
@@ -224,7 +225,9 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
     // Initialize shared preferences in initState
     _initPrefs();
     _loadList();
-    widget.categoryController.getProductDetail(widget.productId); // Explicit call
+    widget.categoryController.getProductDetail(
+      widget.productId,
+    ); // Explicit call
 
     _tabController = TabController(
       length: 2, //initialIndex : 0,
@@ -258,6 +261,21 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
   }
 
   final ScrollController _scrollController = ScrollController();
+
+  void showImageViewer(BuildContext context, String imageUrl) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: "Image Viewer",
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (_, __, ___) {
+        return FloatingImageViewer(imageUrl: imageUrl, onClose: () => {});
+      },
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(opacity: animation, child: child);
+      },
+    );
+  }
 
   // Example usage:
   void showAudioFilesDialog(BuildContext context) {
@@ -392,6 +410,8 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
       productDetailResponse ??=
           widget.categoryController.productDetailResponse.value;
 
+      productDetailItem ??= productDetailResponse!.productDetail.elementAt(0);
+
       if (_selectedVariant == null) {
         _selectedVariant = productDetailResponse!.productPackingList.elementAt(
           0,
@@ -443,25 +463,33 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                 _currentImageIndex,
                               ),
                               //volume or audio icon
-                              //todo: handle visibility of this icon if no audio files available
-                              GestureDetector(
-                                onTap: () {
-                                  showAudioFilesDialog(context);
-                                },
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                    20,
-                                    10,
-                                    30,
-                                    0,
-                                  ),
-                                  child: Image.asset(
-                                    height: 30,
-                                    width: 30,
-                                    "images/audio_icon.png",
+                              if (productDetailItem!
+                                      .productAudioGujarati
+                                      .isNotEmpty ||
+                                  productDetailItem!
+                                      .productAudioHindi
+                                      .isNotEmpty ||
+                                  productDetailItem!
+                                      .productAudioEnglish
+                                      .isNotEmpty)
+                                GestureDetector(
+                                  onTap: () {
+                                    showAudioFilesDialog(context);
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                      20,
+                                      10,
+                                      30,
+                                      0,
+                                    ),
+                                    child: Image.asset(
+                                      height: 30,
+                                      width: 30,
+                                      "images/audio_icon.png",
+                                    ),
                                   ),
                                 ),
-                              ),
                             ],
                           ),
                         ],
@@ -653,14 +681,21 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                 // ),
                                 // Nutrition Info Tab
 
-                                //todo: change this image size and make it zoomable
-                                SizedBox(
-                                  height: 200,
-                                  child: ImageWithProgress(
-                                    imageURL:
-                                        productDetailResponse!.productDetail
-                                            .elementAt(0)
-                                            .productNutritionImage,
+                                GestureDetector(
+                                  onTap: () {
+                                    showImageViewer(
+                                      context,
+                                      productDetailItem!.productNutritionImage,
+                                    );
+                                  },
+                                  child: SizedBox(
+                                    height: 200,
+                                    child: ImageWithProgress(
+                                      imageURL:
+                                          productDetailResponse!.productDetail
+                                              .elementAt(0)
+                                              .productNutritionImage,
+                                    ),
                                   ),
                                 ),
 
