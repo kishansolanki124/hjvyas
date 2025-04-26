@@ -294,6 +294,61 @@ class HJVyasApiService {
     }
   }
 
+  Future<AddInquiryResponse> addNotifyMe(
+    String product_id,
+    String product_type,
+    String user_mobile,
+    String user_email,
+  ) async {
+    // First check basic connectivity
+    if (!await ConnectivityService.isConnected) {
+      throw NetworkException('No internet connection', isConnectionIssue: true);
+    }
+
+    try {
+      // URL-encoded data as a Map
+      final formData = {
+        'product_id': product_id,
+        'product_type': product_type,
+        'user_mobile': user_mobile,
+        'user_email': user_email,
+      };
+
+      if (kDebugMode) {
+        print('formData is: $formData');
+      }
+
+      final response = await _client.post(
+        '/add_notify_me',
+        data: formData,
+        options: Options(
+          // Explicitly set content-type (Dio often infers this, but be explicit)
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        ),
+      );
+      if (kDebugMode) {
+        print('response is $response');
+      }
+      return AddInquiryResponse.fromJson(jsonDecode(response.data));
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print('DioException is message ${e.message} and error is ${e.error}');
+      }
+      if (e.response != null) {
+        if (kDebugMode) {
+          print('DioException is response ${e.response}');
+          print('e.response!.statusCode ${e.response!.statusCode!}');
+        }
+        throw ApiResponseException(e.message!, e.response!.statusCode!);
+      } else {
+        if (kDebugMode) {
+          print('No internet connection');
+        }
+        throw NetworkException('No internet connection');
+      }
+    }
+  }
+
   Future<ProductListResponse> getProduct(
     String start,
     String end,

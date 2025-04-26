@@ -96,7 +96,12 @@ void showAlertWithCallback({
                 onOkPressed?.call();
                 Navigator.of(context, rootNavigator: true).pop();
               },
-              child: Text('OK'),
+              child: Text('OK',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 31, 47, 80),
+                  fontWeight: FontWeight.w600,
+                  fontFamily: "Montserrat",
+                ),),
             ),
           ],
         ),
