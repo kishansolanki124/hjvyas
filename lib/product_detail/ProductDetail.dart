@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:hjvyas/cart/CartHome.dart';
 import 'package:hjvyas/product_detail/ImageWithProgress.dart';
 import 'package:hjvyas/product_detail/ProductDetailController.dart';
 
@@ -10,6 +11,7 @@ import '../api/models/ProductDetailResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product/ProductListWidgets.dart';
+import 'AudioFilesDialog.dart';
 import 'FullWidthButton.dart';
 import 'ProductDetailWidget.dart';
 
@@ -163,6 +165,37 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
   final ScrollController _scrollController = ScrollController();
 
+  // Example usage:
+  void showAudioFilesDialog(BuildContext context,
+      ProductDetailResponse productDetailResponse) {
+    List<String> audioTitles = [];
+    List<String> audioFiles = [];
+
+    if(productDetailResponse.productDetail.elementAt(0).productAudioEnglish.isNotEmpty) {
+      audioFiles.add(productDetailResponse.productDetail.elementAt(0).productAudioEnglish);
+      audioTitles.add("English");
+    }
+
+    if(productDetailResponse.productDetail.elementAt(0).productAudioHindi.isNotEmpty) {
+      audioFiles.add(productDetailResponse.productDetail.elementAt(0).productAudioHindi);
+      audioTitles.add("Hindi");
+    }
+
+    if(productDetailResponse.productDetail.elementAt(0).productAudioGujarati.isNotEmpty) {
+      audioFiles.add(productDetailResponse.productDetail.elementAt(0).productAudioGujarati);
+      audioTitles.add("Gujarati");
+    }
+
+    showDialog(
+      context: context,
+      builder:
+          (context) => AudioFilesDialog(
+            audioFiles: audioFiles,
+            audioTitles: audioTitles,
+          ),
+    );
+  }
+
   void _onScroll() {
     // Check the scroll direction
     if (_scrollController.position.userScrollDirection ==
@@ -260,6 +293,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                           ),
 
                           // 2. Image Carousel Dots and volume
+                          //todo: volume button click audio play option
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -267,17 +301,22 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                 productDetailResponse.productGalleryList,
                                 _currentImageIndex,
                               ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                  20,
-                                  10,
-                                  30,
-                                  0,
-                                ),
-                                child: Image.asset(
-                                  height: 30,
-                                  width: 30,
-                                  "images/audio_icon.png",
+                              GestureDetector(
+                                onTap: () {
+                                  showAudioFilesDialog(context,productDetailResponse);
+                                },
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                    20,
+                                    10,
+                                    30,
+                                    0,
+                                  ),
+                                  child: Image.asset(
+                                    height: 30,
+                                    width: 30,
+                                    "images/audio_icon.png",
+                                  ),
                                 ),
                               ),
                             ],
@@ -518,31 +557,43 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                 backButton(_onBackPressed),
 
                 //cart icon with badge
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20.0,
-                    vertical: 8.0,
-                  ),
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: Badge(
-                      largeSize: 16,
-                      backgroundColor: Colors.red,
-                      label: Text(
-                        "1",
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          fontFamily: "Montserrat",
-                        ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) => //ProductDetail(item: item),
+                                CartPage(),
                       ),
-                      textStyle: TextStyle(fontSize: 16),
-                      child: SizedBox(
-                        width: 30,
-                        height: 30,
-                        child: Image.asset(
-                          "icons/my_bag_icon.png",
-                          color: Colors.white,
+                    );
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 8.0,
+                    ),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: Badge(
+                        largeSize: 16,
+                        backgroundColor: Colors.red,
+                        label: Text(
+                          "1",
+                          style: TextStyle(
+                            fontSize: 10,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: "Montserrat",
+                          ),
+                        ),
+                        textStyle: TextStyle(fontSize: 16),
+                        child: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Image.asset(
+                            "icons/my_bag_icon.png",
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
