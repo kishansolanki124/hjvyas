@@ -18,7 +18,7 @@ import 'ProductDetailWidget.dart';
 class ProductDetail extends StatefulWidget {
   final String parentPrice;
 
-  ProductDetail({required this.parentPrice});
+  const ProductDetail({required this.parentPrice});
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
