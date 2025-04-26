@@ -86,16 +86,26 @@ class _AudioFilesDialogState extends State<AudioFilesDialog> {
         await _audioPlayer.stop();
       }
 
+      setState(() {
+        _playingIndex = index;
+        _position = Duration.zero;
+        _duration = Duration.zero; // Reset duration until new one is loaded
+      });
+
       // Set the new source
       try {
+        // Load the audio file and wait for it to be ready
         await _audioPlayer.setUrl(widget.audioFiles[index]);
-        setState(() {
-          _playingIndex = index;
-          _position = Duration.zero;
-          _duration = Duration.zero;
-        });
 
-        // Play the new track and immediately update UI
+        // Try to get the duration immediately after loading
+        Duration? loadedDuration = await _audioPlayer.duration;
+        if (loadedDuration != null && mounted) {
+          setState(() {
+            _duration = loadedDuration;
+          });
+        }
+
+        // Play the new track
         await _audioPlayer.play();
       } catch (e) {
         debugPrint('Error playing audio: $e');
@@ -103,11 +113,26 @@ class _AudioFilesDialogState extends State<AudioFilesDialog> {
     }
   }
 
+  // Added helper method to show loading or actual duration
+  String _getDurationText() {
+    if (_duration == Duration.zero) {
+      return "loading...";
+    }
+    return _formatDuration(_duration);
+  }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Audio Files"),
+      title: const Text(
+        "Audio Files",
+        style: TextStyle(
+          fontSize: 24,
+          color: Color.fromARGB(255, 31, 47, 80),
+          fontWeight: FontWeight.w700,
+          fontFamily: "Montserrat",
+        ),
+      ),
       content: SizedBox(
         width: double.maxFinite,
         child: ListView.builder(
@@ -116,18 +141,34 @@ class _AudioFilesDialogState extends State<AudioFilesDialog> {
           itemBuilder: (context, index) {
             final bool isCurrentlyPlaying =
                 _playingIndex == index && _isPlaying;
+            final bool isCurrentTrack = _playingIndex == index;
 
             return Card(
               margin: const EdgeInsets.symmetric(vertical: 4),
               child: ListTile(
-                title: Text(widget.audioTitles[index]),
+                title: Text(
+                  widget.audioTitles[index],
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Color.fromARGB(255, 31, 47, 80),
+                    fontWeight: FontWeight.w500,
+                    fontFamily: "Montserrat",
+                  ),
+                ),
                 subtitle:
-                    _playingIndex == index
+                    isCurrentTrack
                         ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             LinearProgressIndicator(
+                              backgroundColor: Color.fromARGB(
+                                255,
+                                179,
+                                193,
+                                222,
+                              ),
+                              color: Color.fromARGB(255, 31, 47, 80),
                               value:
                                   _duration.inMilliseconds > 0
                                       ? _position.inMilliseconds /
@@ -136,8 +177,12 @@ class _AudioFilesDialogState extends State<AudioFilesDialog> {
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              "${_formatDuration(_position)} / ${_formatDuration(_duration)}",
-                              style: const TextStyle(fontSize: 12),
+                              "${_formatDuration(_position)} / ${_getDurationText()}",
+                              style: const TextStyle(
+                                color: Color.fromARGB(255, 31, 47, 80),
+                                fontFamily: "Montserrat",
+                                fontSize: 12,
+                              ),
                             ),
                           ],
                         )
@@ -145,6 +190,7 @@ class _AudioFilesDialogState extends State<AudioFilesDialog> {
                 trailing: IconButton(
                   icon: Icon(
                     isCurrentlyPlaying ? Icons.pause : Icons.play_arrow,
+                    color: Color.fromARGB(255, 31, 47, 80),
                   ),
                   onPressed: () => _playAudio(index),
                 ),
@@ -159,7 +205,14 @@ class _AudioFilesDialogState extends State<AudioFilesDialog> {
             _audioPlayer.stop();
             Navigator.of(context).pop();
           },
-          child: const Text("Close"),
+          child: const Text(
+            "Close",
+            style: TextStyle(
+              color: Color.fromARGB(255, 31, 47, 80),
+              fontWeight: FontWeight.w600,
+              fontFamily: "Montserrat",
+            ),
+          ),
         ),
       ],
     );
