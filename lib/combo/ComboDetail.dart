@@ -905,7 +905,6 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                // Description Tab (tab 1)
                                 Html(
                                   data:
                                       comboDetailResponse!.comboDetail
@@ -914,6 +913,14 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                   style: {
                                     //"h1": Style(fontSize: FontSize.xxLarge),
                                     "p": Style(
+                                      fontWeight: FontWeight.w400,
+                                      //fontSize: 14,
+                                      fontFamily: "Montserrat",
+                                      fontSize: FontSize.medium,
+                                      textAlign: TextAlign.justify,
+                                      color: Colors.white,
+                                    ),
+                                    "li": Style(
                                       fontWeight: FontWeight.w400,
                                       //fontSize: 14,
                                       fontFamily: "Montserrat",
