@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 
-Widget addToCartFullWidthButton(double price, onPressed) {
+import '../api/models/ProductDetailResponse.dart';
+
+Widget addToCartFullWidthButton(double price, _onPressed) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
     // Optional horizontal padding
     child: SizedBox(
       width: double.infinity, // Makes the button full width
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: _onPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: Color.fromARGB(225, 255, 255, 255),
           // Semi-transparent white

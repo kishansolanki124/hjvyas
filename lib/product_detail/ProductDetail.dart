@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:autoscale_tabbarview/autoscale_tabbarview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,9 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hjvyas/cart/CartHome.dart';
 import 'package:hjvyas/product_detail/ImageWithProgress.dart';
 import 'package:hjvyas/product_detail/ProductDetailController.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../api/models/CartItemModel.dart';
 import '../api/models/ProductDetailResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
@@ -47,6 +51,159 @@ class FoodProductDetailsPage extends StatefulWidget {
 
 class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
     with TickerProviderStateMixin {
+  // Instance of SharedPreferences
+  late SharedPreferences _prefs;
+
+  List<CartItemModel> _myList = [];
+
+  // Initialize SharedPreferences
+  Future<void> _initPrefs() async {
+    _prefs = await SharedPreferences.getInstance();
+  }
+
+  // Helper function to load the list from SharedPreferences
+  Future<void> _loadList() async {
+    final prefs = await SharedPreferences.getInstance();
+    final List<String>? stringList = prefs.getStringList("cart_list");
+    if (stringList == null) {
+      //_setMessage('No list found, initializing empty list.');
+      return; //  Return, don't try to decode null
+    }
+
+    // Decode each JSON string back into a CustomObject
+    try {
+      _myList.clear(); // Clear the existing list before loading
+      _myList.addAll(
+        stringList
+            .map((item) => CartItemModel.fromJson(jsonDecode(item)))
+            .toList(),
+      );
+      if (kDebugMode) {
+        print('initial size of _myList is ${_myList.length}');
+      }
+      //_setMessage('List loaded successfully!');
+    } catch (e) {
+      //_setMessage('Error loading list: $e'); // Important: show errors to the user
+      _myList.clear(); // Clear corrupted data.
+      if (kDebugMode) {
+        print('initial size of _myList catch is ${_myList.length}');
+      }
+    }
+    setState(() {}); //update
+  }
+
+  int getQuantity() {
+    int initialQuantity = 1;
+    if (kDebugMode) {
+      print('_myList size is $_myList');
+    }
+    if (_myList.isNotEmpty) {
+      for (var i = 0; i < _myList.length; i++) {
+        //check if item exist in cart, then update quantity only
+        if (_myList.elementAt(i).productPackingId ==
+            _selectedVariant!.packingId) {
+          initialQuantity = int.parse(_myList.elementAt(i).quantity);
+          if (kDebugMode) {
+            print('initialQuantity is $initialQuantity');
+          }
+          break;
+        }
+      }
+    }
+
+    return initialQuantity;
+  }
+
+  void initPriceAndQuantity() {
+    int initialQuantity = 1;
+    if (kDebugMode) {
+      print('_myList size is $_myList');
+    }
+    if (_myList.isNotEmpty) {
+      for (var i = 0; i < _myList.length; i++) {
+        //check if item exist in cart, then update quantity only
+        if (_myList.elementAt(i).productPackingId ==
+            _selectedVariant!.packingId) {
+          initialQuantity = int.parse(_myList.elementAt(i).quantity);
+          if (kDebugMode) {
+            print('initialQuantity is $initialQuantity');
+          }
+          break;
+        }
+      }
+    }
+
+    //setState(() {
+      selectedItemQuantity = initialQuantity;
+      floatingButtonPrice =
+          double.parse(_selectedVariant!.productPackingPrice) *
+          selectedItemQuantity;
+    //});
+  }
+
+  Future<void> _addToCart() async {
+    // Convert each CustomObject in the list to a JSON map,
+    // then encode the whole list as a JSON string
+    CartItemModel cartItemModel = CartItemModel(
+      productType: "product",
+      productPackingId: _selectedVariant!.packingId,
+      quantity: selectedItemQuantity.toString(),
+      productDetail: productDetailResponse!.productDetail,
+      productPackingList: productDetailResponse!.productPackingList,
+    );
+
+    bool itemExist = false;
+    int itemExistPosition = -1;
+
+    if (kDebugMode) {
+      print('_myList size addtoCart is ${_myList.length}');
+    }
+
+    if (_myList.isNotEmpty) {
+      for (var i = 0; i < _myList.length; i++) {
+        //check if item exist in cart, then update quantity only
+        if (_myList.elementAt(i).productPackingId ==
+            _selectedVariant!.packingId) {
+          //item exist
+          itemExist = true;
+          itemExistPosition = i;
+          print('itemExistPosition addtoCart is $itemExistPosition');
+          break;
+        }
+      }
+    }
+
+    if (itemExist) {
+      _myList[itemExistPosition] = cartItemModel;
+    } else {
+      _myList.add(cartItemModel);
+    }
+
+    if (kDebugMode) {
+      print('_myList is inside addTocart is $_myList');
+    }
+
+    final List<String> stringList =
+        _myList.map((item) => jsonEncode(item.toJson())).toList();
+    await _prefs.setStringList("cart_list", stringList);
+    showSnackbar("Cart updated.");
+  }
+
+  void showSnackbar(String s) {
+    var snackBar = SnackBar(
+      backgroundColor: Colors.white,
+      content: Text(
+        s,
+        style: TextStyle(
+          fontSize: 14.0,
+          fontFamily: "Montserrat",
+          color: Color.fromARGB(255, 32, 47, 80),
+        ),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
   bool _showBottomNavBar = true; //BottomNavigationBar visibility
 
   int _currentImageIndex = 0;
@@ -55,6 +212,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
   int selectedItemQuantity = 1;
 
   ProductPackingListItem? _selectedVariant;
+  ProductDetailResponse? productDetailResponse;
 
   late TabController _tabController;
   int activeTabIndex = 0;
@@ -62,6 +220,9 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
   @override
   void initState() {
     super.initState();
+    // Initialize shared preferences in initState
+    _initPrefs();
+    _loadList();
     //todo change this product id
     widget.categoryController.getProductDetail("2"); // Explicit call
 
@@ -99,39 +260,36 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
   final ScrollController _scrollController = ScrollController();
 
   // Example usage:
-  void showAudioFilesDialog(
-    BuildContext context,
-    ProductDetailResponse productDetailResponse,
-  ) {
+  void showAudioFilesDialog(BuildContext context) {
     List<String> audioTitles = [];
     List<String> audioFiles = [];
 
-    if (productDetailResponse.productDetail
+    if (productDetailResponse!.productDetail
         .elementAt(0)
         .productAudioEnglish
         .isNotEmpty) {
       audioFiles.add(
-        productDetailResponse.productDetail.elementAt(0).productAudioEnglish,
+        productDetailResponse!.productDetail.elementAt(0).productAudioEnglish,
       );
       audioTitles.add("English");
     }
 
-    if (productDetailResponse.productDetail
+    if (productDetailResponse!.productDetail
         .elementAt(0)
         .productAudioHindi
         .isNotEmpty) {
       audioFiles.add(
-        productDetailResponse.productDetail.elementAt(0).productAudioHindi,
+        productDetailResponse!.productDetail.elementAt(0).productAudioHindi,
       );
       audioTitles.add("Hindi");
     }
 
-    if (productDetailResponse.productDetail
+    if (productDetailResponse!.productDetail
         .elementAt(0)
         .productAudioGujarati
         .isNotEmpty) {
       audioFiles.add(
-        productDetailResponse.productDetail.elementAt(0).productAudioGujarati,
+        productDetailResponse!.productDetail.elementAt(0).productAudioGujarati,
       );
       audioTitles.add("Gujarati");
     }
@@ -176,9 +334,13 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
   void _onChangedDropDownValue(ProductPackingListItem newValue) {
     setState(() {
       _selectedVariant = newValue;
+      selectedItemQuantity = getQuantity();
+      if (kDebugMode) {
+        print('selectedItemQuantity is $selectedItemQuantity');
+      }
       floatingButtonPrice =
           double.parse(_selectedVariant!.productPackingPrice) *
-              selectedItemQuantity;
+          selectedItemQuantity;
     });
   }
 
@@ -201,6 +363,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
   void _onPressed() {
     setState(() {
+      _addToCart();
       if (kDebugMode) {
         print('Add to Cart button pressed!');
       }
@@ -226,16 +389,22 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
         return Center(child: Text('Error: ${widget.categoryController.error}'));
       }
 
-      final productDetailResponse =
+      productDetailResponse ??=
           widget.categoryController.productDetailResponse.value;
 
-      _selectedVariant ??= productDetailResponse!.productPackingList.elementAt(
-        0,
-      );
+      if (_selectedVariant == null) {
+        _selectedVariant = productDetailResponse!.productPackingList.elementAt(
+          0,
+        );
+        initPriceAndQuantity();
+        if (kDebugMode) {
+          print('selectedItemQuantity is $selectedItemQuantity');
+        }
+      }
 
       if (floatingButtonPrice == 0) {
         floatingButtonPrice = double.parse(
-          productDetailResponse!.productPackingList!
+          productDetailResponse!.productPackingList
               .elementAt(0)
               .productPackingPrice,
         );
@@ -271,17 +440,14 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               productDetailCorosoulDots(
-                                productDetailResponse.productGalleryList,
+                                productDetailResponse!.productGalleryList,
                                 _currentImageIndex,
                               ),
                               //volume or audio icon
                               //todo: handle visibility of this icon if no audio files available
                               GestureDetector(
                                 onTap: () {
-                                  showAudioFilesDialog(
-                                    context,
-                                    productDetailResponse,
-                                  );
+                                  showAudioFilesDialog(context);
                                 },
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
@@ -344,10 +510,10 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                               children: <Widget>[
                                 //3. name and price
                                 productDetailNameAndPrice(
-                                  productDetailResponse.productDetail
+                                  productDetailResponse!.productDetail
                                       .elementAt(0)
                                       .productName,
-                                  productDetailResponse.productDetail
+                                  productDetailResponse!.productDetail
                                       .elementAt(0)
                                       .productPrice,
                                 ),
@@ -360,7 +526,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                     //todo: update this for out of stock
                                     //if (widget.availableColors.isNotEmpty)
                                     productDetailDropDown(
-                                      productDetailResponse.productPackingList,
+                                      productDetailResponse!.productPackingList,
                                       _selectedVariant,
                                       _onChangedDropDownValue,
                                     ),
@@ -378,11 +544,11 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                           ),
 
                           // 5. Horizontal List of Square Images of Product Ingredients
-                          if (productDetailResponse
+                          if (productDetailResponse!
                               .productIngredientsList
                               .isNotEmpty)
                             productDetailIngredients(
-                              productDetailResponse.productIngredientsList,
+                              productDetailResponse!.productIngredientsList,
                             ),
 
                           // //description
@@ -417,7 +583,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                 ),
                                 SizedBox(height: 8),
                                 Text(
-                                  productDetailResponse.productDetail
+                                  productDetailResponse!.productDetail
                                       .elementAt(0)
                                       .productTerms,
                                   textAlign: TextAlign.justify,
@@ -443,7 +609,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                 // Description Tab (tab 1)
                                 Html(
                                   data:
-                                      productDetailResponse.productDetail
+                                      productDetailResponse!.productDetail
                                           .elementAt(0)
                                           .productDescription,
                                   style: {
@@ -493,7 +659,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                   height: 200,
                                   child: ImageWithProgress(
                                     imageURL:
-                                        productDetailResponse.productDetail
+                                        productDetailResponse!.productDetail
                                             .elementAt(0)
                                             .productNutritionImage,
                                   ),
@@ -515,9 +681,9 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                           SizedBox(height: 18),
 
                           // 8. You May Also Like Product Listing Horizontally
-                          if (productDetailResponse.productMoreList.isNotEmpty)
+                          if (productDetailResponse!.productMoreList.isNotEmpty)
                             productDetailYouMayLike(
-                              productDetailResponse.productMoreList,
+                              productDetailResponse!.productMoreList,
                             ),
 
                           SizedBox(height: 100),
@@ -526,7 +692,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
                       //product center image
                       productDetailCenterImageRound(
-                        productDetailResponse.productDetail
+                        productDetailResponse!.productDetail
                             .elementAt(0)
                             .productImage,
                       ),
