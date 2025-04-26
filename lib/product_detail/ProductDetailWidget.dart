@@ -298,7 +298,8 @@ Widget productDetailIngredients(
                     ),
                   ),
 
-                  Container(
+                  //Ingredient text name
+                  SizedBox(
                     width: 80,
                     child: Center(
                       child: Text(
@@ -320,7 +321,6 @@ Widget productDetailIngredients(
           },
         ),
       ),
-      SizedBox(height: 16),
     ],
   );
 }
@@ -425,9 +425,9 @@ Widget productDetailYouMayLike(List<ProductMoreListItem> moreItemList) {
   );
 }
 
-Widget productDetailTabs(_tabController, activeTabIndex) {
+Widget productDetailTabs(tabController, activeTabIndex) {
   return Padding(
-    padding: const EdgeInsets.all(16.0),
+    padding: const EdgeInsets.symmetric(horizontal: 16.0),
     child: TabBar(
       indicatorSize: TabBarIndicatorSize.tab,
       dividerColor: Colors.transparent,
@@ -449,11 +449,10 @@ Widget productDetailTabs(_tabController, activeTabIndex) {
         ),
       ),
       labelColor: Colors.white,
-      //indicatorPadding: const EdgeInsets.all(0),
       indicatorPadding: const EdgeInsets.fromLTRB(0, 0, 0, 2),
       labelPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       unselectedLabelColor: Colors.white,
-      controller: _tabController,
+      controller: tabController,
       tabs: [
         //Tab(text: 'Description',),
         Tab(

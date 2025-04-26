@@ -74,7 +74,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
   // Instance of SharedPreferences
   late SharedPreferences _prefs;
 
-  List<CartItemModel> _myList = [];
+  List<CartItemModel> _cartItemList = [];
 
   // Initialize SharedPreferences
   Future<void> _initPrefs() async {
@@ -92,21 +92,21 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
     // Decode each JSON string back into a CustomObject
     try {
-      _myList.clear(); // Clear the existing list before loading
-      _myList.addAll(
+      _cartItemList.clear(); // Clear the existing list before loading
+      _cartItemList.addAll(
         stringList
             .map((item) => CartItemModel.fromJson(jsonDecode(item)))
             .toList(),
       );
       if (kDebugMode) {
-        print('initial size of _myList is ${_myList.length}');
+        print('initial size of _cartItemList is ${_cartItemList.length}');
       }
       //_setMessage('List loaded successfully!');
     } catch (e) {
       //_setMessage('Error loading list: $e'); // Important: show errors to the user
-      _myList.clear(); // Clear corrupted data.
+      _cartItemList.clear(); // Clear corrupted data.
       if (kDebugMode) {
-        print('initial size of _myList catch is ${_myList.length}');
+        print('initial size of _cartItemList catch is ${_cartItemList.length}');
       }
     }
     setState(() {}); //update
@@ -115,14 +115,14 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
   int getQuantity() {
     int initialQuantity = 1;
     if (kDebugMode) {
-      print('_myList size is $_myList');
+      print('_cartItemList size is $_cartItemList');
     }
-    if (_myList.isNotEmpty) {
-      for (var i = 0; i < _myList.length; i++) {
+    if (_cartItemList.isNotEmpty) {
+      for (var i = 0; i < _cartItemList.length; i++) {
         //check if item exist in cart, then update quantity only
-        if (_myList.elementAt(i).productPackingId ==
+        if (_cartItemList.elementAt(i).productPackingId ==
             _selectedVariant!.packingId) {
-          initialQuantity = int.parse(_myList.elementAt(i).quantity);
+          initialQuantity = int.parse(_cartItemList.elementAt(i).quantity);
           if (kDebugMode) {
             print('initialQuantity is $initialQuantity');
           }
@@ -137,14 +137,14 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
   void initPriceAndQuantity() {
     int initialQuantity = 1;
     if (kDebugMode) {
-      print('_myList size is $_myList');
+      print('_cartItemList size is $_cartItemList');
     }
-    if (_myList.isNotEmpty) {
-      for (var i = 0; i < _myList.length; i++) {
+    if (_cartItemList.isNotEmpty) {
+      for (var i = 0; i < _cartItemList.length; i++) {
         //check if item exist in cart, then update quantity only
-        if (_myList.elementAt(i).productPackingId ==
+        if (_cartItemList.elementAt(i).productPackingId ==
             _selectedVariant!.packingId) {
-          initialQuantity = int.parse(_myList.elementAt(i).quantity);
+          initialQuantity = int.parse(_cartItemList.elementAt(i).quantity);
           if (kDebugMode) {
             print('initialQuantity is $initialQuantity');
           }
@@ -176,13 +176,13 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
     int itemExistPosition = -1;
 
     if (kDebugMode) {
-      print('_myList size addtoCart is ${_myList.length}');
+      print('_cartItemList size addtoCart is ${_cartItemList.length}');
     }
 
-    if (_myList.isNotEmpty) {
-      for (var i = 0; i < _myList.length; i++) {
+    if (_cartItemList.isNotEmpty) {
+      for (var i = 0; i < _cartItemList.length; i++) {
         //check if item exist in cart, then update quantity only
-        if (_myList.elementAt(i).productPackingId ==
+        if (_cartItemList.elementAt(i).productPackingId ==
             _selectedVariant!.packingId) {
           //item exist
           itemExist = true;
@@ -194,17 +194,17 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
     }
 
     if (itemExist) {
-      _myList[itemExistPosition] = cartItemModel;
+      _cartItemList[itemExistPosition] = cartItemModel;
     } else {
-      _myList.add(cartItemModel);
+      _cartItemList.add(cartItemModel);
     }
 
     if (kDebugMode) {
-      print('_myList is inside addTocart is $_myList');
+      print('_cartItemList is inside addTocart is $_cartItemList');
     }
 
     final List<String> stringList =
-        _myList.map((item) => jsonEncode(item.toJson())).toList();
+        _cartItemList.map((item) => jsonEncode(item.toJson())).toList();
     await _prefs.setStringList("cart_list", stringList);
     showSnackbar("Cart updated.");
   }
@@ -625,8 +625,10 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                           //3. name and price
                           // 4. Dropdown of variant and Counter (Horizontal)
                           Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0,
-                            horizontal: 16),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 8.0,
+                              horizontal: 16,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
@@ -772,7 +774,6 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                             ),
                                           ),
 
-
                                           contentPadding: EdgeInsets.all(8),
                                           isDense:
                                               true, //make textfield compact
@@ -872,10 +873,11 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                               return SizedBox(
                                                 width: 20,
                                                 height: 20,
-                                                child: CircularProgressIndicator(
-                                                  strokeWidth: 2,
-                                                  color: Colors.white,
-                                                ),
+                                                child:
+                                                    CircularProgressIndicator(
+                                                      strokeWidth: 2,
+                                                      color: Colors.white,
+                                                    ),
                                               );
                                             }
                                             return Text(
@@ -927,24 +929,11 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                               productDetailResponse!.productIngredientsList,
                             ),
 
-                          // //description
-                          // Padding(
-                          //   padding: const EdgeInsets.symmetric(
-                          //     horizontal: 16.0,
-                          //   ),
-                          //   child: Text(
-                          //     productDetailResponse.productDetail.elementAt(0).detail,
-                          //     style: TextStyle(
-                          //       fontSize: 14,
-                          //       color: Colors.white,
-                          //       fontFamily: "Montserrat",
-                          //     ),
-                          //   ),
-                          // ),
-
                           //Product Terms
                           Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                            ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
@@ -977,8 +966,9 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                           // 7. Tab Layout with Two Tabs
                           productDetailTabs(_tabController, activeTabIndex),
 
+                          //tabs content
                           Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: AutoScaleTabBarView(
                               controller: _tabController,
                               children: [
@@ -1017,17 +1007,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                     // ),
                                   },
                                 ), // Text(
-                                //   productDetailResponse.productDetail
-                                //       .elementAt(0)
-                                //       .productDescription,
-                                //   textAlign: TextAlign.justify,
-                                //   style: TextStyle(
-                                //     fontSize: 14,
-                                //     color: Colors.white,
-                                //     fontFamily: "Montserrat",
-                                //   ),
-                                // ),
-                                // Nutrition Info Tab
+                                // Nutrition Info Tab (tab 2)
                                 GestureDetector(
                                   onTap: () {
                                     showImageViewer(
@@ -1037,11 +1017,14 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                   },
                                   child: SizedBox(
                                     height: 200,
-                                    child: ImageWithProgress(
-                                      imageURL:
-                                          productDetailResponse!.productDetail
-                                              .elementAt(0)
-                                              .productNutritionImage,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 8.0),
+                                      child: ImageWithProgress(
+                                        imageURL:
+                                            productDetailResponse!.productDetail
+                                                .elementAt(0)
+                                                .productNutritionImage,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -1058,8 +1041,6 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                               ],
                             ),
                           ),
-
-                          SizedBox(height: 18),
 
                           // 8. You May Also Like Product Listing Horizontally
                           if (productDetailResponse!.productMoreList.isNotEmpty)
@@ -1103,9 +1084,12 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                       alignment: Alignment.topRight,
                       child: Badge(
                         largeSize: 16,
-                        backgroundColor: Colors.red,
+                        backgroundColor: _cartItemList.isEmpty ? Colors.transparent :
+                        Colors.red,
                         label: Text(
-                          "1",
+                          _cartItemList.isEmpty
+                              ? ""
+                              : _cartItemList.length.toString(),
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.w700,
