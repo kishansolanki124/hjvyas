@@ -1,6 +1,7 @@
 import 'package:autoscale_tabbarview/autoscale_tabbarview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hjvyas/product_detail/ImageWithProgress.dart';
 import 'package:hjvyas/product_detail/ProductDetailController.dart';
@@ -423,17 +424,51 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                               controller: _tabController,
                               children: [
                                 // Description Tab (tab 1)
-                                Text(
-                                  productDetailResponse.productDetail
-                                      .elementAt(0)
-                                      .productDescription,
-                                  textAlign: TextAlign.justify,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontFamily: "Montserrat",
-                                  ),
+                                Html(
+                                  data:
+                                      productDetailResponse.productDetail
+                                          .elementAt(0)
+                                          .productDescription,
+                                  style: {
+                                    //"h1": Style(fontSize: FontSize.xxLarge),
+                                    "p": Style(
+                                      fontWeight: FontWeight.w400,
+                                      //fontSize: 14,
+                                      fontFamily: "Montserrat",
+                                      fontSize: FontSize.medium,
+                                      textAlign: TextAlign.justify,
+                                      color: Colors.white,
+                                    ),
+                                    "strong": Style(
+                                      fontWeight: FontWeight.w600,
+                                      //fontSize: 14,
+                                      fontFamily: "Montserrat",
+                                      fontSize: FontSize.large,
+                                      textAlign: TextAlign.justify,
+                                      color: Colors.white,
+                                    ),
+                                    //"a": Style(color: Colors.blue, decoration: TextDecoration.underline),
+                                    //"table": Style(border: Border.all(color: Colors.grey)),
+                                    //"th": Style(padding: EdgeInsets.all(8), backgroundColor: Colors.lightBlue),
+                                    //"td": Style(padding: EdgeInsets.all(8)),
+                                    //"div": Style(margin: EdgeInsets.only(bottom: 10)),
+                                    // "img": Style(
+                                    //   width: Width.percent(100), // Make images responsive.
+                                    //   height: Height.auto(),
+                                    // ),
+                                  },
                                 ),
+                                // Text(
+                                //   productDetailResponse.productDetail
+                                //       .elementAt(0)
+                                //       .productDescription,
+                                //   textAlign: TextAlign.justify,
+                                //   style: TextStyle(
+                                //     fontSize: 14,
+                                //     color: Colors.white,
+                                //     fontFamily: "Montserrat",
+                                //   ),
+                                // ),
                                 // Nutrition Info Tab
 
                                 //todo: change this image size and make it zoomable
