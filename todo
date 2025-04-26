@@ -48,6 +48,7 @@ Design feedback ma evu lakhyu che k price add karvi so...
 -> Combo you may like list ma out of stock Combos parameter missing. Add it.
 -> combo_price parameter missing weight. In product detail API, product_price contains weight
 along with price.
+-> max quantity variable not available in this API
 
 3. Notification:
 https://mithaiwalahjvyas.com/get_notification API not working.

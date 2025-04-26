@@ -419,6 +419,10 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
   void _incrementQuantity() {
     //todo: product_max_qty handle here
+    // if (int.parse(comboDetailItem!.max) == selectedItemQuantity) {
+    //   showSnackbar("You have added max quantity into cart.");
+    //   return;
+    // }
     setState(() {
       selectedItemQuantity++;
       floatingButtonPrice =

@@ -434,7 +434,10 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
   }
 
   void _incrementQuantity() {
-    //todo: product_max_qty handle here
+    if (int.parse(productDetailItem!.productMaxQty) == selectedItemQuantity) {
+      showSnackbar("You have added max quantity into cart.");
+      return;
+    }
     setState(() {
       selectedItemQuantity++;
       floatingButtonPrice =
@@ -1083,8 +1086,10 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                       alignment: Alignment.topRight,
                       child: Badge(
                         largeSize: 16,
-                        backgroundColor: _cartItemList.isEmpty ? Colors.transparent :
-                        Colors.red,
+                        backgroundColor:
+                            _cartItemList.isEmpty
+                                ? Colors.transparent
+                                : Colors.red,
                         label: Text(
                           _cartItemList.isEmpty
                               ? ""
