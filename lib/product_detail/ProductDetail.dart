@@ -592,7 +592,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                       //square border app color
                       IgnorePointer(
                         child: Container(
-                          height: 680,
+                          height: 672,
                           margin: EdgeInsets.only(
                             left: 16.0,
                             right: 16.0,
@@ -625,7 +625,8 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                           //3. name and price
                           // 4. Dropdown of variant and Counter (Horizontal)
                           Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: const EdgeInsets.symmetric(vertical: 8.0,
+                            horizontal: 16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
@@ -771,18 +772,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                             ),
                                           ),
 
-                                          // border: OutlineInputBorder(
-                                          //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                                          //     borderSide: BorderSide(width: 1,)
-                                          // ),
-                                          // errorBorder: OutlineInputBorder(
-                                          //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                                          //     borderSide: BorderSide(width: 1,color: Colors.black)
-                                          // ),
-                                          // focusedErrorBorder: OutlineInputBorder(
-                                          //     borderRadius: BorderRadius.all(Radius.circular(4)),
-                                          //     borderSide: BorderSide(width: 1,color: Colors.yellowAccent)
-                                          // ),
+
                                           contentPadding: EdgeInsets.all(8),
                                           isDense:
                                               true, //make textfield compact

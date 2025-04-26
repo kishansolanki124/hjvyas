@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:hjvyas/product_detail/ProductDetail.dart';
 
 import '../api/models/ProductDetailResponse.dart';
@@ -85,8 +84,7 @@ Widget productDetailCorosoulDots(
   );
 }
 
-Widget productDetailNameAndPrice(String name, String price,
-    bool isOutOfStock) {
+Widget productDetailNameAndPrice(String name, String price, bool isOutOfStock) {
   return Column(
     children: [
       SizedBox(height: 50),
@@ -110,8 +108,6 @@ Widget productDetailNameAndPrice(String name, String price,
         ),
       ),
 
-      SizedBox(height: 8),
-
       // 3. Product Price
       if (price.isNotEmpty)
         Text(
@@ -126,7 +122,6 @@ Widget productDetailNameAndPrice(String name, String price,
 
       // if(isOutOfStock)
       //   outOfStockDetail(),
-
       SizedBox(height: 16),
     ],
   );
