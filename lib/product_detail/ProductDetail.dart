@@ -1,7 +1,9 @@
 import 'package:autoscale_tabbarview/autoscale_tabbarview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hjvyas/cart/CartHome.dart';
 import 'package:hjvyas/product_detail/ImageWithProgress.dart';
@@ -28,55 +30,7 @@ class _ProductDetailState extends State<ProductDetail> {
   @override
   Widget build(BuildContext context) {
     String price = widget.parentPrice;
-    return Scaffold(
-      body: FoodProductDetailsPage(
-        productName: "Luscious Bite",
-        imageUrls: [
-          "https://images.pexels.com/photos/1496373/pexels-photo-1496373.jpeg?cs=srgb&dl=pexels-arts-1496373.jpg&fm=jpg",
-          "https://images.pexels.com/photos/7276946/pexels-photo-7276946.jpeg?cs=srgb&dl=pexels-rachel-claire-7276946.jpg&fm=jpg&w=3648&h=5472",
-          "https://cdn.pixabay.com/photo/2016/11/29/05/45/astronomy-1867616_1280.jpg",
-          "https://picsum.photos/id/6/400/800",
-          "https://images.pexels.com/photos/1526713/pexels-photo-1526713.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1526713.jpg&fm=jpg&w=4000&h=6000",
-        ],
-        productPrice: price,
-        productDescription:
-            "Prices are Inclusive of Taxes & Exclusive of Shipping Charges. Make Sure it Takes 3 to 4 Days to Reach the Delivery Address after Dispatch 1  from Your Order. Depends on the State, City & Location of Your Delivery Address. Maybe it's Take More Days to Delivered in India & 7-8 Business Days in Abroad",
-        availableColors: [
-          "300 GM (900.00) - 12 Pieces",
-          "150 GM (450.00) - 6 Pieces",
-          "100 GM (400.00) - 4 Pieces",
-        ],
-        ingredientImageUrls: [
-          "https://www.mithaiwalahjvyas.com/uploads/ingredients_img/7-Asafoetida.jpg",
-          "https://img.lovepik.com/png/20231110/mayo-clipart-cartoon-illustration-of-various-food-items-and-dressings_553233_wh300.png",
-          "https://via.placeholder.com/50/FFFF00/000?Text=Sugar",
-          "https://via.placeholder.com/50/FFFFFF/000?Text=Eggs",
-          "https://via.placeholder.com/50/FFD700/000?Text=Butter",
-        ],
-        reviews:
-            "A guaranteed taste, aroma & freshness for 300 days. 7 different kinds of dry fruits give it a very unique sweet & sour taste. Deep fried in pure peanut oil with a thin layer of fine wheat flour. An irresistible zero-cholesterol kachori",
-        nutritionInfo:
-            "nutritionInfo: A guaranteed taste, aroma & freshness for 300 days. 7 different kinds of dry fruits give it a very unique sweet & sour taste. Deep fried in pure peanut oil with a thin layer of fine wheat flour. An irresistible zero-cholesterol kachori",
-        youMayLikeProducts: [
-          {
-            "name": "Standard Kachori",
-            "imageUrl": "https://picsum.photos/id/2/400/800",
-          },
-          {
-            "name": "Jamnagari Chevda",
-            "imageUrl": "https://picsum.photos/id/3/400/800",
-          },
-          {
-            "name": "Ahmedabad special Masala Gathiya",
-            "imageUrl": "https://picsum.photos/id/4/400/800",
-          },
-          {
-            "name": "Kutchi Pakwan",
-            "imageUrl": "https://picsum.photos/id/5/400/800",
-          },
-        ],
-      ),
-    );
+    return Scaffold(body: FoodProductDetailsPage());
   }
 }
 
@@ -85,27 +39,7 @@ class FoodProductDetailsPage extends StatefulWidget {
     getIt<HJVyasApiService>(),
   );
 
-  final String productName;
-  final List<String> imageUrls;
-  final String productPrice;
-  final String productDescription;
-  final List<String> availableColors;
-  final List<String> ingredientImageUrls;
-  final String reviews;
-  final String nutritionInfo;
-  final List<Map<String, String>> youMayLikeProducts;
-
-  FoodProductDetailsPage({
-    required this.productName,
-    required this.imageUrls,
-    required this.productPrice,
-    required this.productDescription,
-    this.availableColors = const [],
-    this.ingredientImageUrls = const [],
-    this.reviews = "",
-    this.nutritionInfo = "",
-    this.youMayLikeProducts = const [],
-  });
+  FoodProductDetailsPage();
 
   @override
   _FoodProductDetailsPageState createState() => _FoodProductDetailsPageState();
@@ -117,9 +51,11 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
   int _currentImageIndex = 0;
 
-  //String? _selectedVariant;
+  double floatingButtonPrice = 0;
+  int selectedItemQuantity = 1;
+
   ProductPackingListItem? _selectedVariant;
-  int _quantity = 1;
+
   late TabController _tabController;
   int activeTabIndex = 0;
 
@@ -133,9 +69,6 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
       length: 2, //initialIndex : 0,
       vsync: this,
     );
-    // if (widget.availableColors.isNotEmpty) {
-    //   _selectedVariant = widget.availableColors.first;
-    // }
 
     _tabController.addListener(() {
       setState(() {
@@ -233,20 +166,29 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
   void _incrementQuantity() {
     setState(() {
-      _quantity++;
+      selectedItemQuantity++;
+      floatingButtonPrice =
+          double.parse(_selectedVariant!.productPackingPrice) *
+          selectedItemQuantity;
     });
   }
 
   void _onChangedDropDownValue(ProductPackingListItem newValue) {
     setState(() {
       _selectedVariant = newValue;
+      floatingButtonPrice =
+          double.parse(_selectedVariant!.productPackingPrice) *
+              selectedItemQuantity;
     });
   }
 
   void _decrementQuantity() {
-    if (_quantity > 1) {
+    if (selectedItemQuantity > 1) {
       setState(() {
-        _quantity--;
+        selectedItemQuantity--;
+        floatingButtonPrice =
+            double.parse(_selectedVariant!.productPackingPrice) *
+            selectedItemQuantity;
       });
     }
   }
@@ -259,7 +201,9 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
   void _onPressed() {
     setState(() {
-      print('Add to Cart button pressed!');
+      if (kDebugMode) {
+        print('Add to Cart button pressed!');
+      }
     });
   }
 
@@ -284,6 +228,18 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
       final productDetailResponse =
           widget.categoryController.productDetailResponse.value;
+
+      _selectedVariant ??= productDetailResponse!.productPackingList.elementAt(
+        0,
+      );
+
+      if (floatingButtonPrice == 0) {
+        floatingButtonPrice = double.parse(
+          productDetailResponse!.productPackingList!
+              .elementAt(0)
+              .productPackingPrice,
+        );
+      }
       //_selectedVariantInquiry ??= cateogories.inquiryType.split(', ').first;
       return Scaffold(
         body: Container(
@@ -397,33 +353,34 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                 ),
 
                                 // 4. Dropdown of variant and Counter (Horizontal)
-                                if (widget.productPrice.isNotEmpty)
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      if (widget.availableColors.isNotEmpty)
-                                        productDetailDropDown(
-                                          productDetailResponse
-                                              .productPackingList,
-                                          _selectedVariant,
-                                          _onChangedDropDownValue,
-                                        ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: <Widget>[
+                                    //todo: update this for out of stock
+                                    //if (widget.availableColors.isNotEmpty)
+                                    productDetailDropDown(
+                                      productDetailResponse.productPackingList,
+                                      _selectedVariant,
+                                      _onChangedDropDownValue,
+                                    ),
 
-                                      productDetailItemCounter(
-                                        widget,
-                                        _decrementQuantity,
-                                        _incrementQuantity,
-                                        _quantity,
-                                      ),
-                                    ],
-                                  ),
+                                    productDetailItemCounter(
+                                      widget,
+                                      _decrementQuantity,
+                                      _incrementQuantity,
+                                      selectedItemQuantity,
+                                    ),
+                                  ],
+                                ),
                               ],
                             ),
                           ),
 
                           // 5. Horizontal List of Square Images of Product Ingredients
-                          if (widget.ingredientImageUrls.isNotEmpty)
+                          if (productDetailResponse
+                              .productIngredientsList
+                              .isNotEmpty)
                             productDetailIngredients(
                               productDetailResponse.productIngredientsList,
                             ),
@@ -558,7 +515,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                           SizedBox(height: 18),
 
                           // 8. You May Also Like Product Listing Horizontally
-                          if (widget.youMayLikeProducts.isNotEmpty)
+                          if (productDetailResponse.productMoreList.isNotEmpty)
                             productDetailYouMayLike(
                               productDetailResponse.productMoreList,
                             ),
@@ -629,7 +586,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
         //add to cart button
         floatingActionButton:
             _showBottomNavBar
-                ? addToCartFullWidthButton("1800.00", _onPressed)
+                ? addToCartFullWidthButton(floatingButtonPrice, _onPressed)
                 : null,
       );
     });

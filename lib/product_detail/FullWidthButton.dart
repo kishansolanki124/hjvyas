@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget addToCartFullWidthButton(String price, onPressed) {
+Widget addToCartFullWidthButton(double price, onPressed) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
     // Optional horizontal padding

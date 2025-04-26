@@ -33,9 +33,6 @@ General:
 1. keep only portrait mode app
 2. Scrolling animation for bottom nav hide/show
 ====================================================
-1. initial quantity of any variety should be 1 and price equals given price
-2. On plus button or minus button , update quantity and call setState
-3. price on the bottom button is based on the selected variant's quantity * selected variant's price
 4. add to cart will add to shared pref and show snackbar
 5. if user change variety it will show earlier selected counter for that variety
 6. now this logic will depend on the cart shared preference
@@ -44,3 +41,9 @@ show that quantity in plus minus view and price in bottom button view.
 8. if user upate counter and click add to cart (it will update the cart value of that
 product to the new value provided, basically replace)
 9. can show animatino on top right cart icon on update
+
+
+1. initial quantity of any variety should be 1 and price equals given price
+2. On plus button or minus button , update quantity and call setState
+3. price on the bottom button is based on the selected variant's quantity * selected variant's price
+

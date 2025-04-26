@@ -1,86 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart'; // Import for RenderSliver
 
 void main() {
-  runApp(const MyApp());
+  runApp(const MaterialApp(home: MyPage()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyPage extends StatefulWidget {
+  const MyPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Sliver Example',
-      home: Scaffold(
-        body: CombinedScrollScreen(),
-      ),
-    );
-  }
+  _MyPageState createState() => _MyPageState();
 }
-class CombinedScrollScreen extends StatelessWidget {
+
+class _MyPageState extends State<MyPage> {
+  double _myDoubleValue = 0.0; // Changed to double
+
+  void _updateDoubleValue() {
+    setState(() {
+      _myDoubleValue += 1.1; // Increment by a double value
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          // Header Section (Icon + Text)
-          SliverToBoxAdapter(
-            child: _buildHeader(),
-          ),
-
-          // GridView Section
-          SliverGrid(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              childAspectRatio: 0.8,
+      appBar: AppBar(title: const Text('FloatingActionButton Demo')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Current Value: ${_myDoubleValue.toStringAsFixed(2)}', // Use toStringAsFixed
+              style: const TextStyle(fontSize: 20),
             ),
-            delegate: SliverChildBuilderDelegate(
-                  (context, index) => _buildGridItem(index),
-              childCount: 20, // Your item count
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: _updateDoubleValue,
+              child: const Text('Update Value'),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      padding: EdgeInsets.all(16),
-      color: Colors.blue[50],
-      child: Row(
-        children: [
-          Icon(Icons.star, size: 30, color: Colors.amber),
-          SizedBox(width: 12),
-          Text(
-            'Featured Items',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: _updateDoubleValue,
+        label: Text(
+          'Value: ${_myDoubleValue.toStringAsFixed(2)}', // Use toStringAsFixed here too!
+          style: const TextStyle(fontSize: 16),
+        ),
+        icon: const Icon(Icons.add),
+        backgroundColor: Colors.blue,
       ),
-    );
-  }
-
-  Widget _buildGridItem(int index) {
-    return Card(
-      elevation: 3,
-      child: Column(
-        children: [
-          Expanded(
-            child: Placeholder(), // Replace with your image
-          ),
-          Padding(
-            padding: EdgeInsets.all(8),
-            child: Text('Item $index'),
-          ),
-        ],
-      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
