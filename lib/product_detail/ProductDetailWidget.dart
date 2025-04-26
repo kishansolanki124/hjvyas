@@ -392,6 +392,7 @@ Widget productDetailYouMayLike(List<ProductMoreListItem> moreItemList) {
                         style: TextStyle(
                           color: Colors.white,
                           fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w500,
                           fontSize: 12,
                         ),
                       ),
@@ -421,6 +422,9 @@ Widget productDetailYouMayLike(List<ProductMoreListItem> moreItemList) {
           },
         ),
       ),
+
+      //todo: when API have price and weight, add over here
+      //todo: also handle out of stock from here click, currently out of stock NA in response
     ],
   );
 }

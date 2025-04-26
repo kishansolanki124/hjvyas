@@ -1048,7 +1048,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                               productDetailResponse!.productMoreList,
                             ),
 
-                          SizedBox(height: 100),
+                          SizedBox(height: 50),
                         ],
                       ),
 
