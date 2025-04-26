@@ -626,6 +626,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
           ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        //add to cart button
         floatingActionButton:
             _showBottomNavBar
                 ? addToCartFullWidthButton("1800.00", _onPressed)

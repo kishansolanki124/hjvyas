@@ -154,7 +154,10 @@ Widget productDetailDropDown(
       // Custom icon
       value: _selectedVariant,
       hint: Text(
-        'Select Variant',
+          "${productPackingList.elementAt(0).productWeight} ${productPackingList.elementAt(0)
+              .productWeightType} "
+              "(₹${productPackingList.elementAt(0).productPackingPrice}) - "
+              "${productPackingList.elementAt(0).productPieces} Pieces",
         style: TextStyle(
           backgroundColor: Color.fromARGB(255, 31, 47, 80),
           fontSize: 12,
