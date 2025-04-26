@@ -139,7 +139,7 @@ Widget productDetailNameAndPrice(String name, String price, bool isOutOfStock) {
       // 3. Product Price
       if (price.isNotEmpty)
         Text(
-          "₹ $price ()",
+          "₹ $price",
           style: TextStyle(
             fontSize: 16,
             fontFamily: "Montserrat",

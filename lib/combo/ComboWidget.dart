@@ -32,7 +32,7 @@ class _CombowidgetState extends State<Combowidget> {
       MaterialPageRoute(
         builder:
             (context) => //ProductDetail(item: item),
-            ComboDetail(comboId: item.comboId, isOutOfStock: false),
+            ComboDetail(comboId: item.comboId, isOutOfStock: item.comboSoldout.isEmpty ? false : true),
       ),
     );
   }
