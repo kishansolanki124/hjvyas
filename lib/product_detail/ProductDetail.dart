@@ -236,7 +236,6 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
           widget.categoryController.productDetailResponse.value;
       //_selectedVariantInquiry ??= cateogories.inquiryType.split(', ').first;
       return Scaffold(
-        //appBar: AppBar(title: Text(widget.productName)),
         body: Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -289,7 +288,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                       //square border app color
                       IgnorePointer(
                         child: Container(
-                          height: 480,
+                          height: 680,
                           margin: EdgeInsets.only(
                             left: 16.0,
                             right: 16.0,
@@ -317,7 +316,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
                       Column(
                         children: [
-                          SizedBox(height: 400),
+                          SizedBox(height: 600),
 
                           //3. name and price
                           // 4. Dropdown of variant and Counter (Horizontal)
@@ -507,6 +506,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                         ],
                       ),
 
+                      //product center image
                       productDetailCenterImageRound(
                         productDetailResponse.productDetail
                             .elementAt(0)
@@ -516,6 +516,38 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                   ),
                 ),
                 backButton(_onBackPressed),
+
+                //cart icon with badge
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 8.0,
+                  ),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: Badge(
+                      largeSize: 16,
+                      backgroundColor: Colors.red,
+                      label: Text(
+                        "1",
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: "Montserrat",
+                        ),
+                      ),
+                      textStyle: TextStyle(fontSize: 16),
+                      child: SizedBox(
+                        width: 30,
+                        height: 30,
+                        child: Image.asset(
+                          "icons/my_bag_icon.png",
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

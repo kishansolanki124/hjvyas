@@ -27,6 +27,7 @@ class _NavigationBarAppState extends State<NavigationBarApp> {
     );
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false, // Remove the debug banner
       theme: ThemeData(useMaterial3: true),
       home: const NavigationExample(),
     );

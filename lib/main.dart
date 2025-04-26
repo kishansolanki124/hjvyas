@@ -26,6 +26,7 @@ class MyApp extends StatelessWidget {
 
     return SafeArea(
       child: MaterialApp(
+        debugShowCheckedModeBanner: false, // Remove the debug banner
         title: 'HJ Vyas App',
         theme: ThemeData(
           // This is the theme of your application.

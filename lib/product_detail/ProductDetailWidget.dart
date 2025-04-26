@@ -42,7 +42,7 @@ Widget productDetailViewpager(
             .map((item) => networkImageWithLoader(item.upProImg))
             .toList(),
     options: CarouselOptions(
-      height: 350,
+      height: 550,
       viewportFraction: 1,
 
       //autoPlay: true,
@@ -99,7 +99,7 @@ Widget productDetailNameAndPrice(String name, String price) {
             name,
             style: TextStyle(
               backgroundColor: Color.fromARGB(255, 31, 47, 80),
-              fontSize: 16,
+              fontSize: 18,
               color: Colors.white,
               fontFamily: "Montserrat",
               fontWeight: FontWeight.w700,
@@ -172,7 +172,7 @@ Widget productDetailDropDown(
               value: variation,
               child: Text(
                 "${variation.productWeight} ${variation.productWeightType} "
-                "(${variation.productPackingPrice}) - ${variation.productPieces} Pieces",
+                "(₹${variation.productPackingPrice}) - ${variation.productPieces} Pieces",
                 style: TextStyle(
                   backgroundColor: Color.fromARGB(255, 31, 47, 80),
                   fontSize: 12,
