@@ -166,23 +166,40 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
   final ScrollController _scrollController = ScrollController();
 
   // Example usage:
-  void showAudioFilesDialog(BuildContext context,
-      ProductDetailResponse productDetailResponse) {
+  void showAudioFilesDialog(
+    BuildContext context,
+    ProductDetailResponse productDetailResponse,
+  ) {
     List<String> audioTitles = [];
     List<String> audioFiles = [];
 
-    if(productDetailResponse.productDetail.elementAt(0).productAudioEnglish.isNotEmpty) {
-      audioFiles.add(productDetailResponse.productDetail.elementAt(0).productAudioEnglish);
+    if (productDetailResponse.productDetail
+        .elementAt(0)
+        .productAudioEnglish
+        .isNotEmpty) {
+      audioFiles.add(
+        productDetailResponse.productDetail.elementAt(0).productAudioEnglish,
+      );
       audioTitles.add("English");
     }
 
-    if(productDetailResponse.productDetail.elementAt(0).productAudioHindi.isNotEmpty) {
-      audioFiles.add(productDetailResponse.productDetail.elementAt(0).productAudioHindi);
+    if (productDetailResponse.productDetail
+        .elementAt(0)
+        .productAudioHindi
+        .isNotEmpty) {
+      audioFiles.add(
+        productDetailResponse.productDetail.elementAt(0).productAudioHindi,
+      );
       audioTitles.add("Hindi");
     }
 
-    if(productDetailResponse.productDetail.elementAt(0).productAudioGujarati.isNotEmpty) {
-      audioFiles.add(productDetailResponse.productDetail.elementAt(0).productAudioGujarati);
+    if (productDetailResponse.productDetail
+        .elementAt(0)
+        .productAudioGujarati
+        .isNotEmpty) {
+      audioFiles.add(
+        productDetailResponse.productDetail.elementAt(0).productAudioGujarati,
+      );
       audioTitles.add("Gujarati");
     }
 
@@ -301,9 +318,14 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                 productDetailResponse.productGalleryList,
                                 _currentImageIndex,
                               ),
+                              //volume or audio icon
+                              //todo: handle visibility of this icon if no audio files available
                               GestureDetector(
                                 onTap: () {
-                                  showAudioFilesDialog(context,productDetailResponse);
+                                  showAudioFilesDialog(
+                                    context,
+                                    productDetailResponse,
+                                  );
                                 },
                                 child: Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
