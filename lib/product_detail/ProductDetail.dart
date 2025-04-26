@@ -1115,7 +1115,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         //add to cart button
         floatingActionButton:
-            _showBottomNavBar
+            _showBottomNavBar && !widget.isOutOfStock
                 ? addToCartFullWidthButton(floatingButtonPrice, _onPressed)
                 : null,
       );

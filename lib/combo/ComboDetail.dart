@@ -118,7 +118,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
       for (var i = 0; i < _cartItemList.length; i++) {
         //check if item exist in cart, then update quantity only
         if (_cartItemList.elementAt(i).productPackingId ==
-            comboDetailItem!.comboId) {
+            getComboProductUniqueId(comboDetailItem!.comboId)) {
           initialQuantity = int.parse(_cartItemList.elementAt(i).quantity);
           if (kDebugMode) {
             print('initialQuantity is $initialQuantity');
@@ -140,7 +140,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
       for (var i = 0; i < _cartItemList.length; i++) {
         //check if item exist in cart, then update quantity only
         if (_cartItemList.elementAt(i).productPackingId ==
-            comboDetailItem!.comboId) {
+            getComboProductUniqueId(comboDetailItem!.comboId)) {
           initialQuantity = int.parse(_cartItemList.elementAt(i).quantity);
           if (kDebugMode) {
             print('initialQuantity is $initialQuantity');
@@ -157,12 +157,16 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
     //});
   }
 
+  String getComboProductUniqueId(String comboId) {
+    return "combo_$comboId";
+  }
+
   Future<void> _addToCart() async {
     // Convert each CustomObject in the list to a JSON map,
     // then encode the whole list as a JSON string
     CartItemModel cartItemModel = CartItemModel(
       productType: "combo",
-      productPackingId: comboDetailItem!.comboId,
+      productPackingId: getComboProductUniqueId(comboDetailItem!.comboId),
       quantity: selectedItemQuantity.toString(),
       comboDetail: comboDetailResponse!.comboDetail,
     );
@@ -178,7 +182,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
       for (var i = 0; i < _cartItemList.length; i++) {
         //check if item exist in cart, then update quantity only
         if (_cartItemList.elementAt(i).productPackingId ==
-            comboDetailItem!.comboId) {
+            getComboProductUniqueId(comboDetailItem!.comboId)) {
           //item exist
           itemExist = true;
           itemExistPosition = i;
@@ -1052,7 +1056,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         //add to cart button
         floatingActionButton:
-            _showBottomNavBar
+            _showBottomNavBar && !widget.isOutOfStock
                 ? addToCartFullWidthButton(floatingButtonPrice, _onPressed)
                 : null,
       );
