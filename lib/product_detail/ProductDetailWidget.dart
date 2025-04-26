@@ -85,7 +85,8 @@ Widget productDetailCorosoulDots(
   );
 }
 
-Widget productDetailNameAndPrice(String name, String price) {
+Widget productDetailNameAndPrice(String name, String price,
+    bool isOutOfStock) {
   return Column(
     children: [
       SizedBox(height: 50),
@@ -123,8 +124,8 @@ Widget productDetailNameAndPrice(String name, String price) {
           ),
         ),
 
-      //todo: out of stock
-      if (price.isEmpty) outOfStockDetail(),
+      if(isOutOfStock)
+        outOfStockDetail(),
 
       SizedBox(height: 16),
     ],
@@ -404,7 +405,11 @@ Widget productDetailYouMayLike(List<ProductMoreListItem> moreItemList) {
                   MaterialPageRoute(
                     builder:
                         (context) => //ProductDetail(item: item),
-                            ProductDetail(productId: product.productId),
+                            ProductDetail(
+                          productId: product.productId,
+                          //todo: currently out of stock not available in more item list
+                          isOutOfStock: false,
+                        ),
                   ),
                 );
               },

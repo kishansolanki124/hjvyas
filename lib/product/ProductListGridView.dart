@@ -39,8 +39,10 @@ class _ProductListGridViewState extends State<ProductListGridView> {
       context,
       MaterialPageRoute(
         builder:
-            (context) => //ProductDetail(item: item),
-                ProductDetail(productId: item.productId),
+            (context) => ProductDetail(
+              productId: item.productId,
+              isOutOfStock: item.productSoldout.isEmpty ? false : true,
+            ),
       ),
     );
   }

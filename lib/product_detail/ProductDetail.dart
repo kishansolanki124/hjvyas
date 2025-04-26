@@ -24,8 +24,13 @@ import 'ProductDetailWidget.dart';
 
 class ProductDetail extends StatefulWidget {
   final String productId;
+  final bool isOutOfStock;
 
-  const ProductDetail({super.key, required this.productId});
+  const ProductDetail({
+    super.key,
+    required this.productId,
+    required this.isOutOfStock,
+  });
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
@@ -34,7 +39,12 @@ class ProductDetail extends StatefulWidget {
 class _ProductDetailState extends State<ProductDetail> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: FoodProductDetailsPage(productId: widget.productId));
+    return Scaffold(
+      body: FoodProductDetailsPage(
+        productId: widget.productId,
+        isOutOfStock: widget.isOutOfStock,
+      ),
+    );
   }
 }
 
@@ -44,8 +54,13 @@ class FoodProductDetailsPage extends StatefulWidget {
   );
 
   String productId = "";
+  bool isOutOfStock = false;
 
-  FoodProductDetailsPage({super.key, required this.productId});
+  FoodProductDetailsPage({
+    super.key,
+    required this.productId,
+    required this.isOutOfStock,
+  });
 
   @override
   _FoodProductDetailsPageState createState() => _FoodProductDetailsPageState();
@@ -341,6 +356,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
   }
 
   void _incrementQuantity() {
+    //todo: product_max_qty handle here
     setState(() {
       selectedItemQuantity++;
       floatingButtonPrice =
@@ -543,6 +559,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                   productDetailResponse!.productDetail
                                       .elementAt(0)
                                       .productPrice,
+                                  widget.isOutOfStock,
                                 ),
 
                                 // 4. Dropdown of variant and Counter (Horizontal)
@@ -550,20 +567,21 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    //todo: update this for out of stock
-                                    //if (widget.availableColors.isNotEmpty)
-                                    productDetailDropDown(
-                                      productDetailResponse!.productPackingList,
-                                      _selectedVariant,
-                                      _onChangedDropDownValue,
-                                    ),
+                                    if (!widget.isOutOfStock)
+                                      productDetailDropDown(
+                                        productDetailResponse!
+                                            .productPackingList,
+                                        _selectedVariant,
+                                        _onChangedDropDownValue,
+                                      ),
 
-                                    productDetailItemCounter(
-                                      widget,
-                                      _decrementQuantity,
-                                      _incrementQuantity,
-                                      selectedItemQuantity,
-                                    ),
+                                    if (!widget.isOutOfStock)
+                                      productDetailItemCounter(
+                                        widget,
+                                        _decrementQuantity,
+                                        _incrementQuantity,
+                                        selectedItemQuantity,
+                                      ),
                                   ],
                                 ),
                               ],
@@ -667,8 +685,8 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                     //   height: Height.auto(),
                                     // ),
                                   },
-                                ),
-                                // Text(
+                                ), // Text(
+
                                 //   productDetailResponse.productDetail
                                 //       .elementAt(0)
                                 //       .productDescription,
@@ -680,7 +698,6 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                 //   ),
                                 // ),
                                 // Nutrition Info Tab
-
                                 GestureDetector(
                                   onTap: () {
                                     showImageViewer(
