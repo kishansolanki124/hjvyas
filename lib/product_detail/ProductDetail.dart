@@ -910,7 +910,6 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
                                     if (!widget.isOutOfStock)
                                       productDetailItemCounter(
-                                        widget,
                                         _decrementQuantity,
                                         _incrementQuantity,
                                         selectedItemQuantity,
