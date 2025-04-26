@@ -191,7 +191,35 @@ Widget productListColoredBorderBox(double marginTop, double marginBottom) {
   );
 }
 
-Widget productDetailCenterImageRound(String imageUrl) {
+Widget productDetailCenterImageRound(String imageUrl,[bool? isCombo]) {
+  isCombo ??= false;
+
+  if(isCombo) {
+    return Padding(
+      padding: EdgeInsetsDirectional.fromSTEB(0, 500, 0, 0),
+      child: Align(
+          child: SizedBox(width: 150, height: 150, child: Container(
+        width: 150,
+        height: 150,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.transparent, width: 1.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(25),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
+        ),
+        child: ClipOval(child: ImageWithProgress(imageURL: imageUrl)),
+      ),
+      ),
+    )
+    );
+  }
+
   return Padding(
     padding: EdgeInsetsDirectional.fromSTEB(0, 500, 0, 0),
     child: Align(

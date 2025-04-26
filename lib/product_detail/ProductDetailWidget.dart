@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:hjvyas/combo/ComboDetail.dart';
 import 'package:hjvyas/product_detail/ProductDetail.dart';
 
+import '../api/models/ComboDetailResponse.dart';
 import '../api/models/ProductDetailResponse.dart';
 import 'NetworkImageWithLoading.dart';
 
@@ -57,8 +59,34 @@ Widget productDetailViewpager(
   );
 }
 
+Widget comboDetailViewpager(
+  List<ComboGalleryListItem> galleryList,
+  onPageChange,
+) {
+  return CarouselSlider(
+    items:
+        galleryList
+            .map((item) => networkImageWithLoader(item.upProImg))
+            .toList(),
+    options: CarouselOptions(
+      height: 550,
+      viewportFraction: 1,
+
+      //autoPlay: true,
+      //enlargeCenterPage: true,
+      //aspectRatio: 9 / 16,
+      onPageChanged: (index, reason) {
+        onPageChange(index);
+        // setState(() {
+        //   _currentImageIndex = index;
+        // });
+      },
+    ),
+  );
+}
+
 Widget productDetailCorosoulDots(
-  List<ProductGalleryListItem> galleryList,
+  List<Object> galleryList,
   int currentImageIndex,
 ) {
   return Padding(
@@ -428,6 +456,110 @@ Widget productDetailYouMayLike(List<ProductMoreListItem> moreItemList) {
   );
 }
 
+Widget comboDetailYouMayLike(List<ComboMoreListItem> moreItemList) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: Text(
+          'You May Also Like :',
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+      SizedBox(height: 8),
+      SizedBox(
+        height: 160, // Adjust height as needed
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          itemCount: moreItemList.length,
+          itemBuilder: (context, index) {
+            final product = moreItemList.elementAt(index);
+            Widget youMayLikeWidget = Padding(
+              padding: const EdgeInsets.only(right: 12.0),
+              child: Container(
+                width: 120,
+                decoration: BoxDecoration(
+                  border: Border.all(color: Color.fromARGB(255, 123, 138, 195)),
+                ),
+                child: Column(
+                  children: [
+                    if (product.productImage != null)
+                      SizedBox(
+                        height: 110,
+                        width: 110,
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 4),
+                          child: Image.network(
+                            product.productImage,
+                            height: 110,
+                            width: 110,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return SizedBox(
+                                height: 60,
+                                child: Center(child: Text('Err')),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+
+                    SizedBox(height: 4),
+
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 2),
+                      child: Text(
+                        product.comboName ?? '',
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+
+            return GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => //ProductDetail(item: item),
+                            ComboDetail(
+                          comboId: product.comboId,
+                          //todo: currently out of stock not available in more item list
+                          isOutOfStock: false,
+                        ),
+                  ),
+                );
+              },
+              child: youMayLikeWidget,
+            );
+          },
+        ),
+      ),
+
+      //todo: when API have price and weight, add over here
+      //todo: also handle out of stock from here click, currently out of stock NA in response
+    ],
+  );
+}
+
 Widget productDetailTabs(tabController, activeTabIndex) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -513,6 +645,69 @@ Widget productDetailTabs(tabController, activeTabIndex) {
             ),
           ),
         ),
+      ],
+    ),
+  );
+}
+
+Widget comboDetailTabs(tabController, activeTabIndex) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    child: TabBar(
+      indicatorSize: TabBarIndicatorSize.tab,
+      dividerColor: Colors.transparent,
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+      indicator: BoxDecoration(
+        border: Border(
+          top: BorderSide(
+            color: Color.fromARGB(255, 123, 138, 195),
+            width: 6.0,
+          ),
+          left: BorderSide(
+            color: Color.fromARGB(255, 123, 138, 195),
+            width: 1.0,
+          ),
+          right: BorderSide(
+            color: Color.fromARGB(255, 123, 138, 195),
+            width: 1.0,
+          ),
+        ),
+      ),
+      labelColor: Colors.white,
+      indicatorPadding: const EdgeInsets.fromLTRB(0, 0, 0, 2),
+      labelPadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+      unselectedLabelColor: Colors.white,
+      controller: tabController,
+      tabs: [
+        //Tab(text: 'Description',),
+        Tab(
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color:
+                      activeTabIndex == 0
+                          ? Colors.transparent
+                          : Color.fromARGB(255, 123, 138, 195),
+                  width: 1.0,
+                ),
+              ),
+            ),
+            child: const Align(
+              alignment: Alignment.center,
+              child: Text(
+                "Description",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white,
+                  fontFamily: "Montserrat",
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ),
+        ),
+
       ],
     ),
   );

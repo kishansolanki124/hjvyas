@@ -6,6 +6,7 @@ import 'package:hjvyas/api/models/ComboListResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product_detail/ProductDetail.dart';
+import 'ComboDetail.dart';
 import 'ComboFirstItem.dart';
 import 'ComboFourthItem.dart';
 import 'ComboPaginationController.dart';
@@ -31,7 +32,7 @@ class _CombowidgetState extends State<Combowidget> {
       MaterialPageRoute(
         builder:
             (context) => //ProductDetail(item: item),
-                ProductDetail(productId: item.comboId, isOutOfStock: false),
+            ComboDetail(comboId: item.comboId, isOutOfStock: false),
       ),
     );
   }

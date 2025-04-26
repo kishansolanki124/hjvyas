@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:hjvyas/api/api_client.dart';
 import 'package:hjvyas/api/models/AddInquiryResponse.dart';
+import 'package:hjvyas/api/models/ComboDetailResponse.dart';
 import 'package:hjvyas/api/models/ComboListResponse.dart';
 import 'package:hjvyas/api/models/HomeMediaResponse.dart';
 
@@ -141,6 +142,52 @@ class HJVyasApiService {
         print('response is $response');
       }
       return ProductDetailResponse.fromJson(jsonDecode(response.data));
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print('DioException is message ${e.message} and error is ${e.error}');
+      }
+      if (e.response != null) {
+        if (kDebugMode) {
+          print('DioException is response ${e.response}');
+          print('e.response!.statusCode ${e.response!.statusCode!}');
+        }
+        throw ApiResponseException(e.message!, e.response!.statusCode!);
+      } else {
+        if (kDebugMode) {
+          print('No internet connection');
+        }
+        throw NetworkException('No internet connection');
+      }
+    }
+  }
+
+  Future<ComboDetailResponse> getComboDetail(String productId) async {
+    // First check basic connectivity
+    if (!await ConnectivityService.isConnected) {
+      throw NetworkException('No internet connection', isConnectionIssue: true);
+    }
+
+    try {
+      // URL-encoded data as a Map
+      final formData = {
+        'combo_id': productId,
+      };
+
+      if (kDebugMode) {
+        print('formData is: $formData');
+      }
+
+      final response = await _client.post(
+        '/get_combo_detail',
+        data: formData,
+        options: Options(
+          // Explicitly set content-type (Dio often infers this, but be explicit)
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        ),
+      );      if (kDebugMode) {
+        print('response is $response');
+      }
+      return ComboDetailResponse.fromJson(jsonDecode(response.data));
     } on DioException catch (e) {
       if (kDebugMode) {
         print('DioException is message ${e.message} and error is ${e.error}');
