@@ -22,9 +22,9 @@ import 'FullWidthButton.dart';
 import 'ProductDetailWidget.dart';
 
 class ProductDetail extends StatefulWidget {
-  final String parentPrice;
+  final String productId;
 
-  const ProductDetail({required this.parentPrice});
+  const ProductDetail({super.key, required this.productId});
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
@@ -33,8 +33,7 @@ class ProductDetail extends StatefulWidget {
 class _ProductDetailState extends State<ProductDetail> {
   @override
   Widget build(BuildContext context) {
-    String price = widget.parentPrice;
-    return Scaffold(body: FoodProductDetailsPage());
+    return Scaffold(body: FoodProductDetailsPage(productId: widget.productId,));
   }
 }
 
@@ -43,7 +42,9 @@ class FoodProductDetailsPage extends StatefulWidget {
     getIt<HJVyasApiService>(),
   );
 
-  FoodProductDetailsPage();
+  String productId = "";
+
+  FoodProductDetailsPage({super.key, required this.productId});
 
   @override
   _FoodProductDetailsPageState createState() => _FoodProductDetailsPageState();
@@ -223,8 +224,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
     // Initialize shared preferences in initState
     _initPrefs();
     _loadList();
-    //todo change this product id
-    widget.categoryController.getProductDetail("2"); // Explicit call
+    widget.categoryController.getProductDetail(widget.productId); // Explicit call
 
     _tabController = TabController(
       length: 2, //initialIndex : 0,
@@ -435,7 +435,6 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                           ),
 
                           // 2. Image Carousel Dots and volume
-                          //todo: volume button click audio play option
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

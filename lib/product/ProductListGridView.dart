@@ -40,10 +40,7 @@ class _ProductListGridViewState extends State<ProductListGridView> {
       MaterialPageRoute(
         builder:
             (context) => //ProductDetail(item: item),
-                ProductDetail(
-              parentPrice:
-                  item.productPrice.isNotEmpty ? item.productPrice : "",
-            ),
+                ProductDetail(productId: item.productId),
       ),
     );
   }
@@ -86,9 +83,10 @@ class _ProductListGridViewState extends State<ProductListGridView> {
                 Expanded(
                   child: CustomScrollView(
                     slivers: [
-
                       SliverToBoxAdapter(
-                        child: productListTopView(widget.categoryListItem.categoryName),
+                        child: productListTopView(
+                          widget.categoryListItem.categoryName,
+                        ),
                       ),
 
                       SliverGrid(

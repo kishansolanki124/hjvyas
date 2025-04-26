@@ -154,10 +154,9 @@ Widget productDetailDropDown(
       // Custom icon
       value: _selectedVariant,
       hint: Text(
-          "${productPackingList.elementAt(0).productWeight} ${productPackingList.elementAt(0)
-              .productWeightType} "
-              "(₹${productPackingList.elementAt(0).productPackingPrice}) - "
-              "${productPackingList.elementAt(0).productPieces} Pieces",
+        "${productPackingList.elementAt(0).productWeight} ${productPackingList.elementAt(0).productWeightType} "
+        "(₹${productPackingList.elementAt(0).productPackingPrice}) - "
+        "${productPackingList.elementAt(0).productPieces} Pieces",
         style: TextStyle(
           backgroundColor: Color.fromARGB(255, 31, 47, 80),
           fontSize: 12,
@@ -405,12 +404,7 @@ Widget productDetailYouMayLike(List<ProductMoreListItem> moreItemList) {
                   MaterialPageRoute(
                     builder:
                         (context) => //ProductDetail(item: item),
-                            ProductDetail(
-                          parentPrice:
-                              product.productImage != null
-                                  ? product.productImage!
-                                  : "",
-                        ),
+                            ProductDetail(productId: product.productId),
                   ),
                 );
               },

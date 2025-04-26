@@ -31,9 +31,7 @@ class _CombowidgetState extends State<Combowidget> {
       MaterialPageRoute(
         builder:
             (context) => //ProductDetail(item: item),
-                ProductDetail(
-              parentPrice: item.comboPrice.isNotEmpty ? item.comboPrice : "",
-            ),
+                ProductDetail(productId: item.comboId),
       ),
     );
   }
@@ -103,10 +101,7 @@ class _CombowidgetState extends State<Combowidget> {
                   Expanded(
                     child: CustomScrollView(
                       slivers: [
-
-                        SliverToBoxAdapter(
-                          child: productListTopView(),
-                        ),
+                        SliverToBoxAdapter(child: productListTopView()),
 
                         SliverGrid(
                           gridDelegate:
