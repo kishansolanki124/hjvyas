@@ -16,6 +16,7 @@ class ProductPaginationController extends GetxController {
   var items = <ProductListItem>[].obs;
   var isLoading = false.obs;
   var cartItemsLoading = false.obs;
+  var cartMaxQty = 0;
   var currentPage = 0;
   var totalItems = 0;
   final int itemsPerPage = 10; // Adjust based on API
@@ -30,6 +31,7 @@ class ProductPaginationController extends GetxController {
         cartPackingId,
         cartProductType,
       );
+      cartMaxQty = int.parse(newItems.productMaxQty);
       cartItems.assignAll(newItems.productCartList);
     } finally {
       cartItemsLoading(false);

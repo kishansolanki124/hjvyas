@@ -8,7 +8,7 @@ import 'ProductDetailResponse.dart';
 class CartItemModel {
   final String productType;
   final String productPackingId;
-  final String quantity;
+  String quantity;
   final List<ProductDetailItem> productDetail;
   final List<ComboDetailItem> comboDetail;
   final List<ProductGalleryListItem> productGalleryList;

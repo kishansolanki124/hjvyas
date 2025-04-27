@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hjvyas/product_detail/NetworkImageWithLoading.dart';
 
+import '../api/models/CartItemModel.dart';
+import '../api/models/ProductCartResponse.dart';
+
 Widget CartItemWidget(
   index,
-  cartItem,
+  ProductCartListItem cartItem,
+  CartItemModel cartSharedPrefItem,
   _formatPrice,
   _decrementCount,
   _incrementCount,
@@ -22,7 +26,7 @@ Widget CartItemWidget(
             SizedBox(
               width: 180,
               height: 180,
-              child: NetworkImageWithLoading(imageUrl: cartItem.imageUrl),
+              child: NetworkImageWithLoading(imageUrl: cartItem.productImage),
             ),
           ],
         ),
@@ -57,7 +61,7 @@ Widget CartItemWidget(
                   Padding(
                     padding: EdgeInsetsDirectional.fromSTEB(0, 20, 0, 0),
                     child: Text(
-                      cartItem.title,
+                      cartItem.productName,
                       textAlign: TextAlign.right,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
@@ -73,7 +77,7 @@ Widget CartItemWidget(
 
                   // 3. Price per Weight
                   Text(
-                    '${_formatPrice(cartItem.pricePerKg)} (600 GM)',
+                    '${_formatPrice(cartItem.packingPrice)} (600 GM)',
                     textAlign: TextAlign.right,
                     style: TextStyle(
                       backgroundColor: Color.fromARGB(255, 31, 47, 80),
@@ -86,64 +90,66 @@ Widget CartItemWidget(
                   // 4. "+" and "-" Buttons with Count
                   Wrap(
                     children: [
-                      ColoredBox(color: Color.fromARGB(255, 31, 47, 80),
-                      child: Padding(padding: EdgeInsets.symmetric(vertical: 6),
-                      child:
-                      Container(
-                        height: 30,
-                        width: 120,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Color.fromARGB(255, 123, 138, 195),
-                          ),
-                          borderRadius: BorderRadius.circular(0),
-                          color: Color.fromARGB(
-                            255,
-                            31,
-                            47,
-                            80,
-                          ), // Background color
-                        ),
-                        // Add some padding inside the border
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            IconButton(
-                              iconSize: 16,
-                              icon: Icon(Icons.remove),
-                              color: Colors.white,
-                              onPressed: () => _decrementCount(index),
-                              padding: EdgeInsets.zero,
-                              constraints: BoxConstraints(),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                0,
-                                0,
-                                0,
-                                0,
+                      ColoredBox(
+                        color: Color.fromARGB(255, 31, 47, 80),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 6),
+                          child: Container(
+                            height: 30,
+                            width: 120,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Color.fromARGB(255, 123, 138, 195),
                               ),
-                              child: Text(
-                                cartItem.count.toString(),
-                                style: TextStyle(
-                                  fontSize: 14,
+                              borderRadius: BorderRadius.circular(0),
+                              color: Color.fromARGB(
+                                255,
+                                31,
+                                47,
+                                80,
+                              ), // Background color
+                            ), // Add some padding inside the border
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                IconButton(
+                                  iconSize: 16,
+                                  icon: Icon(Icons.remove),
                                   color: Colors.white,
-                                  fontFamily: "Montserrat",
+                                  onPressed: () => _decrementCount(index),
+                                  padding: EdgeInsets.zero,
+                                  constraints: BoxConstraints(),
                                 ),
-                              ),
-                            ),
+                                Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                  ),
+                                  child: Text(
+                                    cartSharedPrefItem.quantity,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontFamily: "Montserrat",
+                                    ),
+                                  ),
+                                ),
 
-                            IconButton(
-                              iconSize: 16,
-                              icon: Icon(Icons.add),
-                              color: Colors.white,
-                              onPressed: () => _incrementCount(index),
-                              padding: EdgeInsets.zero,
-                              constraints: BoxConstraints(),
+                                IconButton(
+                                  iconSize: 16,
+                                  icon: Icon(Icons.add),
+                                  color: Colors.white,
+                                  onPressed: () => _incrementCount(index),
+                                  padding: EdgeInsets.zero,
+                                  constraints: BoxConstraints(),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
-                      ),),),
+                      ),
                     ],
                   ),
 
@@ -153,7 +159,7 @@ Widget CartItemWidget(
                       Padding(
                         padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
                         child: Text(
-                          '${_formatPrice(cartItem.totalPrice)}',
+                          '${_formatPrice((double.parse(cartItem.packingPrice) * double.parse(cartSharedPrefItem.quantity)).toString())}',
                           style: TextStyle(
                             fontSize: 14.0,
                             fontFamily: "Montserrat",

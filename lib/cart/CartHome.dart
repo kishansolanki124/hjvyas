@@ -7,11 +7,11 @@ import 'package:hjvyas/checkout/Checkout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/models/CartItemModel.dart';
+import '../api/models/ProductCartResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product/ProductPaginationController.dart';
 import '../product_detail/FullWidthButton.dart';
-import '../product_detail/NetworkImageWithLoading.dart';
 import 'CartWidget.dart';
 
 class CartItem {
@@ -41,7 +41,9 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
-  List<CartItemModel> _cartItemList = [];
+  List<CartItemModel> _cartItemShaaredPrefList = [];
+  List<ProductCartListItem>? _cartItems;
+  int cartMaxQty = 0;
 
   // Instance of SharedPreferences
   late SharedPreferences _prefs;
@@ -56,27 +58,30 @@ class _CartPageState extends State<CartPage> {
     await _initPrefs();
     final List<String>? stringList = _prefs.getStringList("cart_list");
     if (stringList == null) {
-      //_setMessage('No list found, initializing empty list.');
       return;
     }
 
-    // Decode each JSON string back into a CustomObject
     try {
-      _cartItemList.clear(); // Clear the existing list before loading
-      _cartItemList.addAll(
+      _cartItemShaaredPrefList
+          .clear(); // Clear the existing list before loading
+      _cartItemShaaredPrefList.addAll(
         stringList
             .map((item) => CartItemModel.fromJson(jsonDecode(item)))
             .toList(),
       );
       if (kDebugMode) {
-        print('initial size of _cartItemList is ${_cartItemList.length}');
+        print(
+          'initial size of _cartItemShaaredPrefList is ${_cartItemShaaredPrefList.length}',
+        );
       }
       //_setMessage('List loaded successfully!');
     } catch (e) {
       //_setMessage('Error loading list: $e'); // Important: show errors to the user
-      _cartItemList.clear(); // Clear corrupted data.
+      _cartItemShaaredPrefList.clear(); // Clear corrupted data.
       if (kDebugMode) {
-        print('initial size of _cartItemList catch is ${_cartItemList.length}');
+        print(
+          'initial size of _cartItemShaaredPrefList catch is ${_cartItemShaaredPrefList.length}',
+        );
       }
     }
     setState(() {}); //update
@@ -90,80 +95,60 @@ class _CartPageState extends State<CartPage> {
 
   Future<void> loadCartProductsFromSharedPref() async {
     await _loadList();
-    if (_cartItemList.isNotEmpty) {
-      String productIds = _cartItemList
+    if (_cartItemShaaredPrefList.isNotEmpty) {
+      String productIds = _cartItemShaaredPrefList
           .map((cartItem) => cartItem.productPackingId)
           .join(',');
 
-      String productType = _cartItemList
+      String productType = _cartItemShaaredPrefList
           .map((cartItem) => cartItem.productType.replaceAll("combo_", ""))
           .join(',');
 
       widget.paginationController.getProductCart(
         productIds.replaceAll("combo_", ""),
         productType,
-        //"product,product,product,product,combo,combo,product",
       ); // Explicit call
     }
   }
 
   int freeSelectedIndex = -1;
 
-  // Sample cart data
-  final List<CartItem> _cartItems = [
-    CartItem(
-      imageUrl:
-          'https://images.pexels.com/photos/1526713/pexels-photo-1526713.jpeg?cs=srgb&dl=pexels-francesco-ungaro-1526713.jpg&fm=jpg&w=4000&h=6000',
-      // Replace with your image paths
-      title: 'Sweet Kachori',
-      pricePerKg: 11500.00,
-    ),
-    CartItem(
-      imageUrl:
-          'https://images.pexels.com/photos/7276946/pexels-photo-7276946.jpeg?cs=srgb&dl=pexels-rachel-claire-7276946.jpg&fm=jpg&w=3648&h=5472',
-      title: 'Luscious Bite Kachori and Jalebi',
-      pricePerKg: 1800.00,
-    ),
-    CartItem(
-      imageUrl:
-          'https://images.pexels.com/photos/1496373/pexels-photo-1496373.jpeg?cs=srgb&dl=pexels-arts-1496373.jpg&fm=jpg',
-      title: 'Kaju Katri',
-      pricePerKg: 2300.00,
-    ),
-    CartItem(
-      imageUrl:
-          'https://cdn.pixabay.com/photo/2016/11/29/05/45/astronomy-1867616_1280.jpg',
-      title: 'Mung Mixture',
-      pricePerKg: 348.00,
-    ),
-    CartItem(
-      imageUrl: 'https://picsum.photos/id/6/400/800',
-      title: 'Samosa Small',
-      pricePerKg: 50,
-    ),
-  ];
-
-  final List<String> _imageList = [
-    'https://picsum.photos/id/6/400/800',
-    'https://picsum.photos/id/1/400/800',
-    'https://picsum.photos/id/2/400/800',
-    'https://picsum.photos/id/3/400/800',
-    'https://picsum.photos/id/4/400/800',
-  ];
-
-  final List<String> _itemNameList = [
-    'Jamnagri Standard Kachori style Kachori style',
-    'Jamnagari Chewda',
-    'Masala Gathiya',
-    'Bhavnagari Gathiya',
-    'Kutchi Pakwan',
-  ];
+  void showSnackbar(String s) {
+    var snackBar = SnackBar(
+      backgroundColor: Colors.white,
+      content: Text(
+        s,
+        style: TextStyle(
+          fontSize: 14.0,
+          fontFamily: "Montserrat",
+          color: Color.fromARGB(255, 32, 47, 80),
+        ),
+      ),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
 
   // Function to increment item count
   void _incrementCount(int index) {
+    if (cartMaxQty.toString() ==
+        _cartItemShaaredPrefList.elementAt(index).quantity) {
+      showSnackbar("You have added max quantity.");
+      return;
+    }
     setState(() {
-      _cartItems[index].count++;
+      int currentQuantity = int.parse(_cartItemShaaredPrefList[index].quantity);
+      _cartItemShaaredPrefList[index].quantity =
+          (currentQuantity + 1).toString();
+
+      //todo: test this
+      // selectedItemQuantity++;
+      // floatingButtonPrice =
+      //     double.parse(_selectedVariant!.productPackingPrice) *
+      //         selectedItemQuantity;
     });
+    // setState(() {
+    //   _cartItems[index].count++;
+    // });
   }
 
   // Function to increment item count
@@ -183,22 +168,37 @@ class _CartPageState extends State<CartPage> {
 
   // Function to decrement item count
   void _decrementCount(int index) {
-    setState(() {
-      if (_cartItems[index].count > 1) {
-        _cartItems[index].count--;
-      }
-    });
+    if (int.parse(_cartItemShaaredPrefList.elementAt(index).quantity) > 1) {
+      setState(() {
+        _cartItemShaaredPrefList[index].quantity =
+            (int.parse(_cartItemShaaredPrefList.elementAt(index).quantity) - 1)
+                .toString();
+      });
+    }
+
+    // setState(() {
+    //   if (_cartItems[index].count > 1) {
+    //     _cartItems[index].count--;
+    //   }
+    // });
   }
 
   // Function to remove item from cart
-  void _removeItem(int index) {
-    setState(() {
-      _cartItems.removeAt(index);
-    });
+  Future<void> _removeItem(int index) async {
+    _cartItems!.removeAt(index);
+    _cartItemShaaredPrefList.removeAt(index);
+
+    final List<String> stringList =
+        _cartItemShaaredPrefList
+            .map((item) => jsonEncode(item.toJson()))
+            .toList();
+    await _prefs.setStringList("cart_list", stringList);
+
+    showSnackbar("Cart updated."); // Show the message
   }
 
   // Function to format price
-  String _formatPrice(double price) {
+  String _formatPrice(String price) {
     return "₹ $price";
   }
 
@@ -221,6 +221,9 @@ class _CartPageState extends State<CartPage> {
           //either no API called or no data exist
           return Center(child: Text("Empty Cart"));
         }
+
+        cartMaxQty = widget.paginationController.cartMaxQty;
+        _cartItems = widget.paginationController.cartItems;
 
         return SafeArea(
           child: Scaffold(
@@ -264,12 +267,15 @@ class _CartPageState extends State<CartPage> {
                               shrinkWrap: true,
                               physics: NeverScrollableScrollPhysics(),
                               // Disable nested scrolling
-                              itemCount: _cartItems.length,
+                              itemCount: _cartItems?.length,
                               itemBuilder: (context, index) {
-                                final cartItem = _cartItems[index];
+                                final cartItem = _cartItems![index];
+                                final _cartItemShaaredPref =
+                                    _cartItemShaaredPrefList[index];
                                 return CartItemWidget(
                                   index,
                                   cartItem,
+                                  _cartItemShaaredPref,
                                   _formatPrice,
                                   _decrementCount,
                                   _incrementCount,
@@ -278,9 +284,8 @@ class _CartPageState extends State<CartPage> {
                               },
                             ),
 
-                            SizedBox(
-                              height: 16.0,
-                            ), // 4. Horizontal List of Images
+                            SizedBox(height: 16.0),
+                            // 4. Horizontal List of Images
                             //free product 2 text
                             Text(
                               "For our prestigious Customers :",
@@ -305,161 +310,161 @@ class _CartPageState extends State<CartPage> {
 
                             SizedBox(height: 10),
 
-                            //horizontal list of free products
-                            SizedBox(
-                              height:
-                                  230, // Fixed height for the horizontal list
-                              child: ListView.builder(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: _imageList.length,
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      _updateFreeSelectedIndex(index);
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8.0,
-                                      ),
-                                      child: Stack(
-                                        alignment: Alignment.center,
-                                        children: [
-                                          Column(
-                                            children: [
-                                              //product image
-                                              Padding(
-                                                padding: EdgeInsets.all(4),
-                                                child: SizedBox(
-                                                  width: 150,
-                                                  height: 150,
-                                                  child:
-                                                      NetworkImageWithLoading(
-                                                        imageUrl:
-                                                            _imageList[index],
-                                                      ),
-                                                ),
-                                              ),
-
-                                              //product text
-                                              SizedBox(
-                                                width: 150,
-                                                height: 40,
-                                                child: Center(
-                                                  child: Text(
-                                                    maxLines: 2,
-                                                    textAlign: TextAlign.center,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    "${_itemNameList[index]}",
-                                                    style: TextStyle(
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w500,
-                                                      fontFamily: "Montserrat",
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-
-                                          //background border
-                                          Align(
-                                            alignment: Alignment.topCenter,
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                border: Border.all(
-                                                  color: Color.fromARGB(
-                                                    255,
-                                                    123,
-                                                    138,
-                                                    195,
-                                                  ),
-                                                  width: 1.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(0),
-                                              ),
-                                              width: 166,
-                                              height: 210,
-                                            ),
-                                          ),
-
-                                          //bottom selector default
-                                          if (freeSelectedIndex != index)
-                                            Align(
-                                              alignment: Alignment.bottomCenter,
-                                              child: Container(
-                                                width: 35,
-                                                height: 35,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Color.fromARGB(
-                                                    255,
-                                                    31,
-                                                    47,
-                                                    80,
-                                                  ),
-                                                ),
-                                                child: Container(
-                                                  width: 30,
-                                                  height: 30,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Colors.white,
-                                                    border: Border.all(
-                                                      width: 5,
-                                                      color: Color.fromARGB(
-                                                        255,
-                                                        31,
-                                                        47,
-                                                        80,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-
-                                          //bottom selector selected
-                                          if (freeSelectedIndex == index)
-                                            Align(
-                                              alignment: Alignment.bottomCenter,
-                                              child: Container(
-                                                width: 33,
-                                                height: 33,
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  color: Colors.white,
-                                                ),
-                                                child: Container(
-                                                  width: 30,
-                                                  height: 30,
-                                                  decoration: BoxDecoration(
-                                                    shape: BoxShape.circle,
-                                                    color: Color.fromARGB(
-                                                      255,
-                                                      31,
-                                                      47,
-                                                      80,
-                                                    ),
-                                                    border: Border.all(
-                                                      width: 2,
-                                                      color: Colors.white,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                        ],
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-
+                            //todo: here for free products API and data
+                            // //horizontal list of free products
+                            // SizedBox(
+                            //   height:
+                            //       230, // Fixed height for the horizontal list
+                            //   child: ListView.builder(
+                            //     scrollDirection: Axis.horizontal,
+                            //     itemCount: _imageList.length,
+                            //     itemBuilder: (context, index) {
+                            //       return GestureDetector(
+                            //         onTap: () {
+                            //           _updateFreeSelectedIndex(index);
+                            //         },
+                            //         child: Padding(
+                            //           padding: const EdgeInsets.symmetric(
+                            //             horizontal: 8.0,
+                            //           ),
+                            //           child: Stack(
+                            //             alignment: Alignment.center,
+                            //             children: [
+                            //               Column(
+                            //                 children: [
+                            //                   //product image
+                            //                   Padding(
+                            //                     padding: EdgeInsets.all(4),
+                            //                     child: SizedBox(
+                            //                       width: 150,
+                            //                       height: 150,
+                            //                       child:
+                            //                           NetworkImageWithLoading(
+                            //                             imageUrl:
+                            //                                 _imageList[index],
+                            //                           ),
+                            //                     ),
+                            //                   ),
+                            //
+                            //                   //product text
+                            //                   SizedBox(
+                            //                     width: 150,
+                            //                     height: 40,
+                            //                     child: Center(
+                            //                       child: Text(
+                            //                         maxLines: 2,
+                            //                         textAlign: TextAlign.center,
+                            //                         overflow:
+                            //                             TextOverflow.ellipsis,
+                            //                         "${_itemNameList[index]}",
+                            //                         style: TextStyle(
+                            //                           fontSize: 12,
+                            //                           fontWeight:
+                            //                               FontWeight.w500,
+                            //                           fontFamily: "Montserrat",
+                            //                           color: Colors.white,
+                            //                         ),
+                            //                       ),
+                            //                     ),
+                            //                   ),
+                            //                 ],
+                            //               ),
+                            //
+                            //               //background border
+                            //               Align(
+                            //                 alignment: Alignment.topCenter,
+                            //                 child: Container(
+                            //                   decoration: BoxDecoration(
+                            //                     border: Border.all(
+                            //                       color: Color.fromARGB(
+                            //                         255,
+                            //                         123,
+                            //                         138,
+                            //                         195,
+                            //                       ),
+                            //                       width: 1.0,
+                            //                     ),
+                            //                     borderRadius:
+                            //                         BorderRadius.circular(0),
+                            //                   ),
+                            //                   width: 166,
+                            //                   height: 210,
+                            //                 ),
+                            //               ),
+                            //
+                            //               //bottom selector default
+                            //               if (freeSelectedIndex != index)
+                            //                 Align(
+                            //                   alignment: Alignment.bottomCenter,
+                            //                   child: Container(
+                            //                     width: 35,
+                            //                     height: 35,
+                            //                     decoration: BoxDecoration(
+                            //                       shape: BoxShape.circle,
+                            //                       color: Color.fromARGB(
+                            //                         255,
+                            //                         31,
+                            //                         47,
+                            //                         80,
+                            //                       ),
+                            //                     ),
+                            //                     child: Container(
+                            //                       width: 30,
+                            //                       height: 30,
+                            //                       decoration: BoxDecoration(
+                            //                         shape: BoxShape.circle,
+                            //                         color: Colors.white,
+                            //                         border: Border.all(
+                            //                           width: 5,
+                            //                           color: Color.fromARGB(
+                            //                             255,
+                            //                             31,
+                            //                             47,
+                            //                             80,
+                            //                           ),
+                            //                         ),
+                            //                       ),
+                            //                     ),
+                            //                   ),
+                            //                 ),
+                            //
+                            //               //bottom selector selected
+                            //               if (freeSelectedIndex == index)
+                            //                 Align(
+                            //                   alignment: Alignment.bottomCenter,
+                            //                   child: Container(
+                            //                     width: 33,
+                            //                     height: 33,
+                            //                     decoration: BoxDecoration(
+                            //                       shape: BoxShape.circle,
+                            //                       color: Colors.white,
+                            //                     ),
+                            //                     child: Container(
+                            //                       width: 30,
+                            //                       height: 30,
+                            //                       decoration: BoxDecoration(
+                            //                         shape: BoxShape.circle,
+                            //                         color: Color.fromARGB(
+                            //                           255,
+                            //                           31,
+                            //                           47,
+                            //                           80,
+                            //                         ),
+                            //                         border: Border.all(
+                            //                           width: 2,
+                            //                           color: Colors.white,
+                            //                         ),
+                            //                       ),
+                            //                     ),
+                            //                   ),
+                            //                 ),
+                            //             ],
+                            //           ),
+                            //         ),
+                            //       );
+                            //     },
+                            //   ),
+                            // ),
                             SizedBox(height: 10),
 
                             //proceed to checkout button
