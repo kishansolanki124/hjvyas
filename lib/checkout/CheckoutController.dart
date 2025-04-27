@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../api/models/ShippingChargesResponse.dart';
 import '../api/models/ShippingStatusResponse.dart';
 import '../api/services/HJVyasApiService.dart'; // Or your state management solution
 
@@ -14,9 +15,13 @@ class CheckoutController extends GetxController {
   Rx<ShippingStatusResponse?> shippingStatusResponse =
       Rx<ShippingStatusResponse?>(null);
 
+  Rx<ShippingChargesResponse?> shippingChargesResponse =
+      Rx<ShippingChargesResponse?>(null);
+
   //var productTesterList = <ProductTesterListItem>[].obs;
   //var items = <ProductListItem>[].obs;
   var isLoading = false.obs;
+  var shippingChargesLoading = false.obs;
 
   //var cartItemsLoading = false.obs;
   var testerItemsLoading = false.obs;
@@ -30,6 +35,30 @@ class CheckoutController extends GetxController {
       //cartItems.assignAll(newItems.productCartList);
     } finally {
       isLoading(false);
+    }
+  }
+
+  Future<void> getShippingCharge(
+    String cityJamnagar,
+    String cityOther,
+    String stateOutofGujarat,
+    String countryOutside,
+    String cartWeight,
+    String cartAmount,
+  ) async {
+    shippingChargesLoading(true);
+    try {
+      shippingChargesResponse.value = await _service.getShippingCharge(
+        cityJamnagar,
+        cityOther,
+        stateOutofGujarat,
+        countryOutside,
+        cartWeight,
+        cartAmount,
+      );
+      //cartItems.assignAll(newItems.productCartList);
+    } finally {
+      shippingChargesLoading(false);
     }
   }
 

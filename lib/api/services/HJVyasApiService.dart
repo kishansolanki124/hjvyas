@@ -17,6 +17,7 @@ import '../models/LogoResponse.dart';
 import '../models/ProductDetailResponse.dart';
 import '../models/ProductListResponse.dart';
 import '../models/ProductTesterResponse.dart';
+import '../models/ShippingChargesResponse.dart';
 import '../models/ShippingStatusResponse.dart';
 import '../models/StaticPageResponse.dart';
 
@@ -126,9 +127,7 @@ class HJVyasApiService {
 
     try {
       // URL-encoded data as a Map
-      final formData = {
-        'product_id': productId,
-      };
+      final formData = {'product_id': productId};
 
       if (kDebugMode) {
         print('formData is: $formData');
@@ -141,7 +140,8 @@ class HJVyasApiService {
           // Explicitly set content-type (Dio often infers this, but be explicit)
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         ),
-      );      if (kDebugMode) {
+      );
+      if (kDebugMode) {
         print('response is $response');
       }
       return ProductDetailResponse.fromJson(jsonDecode(response.data));
@@ -172,9 +172,7 @@ class HJVyasApiService {
 
     try {
       // URL-encoded data as a Map
-      final formData = {
-        'combo_id': productId,
-      };
+      final formData = {'combo_id': productId};
 
       if (kDebugMode) {
         print('formData is: $formData');
@@ -187,7 +185,8 @@ class HJVyasApiService {
           // Explicitly set content-type (Dio often infers this, but be explicit)
           headers: {'Content-Type': 'application/x-www-form-urlencoded'},
         ),
-      );      if (kDebugMode) {
+      );
+      if (kDebugMode) {
         print('response is $response');
       }
       return ComboDetailResponse.fromJson(jsonDecode(response.data));
@@ -457,14 +456,71 @@ class HJVyasApiService {
     }
 
     try {
-
-      final response = await _client.post(
-        '/get_shipping_status',
-      );
+      final response = await _client.post('/get_shipping_status');
       if (kDebugMode) {
         print('response is $response');
       }
       return ShippingStatusResponse.fromJson(jsonDecode(response.data));
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print('DioException is message ${e.message} and error is ${e.error}');
+      }
+      if (e.response != null) {
+        if (kDebugMode) {
+          print('DioException is response ${e.response}');
+          print('e.response!.statusCode ${e.response!.statusCode!}');
+        }
+        throw ApiResponseException(e.message!, e.response!.statusCode!);
+      } else {
+        if (kDebugMode) {
+          print('No internet connection');
+        }
+        throw NetworkException('No internet connection');
+      }
+    }
+  }
+
+  Future<ShippingChargesResponse> getShippingCharge(
+    String city_jamnagar,
+    String city_other,
+    String state_outof_gujarat,
+    String country_outside,
+    String cart_weight,
+    String cart_amount,
+  ) async {
+    // First check basic connectivity
+    if (!await ConnectivityService.isConnected) {
+      throw NetworkException('No internet connection', isConnectionIssue: true);
+    }
+
+    try {
+      // URL-encoded data as a Map
+      final formData = {
+        'city_jamnagar': city_jamnagar,
+        'city_other': city_other,
+        'state_outof_gujarat': state_outof_gujarat,
+        'country_outside': country_outside,
+        'cart_weight': cart_weight,
+        'cart_amount': cart_amount,
+      };
+
+      if (kDebugMode) {
+        print('formData is: $formData');
+      }
+
+      final response = await _client.post(
+        '/get_shipping_charge',
+        data: formData,
+        options: Options(
+          // Explicitly set content-type (Dio often infers this, but be explicit)
+          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        ),
+      );
+
+      if (kDebugMode) {
+        print('response is $response');
+      }
+      return ShippingChargesResponse.fromJson(jsonDecode(response.data));
     } on DioException catch (e) {
       if (kDebugMode) {
         print('DioException is message ${e.message} and error is ${e.error}');

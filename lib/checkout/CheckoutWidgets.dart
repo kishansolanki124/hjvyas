@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../api/models/ShippingStatusResponse.dart';
+
 Widget CartTotalRow(String title, String value, double bottomPadding) {
   return Padding(
     padding: EdgeInsets.only(bottom: bottomPadding, left: 10, right: 10),
@@ -31,11 +33,26 @@ Widget CartTotalRow(String title, String value, double bottomPadding) {
 }
 
 Widget radioTwoOption(
+  ShippingStatusResponse? shippingStatusResponse,
   String option1,
   String option2,
   _onValueChanged,
   _selectedOption,
 ) {
+  bool isGujaratOn = (shippingStatusResponse!.shippingStatusList!
+      .elementAt(0).gujaratStatus == "on") ? true : false;
+
+  bool otherStateOn = (shippingStatusResponse!.shippingStatusList!
+      .elementAt(0).outofgujaratStatus == "on") ? true : false;
+
+  if (option1 == "India") {
+    //country radio options
+  } else if (option1 == "Gujarat") {
+    //state radio options
+  } else if (option1 == "Jamnagar") {
+    //city radio
+  }
+
   return Row(
     mainAxisAlignment: MainAxisAlignment.start,
     // Center the buttons horizontally
@@ -108,8 +125,12 @@ Widget radioTwoOption(
   );
 }
 
-Widget CheckoutAddressWidget(_onGiftPackValueUpdate, _giftPackisChecked,
-    _tncCheckedValueUpdate, _tncChecked) {
+Widget CheckoutAddressWidget(
+  _onGiftPackValueUpdate,
+  _giftPackisChecked,
+  _tncCheckedValueUpdate,
+  _tncChecked,
+) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -515,8 +536,7 @@ Widget CheckoutAddressWidget(_onGiftPackValueUpdate, _giftPackisChecked,
         ),
       ),
 
-      SizedBox(height: 10),
-      //gift pack Checkbox
+      SizedBox(height: 10), //gift pack Checkbox
       Row(
         children: [
           Checkbox(
@@ -550,8 +570,7 @@ Widget CheckoutAddressWidget(_onGiftPackValueUpdate, _giftPackisChecked,
         ],
       ),
 
-      SizedBox(height: 10),
-      //TNC Checkbox
+      SizedBox(height: 10), //TNC Checkbox
       Row(
         children: [
           Checkbox(
