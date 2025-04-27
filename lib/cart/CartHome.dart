@@ -177,10 +177,24 @@ class _CartPageState extends State<CartPage> {
   }
 
   void proceedToCheckOutClicked() {
+    if (freeSelectedIndex == -1) {
+      showSnackbar("Please Select Any One Free Product Tester");
+      return;
+    }
+    double total = 0;
+
+    for (int i = 0; i < _cartItemShaaredPrefList.length; i++) {
+      total +=
+          int.parse(_cartItemShaaredPrefList.elementAt(i).quantity) *
+          double.parse(
+            widget.paginationController.cartItems.elementAt(i).packingPrice,
+          );
+    }
+
     setState(() {
       Navigator.of(
         context,
-      ).push(MaterialPageRoute(builder: (context) => Checkout()));
+      ).push(MaterialPageRoute(builder: (context) => Checkout(total: total)));
     });
   }
 
@@ -325,10 +339,12 @@ class _CartPageState extends State<CartPage> {
                                     .paginationController
                                     .productTesterList
                                     .isNotEmpty &&
-                                null != widget
-                                    .paginationController
-                                    .productTesterResponse
-                                    .value && widget
+                                null !=
+                                    widget
+                                        .paginationController
+                                        .productTesterResponse
+                                        .value &&
+                                widget
                                         .paginationController
                                         .productTesterResponse
                                         .value!

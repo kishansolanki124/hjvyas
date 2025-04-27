@@ -5,6 +5,10 @@ import 'package:hjvyas/checkout/CheckoutWidgets.dart';
 import '../product_detail/ProductDetailWidget.dart';
 
 class Checkout extends StatefulWidget {
+  final double total;
+
+  const Checkout({super.key, required this.total});
+
   @override
   State<Checkout> createState() => _CheckoutState();
 }
@@ -136,7 +140,7 @@ class _CheckoutState extends State<Checkout> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             //cart total
-                            CartTotalRow("Cart Total", "Rs. 5900", 10),
+                            CartTotalRow("Cart Total", "₹ ${widget.total}", 10),
 
                             //shipping charge
                             CartTotalRow("Shipping Charge", "Rs. 00", 10),
@@ -155,7 +159,7 @@ class _CheckoutState extends State<Checkout> {
                                 padding: EdgeInsets.symmetric(vertical: 10),
                                 child: CartTotalRow(
                                   "Grant Total",
-                                  "Rs. 5900",
+                                  "₹ ${widget.total}",
                                   0,
                                 ),
                               ),
