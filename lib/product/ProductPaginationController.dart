@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../api/models/ProductCartResponse.dart';
 import '../api/models/ProductListResponse.dart';
+import '../api/models/ProductTesterResponse.dart';
 import '../api/services/HJVyasApiService.dart'; // Or your state management solution
 
 class ProductPaginationController extends GetxController {
@@ -13,9 +14,11 @@ class ProductPaginationController extends GetxController {
   ProductPaginationController(this._service);
 
   var cartItems = <ProductCartListItem>[].obs;
+  var productTesterList = <ProductTesterListItem>[].obs;
   var items = <ProductListItem>[].obs;
   var isLoading = false.obs;
   var cartItemsLoading = false.obs;
+  var testerItemsLoading = false.obs;
   var cartMaxQty = 0;
   var currentPage = 0;
   var totalItems = 0;
@@ -35,6 +38,19 @@ class ProductPaginationController extends GetxController {
       cartItems.assignAll(newItems.productCartList);
     } finally {
       cartItemsLoading(false);
+    }
+  }
+
+  Future<void> getProductTester(String cartProductId, String cartTotal) async {
+    testerItemsLoading(true);
+    try {
+      final newItems = await _service.getProductTester(
+        cartProductId,
+        cartTotal,
+      );
+      productTesterList.assignAll(newItems.productTesterList);
+    } finally {
+      testerItemsLoading(false);
     }
   }
 

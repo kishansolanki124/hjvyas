@@ -19,6 +19,8 @@ Product listing page:
 10. Give fix height to each item
 
 Product Details:
+1. coming back from cart page, update cart total (shared pref)
+2. two decimal points price
 8. Test with smaller and larger devices.
 9. cart button on top right side to navigate to that page.
 9. can show animatino on top right cart icon on Add To Cart Click.
@@ -32,6 +34,10 @@ Static Pages:
 3. internet issue retry page
 4. call api only once on first load. currently on each tab its calling
 8. imoption option next and done for fields
+
+Cart page:
+1. Empty cart screen
+2. two decimal points price
 
 General:
 1. keep only portrait mode app

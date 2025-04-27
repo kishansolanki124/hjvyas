@@ -8,10 +8,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/models/CartItemModel.dart';
 import '../api/models/ProductCartResponse.dart';
+import '../api/models/ProductTesterResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product/ProductPaginationController.dart';
 import '../product_detail/FullWidthButton.dart';
+import '../product_detail/NetworkImageWithLoading.dart';
 import 'CartWidget.dart';
 
 class CartItem {
@@ -43,6 +45,7 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   List<CartItemModel> _cartItemShaaredPrefList = [];
   List<ProductCartListItem>? _cartItems;
+  List<ProductTesterListItem>? _productTesterItems;
   int cartMaxQty = 0;
 
   // Instance of SharedPreferences
@@ -104,11 +107,34 @@ class _CartPageState extends State<CartPage> {
           .map((cartItem) => cartItem.productType.replaceAll("combo_", ""))
           .join(',');
 
-      widget.paginationController.getProductCart(
+      await widget.paginationController.getProductCart(
         productIds.replaceAll("combo_", ""),
         productType,
       ); // Explicit call
+
+      getProductTester();
     }
+  }
+
+  Future<void> getProductTester() async {
+    String productIds = _cartItemShaaredPrefList
+        .map((cartItem) => cartItem.productPackingId)
+        .join(',');
+
+    double total = 0;
+
+    for (int i = 0; i < _cartItemShaaredPrefList.length; i++) {
+      total +=
+          int.parse(_cartItemShaaredPrefList.elementAt(i).quantity) *
+          double.parse(
+            widget.paginationController.cartItems.elementAt(i).packingPrice,
+          );
+    }
+
+    widget.paginationController.getProductTester(
+      productIds.replaceAll("combo_", ""),
+      total.toString(),
+    );
   }
 
   int freeSelectedIndex = -1;
@@ -146,9 +172,6 @@ class _CartPageState extends State<CartPage> {
       //     double.parse(_selectedVariant!.productPackingPrice) *
       //         selectedItemQuantity;
     });
-    // setState(() {
-    //   _cartItems[index].count++;
-    // });
   }
 
   // Function to increment item count
@@ -175,16 +198,11 @@ class _CartPageState extends State<CartPage> {
                 .toString();
       });
     }
-
-    // setState(() {
-    //   if (_cartItems[index].count > 1) {
-    //     _cartItems[index].count--;
-    //   }
-    // });
   }
 
   // Function to remove item from cart
   Future<void> _removeItem(int index) async {
+    //todo: call free item API on item removal
     _cartItems!.removeAt(index);
     _cartItemShaaredPrefList.removeAt(index);
 
@@ -224,6 +242,8 @@ class _CartPageState extends State<CartPage> {
 
         cartMaxQty = widget.paginationController.cartMaxQty;
         _cartItems = widget.paginationController.cartItems;
+
+        _productTesterItems = widget.paginationController.productTesterList;
 
         return SafeArea(
           child: Scaffold(
@@ -284,187 +304,220 @@ class _CartPageState extends State<CartPage> {
                               },
                             ),
 
-                            SizedBox(height: 16.0),
-                            // 4. Horizontal List of Images
-                            //free product 2 text
-                            Text(
-                              "For our prestigious Customers :",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: "Montserrat",
+
+
+                            if (widget
+                                    .paginationController
+                                    .productTesterList
+                                    .isEmpty &&
+                                widget
+                                    .paginationController
+                                    .testerItemsLoading
+                                    .value)
+                              Container(
+                                color: Color.fromARGB(255, 31, 47, 80),
+                                child: Center(
+                                  child: CircularProgressIndicator(),
+                                ),
                               ),
-                            ),
 
-                            SizedBox(height: 5),
+                            //horizontal list of free products
+                            if (!widget
+                                    .paginationController
+                                    .testerItemsLoading
+                                    .value &&
+                                widget
+                                    .paginationController
+                                    .productTesterList
+                                    .isNotEmpty) ...[
 
-                            Text(
-                              "Please Select Anyone Free Product Tester & Proceed To Checkout Below",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 14,
-                                fontFamily: "Montserrat",
+                              SizedBox(
+                                height: 16.0,
+                              ), // 4. Horizontal List of Images
+                              //free product 2 text
+                              Text(
+                                "For our prestigious Customers :",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: "Montserrat",
+                                ),
                               ),
-                            ),
 
-                            SizedBox(height: 10),
+                              SizedBox(height: 5),
 
-                            //todo: here for free products API and data
-                            // //horizontal list of free products
-                            // SizedBox(
-                            //   height:
-                            //       230, // Fixed height for the horizontal list
-                            //   child: ListView.builder(
-                            //     scrollDirection: Axis.horizontal,
-                            //     itemCount: _imageList.length,
-                            //     itemBuilder: (context, index) {
-                            //       return GestureDetector(
-                            //         onTap: () {
-                            //           _updateFreeSelectedIndex(index);
-                            //         },
-                            //         child: Padding(
-                            //           padding: const EdgeInsets.symmetric(
-                            //             horizontal: 8.0,
-                            //           ),
-                            //           child: Stack(
-                            //             alignment: Alignment.center,
-                            //             children: [
-                            //               Column(
-                            //                 children: [
-                            //                   //product image
-                            //                   Padding(
-                            //                     padding: EdgeInsets.all(4),
-                            //                     child: SizedBox(
-                            //                       width: 150,
-                            //                       height: 150,
-                            //                       child:
-                            //                           NetworkImageWithLoading(
-                            //                             imageUrl:
-                            //                                 _imageList[index],
-                            //                           ),
-                            //                     ),
-                            //                   ),
-                            //
-                            //                   //product text
-                            //                   SizedBox(
-                            //                     width: 150,
-                            //                     height: 40,
-                            //                     child: Center(
-                            //                       child: Text(
-                            //                         maxLines: 2,
-                            //                         textAlign: TextAlign.center,
-                            //                         overflow:
-                            //                             TextOverflow.ellipsis,
-                            //                         "${_itemNameList[index]}",
-                            //                         style: TextStyle(
-                            //                           fontSize: 12,
-                            //                           fontWeight:
-                            //                               FontWeight.w500,
-                            //                           fontFamily: "Montserrat",
-                            //                           color: Colors.white,
-                            //                         ),
-                            //                       ),
-                            //                     ),
-                            //                   ),
-                            //                 ],
-                            //               ),
-                            //
-                            //               //background border
-                            //               Align(
-                            //                 alignment: Alignment.topCenter,
-                            //                 child: Container(
-                            //                   decoration: BoxDecoration(
-                            //                     border: Border.all(
-                            //                       color: Color.fromARGB(
-                            //                         255,
-                            //                         123,
-                            //                         138,
-                            //                         195,
-                            //                       ),
-                            //                       width: 1.0,
-                            //                     ),
-                            //                     borderRadius:
-                            //                         BorderRadius.circular(0),
-                            //                   ),
-                            //                   width: 166,
-                            //                   height: 210,
-                            //                 ),
-                            //               ),
-                            //
-                            //               //bottom selector default
-                            //               if (freeSelectedIndex != index)
-                            //                 Align(
-                            //                   alignment: Alignment.bottomCenter,
-                            //                   child: Container(
-                            //                     width: 35,
-                            //                     height: 35,
-                            //                     decoration: BoxDecoration(
-                            //                       shape: BoxShape.circle,
-                            //                       color: Color.fromARGB(
-                            //                         255,
-                            //                         31,
-                            //                         47,
-                            //                         80,
-                            //                       ),
-                            //                     ),
-                            //                     child: Container(
-                            //                       width: 30,
-                            //                       height: 30,
-                            //                       decoration: BoxDecoration(
-                            //                         shape: BoxShape.circle,
-                            //                         color: Colors.white,
-                            //                         border: Border.all(
-                            //                           width: 5,
-                            //                           color: Color.fromARGB(
-                            //                             255,
-                            //                             31,
-                            //                             47,
-                            //                             80,
-                            //                           ),
-                            //                         ),
-                            //                       ),
-                            //                     ),
-                            //                   ),
-                            //                 ),
-                            //
-                            //               //bottom selector selected
-                            //               if (freeSelectedIndex == index)
-                            //                 Align(
-                            //                   alignment: Alignment.bottomCenter,
-                            //                   child: Container(
-                            //                     width: 33,
-                            //                     height: 33,
-                            //                     decoration: BoxDecoration(
-                            //                       shape: BoxShape.circle,
-                            //                       color: Colors.white,
-                            //                     ),
-                            //                     child: Container(
-                            //                       width: 30,
-                            //                       height: 30,
-                            //                       decoration: BoxDecoration(
-                            //                         shape: BoxShape.circle,
-                            //                         color: Color.fromARGB(
-                            //                           255,
-                            //                           31,
-                            //                           47,
-                            //                           80,
-                            //                         ),
-                            //                         border: Border.all(
-                            //                           width: 2,
-                            //                           color: Colors.white,
-                            //                         ),
-                            //                       ),
-                            //                     ),
-                            //                   ),
-                            //                 ),
-                            //             ],
-                            //           ),
-                            //         ),
-                            //       );
-                            //     },
-                            //   ),
-                            // ),
+                              Text(
+                                "Please Select Anyone Free Product Tester & Proceed To Checkout Below",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontFamily: "Montserrat",
+                                ),
+                              ),
+
+                              SizedBox(height: 10),
+
+                              SizedBox(
+                                height:
+                                    230, // Fixed height for the horizontal list
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _productTesterItems?.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        _updateFreeSelectedIndex(index);
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 8.0,
+                                        ),
+                                        child: Stack(
+                                          alignment: Alignment.center,
+                                          children: [
+                                            Column(
+                                              children: [
+                                                //product image
+                                                Padding(
+                                                  padding: EdgeInsets.all(4),
+                                                  child: SizedBox(
+                                                    width: 150,
+                                                    height: 150,
+                                                    child: NetworkImageWithLoading(
+                                                      imageUrl:
+                                                          _productTesterItems![index]
+                                                              .testerImage,
+                                                    ),
+                                                  ),
+                                                ),
+
+                                                //product text
+                                                SizedBox(
+                                                  width: 150,
+                                                  height: 40,
+                                                  child: Center(
+                                                    child: Text(
+                                                      maxLines: 2,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      _productTesterItems![index]
+                                                          .testerName,
+                                                      style: TextStyle(
+                                                        fontSize: 12,
+                                                        fontWeight:
+                                                            FontWeight.w500,
+                                                        fontFamily:
+                                                            "Montserrat",
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+
+                                            //background border
+                                            Align(
+                                              alignment: Alignment.topCenter,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                    color: Color.fromARGB(
+                                                      255,
+                                                      123,
+                                                      138,
+                                                      195,
+                                                    ),
+                                                    width: 1.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(0),
+                                                ),
+                                                width: 166,
+                                                height: 210,
+                                              ),
+                                            ),
+
+                                            //bottom selector default
+                                            if (freeSelectedIndex != index)
+                                              Align(
+                                                alignment:
+                                                    Alignment.bottomCenter,
+                                                child: Container(
+                                                  width: 35,
+                                                  height: 35,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Color.fromARGB(
+                                                      255,
+                                                      31,
+                                                      47,
+                                                      80,
+                                                    ),
+                                                  ),
+                                                  child: Container(
+                                                    width: 30,
+                                                    height: 30,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: Colors.white,
+                                                      border: Border.all(
+                                                        width: 5,
+                                                        color: Color.fromARGB(
+                                                          255,
+                                                          31,
+                                                          47,
+                                                          80,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+
+                                            //bottom selector selected
+                                            if (freeSelectedIndex == index)
+                                              Align(
+                                                alignment:
+                                                    Alignment.bottomCenter,
+                                                child: Container(
+                                                  width: 33,
+                                                  height: 33,
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: Colors.white,
+                                                  ),
+                                                  child: Container(
+                                                    width: 30,
+                                                    height: 30,
+                                                    decoration: BoxDecoration(
+                                                      shape: BoxShape.circle,
+                                                      color: Color.fromARGB(
+                                                        255,
+                                                        31,
+                                                        47,
+                                                        80,
+                                                      ),
+                                                      border: Border.all(
+                                                        width: 2,
+                                                        color: Colors.white,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+
                             SizedBox(height: 10),
 
                             //proceed to checkout button

@@ -77,7 +77,7 @@ Widget CartItemWidget(
 
                   // 3. Price per Weight
                   Text(
-                    '${_formatPrice(cartItem.packingPrice)} (600 GM)',
+                    '${_formatPrice(cartItem.packingPrice)} (${cartItem.packingWeight})',
                     textAlign: TextAlign.right,
                     style: TextStyle(
                       backgroundColor: Color.fromARGB(255, 31, 47, 80),
