@@ -14,6 +14,9 @@ class ProductPaginationController extends GetxController {
   ProductPaginationController(this._service);
 
   var cartItems = <ProductCartListItem>[].obs;
+  Rx<ProductTesterResponse?> productTesterResponse = Rx<ProductTesterResponse?>(
+    null,
+  );
   var productTesterList = <ProductTesterListItem>[].obs;
   var items = <ProductListItem>[].obs;
   var isLoading = false.obs;
@@ -44,11 +47,13 @@ class ProductPaginationController extends GetxController {
   Future<void> getProductTester(String cartProductId, String cartTotal) async {
     testerItemsLoading(true);
     try {
-      final newItems = await _service.getProductTester(
+      productTesterResponse.value = await _service.getProductTester(
         cartProductId,
         cartTotal,
       );
-      productTesterList.assignAll(newItems.productTesterList);
+      productTesterList.assignAll(
+        productTesterResponse.value!.productTesterList,
+      );
     } finally {
       testerItemsLoading(false);
     }

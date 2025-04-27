@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hjvyas/checkout/Checkout.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -304,8 +305,6 @@ class _CartPageState extends State<CartPage> {
                               },
                             ),
 
-
-
                             if (widget
                                     .paginationController
                                     .productTesterList
@@ -329,33 +328,82 @@ class _CartPageState extends State<CartPage> {
                                 widget
                                     .paginationController
                                     .productTesterList
-                                    .isNotEmpty) ...[
+                                    .isNotEmpty &&
+                                widget
+                                        .paginationController
+                                        .productTesterResponse!
+                                        .value!
+                                        .productTesterStatus ==
+                                    "on") ...[
+                              SizedBox(height: 16.0),
 
-                              SizedBox(
-                                height: 16.0,
-                              ), // 4. Horizontal List of Images
+                              // 4. Horizontal List of Images
                               //free product 2 text
-                              Text(
-                                "For our prestigious Customers :",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: "Montserrat",
-                                ),
+                              Html(
+                                data:
+                                    widget
+                                        .paginationController
+                                        .productTesterResponse!
+                                        .value!
+                                        .productTesterMsg,
+                                style: {
+                                  "body": Style(
+                                    fontWeight: FontWeight.w400,
+                                    //fontSize: 14,
+                                    fontFamily: "Montserrat",
+                                    fontSize: FontSize.medium,
+                                    textAlign: TextAlign.justify,
+                                    color: Colors.white,
+                                  ),
+                                  //"h1": Style(fontSize: FontSize.xxLarge),
+                                  "p": Style(
+                                    fontWeight: FontWeight.w400,
+                                    //fontSize: 14,
+                                    fontFamily: "Montserrat",
+                                    fontSize: FontSize.medium,
+                                    textAlign: TextAlign.justify,
+                                    color: Colors.white,
+                                  ),
+                                  "strong": Style(
+                                    fontWeight: FontWeight.w600,
+                                    //fontSize: 14,
+                                    fontFamily: "Montserrat",
+                                    fontSize: FontSize.large,
+                                    textAlign: TextAlign.justify,
+                                    color: Colors.white,
+                                  ),
+                                  //"a": Style(color: Colors.blue, decoration: TextDecoration.underline),
+                                  //"table": Style(border: Border.all(color: Colors.grey)),
+                                  //"th": Style(padding: EdgeInsets.all(8), backgroundColor: Colors.lightBlue),
+                                  //"td": Style(padding: EdgeInsets.all(8)),
+                                  //"div": Style(margin: EdgeInsets.only(bottom: 10)),
+                                  // "img": Style(
+                                  //   width: Width.percent(100), // Make images responsive.
+                                  //   height: Height.auto(),
+                                  // ),
+                                },
                               ),
 
-                              SizedBox(height: 5),
-
-                              Text(
-                                "Please Select Anyone Free Product Tester & Proceed To Checkout Below",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontFamily: "Montserrat",
-                                ),
-                              ),
-
+                              // Text(
+                              //   "For our prestigious Customers :",
+                              //   style: TextStyle(
+                              //     color: Colors.white,
+                              //     fontSize: 14,
+                              //     fontWeight: FontWeight.w600,
+                              //     fontFamily: "Montserrat",
+                              //   ),
+                              // ),
+                              //
+                              // SizedBox(height: 5),
+                              //
+                              // Text(
+                              //   "Please Select Anyone Free Product Tester & Proceed To Checkout Below",
+                              //   style: TextStyle(
+                              //     color: Colors.white,
+                              //     fontSize: 14,
+                              //     fontFamily: "Montserrat",
+                              //   ),
+                              // ),
                               SizedBox(height: 10),
 
                               SizedBox(
