@@ -166,12 +166,6 @@ class _CartPageState extends State<CartPage> {
       int currentQuantity = int.parse(_cartItemShaaredPrefList[index].quantity);
       _cartItemShaaredPrefList[index].quantity =
           (currentQuantity + 1).toString();
-
-      //todo: test this
-      // selectedItemQuantity++;
-      // floatingButtonPrice =
-      //     double.parse(_selectedVariant!.productPackingPrice) *
-      //         selectedItemQuantity;
     });
   }
 
@@ -203,7 +197,6 @@ class _CartPageState extends State<CartPage> {
 
   // Function to remove item from cart
   Future<void> _removeItem(int index) async {
-    //todo: call free item API on item removal
     _cartItems!.removeAt(index);
     _cartItemShaaredPrefList.removeAt(index);
 
@@ -212,6 +205,8 @@ class _CartPageState extends State<CartPage> {
             .map((item) => jsonEncode(item.toJson()))
             .toList();
     await _prefs.setStringList("cart_list", stringList);
+
+    await getProductTester();
 
     showSnackbar("Cart updated."); // Show the message
   }
@@ -237,6 +232,7 @@ class _CartPageState extends State<CartPage> {
 
         if (!widget.paginationController.cartItemsLoading.value &&
             widget.paginationController.cartItems.isEmpty) {
+          //todo: create a new UI for the same
           //either no API called or no data exist
           return Center(child: Text("Empty Cart"));
         }
@@ -329,7 +325,10 @@ class _CartPageState extends State<CartPage> {
                                     .paginationController
                                     .productTesterList
                                     .isNotEmpty &&
-                                widget
+                                null != widget
+                                    .paginationController
+                                    .productTesterResponse
+                                    .value && widget
                                         .paginationController
                                         .productTesterResponse
                                         .value!
