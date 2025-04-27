@@ -17,6 +17,7 @@ import '../models/LogoResponse.dart';
 import '../models/ProductDetailResponse.dart';
 import '../models/ProductListResponse.dart';
 import '../models/ProductTesterResponse.dart';
+import '../models/ShippingStatusResponse.dart';
 import '../models/StaticPageResponse.dart';
 
 class HJVyasApiService {
@@ -430,6 +431,40 @@ class HJVyasApiService {
         print('response is $response');
       }
       return ProductCartResponse.fromJson(jsonDecode(response.data));
+    } on DioException catch (e) {
+      if (kDebugMode) {
+        print('DioException is message ${e.message} and error is ${e.error}');
+      }
+      if (e.response != null) {
+        if (kDebugMode) {
+          print('DioException is response ${e.response}');
+          print('e.response!.statusCode ${e.response!.statusCode!}');
+        }
+        throw ApiResponseException(e.message!, e.response!.statusCode!);
+      } else {
+        if (kDebugMode) {
+          print('No internet connection');
+        }
+        throw NetworkException('No internet connection');
+      }
+    }
+  }
+
+  Future<ShippingStatusResponse> getShippingStatus() async {
+    // First check basic connectivity
+    if (!await ConnectivityService.isConnected) {
+      throw NetworkException('No internet connection', isConnectionIssue: true);
+    }
+
+    try {
+
+      final response = await _client.post(
+        '/get_shipping_status',
+      );
+      if (kDebugMode) {
+        print('response is $response');
+      }
+      return ShippingStatusResponse.fromJson(jsonDecode(response.data));
     } on DioException catch (e) {
       if (kDebugMode) {
         print('DioException is message ${e.message} and error is ${e.error}');
