@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../api/models/ProductCartResponse.dart';
 import '../api/models/ProductListResponse.dart';
 import '../api/services/HJVyasApiService.dart'; // Or your state management solution
 
@@ -11,11 +12,29 @@ class ProductPaginationController extends GetxController {
 
   ProductPaginationController(this._service);
 
+  var cartItems = <ProductCartListItem>[].obs;
   var items = <ProductListItem>[].obs;
   var isLoading = false.obs;
+  var cartItemsLoading = false.obs;
   var currentPage = 0;
   var totalItems = 0;
   final int itemsPerPage = 10; // Adjust based on API
+
+  Future<void> getProductCart(
+    String cartPackingId,
+    String cartProductType,
+  ) async {
+    cartItemsLoading(true);
+    try {
+      final newItems = await _service.getProductCart(
+        cartPackingId,
+        cartProductType,
+      );
+      cartItems.assignAll(newItems.productCartList);
+    } finally {
+      cartItemsLoading(false);
+    }
+  }
 
   Future<void> loadInitialData(int categoryId) async {
     isLoading(true);

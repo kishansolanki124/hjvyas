@@ -1,5 +1,5 @@
 1. create common progress for screens
-2. no internet screen with retry if possible
+2. no internet screen with retry in all screens. The way its handled in Splash screen with vhala text
 2. other error screen
 4. debug top right label (safearea implementation)
 Home page:
