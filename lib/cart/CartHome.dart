@@ -331,7 +331,7 @@ class _CartPageState extends State<CartPage> {
                                     .isNotEmpty &&
                                 widget
                                         .paginationController
-                                        .productTesterResponse!
+                                        .productTesterResponse
                                         .value!
                                         .productTesterStatus ==
                                     "on") ...[
@@ -343,7 +343,7 @@ class _CartPageState extends State<CartPage> {
                                 data:
                                     widget
                                         .paginationController
-                                        .productTesterResponse!
+                                        .productTesterResponse
                                         .value!
                                         .productTesterMsg,
                                 style: {
