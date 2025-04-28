@@ -139,6 +139,7 @@ class _CartPageState extends State<CartPage> {
   }
 
   int freeSelectedIndex = -1;
+  String productTesterId = "";
 
   void showSnackbar(String s) {
     var snackBar = SnackBar(
@@ -173,6 +174,8 @@ class _CartPageState extends State<CartPage> {
   void _updateFreeSelectedIndex(int index) {
     setState(() {
       freeSelectedIndex = index;
+
+      productTesterId = _productTesterItems!.elementAt(index).testerId;
     });
   }
 
@@ -192,12 +195,17 @@ class _CartPageState extends State<CartPage> {
     }
 
     setState(() {
-      Navigator.of(
-        context,
-      ).push(MaterialPageRoute(builder: (context) => Checkout(total: total,
-        cartItemShaaredPrefList: _cartItemShaaredPrefList,
-          cartItemsFromAPIforPrice: _cartItems!
-      )));
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder:
+              (context) => Checkout(
+                total: total,
+                productTesterId: productTesterId,
+                cartItemShaaredPrefList: _cartItemShaaredPrefList,
+                cartItemsFromAPIforPrice: _cartItems!,
+              ),
+        ),
+      );
     });
   }
 

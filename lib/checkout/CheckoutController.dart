@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../api/models/AddOrderResponse.dart';
 import '../api/models/ShippingChargesResponse.dart';
 import '../api/models/ShippingStatusResponse.dart';
 import '../api/services/HJVyasApiService.dart'; // Or your state management solution
@@ -18,10 +19,13 @@ class CheckoutController extends GetxController {
   Rx<ShippingChargesResponse?> shippingChargesResponse =
       Rx<ShippingChargesResponse?>(null);
 
+  Rx<AddOrderResponse?> addOrderResponse = Rx<AddOrderResponse?>(null);
+
   //var productTesterList = <ProductTesterListItem>[].obs;
   //var items = <ProductListItem>[].obs;
   var isLoading = false.obs;
   var shippingChargesLoading = false.obs;
+  var addOrderResponseLoading = false.obs;
 
   //var cartItemsLoading = false.obs;
   var testerItemsLoading = false.obs;
@@ -59,6 +63,71 @@ class CheckoutController extends GetxController {
       //cartItems.assignAll(newItems.productCartList);
     } finally {
       shippingChargesLoading(false);
+    }
+  }
+
+  Future<void> addOrder(
+    String customerName,
+    String customerEmail,
+    String contactNo,
+    String alternateContactNo,
+    String deliveryAddress,
+    String postalCode,
+    String country,
+    String state,
+    String city,
+    String gift_sender,
+    String gift_sender_mobile,
+    String gift_receiver,
+    String gift_receiver_mobile,
+    String product_tester_id,
+    String order_amount,
+    String shipping_charge,
+    String transaction_charge,
+    String payment_type,
+    String platform,
+    String product_id,
+    String product_type,
+    String product_name,
+    String packing_id,
+    String packing_weight,
+    String packing_weight_type,
+    String packing_quantity,
+    String packing_price,
+  ) async {
+    addOrderResponseLoading(true);
+    try {
+      addOrderResponse.value = await _service.addOrder(
+        customerName,
+        customerEmail,
+        contactNo,
+        alternateContactNo,
+        deliveryAddress,
+        postalCode,
+        country,
+        state,
+        city,
+        gift_sender,
+        gift_sender_mobile,
+        gift_receiver,
+        gift_receiver_mobile,
+        product_tester_id,
+        order_amount,
+        shipping_charge,
+        transaction_charge,
+        payment_type,
+        platform,
+        product_id,
+        product_type,
+        product_name,
+        packing_id,
+        packing_weight,
+        packing_weight_type,
+        packing_quantity,
+        packing_price,
+      );
+    } finally {
+      addOrderResponseLoading(false);
     }
   }
 

@@ -19,12 +19,14 @@ class Checkout extends StatefulWidget {
   );
 
   final double total;
+  final String productTesterId;
   final List<CartItemModel> cartItemShaaredPrefList;
   final List<ProductCartListItem> cartItemsFromAPIforPrice;
 
   Checkout({
     super.key,
     required this.total,
+    required this.productTesterId,
     required this.cartItemShaaredPrefList,
     required this.cartItemsFromAPIforPrice,
   });
@@ -34,6 +36,11 @@ class Checkout extends StatefulWidget {
 }
 
 class _CheckoutState extends State<Checkout> {
+
+  String packingWeight = "";
+  String packingWeightType = "";
+
+
   // Controllers for the TextField values
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
@@ -52,6 +59,7 @@ class _CheckoutState extends State<Checkout> {
 
   double shippingCharge = 0;
   double finalAmount = 0;
+  double onlineCharge = 0;
 
   String? _selectedOptionCountry = "";
 
@@ -93,9 +101,98 @@ class _CheckoutState extends State<Checkout> {
     } else if (_alternatePhone(_alternatePhoneController.text) != null) {
       showSnackbar(_alternatePhone(_alternatePhoneController.text).toString());
     } else {
-      //todo: call order place API
-      showSnackbar("Success vhala");
+      placeOrder();
     }
+  }
+
+  Future<void> placeOrder() async  {
+    String productIds = widget.cartItemShaaredPrefList
+        .map((cartItem) => cartItem.productPackingId)
+        .join(',');
+
+    String productType = widget.cartItemShaaredPrefList
+        .map((cartItem) => cartItem.productType.replaceAll("combo_", ""))
+        .join(',');
+
+    String productNames = widget.cartItemsFromAPIforPrice
+        .map((cartItem) => cartItem.productName)
+        .join(',');
+
+    String packingIds = widget.cartItemsFromAPIforPrice
+        .map((cartItem) => cartItem.packingId)
+        .join(',');
+
+    String packingQuantity = widget.cartItemShaaredPrefList
+        .map((cartItem) => cartItem.quantity)
+        .join(',');
+
+    String packingPrice = widget.cartItemsFromAPIforPrice
+        .map((cartItem) => cartItem.packingPrice)
+        .join(',');
+
+    getPackingWeightAndWeightType();
+
+    await widget.paginationController.addOrder(
+      _nameController.text.toString(),
+      _emailController.text.toString(),
+      _phoneController.text.toString(),
+      _alternatePhoneController.text.toString().isNotEmpty ? _alternatePhoneController.text.toString()
+          : "",
+      _deliveryAddressController.text.toString(),
+      _zipcodeController.text.toString(),
+      _selectedOptionCountry!,//todo work for country
+      _stateController.text.toString(),
+      _cityController.text.toString(),
+      "gift_sender", //todo
+      "gift_sender_mobile", //todo
+      "gift_receiver",//todo
+      "gift_receiver_mobile",//todo
+      widget.productTesterId,
+      finalAmount.toString(),
+      shippingCharge.toString(),
+      onlineCharge.toString(),
+      "icici", //todo payment_type value icici, ccavenue, paypal any one
+      "android", //todo: value android, ios any one value
+        productIds.replaceAll("combo_", ""),
+        productType,
+      productNames,
+      packingIds,
+      packingWeight,
+      packingWeightType,
+      packingQuantity,
+      packingPrice,
+    );
+  }
+
+  void getPackingWeightAndWeightType() {
+    List<String> numbersList = [];
+    List<String> unitsList = [];
+
+    for (ProductCartListItem product in widget.cartItemsFromAPIforPrice) {
+      String weightString = product.packingWeight;
+      RegExp numberRegExp = RegExp(r'^\d+(\.\d+)?');
+      RegExp unitRegExp = RegExp(r'[a-zA-Z]+$');
+
+      Match? numberMatch = numberRegExp.firstMatch(weightString);
+      Match? unitMatch = unitRegExp.firstMatch(weightString);
+
+      if (numberMatch != null && unitMatch != null) {
+        numbersList.add(numberMatch.group(0)!);
+        unitsList.add(unitMatch.group(0)!.trim().toUpperCase());
+      } else if (numberMatch != null) {
+        numbersList.add(numberMatch.group(0)!);
+        unitsList.add("NA");
+      } else if (unitMatch != null) {
+        numbersList.add("NA");
+        unitsList.add(unitMatch.group(0)!);
+      } else {
+        numbersList.add("NA");
+        unitsList.add("NA");
+      }
+    }
+
+    packingWeight = numbersList.join(', ');
+    packingWeightType = unitsList.join(', ');
   }
 
   void showSnackbar(String s) {
@@ -373,6 +470,13 @@ class _CheckoutState extends State<Checkout> {
                   .shippingChargesResponse
                   .value!
                   .finalCharge, //actually we are showing final charge i.e. shipping + online charges
+            );
+            onlineCharge = double.parse(
+              widget
+                  .paginationController
+                  .shippingChargesResponse
+                  .value!
+                  .onlineCharge, //actually we are showing final charge i.e. shipping + online charges
             );
             finalAmount = double.parse(
               widget
