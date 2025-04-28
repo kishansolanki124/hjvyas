@@ -38,7 +38,6 @@ class _CheckoutState extends State<Checkout> {
   double shippingCharge = 0;
   double finalAmount = 0;
 
-  //todo: on update of state or city, if form is visible then hide form so that user needs to recall shipping charges API
   String? _selectedOptionCountry = "";
   String? _selectedOptionState;
   String? _selectedOptionCity;
@@ -201,6 +200,12 @@ class _CheckoutState extends State<Checkout> {
     });
   }
 
+  void _hideCheckoutAddressWidget() {
+    setState(() {
+      showCheckoutAddressWidget = false;
+    });
+  }
+
   void _tncCheckedValueUpdate(bool newValue) {
     setState(() {
       _tncChecked = newValue;
@@ -208,20 +213,33 @@ class _CheckoutState extends State<Checkout> {
   }
 
   void _onValueChangedCountry(String value) {
+    if (value == _selectedOptionCountry) {
+      return;
+    }
+
     setState(() {
       _selectedOptionCountry = value;
+      _hideCheckoutAddressWidget();
     });
   }
 
   void _onValueChangedCity(String value) {
+    if (value == _selectedOptionCity) {
+      return;
+    }
     setState(() {
       _selectedOptionCity = value;
+      _hideCheckoutAddressWidget();
     });
   }
 
   void _onValueChangedState(String value) {
+    if (value == _selectedOptionState) {
+      return;
+    }
     setState(() {
       _selectedOptionState = value;
+      _hideCheckoutAddressWidget();
     });
   }
 
