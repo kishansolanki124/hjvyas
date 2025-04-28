@@ -94,17 +94,16 @@ class _CheckoutState extends State<Checkout> {
   }
 
   Future<void> getShippingCharge() async {
-    String state_outof_gujarat =
-        _selectedOptionState == "Gujarat" ? "no" : "yes";
-    String city_jamnagar =
-        (state_outof_gujarat == "no" && _selectedOptionCity == "Jamnagar")
+    String stateOutofGujarat = _selectedOptionState == "Gujarat" ? "no" : "yes";
+    String cityJamnagar =
+        (stateOutofGujarat == "no" && _selectedOptionCity == "Jamnagar")
             ? "yes"
             : "no";
-    String city_other =
-        (state_outof_gujarat == "no" && _selectedOptionCity == "Other City")
+    String cityOther =
+        (stateOutofGujarat == "no" && _selectedOptionCity == "Other City")
             ? "yes"
             : "no";
-    String country_outside = _selectedOptionCountry == "India" ? "no" : "yes";
+    String countryOutside = _selectedOptionCountry == "India" ? "no" : "yes";
 
     List<String> weightList = [];
 
@@ -131,15 +130,15 @@ class _CheckoutState extends State<Checkout> {
       print('totalWeight is $totalWeight');
     }
 
-    String cart_amount = widget.total.toString();
+    String cartAmount = widget.total.toString();
 
     await widget.paginationController.getShippingCharge(
-      city_jamnagar,
-      city_other,
-      state_outof_gujarat,
-      country_outside,
+      cityJamnagar,
+      cityOther,
+      stateOutofGujarat,
+      countryOutside,
       totalWeight.toString(),
-      cart_amount,
+      cartAmount,
     );
     _showCheckoutAddressWidget();
   }
@@ -555,11 +554,10 @@ class _CheckoutState extends State<Checkout> {
                                               !isGujaratOn) ...[
                                             //within Gujarat only Jamnagar is allowed
                                             Text(
-                                              "Khali Jamnagar whala " +
-                                                  shippingStatusResponse!
-                                                      .shippingStatusList
-                                                      .elementAt(0)
-                                                      .gujaratMsg,
+                                              shippingStatusResponse!
+                                                  .shippingStatusList
+                                                  .elementAt(0)
+                                                  .gujaratMsg,
                                               style: TextStyle(
                                                 fontSize: 14.0,
                                                 fontFamily: "Montserrat",
