@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,12 +34,29 @@ class Checkout extends StatefulWidget {
 }
 
 class _CheckoutState extends State<Checkout> {
+  // Controllers for the TextField values
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _areaController = TextEditingController();
+  final TextEditingController _subAreaController = TextEditingController();
+  final TextEditingController _deliveryAddressController =
+      TextEditingController();
+  final TextEditingController _zipcodeController = TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _alternatePhoneController =
+      TextEditingController();
+  final TextEditingController _notesController = TextEditingController();
+
   final TextEditingController _phoneController = TextEditingController();
 
   double shippingCharge = 0;
   double finalAmount = 0;
 
   String? _selectedOptionCountry = "";
+
+  //todo: API have country list and state list, implement here :(
+  //todo: shipping_terms also available in API, show here
   String? _selectedOptionState;
   String? _selectedOptionCity;
   ShippingStatusResponse? shippingStatusResponse;
@@ -51,6 +69,33 @@ class _CheckoutState extends State<Checkout> {
   void initState() {
     super.initState();
     widget.paginationController.getShippingStatus();
+  }
+
+  void onOrderPlaced() {
+    if (_validatePhone(_phoneController.text) != null) {
+      showSnackbar(_validatePhone(_phoneController.text).toString());
+    } else if (_validateName(_nameController.text) != null) {
+      showSnackbar(_validateName(_nameController.text).toString());
+    } else if (_validateEmail(_emailController.text) != null) {
+      showSnackbar(_validateEmail(_emailController.text).toString());
+    } else if (_validateCity(_areaController.text) != null) {
+      showSnackbar("Area field is required.");
+    } else if (_validateCity(_subAreaController.text) != null) {
+      showSnackbar("Sub Area field is required.");
+    } else if (_validateCity(_deliveryAddressController.text) != null) {
+      showSnackbar("Delivery Address is required.");
+    } else if (_validateZipcode(_zipcodeController.text) != null) {
+      showSnackbar(_validateZipcode(_zipcodeController.text).toString());
+    } else if (_validateCity(_cityController.text) != null) {
+      showSnackbar(_validateCity(_cityController.text).toString());
+    } else if (_validateCity(_stateController.text) != null) {
+      showSnackbar("State name is required.");
+    } else if (_alternatePhone(_alternatePhoneController.text) != null) {
+      showSnackbar(_alternatePhone(_alternatePhoneController.text).toString());
+    } else {
+      //todo: call order place API
+      showSnackbar("Success vhala");
+    }
   }
 
   void showSnackbar(String s) {
@@ -76,6 +121,47 @@ class _CheckoutState extends State<Checkout> {
     }
   }
 
+  // Function to validate the form fields
+  String? _validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Name is required';
+    }
+    if (value.length < 3) {
+      return 'Name must be at least 3 characters long';
+    }
+    return null; // Return null if the input is valid
+  }
+
+  String? _validateCity(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'City is required';
+    }
+    if (value.length < 2) {
+      return 'City name is too short';
+    }
+    return null;
+  }
+
+  String? _validateZipcode(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Zipcode is required';
+    }
+    if (value.length < 6) {
+      return 'Invalid Zipcode.';
+    }
+    return null;
+  }
+
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Email is required';
+    }
+    if (!EmailValidator.validate(value)) {
+      return 'Invalid email address';
+    }
+    return null;
+  }
+
   String? _validatePhone(String? value) {
     if (value == null || value.isEmpty) {
       return 'Contact number is required';
@@ -86,10 +172,28 @@ class _CheckoutState extends State<Checkout> {
     return null;
   }
 
+  String? _alternatePhone(String? value) {
+    if (value != null && value.isNotEmpty && value.length != 10) {
+      return 'Alternate mobile number must be 10 digits';
+    }
+    return null;
+  }
+
   @override
   void dispose() {
     // Dispose the controllers when the widget is disposed
     _phoneController.dispose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _areaController.dispose();
+    _subAreaController.dispose();
+    _deliveryAddressController.dispose();
+    _zipcodeController.dispose();
+    _cityController.dispose();
+    _stateController.dispose();
+    _alternatePhoneController.dispose();
+    _notesController.dispose();
+
     super.dispose();
   }
 
@@ -720,6 +824,17 @@ class _CheckoutState extends State<Checkout> {
                                                 _giftPackisChecked,
                                                 _tncCheckedValueUpdate,
                                                 _tncChecked,
+                                                _nameController,
+                                                _emailController,
+                                                _areaController,
+                                                _subAreaController,
+                                                _deliveryAddressController,
+                                                _zipcodeController,
+                                                _cityController,
+                                                _stateController,
+                                                _alternatePhoneController,
+                                                _notesController,
+                                                onOrderPlaced,
                                               ),
                                           ],
                                         ],

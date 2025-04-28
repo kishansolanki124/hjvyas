@@ -130,12 +130,24 @@ Widget CheckoutAddressWidget(
   _giftPackisChecked,
   _tncCheckedValueUpdate,
   _tncChecked,
+    _nameController,
+    _emailController,
+    _areaController,
+    _subAreaController,
+    _deliveryAddressController,
+    _zipcodeController,
+    _cityController,
+    _stateController,
+    _alternatePhoneController,
+    _notesController,
+    VoidCallback onOrderPlaced,
 ) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       //edittext name
       TextField(
+        controller: _nameController,
         keyboardType: TextInputType.name,
         textCapitalization: TextCapitalization.words,
         // Capitalize each word
@@ -177,6 +189,7 @@ Widget CheckoutAddressWidget(
 
       //edittext email
       TextField(
+        controller: _emailController,
         keyboardType: TextInputType.emailAddress,
         style: TextStyle(
           color: Colors.white,
@@ -217,6 +230,7 @@ Widget CheckoutAddressWidget(
 
       //area
       TextField(
+        controller: _areaController,
         keyboardType: TextInputType.streetAddress,
         textCapitalization: TextCapitalization.words,
         style: TextStyle(
@@ -255,6 +269,7 @@ Widget CheckoutAddressWidget(
 
       //sub area
       TextField(
+        controller: _subAreaController,
         keyboardType: TextInputType.streetAddress,
         textCapitalization: TextCapitalization.words,
         style: TextStyle(
@@ -293,6 +308,7 @@ Widget CheckoutAddressWidget(
 
       //Delivery Address
       TextField(
+        controller: _deliveryAddressController,
         keyboardType: TextInputType.multiline,
         // Use multiline input type
         maxLines: null,
@@ -338,6 +354,7 @@ Widget CheckoutAddressWidget(
 
       //Zip Code
       TextField(
+        controller: _zipcodeController,
         keyboardType: TextInputType.number,
         maxLength: 6,
         inputFormatters: <TextInputFormatter>[
@@ -377,6 +394,7 @@ Widget CheckoutAddressWidget(
 
       //City
       TextField(
+        controller: _cityController,
         keyboardType: TextInputType.streetAddress,
         textCapitalization: TextCapitalization.words,
         style: TextStyle(
@@ -415,6 +433,7 @@ Widget CheckoutAddressWidget(
 
       //State
       TextField(
+        controller: _stateController,
         keyboardType: TextInputType.streetAddress,
         textCapitalization: TextCapitalization.words,
         style: TextStyle(
@@ -453,6 +472,7 @@ Widget CheckoutAddressWidget(
 
       //Alternate Mobile no.
       TextField(
+        controller: _alternatePhoneController,
         keyboardType: TextInputType.number,
         maxLength: 10,
         inputFormatters: <TextInputFormatter>[
@@ -495,6 +515,7 @@ Widget CheckoutAddressWidget(
 
       //Notes if any
       TextField(
+        controller: _notesController,
         keyboardType: TextInputType.multiline,
         // Use multiline input type
         maxLines: null,
@@ -609,10 +630,7 @@ Widget CheckoutAddressWidget(
       //submit button
       SizedBox(
         child: ElevatedButton(
-          onPressed: () {
-            //  Add your notification logic here
-            print("Submit button clicked");
-          },
+          onPressed: onOrderPlaced,
           style: ElevatedButton.styleFrom(
             backgroundColor: Color.fromARGB(255, 123, 138, 195),
             // Sky color
