@@ -1,5 +1,3 @@
-
-
 import 'package:hjvyas/api/models/safe_convert.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -23,15 +21,36 @@ class ProductDetailResponse {
     this.productMoreList = const [],
   });
 
-  factory ProductDetailResponse.fromJson(Map<String, dynamic>? json) => ProductDetailResponse(
-    status: asString(json, 'status'),
-    message: asString(json, 'message'),
-    productDetail: asList(json, 'product_detail').map((e) => ProductDetailItem.fromJson(e)).toList(),
-    productGalleryList: asList(json, 'product_gallery_list').map((e) => ProductGalleryListItem.fromJson(e)).toList(),
-    productPackingList: asList(json, 'product_packing_list').map((e) => ProductPackingListItem.fromJson(e)).toList(),
-    productIngredientsList: asList(json, 'product_ingredients_list').map((e) => ProductIngredientsListItem.fromJson(e)).toList(),
-    productMoreList: asList(json, 'product_more_list').map((e) => ProductMoreListItem.fromJson(e)).toList(),
-  );
+  factory ProductDetailResponse.fromJson(Map<String, dynamic>? json) =>
+      ProductDetailResponse(
+        status: asString(json, 'status'),
+        message: asString(json, 'message'),
+        productDetail:
+            asList(
+              json,
+              'product_detail',
+            ).map((e) => ProductDetailItem.fromJson(e)).toList(),
+        productGalleryList:
+            asList(
+              json,
+              'product_gallery_list',
+            ).map((e) => ProductGalleryListItem.fromJson(e)).toList(),
+        productPackingList:
+            asList(
+              json,
+              'product_packing_list',
+            ).map((e) => ProductPackingListItem.fromJson(e)).toList(),
+        productIngredientsList:
+            asList(
+              json,
+              'product_ingredients_list',
+            ).map((e) => ProductIngredientsListItem.fromJson(e)).toList(),
+        productMoreList:
+            asList(
+              json,
+              'product_more_list',
+            ).map((e) => ProductMoreListItem.fromJson(e)).toList(),
+      );
 
   Map<String, dynamic> toJson() => {
     'status': status,
@@ -39,7 +58,8 @@ class ProductDetailResponse {
     'product_detail': productDetail.map((e) => e.toJson()).toList(),
     'product_gallery_list': productGalleryList.map((e) => e.toJson()).toList(),
     'product_packing_list': productPackingList.map((e) => e.toJson()).toList(),
-    'product_ingredients_list': productIngredientsList.map((e) => e.toJson()).toList(),
+    'product_ingredients_list':
+        productIngredientsList.map((e) => e.toJson()).toList(),
     'product_more_list': productMoreList.map((e) => e.toJson()).toList(),
   };
 }
@@ -58,6 +78,9 @@ class ProductDetailItem {
   final String productAudioEnglish;
   final String productAudioHindi;
   final String productAudioGujarati;
+  final String productSoldout;
+  final String notifySorryMsg;
+  final String notifyMeMsg;
 
   ProductDetailItem({
     this.productId = "",
@@ -73,23 +96,30 @@ class ProductDetailItem {
     this.productAudioEnglish = "",
     this.productAudioHindi = "",
     this.productAudioGujarati = "",
+    this.productSoldout = "",
+    this.notifySorryMsg = "",
+    this.notifyMeMsg = "",
   });
 
-  factory ProductDetailItem.fromJson(Map<String, dynamic>? json) => ProductDetailItem(
-    productId: asString(json, 'product_id'),
-    productType: asString(json, 'product_type'),
-    productName: asString(json, 'product_name'),
-    productPrice: asString(json, 'product_price'),
-    productMaxQty: asString(json, 'product_max_qty'),
-    productDescription: asString(json, 'product_description'),
-    productIngredients: asString(json, 'product_ingredients'),
-    productTerms: asString(json, 'product_terms'),
-    productImage: asString(json, 'product_image'),
-    productNutritionImage: asString(json, 'product_nutrition_image'),
-    productAudioEnglish: asString(json, 'product_audio_english'),
-    productAudioHindi: asString(json, 'product_audio_hindi'),
-    productAudioGujarati: asString(json, 'product_audio_gujarati'),
-  );
+  factory ProductDetailItem.fromJson(Map<String, dynamic>? json) =>
+      ProductDetailItem(
+        productId: asString(json, 'product_id'),
+        productType: asString(json, 'product_type'),
+        productName: asString(json, 'product_name'),
+        productPrice: asString(json, 'product_price'),
+        productMaxQty: asString(json, 'product_max_qty'),
+        productDescription: asString(json, 'product_description'),
+        productIngredients: asString(json, 'product_ingredients'),
+        productTerms: asString(json, 'product_terms'),
+        productImage: asString(json, 'product_image'),
+        productNutritionImage: asString(json, 'product_nutrition_image'),
+        productAudioEnglish: asString(json, 'product_audio_english'),
+        productAudioHindi: asString(json, 'product_audio_hindi'),
+        productAudioGujarati: asString(json, 'product_audio_gujarati'),
+        productSoldout: asString(json, 'product_soldout'),
+        notifySorryMsg: asString(json, 'notify_sorry_msg'),
+        notifyMeMsg: asString(json, 'notify_me_msg'),
+      );
 
   Map<String, dynamic> toJson() => {
     'product_id': productId,
@@ -105,9 +135,11 @@ class ProductDetailItem {
     'product_audio_english': productAudioEnglish,
     'product_audio_hindi': productAudioHindi,
     'product_audio_gujarati': productAudioGujarati,
+    'product_soldout': productSoldout,
+    'notify_sorry_msg': notifySorryMsg,
+    'notify_me_msg': notifyMeMsg,
   };
 }
-
 
 class ProductGalleryListItem {
   final String id;
@@ -120,11 +152,12 @@ class ProductGalleryListItem {
     this.upProImg = "",
   });
 
-  factory ProductGalleryListItem.fromJson(Map<String, dynamic>? json) => ProductGalleryListItem(
-    id: asString(json, 'id'),
-    productId: asString(json, 'product_id'),
-    upProImg: asString(json, 'up_pro_img'),
-  );
+  factory ProductGalleryListItem.fromJson(Map<String, dynamic>? json) =>
+      ProductGalleryListItem(
+        id: asString(json, 'id'),
+        productId: asString(json, 'product_id'),
+        upProImg: asString(json, 'up_pro_img'),
+      );
 
   Map<String, dynamic> toJson() => {
     'id': id,
@@ -132,7 +165,6 @@ class ProductGalleryListItem {
     'up_pro_img': upProImg,
   };
 }
-
 
 class ProductPackingListItem {
   final String packingId;
@@ -151,14 +183,15 @@ class ProductPackingListItem {
     this.productPieces = "",
   });
 
-  factory ProductPackingListItem.fromJson(Map<String, dynamic>? json) => ProductPackingListItem(
-    packingId: asString(json, 'packing_id'),
-    productId: asString(json, 'product_id'),
-    productWeight: asString(json, 'product_weight'),
-    productWeightType: asString(json, 'product_weight_type'),
-    productPackingPrice: asString(json, 'product_packing_price'),
-    productPieces: asString(json, 'product_pieces'),
-  );
+  factory ProductPackingListItem.fromJson(Map<String, dynamic>? json) =>
+      ProductPackingListItem(
+        packingId: asString(json, 'packing_id'),
+        productId: asString(json, 'product_id'),
+        productWeight: asString(json, 'product_weight'),
+        productWeightType: asString(json, 'product_weight_type'),
+        productPackingPrice: asString(json, 'product_packing_price'),
+        productPieces: asString(json, 'product_pieces'),
+      );
 
   Map<String, dynamic> toJson() => {
     'packing_id': packingId,
@@ -169,7 +202,6 @@ class ProductPackingListItem {
     'product_pieces': productPieces,
   };
 }
-
 
 class ProductIngredientsListItem {
   final String productIngredientsId;
@@ -182,11 +214,12 @@ class ProductIngredientsListItem {
     this.productIngredientsIcon = "",
   });
 
-  factory ProductIngredientsListItem.fromJson(Map<String, dynamic>? json) => ProductIngredientsListItem(
-    productIngredientsId: asString(json, 'product_ingredients_id'),
-    productIngredientsName: asString(json, 'product_ingredients_name'),
-    productIngredientsIcon: asString(json, 'product_ingredients_icon'),
-  );
+  factory ProductIngredientsListItem.fromJson(Map<String, dynamic>? json) =>
+      ProductIngredientsListItem(
+        productIngredientsId: asString(json, 'product_ingredients_id'),
+        productIngredientsName: asString(json, 'product_ingredients_name'),
+        productIngredientsIcon: asString(json, 'product_ingredients_icon'),
+      );
 
   Map<String, dynamic> toJson() => {
     'product_ingredients_id': productIngredientsId,
@@ -194,7 +227,6 @@ class ProductIngredientsListItem {
     'product_ingredients_icon': productIngredientsIcon,
   };
 }
-
 
 class ProductMoreListItem {
   final String productId;
@@ -207,11 +239,12 @@ class ProductMoreListItem {
     this.productImage = "",
   });
 
-  factory ProductMoreListItem.fromJson(Map<String, dynamic>? json) => ProductMoreListItem(
-    productId: asString(json, 'product_id'),
-    productName: asString(json, 'product_name'),
-    productImage: asString(json, 'product_image'),
-  );
+  factory ProductMoreListItem.fromJson(Map<String, dynamic>? json) =>
+      ProductMoreListItem(
+        productId: asString(json, 'product_id'),
+        productName: asString(json, 'product_name'),
+        productImage: asString(json, 'product_image'),
+      );
 
   Map<String, dynamic> toJson() => {
     'product_id': productId,
@@ -219,4 +252,3 @@ class ProductMoreListItem {
     'product_image': productImage,
   };
 }
-

@@ -194,7 +194,10 @@ class _CartPageState extends State<CartPage> {
     setState(() {
       Navigator.of(
         context,
-      ).push(MaterialPageRoute(builder: (context) => Checkout(total: total)));
+      ).push(MaterialPageRoute(builder: (context) => Checkout(total: total,
+        cartItemShaaredPrefList: _cartItemShaaredPrefList,
+          cartItemsFromAPIforPrice: _cartItems!
+      )));
     });
   }
 

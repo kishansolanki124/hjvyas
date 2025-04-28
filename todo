@@ -63,5 +63,8 @@ Design feedback ma evu lakhyu che k price add karvi so...
 along with price.
 -> max quantity variable not available in this API
 
+Cart Page:
+1. test with static price from shared pref and click on checkout to check values.
+
 3. Notification:
 https://mithaiwalahjvyas.com/get_notification API not working.
