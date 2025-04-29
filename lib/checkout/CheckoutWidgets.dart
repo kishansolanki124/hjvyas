@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -145,7 +146,10 @@ Widget CheckoutAddressWidget(
   _deliveryAddressController,
   _zipcodeController,
   _cityController,
-  _stateController,
+    List<StateListItem> stateList,
+    _selectedOptionState,
+    _selectedOptionCountry,
+    selectedVariantInquiry,
   _alternatePhoneController,
   _notesController,
   _giftSenderNameController,
@@ -443,44 +447,103 @@ Widget CheckoutAddressWidget(
 
       SizedBox(height: 20),
 
-      //State
-      TextField(
-        controller: _stateController,
-        keyboardType: TextInputType.streetAddress,
-        textCapitalization: TextCapitalization.words,
-        style: TextStyle(
-          color: Colors.white,
-          fontFamily: "Montserrat",
-          fontSize: 14,
-        ),
-        decoration: InputDecoration(
-          hintText: "State",
-          hintStyle: TextStyle(
-            color: Colors.white,
-            fontFamily: "Montserrat",
-            fontSize: 14,
-          ),
-
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(0)),
-            borderSide: BorderSide(
-              width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+      if(_selectedOptionState == "Outside Gujarat" &&
+          _selectedOptionCountry == "India")...[
+        //State
+        Container(
+          width: double.infinity,
+          // Full width
+          //height: 40,
+          // Fixed height
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Color.fromARGB(
+                255,
+                123,
+                138,
+                195,
+              ),
             ),
+            borderRadius: BorderRadius.circular(0),
+            color:
+            Colors
+                .transparent, // Background color
           ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(0)),
-            borderSide: BorderSide(
-              width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+          padding: EdgeInsets.symmetric(
+            horizontal: 6.0,
+          ),
+          // Add horizontal padding
+          child: DropdownButtonFormField<
+              StateListItem
+          >(
+            padding: EdgeInsetsDirectional.fromSTEB(
+              0,
+              8,
+              0,
+              8,
             ),
+            value: stateList
+                .elementAt(0),
+            icon: Image.asset(
+              'icons/dropdown_icon.png',
+              // Replace with your icon path
+              width: 18, // Adjust width as needed
+              height: 18, // Adjust height as needed
+            ),
+            onChanged: (newValue) {
+              selectedVariantInquiry(newValue);
+            },
+            items:
+            stateList!
+                .map((StateListItem item) {
+              return DropdownMenuItem<
+                  StateListItem
+              >(
+                value: item,
+                child: Text(
+                  item.stateName,
+                  style: TextStyle(
+                    backgroundColor:
+                    Color.fromARGB(
+                      255,
+                      31,
+                      47,
+                      80,
+                    ),
+                    fontSize: 14,
+                    color: Colors.white,
+                    fontFamily:
+                    "Montserrat",
+                    //fontWeight: FontWeight.w700,
+                  ),
+                ),
+              );
+            })
+                .toList(),
+            decoration: InputDecoration(
+              border:
+              InputBorder
+                  .none, // Remove default border
+              isDense: true, // Make it compact
+              contentPadding: EdgeInsets.zero,
+              // suffixIcon: Image.asset(
+              //   width: 12,
+              //   height: 12,
+              //   'icons/dropdown_icon.png',
+              // ),
+            ),
+            dropdownColor: Color.fromARGB(
+              255,
+              31,
+              47,
+              80,
+            ),
+            //underline: SizedBox(),
           ),
-          contentPadding: EdgeInsets.all(8),
-          isDense: true, //make textfield compact
         ),
-      ),
 
-      SizedBox(height: 20),
+        SizedBox(height: 20),
+      ],
 
       //Alternate Mobile no.
       TextField(

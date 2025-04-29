@@ -56,7 +56,7 @@ class _CheckoutState extends State<Checkout> {
       TextEditingController();
   final TextEditingController _zipcodeController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _stateController = TextEditingController();
+  //final TextEditingController _stateController = TextEditingController();
   final TextEditingController _alternatePhoneController =
       TextEditingController();
   final TextEditingController _notesController = TextEditingController();
@@ -69,11 +69,10 @@ class _CheckoutState extends State<Checkout> {
 
   String? _selectedOptionCountry = "";
 
-  //todo: API have country list and state list, implement here :(
-  //todo: shipping_terms also available in API, show here
   String? _selectedOptionState;
   String? _selectedOptionCity;
   CountryListItem? countryListItem;
+  StateListItem? stateListItem;
   ShippingStatusResponse? shippingStatusResponse;
 
   bool _giftPacksChecked = false;
@@ -81,15 +80,28 @@ class _CheckoutState extends State<Checkout> {
   bool shouldShowCheckoutDetails = false;
   bool _tncChecked = false;
 
-  void selectedVariantInquiry(CountryListItem? countryListItem) {
+  void selectedCountryFromDropdown(CountryListItem? countryListItem) {
     if (kDebugMode) {
-      print('selectedVariantInquiry is changed');
+      print('selectedCountryFromDropdown is changed');
     }
 
     setState(() {
       this.countryListItem = countryListItem;
       if (kDebugMode) {
         print('_country is ${countryListItem!.countryName}');
+      }
+    });
+  }
+
+  void selectedVariantInquiry(StateListItem? stateListItem) {
+    if (kDebugMode) {
+      print('stateListItem is changed');
+    }
+
+    setState(() {
+      this.stateListItem = stateListItem;
+      if (kDebugMode) {
+        print('_country is ${stateListItem!.stateName}');
       }
     });
   }
@@ -117,12 +129,12 @@ class _CheckoutState extends State<Checkout> {
       showSnackbar(_validateZipcode(_zipcodeController.text).toString());
     } else if (_validateCity(_cityController.text) != null) {
       showSnackbar(_validateCity(_cityController.text).toString());
-    } else if (_validateCity(_stateController.text) != null) {
+    } else if (stateListItem == null) {
       showSnackbar("State name is required.");
     } else if (_alternatePhone(_alternatePhoneController.text) != null) {
       showSnackbar(_alternatePhone(_alternatePhoneController.text).toString());
     } else if (!_tncChecked) {
-      showSnackbar("Kindly accept TNC. Click on I Agree.");
+      showSnackbar("Kindly click on I Agree to accept TNC.");
     } else if (_giftPacksChecked) {
       if (_validateName(_giftSenderNameController.text) != null) {
         showSnackbar("Gift Sender Name is required.");
@@ -179,8 +191,10 @@ class _CheckoutState extends State<Checkout> {
       _selectedOptionCountry == "India"
           ? "India"
           : countryListItem!.countryName,
-      _stateController.text.toString(),
-      //todo work for state
+      _selectedOptionCountry != "India" ? "" :
+      (_selectedOptionState == "Gujarat"
+          ? "Gujarat"
+          : stateListItem!.stateName),
       _cityController.text.toString(),
       _giftSenderNameController.text.toString(),
       _giftSenderMobileController.text.toString(),
@@ -328,7 +342,7 @@ class _CheckoutState extends State<Checkout> {
     _deliveryAddressController.dispose();
     _zipcodeController.dispose();
     _cityController.dispose();
-    _stateController.dispose();
+    //_stateController.dispose();
     _alternatePhoneController.dispose();
     _notesController.dispose();
     _giftSenderNameController.dispose();
@@ -340,16 +354,18 @@ class _CheckoutState extends State<Checkout> {
   }
 
   Future<void> getShippingCharge() async {
+    String countryOutside = _selectedOptionCountry == "India" ? "no" : "yes";
     String stateOutofGujarat = _selectedOptionState == "Gujarat" ? "no" : "yes";
     String cityJamnagar =
         (stateOutofGujarat == "no" && _selectedOptionCity == "Jamnagar")
             ? "yes"
             : "no";
     String cityOther =
-        (stateOutofGujarat == "no" && _selectedOptionCity == "Other City")
+        (stateOutofGujarat == "no" &&
+            countryOutside == "no" && _selectedOptionCity == "Other City")
             ? "yes"
             : "no";
-    String countryOutside = _selectedOptionCountry == "India" ? "no" : "yes";
+
 
     List<String> weightList = [];
 
@@ -480,6 +496,11 @@ class _CheckoutState extends State<Checkout> {
     }
     setState(() {
       _selectedOptionCity = value;
+      if(_selectedOptionCity == "Jamnagar") {
+        _cityController.text = "Jamnagar";
+      } else{
+        _cityController.text = "";
+      }
       _hideCheckoutAddressWidget();
     });
   }
@@ -562,15 +583,15 @@ class _CheckoutState extends State<Checkout> {
               ? true
               : false;
 
-          if (shouldShowCheckoutDetails && !outSideIndia &&
+          if (!outSideIndia &&
               _selectedOptionCountry == "Outside India") {
             //_updateCheckoutDetails(false);
             shouldShowCheckoutDetails = false;
-          } else if (shouldShowCheckoutDetails &&
+          } else if (
               !otherStateOn && _selectedOptionState == "Outside Gujarat") {
             //_updateCheckoutDetails(false);
             shouldShowCheckoutDetails = false;
-          } else if (shouldShowCheckoutDetails &&
+          } else if (
               !isGujaratOn && _selectedOptionCity == "Other City") {
             //_updateCheckoutDetails(false);
             shouldShowCheckoutDetails = false;
@@ -580,6 +601,9 @@ class _CheckoutState extends State<Checkout> {
             //_updateCheckoutDetails(true);
             shouldShowCheckoutDetails = true;
           }
+
+          countryListItem ??= shippingStatusResponse?.countryList.elementAt(0);
+          stateListItem ??= shippingStatusResponse?.stateList.elementAt(0);
 
           return SafeArea(
             child: Scaffold(
@@ -900,11 +924,11 @@ class _CheckoutState extends State<Checkout> {
                                         ),
                                         onChanged: (newValue) {
                                           // setState(() {
-                                          selectedVariantInquiry(newValue);
-                                          //selectedVariantInquiry = newValue;
+                                          selectedCountryFromDropdown(newValue);
+                                          //selectedCountryFromDropdown = newValue;
                                           if (kDebugMode) {
                                             print(
-                                              'selectedVariantInquiry $selectedVariantInquiry',
+                                              'country $selectedCountryFromDropdown',
                                             );
                                           }
                                           // });
@@ -1104,7 +1128,10 @@ class _CheckoutState extends State<Checkout> {
                                         _deliveryAddressController,
                                         _zipcodeController,
                                         _cityController,
-                                        _stateController,
+                                        shippingStatusResponse!.stateList,
+                                        _selectedOptionState,
+                                        _selectedOptionCountry,
+                                        selectedVariantInquiry,
                                         _alternatePhoneController,
                                         _notesController,
                                         _giftSenderNameController,
@@ -1113,6 +1140,21 @@ class _CheckoutState extends State<Checkout> {
                                         _giftReceiverMobileController,
                                         onOrderPlaced,
                                       ),
+
+                                    if(null != shippingStatusResponse!.shippingStatusList
+                                        .elementAt(0).shippingTerms &&
+                                        shippingStatusResponse!.shippingStatusList
+                                            .elementAt(0).shippingTerms.isNotEmpty)...[
+                                      SizedBox(height: 10,),
+
+                                      Text(shippingStatusResponse!.shippingStatusList
+                                          .elementAt(0).shippingTerms,
+                                        style: TextStyle(
+                                          color: Color.fromARGB(255, 123, 138, 195),
+                                          fontSize: 10.0,
+                                          fontFamily: "Montserrat",
+                                        ),),
+                                    ],
                                   ],
 
                                   SizedBox(height: 100),
