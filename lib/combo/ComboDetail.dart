@@ -263,8 +263,8 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
     if (value == null || value.isEmpty) {
       return 'Mobile No. is required';
     }
-    if (value.length != 10) {
-      return 'Mobile No. must be 10 digits';
+    if (value.length < 10) {
+      return 'Contact number should be at least 10 digits';
     }
     return null;
   }
@@ -700,7 +700,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                       TextField(
                                         controller: _phoneController,
                                         keyboardType: TextInputType.number,
-                                        maxLength: 10,
+                                        maxLength: 14,
                                         inputFormatters: <TextInputFormatter>[
                                           FilteringTextInputFormatter
                                               .digitsOnly,

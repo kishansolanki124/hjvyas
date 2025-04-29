@@ -39,11 +39,19 @@ Widget radioTwoOption(
   _onValueChanged,
   _selectedOption,
 ) {
-  bool isGujaratOn = (shippingStatusResponse!.shippingStatusList!
-      .elementAt(0).gujaratStatus == "on") ? true : false;
+  bool isGujaratOn =
+      (shippingStatusResponse!.shippingStatusList!.elementAt(0).gujaratStatus ==
+              "on")
+          ? true
+          : false;
 
-  bool otherStateOn = (shippingStatusResponse!.shippingStatusList!
-      .elementAt(0).outofgujaratStatus == "on") ? true : false;
+  bool otherStateOn =
+      (shippingStatusResponse!.shippingStatusList!
+                  .elementAt(0)
+                  .outofgujaratStatus ==
+              "on")
+          ? true
+          : false;
 
   if (option1 == "India") {
     //country radio options
@@ -127,20 +135,24 @@ Widget radioTwoOption(
 
 Widget CheckoutAddressWidget(
   _onGiftPackValueUpdate,
-  _giftPackisChecked,
+  _giftPacksChecked,
   _tncCheckedValueUpdate,
   _tncChecked,
-    _nameController,
-    _emailController,
-    _areaController,
-    _subAreaController,
-    _deliveryAddressController,
-    _zipcodeController,
-    _cityController,
-    _stateController,
-    _alternatePhoneController,
-    _notesController,
-    VoidCallback onOrderPlaced,
+  _nameController,
+  _emailController,
+  _areaController,
+  _subAreaController,
+  _deliveryAddressController,
+  _zipcodeController,
+  _cityController,
+  _stateController,
+  _alternatePhoneController,
+  _notesController,
+  _giftSenderNameController,
+  _giftReceiverNameController,
+  _giftSenderMobileController,
+  _giftReceiverMobileController,
+  VoidCallback onOrderPlaced,
 ) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -355,11 +367,11 @@ Widget CheckoutAddressWidget(
       //Zip Code
       TextField(
         controller: _zipcodeController,
-        keyboardType: TextInputType.number,
-        maxLength: 6,
-        inputFormatters: <TextInputFormatter>[
-          FilteringTextInputFormatter.digitsOnly,
-        ],
+        keyboardType: TextInputType.text,
+        maxLength: 10,
+        // inputFormatters: <TextInputFormatter>[
+        //   FilteringTextInputFormatter.,
+        // ],
         style: TextStyle(
           color: Colors.white,
           fontFamily: "Montserrat",
@@ -474,7 +486,7 @@ Widget CheckoutAddressWidget(
       TextField(
         controller: _alternatePhoneController,
         keyboardType: TextInputType.number,
-        maxLength: 10,
+        maxLength: 14,
         inputFormatters: <TextInputFormatter>[
           FilteringTextInputFormatter.digitsOnly,
         ],
@@ -561,7 +573,7 @@ Widget CheckoutAddressWidget(
       Row(
         children: [
           Checkbox(
-            value: _giftPackisChecked,
+            value: _giftPacksChecked,
             onChanged: (newValue) {
               _onGiftPackValueUpdate(newValue!);
             },
@@ -576,8 +588,8 @@ Widget CheckoutAddressWidget(
 
           GestureDetector(
             onTap: () {
-              _giftPackisChecked = !_giftPackisChecked;
-              _onGiftPackValueUpdate(_giftPackisChecked);
+              _giftPacksChecked = !_giftPacksChecked;
+              _onGiftPackValueUpdate(_giftPacksChecked);
             },
             child: Text(
               'Gift Packing : (Please mark the checkbox)',
@@ -590,6 +602,181 @@ Widget CheckoutAddressWidget(
           ),
         ],
       ),
+
+      if (_giftPacksChecked) ...[
+        SizedBox(height: 20),
+
+        //gift sender name
+        TextField(
+          controller: _giftSenderNameController,
+          keyboardType: TextInputType.name,
+          textCapitalization: TextCapitalization.words,
+          // Capitalize each word
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+          decoration: InputDecoration(
+            hintText: "Gift Sender Name",
+            hintStyle: TextStyle(
+              color: Colors.white,
+              fontFamily: "Montserrat",
+              fontSize: 14,
+            ),
+
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(
+                width: 1,
+                color: Color.fromARGB(255, 123, 138, 195),
+              ),
+            ),
+
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(
+                width: 1,
+                color: Color.fromARGB(255, 123, 138, 195),
+              ),
+            ),
+
+            contentPadding: EdgeInsets.all(8),
+            isDense: true, //make textfield compact
+          ),
+        ),
+
+        SizedBox(height: 20),
+        //gift sender mobile number
+        TextField(
+          controller: _giftSenderMobileController,
+          keyboardType: TextInputType.number,
+          maxLength: 14,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+          // Set text color to white
+          decoration: InputDecoration(
+            hintText: "Gift Sender Mobile No",
+            hintStyle: TextStyle(
+              color: Colors.white,
+              fontFamily: "Montserrat",
+              fontSize: 14,
+            ),
+
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(
+                width: 1,
+                color: Color.fromARGB(255, 123, 138, 195),
+              ),
+            ),
+
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(
+                width: 1,
+                color: Color.fromARGB(255, 123, 138, 195),
+              ),
+            ),
+
+            contentPadding: EdgeInsets.all(8),
+            isDense: true, //make textfield compact
+          ),
+        ),
+
+        SizedBox(height: 10),
+
+        //gift receiver name
+        TextField(
+          controller: _giftReceiverNameController,
+          keyboardType: TextInputType.name,
+          textCapitalization: TextCapitalization.words,
+          // Capitalize each word
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+          decoration: InputDecoration(
+            hintText: "Gift Receiver Name",
+            hintStyle: TextStyle(
+              color: Colors.white,
+              fontFamily: "Montserrat",
+              fontSize: 14,
+            ),
+
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(
+                width: 1,
+                color: Color.fromARGB(255, 123, 138, 195),
+              ),
+            ),
+
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(
+                width: 1,
+                color: Color.fromARGB(255, 123, 138, 195),
+              ),
+            ),
+
+            contentPadding: EdgeInsets.all(8),
+            isDense: true, //make textfield compact
+          ),
+        ),
+
+        SizedBox(height: 20),
+
+        //gift receiver mobile number
+        TextField(
+          controller: _giftReceiverMobileController,
+          keyboardType: TextInputType.number,
+          maxLength: 14,
+          inputFormatters: <TextInputFormatter>[
+            FilteringTextInputFormatter.digitsOnly,
+          ],
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+          // Set text color to white
+          decoration: InputDecoration(
+            hintText: "Gift Receiver Mobile No",
+            hintStyle: TextStyle(
+              color: Colors.white,
+              fontFamily: "Montserrat",
+              fontSize: 14,
+            ),
+
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(
+                width: 1,
+                color: Color.fromARGB(255, 123, 138, 195),
+              ),
+            ),
+
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(
+                width: 1,
+                color: Color.fromARGB(255, 123, 138, 195),
+              ),
+            ),
+
+            contentPadding: EdgeInsets.all(8),
+            isDense: true, //make textfield compact
+          ),
+        ),
+      ],
 
       SizedBox(height: 10), //TNC Checkbox
       Row(

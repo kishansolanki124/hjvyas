@@ -36,13 +36,19 @@ class Checkout extends StatefulWidget {
 }
 
 class _CheckoutState extends State<Checkout> {
-
   String packingWeight = "";
   String packingWeightType = "";
 
-
   // Controllers for the TextField values
   final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _giftSenderNameController =
+      TextEditingController();
+  final TextEditingController _giftReceiverNameController =
+      TextEditingController();
+  final TextEditingController _giftSenderMobileController =
+      TextEditingController();
+  final TextEditingController _giftReceiverMobileController =
+      TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _areaController = TextEditingController();
   final TextEditingController _subAreaController = TextEditingController();
@@ -67,11 +73,26 @@ class _CheckoutState extends State<Checkout> {
   //todo: shipping_terms also available in API, show here
   String? _selectedOptionState;
   String? _selectedOptionCity;
+  CountryListItem? countryListItem;
   ShippingStatusResponse? shippingStatusResponse;
 
-  bool _giftPackisChecked = false;
+  bool _giftPacksChecked = false;
   bool showCheckoutAddressWidget = false;
+  bool shouldShowCheckoutDetails = false;
   bool _tncChecked = false;
+
+  void selectedVariantInquiry(CountryListItem? countryListItem) {
+    if (kDebugMode) {
+      print('selectedVariantInquiry is changed');
+    }
+
+    setState(() {
+      this.countryListItem = countryListItem;
+      if (kDebugMode) {
+        print('_country is ${countryListItem!.countryName}');
+      }
+    });
+  }
 
   @override
   void initState() {
@@ -100,12 +121,26 @@ class _CheckoutState extends State<Checkout> {
       showSnackbar("State name is required.");
     } else if (_alternatePhone(_alternatePhoneController.text) != null) {
       showSnackbar(_alternatePhone(_alternatePhoneController.text).toString());
+    } else if (!_tncChecked) {
+      showSnackbar("Kindly accept TNC. Click on I Agree.");
+    } else if (_giftPacksChecked) {
+      if (_validateName(_giftSenderNameController.text) != null) {
+        showSnackbar("Gift Sender Name is required.");
+      } else if (_validateName(_giftReceiverNameController.text) != null) {
+        showSnackbar("Gift Receiver Name is required.");
+      } else if (_validatePhone(_giftSenderMobileController.text) != null) {
+        showSnackbar("Gift Sender Mobile Number is required.");
+      } else if (_validatePhone(_giftReceiverMobileController.text) != null) {
+        showSnackbar("Gift Receiver Mobile Number is required.");
+      } else {
+        placeOrder();
+      }
     } else {
       placeOrder();
     }
   }
 
-  Future<void> placeOrder() async  {
+  Future<void> placeOrder() async {
     String productIds = widget.cartItemShaaredPrefList
         .map((cartItem) => cartItem.productPackingId)
         .join(',');
@@ -136,25 +171,31 @@ class _CheckoutState extends State<Checkout> {
       _nameController.text.toString(),
       _emailController.text.toString(),
       _phoneController.text.toString(),
-      _alternatePhoneController.text.toString().isNotEmpty ? _alternatePhoneController.text.toString()
+      _alternatePhoneController.text.toString().isNotEmpty
+          ? _alternatePhoneController.text.toString()
           : "",
       _deliveryAddressController.text.toString(),
       _zipcodeController.text.toString(),
-      _selectedOptionCountry!,//todo work for country
+      _selectedOptionCountry == "India"
+          ? "India"
+          : countryListItem!.countryName,
       _stateController.text.toString(),
+      //todo work for state
       _cityController.text.toString(),
-      "gift_sender", //todo
-      "gift_sender_mobile", //todo
-      "gift_receiver",//todo
-      "gift_receiver_mobile",//todo
+      _giftSenderNameController.text.toString(),
+      _giftSenderMobileController.text.toString(),
+      _giftReceiverNameController.text.toString(),
+      _giftReceiverMobileController.text.toString(),
       widget.productTesterId,
       finalAmount.toString(),
       shippingCharge.toString(),
       onlineCharge.toString(),
-      "icici", //todo payment_type value icici, ccavenue, paypal any one
-      "android", //todo: value android, ios any one value
-        productIds.replaceAll("combo_", ""),
-        productType,
+      "icici",
+      //todo payment_type value icici, ccavenue, paypal any one
+      "android",
+      //todo: value android, ios any one value
+      productIds.replaceAll("combo_", ""),
+      productType,
       productNames,
       packingIds,
       packingWeight,
@@ -243,9 +284,9 @@ class _CheckoutState extends State<Checkout> {
     if (value == null || value.isEmpty) {
       return 'Zipcode is required';
     }
-    if (value.length < 6) {
-      return 'Invalid Zipcode.';
-    }
+    // if (value.length < 6) {
+    //   return 'Invalid Zipcode.';
+    // }
     return null;
   }
 
@@ -263,8 +304,8 @@ class _CheckoutState extends State<Checkout> {
     if (value == null || value.isEmpty) {
       return 'Contact number is required';
     }
-    if (value.length != 10) {
-      return 'Contact number must be 10 digits';
+    if (value.length < 10) {
+      return 'Contact number should be at least 10 digits';
     }
     return null;
   }
@@ -290,6 +331,10 @@ class _CheckoutState extends State<Checkout> {
     _stateController.dispose();
     _alternatePhoneController.dispose();
     _notesController.dispose();
+    _giftSenderNameController.dispose();
+    _giftReceiverNameController.dispose();
+    _giftSenderMobileController.dispose();
+    _giftReceiverMobileController.dispose();
 
     super.dispose();
   }
@@ -390,7 +435,7 @@ class _CheckoutState extends State<Checkout> {
 
   void _onGiftPackValueUpdate(bool newValue) {
     setState(() {
-      _giftPackisChecked = newValue;
+      _giftPacksChecked = newValue;
     });
   }
 
@@ -399,6 +444,12 @@ class _CheckoutState extends State<Checkout> {
       showCheckoutAddressWidget = true;
     });
   }
+
+  // void _updateCheckoutDetails(bool value) {
+  //   setState(() {
+  //     shouldShowCheckoutDetails = value;
+  //   });
+  // }
 
   void _hideCheckoutAddressWidget() {
     setState(() {
@@ -495,21 +546,40 @@ class _CheckoutState extends State<Checkout> {
                   ? true
                   : false;
 
-          bool isGujaratOn =
-              (shippingStatusResponse!.shippingStatusList
-                          .elementAt(0)
-                          .gujaratStatus ==
-                      "on")
-                  ? true
-                  : false;
-
           bool otherStateOn =
-              (shippingStatusResponse!.shippingStatusList
-                          .elementAt(0)
-                          .outofgujaratStatus ==
-                      "on")
-                  ? true
-                  : false;
+          (shippingStatusResponse!.shippingStatusList
+              .elementAt(0)
+              .outofgujaratStatus ==
+              "on")
+              ? true
+              : false;
+
+          bool isGujaratOn =
+          (shippingStatusResponse!.shippingStatusList
+              .elementAt(0)
+              .gujaratStatus ==
+              "on")
+              ? true
+              : false;
+
+          if (shouldShowCheckoutDetails && !outSideIndia &&
+              _selectedOptionCountry == "Outside India") {
+            //_updateCheckoutDetails(false);
+            shouldShowCheckoutDetails = false;
+          } else if (shouldShowCheckoutDetails &&
+              !otherStateOn && _selectedOptionState == "Outside Gujarat") {
+            //_updateCheckoutDetails(false);
+            shouldShowCheckoutDetails = false;
+          } else if (shouldShowCheckoutDetails &&
+              !isGujaratOn && _selectedOptionCity == "Other City") {
+            //_updateCheckoutDetails(false);
+            shouldShowCheckoutDetails = false;
+          } else if((null != _selectedOptionCountry &&_selectedOptionCountry == "Outside India") ||
+              (null != _selectedOptionState && _selectedOptionState == "Outside Gujarat") ||
+              (null != _selectedOptionCity && _selectedOptionCity!.isNotEmpty)){
+            //_updateCheckoutDetails(true);
+            shouldShowCheckoutDetails = true;
+          }
 
           return SafeArea(
             child: Scaffold(
@@ -700,27 +770,71 @@ class _CheckoutState extends State<Checkout> {
                                     SizedBox(height: 10),
 
                                     //state radio
-                                    if (_selectedOptionCountry != null &&
-                                        _selectedOptionCountry!.isNotEmpty) ...[
-                                      radioTwoOption(
-                                        shippingStatusResponse,
-                                        "Gujarat",
-                                        "Outside Gujarat",
-                                        _onValueChangedState,
-                                        _selectedOptionState,
-                                      ),
+                                    radioTwoOption(
+                                      shippingStatusResponse,
+                                      "Gujarat",
+                                      "Outside Gujarat",
+                                      _onValueChangedState,
+                                      _selectedOptionState,
+                                    ),
 
-                                      if (_selectedOptionState != null &&
-                                          _selectedOptionState!.isNotEmpty) ...[
+                                    if (_selectedOptionCountry == "India" &&
+                                        _selectedOptionState != null &&
+                                        _selectedOptionState!.isNotEmpty) ...[
+                                      if (_selectedOptionState ==
+                                              "Outside Gujarat" &&
+                                          !otherStateOn) ...[
+                                        //outside Gujarat not allowed
+                                        Text(
+                                          shippingStatusResponse!
+                                              .shippingStatusList
+                                              .elementAt(0)
+                                              .outofgujaratMsg,
+                                          style: TextStyle(
+                                            fontSize: 14.0,
+                                            fontFamily: "Montserrat",
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                      ],
+
+                                      if (_selectedOptionState == "Gujarat" ||
+                                          otherStateOn) ...[
                                         if (_selectedOptionState ==
-                                                "Outside Gujarat" &&
-                                            !otherStateOn) ...[
-                                          //outside Gujarat not allowed
+                                            "Gujarat") ...[
+                                          //Select City
+                                          Text(
+                                            "Select City",
+                                            style: TextStyle(
+                                              fontSize: 14.0,
+                                              fontFamily: "Montserrat",
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+
+                                          SizedBox(height: 10),
+
+                                          //City radio
+                                          radioTwoOption(
+                                            shippingStatusResponse,
+                                            "Jamnagar",
+                                            "Other City",
+                                            _onValueChangedCity,
+                                            _selectedOptionCity,
+                                          ),
+                                        ],
+
+                                        if (_selectedOptionCity ==
+                                                "Other City" &&
+                                            !isGujaratOn) ...[
+                                          //within Gujarat only Jamnagar is allowed
                                           Text(
                                             shippingStatusResponse!
                                                 .shippingStatusList
                                                 .elementAt(0)
-                                                .outofgujaratMsg,
+                                                .gujaratMsg,
                                             style: TextStyle(
                                               fontSize: 14.0,
                                               fontFamily: "Montserrat",
@@ -730,217 +844,9 @@ class _CheckoutState extends State<Checkout> {
                                           ),
                                         ],
 
-                                        if (_selectedOptionState == "Gujarat" ||
-                                            otherStateOn) ...[
-                                          if (_selectedOptionState ==
-                                              "Gujarat") ...[
-                                            //Select City
-                                            Text(
-                                              "Select City",
-                                              style: TextStyle(
-                                                fontSize: 14.0,
-                                                fontFamily: "Montserrat",
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-
-                                            SizedBox(height: 10),
-
-                                            //City radio
-                                            radioTwoOption(
-                                              shippingStatusResponse,
-                                              "Jamnagar",
-                                              "Other City",
-                                              _onValueChangedCity,
-                                              _selectedOptionCity,
-                                            ),
-                                          ],
-
-                                          if (_selectedOptionCity ==
-                                                  "Other City" &&
-                                              !isGujaratOn) ...[
-                                            //within Gujarat only Jamnagar is allowed
-                                            Text(
-                                              shippingStatusResponse!
-                                                  .shippingStatusList
-                                                  .elementAt(0)
-                                                  .gujaratMsg,
-                                              style: TextStyle(
-                                                fontSize: 14.0,
-                                                fontFamily: "Montserrat",
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ],
-
-                                          if (_selectedOptionCity ==
-                                                  "Jamnagar" ||
-                                              isGujaratOn) ...[
-                                            SizedBox(height: 20.0),
-                                            // Description
-                                            //your delivery address
-                                            Text(
-                                              "Checkout Details",
-                                              style: TextStyle(
-                                                fontSize: 18.0,
-                                                fontFamily: "Montserrat",
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.w700,
-                                              ),
-                                            ),
-
-                                            SizedBox(height: 10.0),
-
-                                            //enter your mob no.
-                                            // with 10 digit max length and input type should be only numbers
-                                            TextField(
-                                              controller: _phoneController,
-                                              keyboardType:
-                                                  TextInputType.number,
-                                              maxLength: 10,
-                                              inputFormatters:
-                                                  <TextInputFormatter>[
-                                                    FilteringTextInputFormatter
-                                                        .digitsOnly,
-                                                  ],
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: "Montserrat",
-                                                fontSize: 14,
-                                              ),
-                                              // Set text color to white
-                                              decoration: InputDecoration(
-                                                hintText: "Enter Mobile No.",
-                                                hintStyle: TextStyle(
-                                                  color: Colors.white,
-                                                  fontFamily: "Montserrat",
-                                                  fontSize: 14,
-                                                ),
-
-                                                focusedBorder:
-                                                    OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                            Radius.circular(0),
-                                                          ),
-                                                      borderSide: BorderSide(
-                                                        width: 1,
-                                                        color: Color.fromARGB(
-                                                          255,
-                                                          123,
-                                                          138,
-                                                          195,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                // disabledBorder: OutlineInputBorder(
-                                                //   borderRadius: BorderRadius.all(Radius.circular(4)),
-                                                //   borderSide: BorderSide(width: 1,color: Colors.orange),
-                                                // ),
-                                                enabledBorder:
-                                                    OutlineInputBorder(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                            Radius.circular(0),
-                                                          ),
-                                                      borderSide: BorderSide(
-                                                        width: 1,
-                                                        color: Color.fromARGB(
-                                                          255,
-                                                          123,
-                                                          138,
-                                                          195,
-                                                        ),
-                                                      ),
-                                                    ),
-
-                                                contentPadding: EdgeInsets.all(
-                                                  8,
-                                                ),
-                                                isDense:
-                                                    true, //make textfield compact
-                                              ),
-                                            ),
-
-                                            //Continue button
-                                            SizedBox(
-                                              child: ElevatedButton(
-                                                onPressed: () {
-                                                  onContinueClick();
-                                                },
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      Color.fromARGB(
-                                                        255,
-                                                        123,
-                                                        138,
-                                                        195,
-                                                      ),
-                                                  // Sky color
-                                                  //foregroundColor: Colors.black,
-                                                  // Black text color
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius
-                                                            .zero, // Square corners
-                                                  ),
-                                                  padding: EdgeInsets.symmetric(
-                                                    vertical: 10.0,
-                                                    horizontal: 12,
-                                                  ), // Add some vertical padding
-                                                ),
-                                                child: Obx(() {
-                                                  if (widget
-                                                      .paginationController
-                                                      .shippingChargesLoading
-                                                      .value) {
-                                                    return SizedBox(
-                                                      width: 20,
-                                                      height: 20,
-                                                      child:
-                                                          CircularProgressIndicator(
-                                                            strokeWidth: 2,
-                                                            color: Colors.white,
-                                                          ),
-                                                    );
-                                                  }
-                                                  return Text(
-                                                    "Continue",
-                                                    style: TextStyle(
-                                                      fontSize: 16.0,
-                                                      fontFamily: "Montserrat",
-                                                      fontWeight:
-                                                          FontWeight.w600,
-                                                      color: Colors.black,
-                                                    ), // Adjust size
-                                                  );
-                                                }),
-                                              ),
-                                            ),
-
-                                            SizedBox(height: 10),
-
-                                            if (showCheckoutAddressWidget)
-                                              CheckoutAddressWidget(
-                                                _onGiftPackValueUpdate,
-                                                _giftPackisChecked,
-                                                _tncCheckedValueUpdate,
-                                                _tncChecked,
-                                                _nameController,
-                                                _emailController,
-                                                _areaController,
-                                                _subAreaController,
-                                                _deliveryAddressController,
-                                                _zipcodeController,
-                                                _cityController,
-                                                _stateController,
-                                                _alternatePhoneController,
-                                                _notesController,
-                                                onOrderPlaced,
-                                              ),
-                                          ],
+                                        if (_selectedOptionCity == "Jamnagar" ||
+                                            isGujaratOn) ...[
+                                          SizedBox(height: 20.0),
                                         ],
                                       ],
                                     ],
@@ -950,6 +856,263 @@ class _CheckoutState extends State<Checkout> {
                                       _selectedOptionCountry ==
                                           "Outside India") ...[
                                     //selected option is out side india
+                                    //dropdown of country
+                                    Container(
+                                      width: double.infinity,
+                                      // Full width
+                                      //height: 40,
+                                      // Fixed height
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Color.fromARGB(
+                                            255,
+                                            123,
+                                            138,
+                                            195,
+                                          ),
+                                        ),
+                                        borderRadius: BorderRadius.circular(0),
+                                        color:
+                                            Colors
+                                                .transparent, // Background color
+                                      ),
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 6.0,
+                                      ),
+                                      // Add horizontal padding
+                                      child: DropdownButtonFormField<
+                                        CountryListItem
+                                      >(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                          0,
+                                          8,
+                                          0,
+                                          8,
+                                        ),
+                                        value: shippingStatusResponse!
+                                            .countryList
+                                            .elementAt(0),
+                                        icon: Image.asset(
+                                          'icons/dropdown_icon.png',
+                                          // Replace with your icon path
+                                          width: 18, // Adjust width as needed
+                                          height: 18, // Adjust height as needed
+                                        ),
+                                        onChanged: (newValue) {
+                                          // setState(() {
+                                          selectedVariantInquiry(newValue);
+                                          //selectedVariantInquiry = newValue;
+                                          if (kDebugMode) {
+                                            print(
+                                              'selectedVariantInquiry $selectedVariantInquiry',
+                                            );
+                                          }
+                                          // });
+                                        },
+                                        items:
+                                            shippingStatusResponse!.countryList!
+                                                .map((CountryListItem item) {
+                                                  return DropdownMenuItem<
+                                                    CountryListItem
+                                                  >(
+                                                    value: item,
+                                                    child: Text(
+                                                      item.countryName,
+                                                      style: TextStyle(
+                                                        backgroundColor:
+                                                            Color.fromARGB(
+                                                              255,
+                                                              31,
+                                                              47,
+                                                              80,
+                                                            ),
+                                                        fontSize: 14,
+                                                        color: Colors.white,
+                                                        fontFamily:
+                                                            "Montserrat",
+                                                        //fontWeight: FontWeight.w700,
+                                                      ),
+                                                    ),
+                                                  );
+                                                })
+                                                .toList(),
+                                        decoration: InputDecoration(
+                                          border:
+                                              InputBorder
+                                                  .none, // Remove default border
+                                          isDense: true, // Make it compact
+                                          contentPadding: EdgeInsets.zero,
+                                          // suffixIcon: Image.asset(
+                                          //   width: 12,
+                                          //   height: 12,
+                                          //   'icons/dropdown_icon.png',
+                                          // ),
+                                        ),
+                                        dropdownColor: Color.fromARGB(
+                                          255,
+                                          31,
+                                          47,
+                                          80,
+                                        ),
+                                        //underline: SizedBox(),
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 10),
+                                  ],
+
+                                  if (shouldShowCheckoutDetails) ...[
+                                    //your delivery address
+                                    Text(
+                                      "Checkout Details",
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontFamily: "Montserrat",
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 10.0),
+
+                                    //enter your mob no.
+                                    // with 10 digit max length and input type should be only numbers
+                                    TextField(
+                                      controller: _phoneController,
+                                      keyboardType: TextInputType.number,
+                                      maxLength: 14,
+                                      inputFormatters: <TextInputFormatter>[
+                                        FilteringTextInputFormatter.digitsOnly,
+                                      ],
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: "Montserrat",
+                                        fontSize: 14,
+                                      ),
+                                      // Set text color to white
+                                      decoration: InputDecoration(
+                                        hintText: "Enter Mobile No.",
+                                        hintStyle: TextStyle(
+                                          color: Colors.white,
+                                          fontFamily: "Montserrat",
+                                          fontSize: 14,
+                                        ),
+
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(0),
+                                          ),
+                                          borderSide: BorderSide(
+                                            width: 1,
+                                            color: Color.fromARGB(
+                                              255,
+                                              123,
+                                              138,
+                                              195,
+                                            ),
+                                          ),
+                                        ),
+                                        // disabledBorder: OutlineInputBorder(
+                                        //   borderRadius: BorderRadius.all(Radius.circular(4)),
+                                        //   borderSide: BorderSide(width: 1,color: Colors.orange),
+                                        // ),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(0),
+                                          ),
+                                          borderSide: BorderSide(
+                                            width: 1,
+                                            color: Color.fromARGB(
+                                              255,
+                                              123,
+                                              138,
+                                              195,
+                                            ),
+                                          ),
+                                        ),
+
+                                        contentPadding: EdgeInsets.all(8),
+                                        isDense: true, //make textfield compact
+                                      ),
+                                    ),
+
+                                    //Continue button
+                                    SizedBox(
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          onContinueClick();
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: Color.fromARGB(
+                                            255,
+                                            123,
+                                            138,
+                                            195,
+                                          ),
+                                          // Sky color
+                                          //foregroundColor: Colors.black,
+                                          // Black text color
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius
+                                                    .zero, // Square corners
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 10.0,
+                                            horizontal: 12,
+                                          ), // Add some vertical padding
+                                        ),
+                                        child: Obx(() {
+                                          if (widget
+                                              .paginationController
+                                              .shippingChargesLoading
+                                              .value) {
+                                            return SizedBox(
+                                              width: 20,
+                                              height: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                color: Colors.white,
+                                              ),
+                                            );
+                                          }
+                                          return Text(
+                                            "Continue",
+                                            style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontFamily: "Montserrat",
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.black,
+                                            ), // Adjust size
+                                          );
+                                        }),
+                                      ),
+                                    ),
+
+                                    SizedBox(height: 10),
+
+                                    if (showCheckoutAddressWidget)
+                                      CheckoutAddressWidget(
+                                        _onGiftPackValueUpdate,
+                                        _giftPacksChecked,
+                                        _tncCheckedValueUpdate,
+                                        _tncChecked,
+                                        _nameController,
+                                        _emailController,
+                                        _areaController,
+                                        _subAreaController,
+                                        _deliveryAddressController,
+                                        _zipcodeController,
+                                        _cityController,
+                                        _stateController,
+                                        _alternatePhoneController,
+                                        _notesController,
+                                        _giftSenderNameController,
+                                        _giftReceiverNameController,
+                                        _giftSenderMobileController,
+                                        _giftReceiverMobileController,
+                                        onOrderPlaced,
+                                      ),
                                   ],
 
                                   SizedBox(height: 100),

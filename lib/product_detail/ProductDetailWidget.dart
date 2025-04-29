@@ -782,7 +782,7 @@ Widget networkImageWithLoader(String url) {
 //       // with 10 digit max length and input type should be only numbers
 //       TextField(
 //         keyboardType: TextInputType.number,
-//         maxLength: 10,
+//         maxLength: 14,
 //         inputFormatters: <TextInputFormatter>[
 //           FilteringTextInputFormatter.digitsOnly,
 //         ],

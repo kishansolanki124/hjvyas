@@ -177,8 +177,8 @@ class _ContactUsState extends State<ContactUs> {
     if (value == null || value.isEmpty) {
       return 'Contact number is required';
     }
-    if (value.length != 10) {
-      return 'Contact number must be 10 digits';
+    if (value.length < 10) {
+      return 'Contact number should be at least 10 digits';
     }
     return null;
   }
@@ -579,7 +579,7 @@ class _ContactUsState extends State<ContactUs> {
                       TextField(
                         controller: _phoneController,
                         keyboardType: TextInputType.number,
-                        maxLength: 10,
+                        maxLength: 14,
                         inputFormatters: <TextInputFormatter>[
                           FilteringTextInputFormatter.digitsOnly,
                         ],
