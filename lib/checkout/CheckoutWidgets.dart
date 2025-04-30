@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -146,17 +145,16 @@ Widget CheckoutAddressWidget(
   _deliveryAddressController,
   _zipcodeController,
   _cityController,
-    List<StateListItem> stateList,
-    _selectedOptionState,
-    _selectedOptionCountry,
-    selectedVariantInquiry,
+  List<StateListItem> stateList,
+  _selectedOptionState,
+  _selectedOptionCountry,
+  selectedVariantInquiry,
   _alternatePhoneController,
   _notesController,
   _giftSenderNameController,
   _giftReceiverNameController,
   _giftSenderMobileController,
   _giftReceiverMobileController,
-  VoidCallback onOrderPlaced,
 ) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -447,8 +445,8 @@ Widget CheckoutAddressWidget(
 
       SizedBox(height: 20),
 
-      if(_selectedOptionState == "Outside Gujarat" &&
-          _selectedOptionCountry == "India")...[
+      if (_selectedOptionState == "Outside Gujarat" &&
+          _selectedOptionCountry == "India") ...[
         //State
         Container(
           width: double.infinity,
@@ -456,37 +454,17 @@ Widget CheckoutAddressWidget(
           //height: 40,
           // Fixed height
           decoration: BoxDecoration(
-            border: Border.all(
-              color: Color.fromARGB(
-                255,
-                123,
-                138,
-                195,
-              ),
-            ),
+            border: Border.all(color: Color.fromARGB(255, 123, 138, 195)),
             borderRadius: BorderRadius.circular(0),
-            color:
-            Colors
-                .transparent, // Background color
+            color: Colors.transparent, // Background color
           ),
-          padding: EdgeInsets.symmetric(
-            horizontal: 6.0,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 6.0),
           // Add horizontal padding
-          child: DropdownButtonFormField<
-              StateListItem
-          >(
-            padding: EdgeInsetsDirectional.fromSTEB(
-              0,
-              8,
-              0,
-              8,
-            ),
-            value: stateList
-                .elementAt(0),
+          child: DropdownButtonFormField<StateListItem>(
+            padding: EdgeInsetsDirectional.fromSTEB(0, 8, 0, 8),
+            value: stateList.elementAt(0),
             icon: Image.asset(
-              'icons/dropdown_icon.png',
-              // Replace with your icon path
+              'icons/dropdown_icon.png', // Replace with your icon path
               width: 18, // Adjust width as needed
               height: 18, // Adjust height as needed
             ),
@@ -494,36 +472,23 @@ Widget CheckoutAddressWidget(
               selectedVariantInquiry(newValue);
             },
             items:
-            stateList!
-                .map((StateListItem item) {
-              return DropdownMenuItem<
-                  StateListItem
-              >(
-                value: item,
-                child: Text(
-                  item.stateName,
-                  style: TextStyle(
-                    backgroundColor:
-                    Color.fromARGB(
-                      255,
-                      31,
-                      47,
-                      80,
+                stateList!.map((StateListItem item) {
+                  return DropdownMenuItem<StateListItem>(
+                    value: item,
+                    child: Text(
+                      item.stateName,
+                      style: TextStyle(
+                        backgroundColor: Color.fromARGB(255, 31, 47, 80),
+                        fontSize: 14,
+                        color: Colors.white,
+                        fontFamily: "Montserrat",
+                        //fontWeight: FontWeight.w700,
+                      ),
                     ),
-                    fontSize: 14,
-                    color: Colors.white,
-                    fontFamily:
-                    "Montserrat",
-                    //fontWeight: FontWeight.w700,
-                  ),
-                ),
-              );
-            })
-                .toList(),
+                  );
+                }).toList(),
             decoration: InputDecoration(
-              border:
-              InputBorder
-                  .none, // Remove default border
+              border: InputBorder.none, // Remove default border
               isDense: true, // Make it compact
               contentPadding: EdgeInsets.zero,
               // suffixIcon: Image.asset(
@@ -532,12 +497,7 @@ Widget CheckoutAddressWidget(
               //   'icons/dropdown_icon.png',
               // ),
             ),
-            dropdownColor: Color.fromARGB(
-              255,
-              31,
-              47,
-              80,
-            ),
+            dropdownColor: Color.fromARGB(255, 31, 47, 80),
             //underline: SizedBox(),
           ),
         ),
@@ -709,8 +669,7 @@ Widget CheckoutAddressWidget(
           ),
         ),
 
-        SizedBox(height: 20),
-        //gift sender mobile number
+        SizedBox(height: 20), //gift sender mobile number
         TextField(
           controller: _giftSenderMobileController,
           keyboardType: TextInputType.number,
@@ -876,34 +835,135 @@ Widget CheckoutAddressWidget(
       ),
 
       SizedBox(height: 20),
+    ],
+  );
+}
 
-      //submit button
-      SizedBox(
-        child: ElevatedButton(
-          onPressed: onOrderPlaced,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Color.fromARGB(255, 123, 138, 195),
-            // Sky color
-            //foregroundColor: Colors.black,
-            // Black text color
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero, // Square corners
-            ),
-            padding: EdgeInsets.symmetric(
-              vertical: 10.0,
-              horizontal: 12,
-            ), // Add some vertical padding
-          ),
-          child: Text(
-            "Submit",
-            style: TextStyle(
-              fontSize: 16.0,
-              fontFamily: "Montserrat",
-              fontWeight: FontWeight.w600,
-              color: Colors.black,
-            ), // Adjust size
-          ),
+Widget paymentOptions(_selectedPaymentMethod, updatePaymentMethod) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: <Widget>[
+      //Select Payment Option
+      Text(
+        "Select Payment Option",
+        style: TextStyle(
+          fontSize: 14.0,
+          fontFamily: "Montserrat",
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
         ),
+      ),
+
+      //icici payment
+      Row(
+        children: [
+          Radio<String>(
+            value: 'ICICI Bank Payment Gateway',
+            groupValue: _selectedPaymentMethod,
+            onChanged: (value) {
+              updatePaymentMethod(value);
+            },
+            // Selected color
+            fillColor: WidgetStateProperty.resolveWith<Color>((
+              Set<WidgetState> states,
+            ) {
+              if (states.contains(WidgetState.selected)) {
+                return Colors.white; // Selected color
+              }
+              return Colors.white; // Default color
+            }),
+          ),
+          GestureDetector(
+            onTap: () {
+              updatePaymentMethod(
+                'ICICI Bank Payment Gateway',
+              ); // Update selected option
+            },
+            child: Text(
+              'ICICI Bank Payment Gateway',
+              style: TextStyle(
+                fontSize: 14.0,
+                fontFamily: "Montserrat",
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+
+      //CCAVenue Payment
+      Row(
+        children: [
+          Radio<String>(
+            value: 'CCAvenue Payment Gateway',
+            groupValue: _selectedPaymentMethod,
+            onChanged: (value) {
+              updatePaymentMethod(value);
+            },
+            // Selected color
+            fillColor: WidgetStateProperty.resolveWith<Color>((
+              Set<WidgetState> states,
+            ) {
+              if (states.contains(WidgetState.selected)) {
+                return Colors.white; // Selected color
+              }
+              return Colors.white; // Default color
+            }),
+          ),
+          GestureDetector(
+            onTap: () {
+              updatePaymentMethod(
+                'CCAvenue Payment Gateway',
+              ); // Update selected option
+            },
+            child: Text(
+              'CCAvenue Payment Gateway',
+              style: TextStyle(
+                fontSize: 14.0,
+                fontFamily: "Montserrat",
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
+
+      //PayPal Payment
+      Row(
+        children: [
+          Radio<String>(
+            value: "PayPal (Outside India Users)",
+            groupValue: _selectedPaymentMethod,
+            onChanged: (value) {
+              updatePaymentMethod(value);
+            },
+            // Selected color
+            fillColor: WidgetStateProperty.resolveWith<Color>((
+              Set<WidgetState> states,
+            ) {
+              if (states.contains(WidgetState.selected)) {
+                return Colors.white; // Selected color
+              }
+              return Colors.white; // Default color
+            }),
+          ),
+          GestureDetector(
+            onTap: () {
+              updatePaymentMethod(
+                'PayPal (Outside India Users)',
+              ); // Update selected option
+            },
+            child: Text(
+              'PayPal (Outside India Users)',
+              style: TextStyle(
+                fontSize: 14.0,
+                fontFamily: "Montserrat",
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
       ),
     ],
   );

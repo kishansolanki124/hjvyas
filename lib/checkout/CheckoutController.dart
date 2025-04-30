@@ -19,12 +19,16 @@ class CheckoutController extends GetxController {
   Rx<ShippingChargesResponse?> shippingChargesResponse =
       Rx<ShippingChargesResponse?>(null);
 
+  Rx<ShippingChargesResponse?> addRazorpayStatusResponse =
+      Rx<ShippingChargesResponse?>(null);
+
   Rx<AddOrderResponse?> addOrderResponse = Rx<AddOrderResponse?>(null);
 
   //var productTesterList = <ProductTesterListItem>[].obs;
   //var items = <ProductListItem>[].obs;
   var isLoading = false.obs;
   var shippingChargesLoading = false.obs;
+  var addRazorpayStatusLoading = false.obs;
   var addOrderResponseLoading = false.obs;
 
   //var cartItemsLoading = false.obs;
@@ -63,6 +67,24 @@ class CheckoutController extends GetxController {
       //cartItems.assignAll(newItems.productCartList);
     } finally {
       shippingChargesLoading(false);
+    }
+  }
+
+  Future<void> addRazorpayStatus(
+      String order_no,
+      String razorpay_orderid,
+      String razorpay_paymentid
+  ) async {
+    addRazorpayStatusLoading(true);
+    try {
+      addRazorpayStatusResponse.value = await _service.addRazorpayStatus(
+        order_no,
+        razorpay_orderid,
+        razorpay_paymentid,
+      );
+      //cartItems.assignAll(newItems.productCartList);
+    } finally {
+      addRazorpayStatusLoading(false);
     }
   }
 

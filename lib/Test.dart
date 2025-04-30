@@ -1,55 +1,68 @@
 import 'package:flutter/material.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 void main() {
-  runApp(const MaterialApp(home: MyPage()));
+  runApp(const MyApp());
 }
 
-class MyPage extends StatefulWidget {
-  const MyPage({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
 
   @override
-  _MyPageState createState() => _MyPageState();
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Razorpay Example',
+      theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+      home: const RazorpayPaymentScreen(),
+    );
+  }
 }
 
-class _MyPageState extends State<MyPage> {
-  double _myDoubleValue = 0.0; // Changed to double
+class RazorpayPaymentScreen extends StatefulWidget {
+  const RazorpayPaymentScreen({Key? key}) : super(key: key);
 
-  void _updateDoubleValue() {
-    setState(() {
-      _myDoubleValue += 1.1; // Increment by a double value
-    });
-  }
+  @override
+  State<RazorpayPaymentScreen> createState() => _RazorpayPaymentScreenState();
+}
+
+class _RazorpayPaymentScreenState extends State<RazorpayPaymentScreen> {
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('FloatingActionButton Demo')),
-      body: Center(
+      appBar: AppBar(
+        title: const Text("Razorpay Payment Example"),
+        backgroundColor: Colors.blue,
+        foregroundColor: Colors.white,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Current Value: ${_myDoubleValue.toStringAsFixed(2)}', // Use toStringAsFixed
-              style: const TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _updateDoubleValue,
-              child: const Text('Update Value'),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+
+
+
+            const SizedBox(height: 16),
+
+            // Secured by Razorpay
+            Center(
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.lock, size: 16, color: Colors.grey),
+                  const SizedBox(width: 8),
+                  Text(
+                    "Secured by Razorpay",
+                    style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: _updateDoubleValue,
-        label: Text(
-          'Value: ${_myDoubleValue.toStringAsFixed(2)}', // Use toStringAsFixed here too!
-          style: const TextStyle(fontSize: 16),
-        ),
-        icon: const Icon(Icons.add),
-        backgroundColor: Colors.blue,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

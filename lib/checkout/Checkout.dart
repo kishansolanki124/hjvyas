@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hjvyas/checkout/CheckoutWidgets.dart';
+import 'package:razorpay_flutter/razorpay_flutter.dart';
 
+import '../api/models/AddOrderResponse.dart';
 import '../api/models/CartItemModel.dart';
 import '../api/models/ProductCartResponse.dart';
 import '../api/models/ShippingStatusResponse.dart';
@@ -36,6 +38,12 @@ class Checkout extends StatefulWidget {
 }
 
 class _CheckoutState extends State<Checkout> {
+  //payment methods
+  late Razorpay _razorpay;
+  bool _isRazorpayProcessing = false;
+
+  String? _selectedPaymentMethod;
+
   String packingWeight = "";
   String packingWeightType = "";
 
@@ -56,6 +64,7 @@ class _CheckoutState extends State<Checkout> {
       TextEditingController();
   final TextEditingController _zipcodeController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
+
   //final TextEditingController _stateController = TextEditingController();
   final TextEditingController _alternatePhoneController =
       TextEditingController();
@@ -74,11 +83,19 @@ class _CheckoutState extends State<Checkout> {
   CountryListItem? countryListItem;
   StateListItem? stateListItem;
   ShippingStatusResponse? shippingStatusResponse;
+  AddOrderResponse? addOrderResponse;
+  String? orderNo;
 
   bool _giftPacksChecked = false;
   bool showCheckoutAddressWidget = false;
   bool shouldShowCheckoutDetails = false;
   bool _tncChecked = false;
+
+  void updatePaymentMethod(String newValue) {
+    setState(() {
+      _selectedPaymentMethod = newValue;
+    });
+  }
 
   void selectedCountryFromDropdown(CountryListItem? countryListItem) {
     if (kDebugMode) {
@@ -110,6 +127,125 @@ class _CheckoutState extends State<Checkout> {
   void initState() {
     super.initState();
     widget.paginationController.getShippingStatus();
+    //initialise Razorpay SDK
+    _initializeRazorpay();
+  }
+
+  void _startRazorPayPayment() {
+    setState(() {
+      _isRazorpayProcessing = true;
+    });
+
+    // Parse amount and convert to paise (multiply by 100)
+    double enteredAmount = finalAmount;
+    int amountInPaise = (enteredAmount * 100).toInt();
+
+    var options = {
+      'key': 'rzp_test_Aqr4FyB60dGtTR',//todo: change this to production
+      // Replace with your Razorpay test key
+      'amount': amountInPaise,
+      // Amount in paise
+      'name': 'HJ Vyas',
+      'description': 'Purchase Description',
+      'prefill': {
+        'contact': _phoneController.text,
+        // Replace with customer's phone
+        'email': _emailController.text,
+        // Replace with customer's email
+      },
+      'external': {
+        'wallets': ['paytm', 'gpay'],
+      },
+    };
+
+    try {
+      _razorpay.open(options);
+    } catch (e) {
+      setState(() {
+        _isRazorpayProcessing = false;
+      });
+      debugPrint('Error: $e');
+      showSnackbar("Error: $e");
+      // Fluttertoast.showToast(
+      //   msg: "Error: $e",
+      //   toastLength: Toast.LENGTH_LONG,
+      // );
+    }
+  }
+
+  void _initializeRazorpay() {
+    _razorpay = Razorpay();
+    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handleRazorPayPaymentSuccess);
+    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handleRazorPayPaymentError);
+    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleRazorPayExternalWallet);
+  }
+
+  void _handleRazorPayPaymentError(PaymentFailureResponse response) {
+    setState(() {
+      _isRazorpayProcessing = false;
+    });
+
+    showSnackbar("Payment Failed: ${response.message}");
+  }
+
+  void _handleRazorPayExternalWallet(ExternalWalletResponse response) {
+    setState(() {
+      _isRazorpayProcessing = false;
+    });
+
+    showSnackbar("External Wallet Selected: ${response.walletName}");
+  }
+
+  Future<void> updateRazorPayOrderStatus(String? razorPayOrderId,
+      String? razorPayPaymentId) async {
+    //todo: test this with prod
+
+    //todo: remove following 2 lines
+    razorPayOrderId ??= "test_razorPayOrderId";
+    razorPayPaymentId ??= "test_razorPayPaymentId";
+
+    await widget.paginationController.addRazorpayStatus(
+        orderNo!, razorPayOrderId, razorPayPaymentId
+    );
+
+    //todo: open success page
+  }
+
+  void _handleRazorPayPaymentSuccess(PaymentSuccessResponse response) {
+    setState(() {
+      _isRazorpayProcessing = false;
+    });
+
+    updateRazorPayOrderStatus(response.orderId, response.paymentId);
+
+    // // Show success dialog
+    // showDialog(
+    //   context: context,
+    //   builder: (BuildContext context) {
+    //     return AlertDialog(
+    //       title: const Text("Payment Successful"),
+    //       content: Column(
+    //         mainAxisSize: MainAxisSize.min,
+    //         crossAxisAlignment: CrossAxisAlignment.start,
+    //         children: [
+    //           Text("Payment ID: ${response.paymentId}"),
+    //           const SizedBox(height: 8),
+    //           Text("Order ID: ${response.orderId}"),
+    //           const SizedBox(height: 8),
+    //           Text("Signature: ${response.signature}"),
+    //         ],
+    //       ),
+    //       actions: [
+    //         TextButton(
+    //           child: const Text("OK"),
+    //           onPressed: () {
+    //             Navigator.of(context).pop();
+    //           },
+    //         ),
+    //       ],
+    //     );
+    //   },
+    // );
   }
 
   void onOrderPlaced() {
@@ -135,6 +271,9 @@ class _CheckoutState extends State<Checkout> {
       showSnackbar(_alternatePhone(_alternatePhoneController.text).toString());
     } else if (!_tncChecked) {
       showSnackbar("Kindly click on I Agree to accept TNC.");
+    } else if (null == _selectedPaymentMethod ||
+        _selectedPaymentMethod!.isEmpty) {
+      showSnackbar("Kindly select any payment method.");
     } else if (_giftPacksChecked) {
       if (_validateName(_giftSenderNameController.text) != null) {
         showSnackbar("Gift Sender Name is required.");
@@ -191,10 +330,11 @@ class _CheckoutState extends State<Checkout> {
       _selectedOptionCountry == "India"
           ? "India"
           : countryListItem!.countryName,
-      _selectedOptionCountry != "India" ? "" :
-      (_selectedOptionState == "Gujarat"
-          ? "Gujarat"
-          : stateListItem!.stateName),
+      _selectedOptionCountry != "India"
+          ? ""
+          : (_selectedOptionState == "Gujarat"
+              ? "Gujarat"
+              : stateListItem!.stateName),
       _cityController.text.toString(),
       _giftSenderNameController.text.toString(),
       _giftSenderMobileController.text.toString(),
@@ -217,6 +357,18 @@ class _CheckoutState extends State<Checkout> {
       packingQuantity,
       packingPrice,
     );
+
+    addOrderResponse = widget.paginationController.addOrderResponse.value;
+
+    if (null != addOrderResponse) {
+      if(addOrderResponse!.orderNo != null && addOrderResponse!.orderNo.isNotEmpty) {
+        orderNo = addOrderResponse!.orderNo.toString();
+        if(_selectedPaymentMethod == "ICICI Bank Payment Gateway") {
+          _startRazorPayPayment();
+        }
+      }
+    }
+
   }
 
   void getPackingWeightAndWeightType() {
@@ -325,7 +477,7 @@ class _CheckoutState extends State<Checkout> {
   }
 
   String? _alternatePhone(String? value) {
-    if (value != null && value.isNotEmpty && value.length != 10) {
+    if (value != null && value.isNotEmpty && value.length < 10) {
       return 'Alternate mobile number must be 10 digits';
     }
     return null;
@@ -350,6 +502,9 @@ class _CheckoutState extends State<Checkout> {
     _giftSenderMobileController.dispose();
     _giftReceiverMobileController.dispose();
 
+    //remove razor pay objects
+    _razorpay.clear();
+
     super.dispose();
   }
 
@@ -362,10 +517,10 @@ class _CheckoutState extends State<Checkout> {
             : "no";
     String cityOther =
         (stateOutofGujarat == "no" &&
-            countryOutside == "no" && _selectedOptionCity == "Other City")
+                countryOutside == "no" &&
+                _selectedOptionCity == "Other City")
             ? "yes"
             : "no";
-
 
     List<String> weightList = [];
 
@@ -496,9 +651,9 @@ class _CheckoutState extends State<Checkout> {
     }
     setState(() {
       _selectedOptionCity = value;
-      if(_selectedOptionCity == "Jamnagar") {
+      if (_selectedOptionCity == "Jamnagar") {
         _cityController.text = "Jamnagar";
-      } else{
+      } else {
         _cityController.text = "";
       }
       _hideCheckoutAddressWidget();
@@ -568,36 +723,37 @@ class _CheckoutState extends State<Checkout> {
                   : false;
 
           bool otherStateOn =
-          (shippingStatusResponse!.shippingStatusList
-              .elementAt(0)
-              .outofgujaratStatus ==
-              "on")
-              ? true
-              : false;
+              (shippingStatusResponse!.shippingStatusList
+                          .elementAt(0)
+                          .outofgujaratStatus ==
+                      "on")
+                  ? true
+                  : false;
 
           bool isGujaratOn =
-          (shippingStatusResponse!.shippingStatusList
-              .elementAt(0)
-              .gujaratStatus ==
-              "on")
-              ? true
-              : false;
+              (shippingStatusResponse!.shippingStatusList
+                          .elementAt(0)
+                          .gujaratStatus ==
+                      "on")
+                  ? true
+                  : false;
 
-          if (!outSideIndia &&
-              _selectedOptionCountry == "Outside India") {
+          if (!outSideIndia && _selectedOptionCountry == "Outside India") {
             //_updateCheckoutDetails(false);
             shouldShowCheckoutDetails = false;
-          } else if (
-              !otherStateOn && _selectedOptionState == "Outside Gujarat") {
+          } else if (!otherStateOn &&
+              _selectedOptionState == "Outside Gujarat") {
             //_updateCheckoutDetails(false);
             shouldShowCheckoutDetails = false;
-          } else if (
-              !isGujaratOn && _selectedOptionCity == "Other City") {
+          } else if (!isGujaratOn && _selectedOptionCity == "Other City") {
             //_updateCheckoutDetails(false);
             shouldShowCheckoutDetails = false;
-          } else if((null != _selectedOptionCountry &&_selectedOptionCountry == "Outside India") ||
-              (null != _selectedOptionState && _selectedOptionState == "Outside Gujarat") ||
-              (null != _selectedOptionCity && _selectedOptionCity!.isNotEmpty)){
+          } else if ((null != _selectedOptionCountry &&
+                  _selectedOptionCountry == "Outside India") ||
+              (null != _selectedOptionState &&
+                  _selectedOptionState == "Outside Gujarat") ||
+              (null != _selectedOptionCity &&
+                  _selectedOptionCity!.isNotEmpty)) {
             //_updateCheckoutDetails(true);
             shouldShowCheckoutDetails = true;
           }
@@ -683,6 +839,7 @@ class _CheckoutState extends State<Checkout> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+
                                   //cart total
                                   CartTotalRow(
                                     "Cart Total",
@@ -934,7 +1091,7 @@ class _CheckoutState extends State<Checkout> {
                                           // });
                                         },
                                         items:
-                                            shippingStatusResponse!.countryList!
+                                            shippingStatusResponse!.countryList
                                                 .map((CountryListItem item) {
                                                   return DropdownMenuItem<
                                                     CountryListItem
@@ -1115,7 +1272,8 @@ class _CheckoutState extends State<Checkout> {
 
                                     SizedBox(height: 10),
 
-                                    if (showCheckoutAddressWidget)
+                                    if (showCheckoutAddressWidget) ...[
+
                                       CheckoutAddressWidget(
                                         _onGiftPackValueUpdate,
                                         _giftPacksChecked,
@@ -1138,24 +1296,133 @@ class _CheckoutState extends State<Checkout> {
                                         _giftReceiverNameController,
                                         _giftSenderMobileController,
                                         _giftReceiverMobileController,
-                                        onOrderPlaced,
                                       ),
 
-                                    if(null != shippingStatusResponse!.shippingStatusList
-                                        .elementAt(0).shippingTerms &&
-                                        shippingStatusResponse!.shippingStatusList
-                                            .elementAt(0).shippingTerms.isNotEmpty)...[
-                                      SizedBox(height: 10,),
+                                      //payment options
+                                      paymentOptions(
+                                        _selectedPaymentMethod,
+                                        updatePaymentMethod,
+                                      ),
 
-                                      Text(shippingStatusResponse!.shippingStatusList
-                                          .elementAt(0).shippingTerms,
+                                      //submit button
+                                      widget
+                                              .paginationController
+                                              .addOrderResponseLoading
+                                              .value
+                                          ? SizedBox(
+                                            width: 20,
+                                            height: 20,
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 2,
+                                              color: Colors.white,
+                                            ),
+                                          )
+                                          : SizedBox(
+                                            child: ElevatedButton(
+                                              onPressed: onOrderPlaced,
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Color.fromARGB(
+                                                  255,
+                                                  123,
+                                                  138,
+                                                  195,
+                                                ),
+                                                // Sky color
+                                                //foregroundColor: Colors.black,
+                                                // Black text color
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius
+                                                          .zero, // Square corners
+                                                ),
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 10.0,
+                                                  horizontal: 12,
+                                                ), // Add some vertical padding
+                                              ),
+                                              child: Text(
+                                                "Submit",
+                                                style: TextStyle(
+                                                  fontSize: 16.0,
+                                                  fontFamily: "Montserrat",
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Colors.black,
+                                                ), // Adjust size
+                                              ),
+                                            ),
+                                          ),
+                                    ],
+
+                                    if (null !=
+                                            shippingStatusResponse!
+                                                .shippingStatusList
+                                                .elementAt(0)
+                                                .shippingTerms &&
+                                        shippingStatusResponse!
+                                            .shippingStatusList
+                                            .elementAt(0)
+                                            .shippingTerms
+                                            .isNotEmpty) ...[
+                                      SizedBox(height: 10),
+
+                                      Text(
+                                        shippingStatusResponse!
+                                            .shippingStatusList
+                                            .elementAt(0)
+                                            .shippingTerms,
                                         style: TextStyle(
-                                          color: Color.fromARGB(255, 123, 138, 195),
+                                          color: Color.fromARGB(
+                                            255,
+                                            123,
+                                            138,
+                                            195,
+                                          ),
                                           fontSize: 10.0,
                                           fontFamily: "Montserrat",
-                                        ),),
+                                        ),
+                                      ),
                                     ],
                                   ],
+
+                                  // // Pay button
+                                  // ElevatedButton(
+                                  //   onPressed:
+                                  //       _isRazorpayProcessing
+                                  //           ? null
+                                  //           : _startRazorPayPayment,
+                                  //   style: ElevatedButton.styleFrom(
+                                  //     backgroundColor: Colors.blue,
+                                  //     foregroundColor: Colors.white,
+                                  //     padding: const EdgeInsets.symmetric(
+                                  //       vertical: 16,
+                                  //     ),
+                                  //     shape: RoundedRectangleBorder(
+                                  //       borderRadius: BorderRadius.circular(8),
+                                  //     ),
+                                  //   ),
+                                  //   child:
+                                  //       _isRazorpayProcessing
+                                  //           ? const Row(
+                                  //             mainAxisAlignment:
+                                  //                 MainAxisAlignment.center,
+                                  //             children: [
+                                  //               SizedBox(
+                                  //                 width: 20,
+                                  //                 height: 20,
+                                  //                 child:
+                                  //                     CircularProgressIndicator(
+                                  //                       color: Colors.white,
+                                  //                       strokeWidth: 2,
+                                  //                     ),
+                                  //               ),
+                                  //               SizedBox(width: 12),
+                                  //               Text("Processing..."),
+                                  //             ],
+                                  //           )
+                                  //           : Text(
+                                  //             "Pay ₹${finalAmount.toStringAsFixed(2)}",
+                                  //           ),
+                                  // ),
 
                                   SizedBox(height: 100),
                                 ],
