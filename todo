@@ -74,3 +74,9 @@ https://mithaiwalahjvyas.com/get_notification API not working.
 dynamic view handle for payment
 
 read chat of Nandish bhai and do the needful changess.
+
+1. notification badge count
+2. badge count on bototm nav view Cart
+3. Cart badge selection/not selectioon badge position issue
+4. add if payment is  disabled then dont show it or if message is available then show that message
+5. on submit click of checkout, progress bar should be in at button positino, update it view

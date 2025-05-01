@@ -2,8 +2,11 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hjvyas/checkout/CheckoutWidgets.dart';
+import 'package:hjvyas/checkout/PaymentSuccessPage.dart';
+import 'package:intl/intl.dart'; // Import the intl package
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
 import '../api/models/AddOrderResponse.dart';
@@ -14,6 +17,7 @@ import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product_detail/ProductDetailWidget.dart';
 import 'CheckoutController.dart';
+import 'PayPalItem.dart';
 
 class Checkout extends StatefulWidget {
   final CheckoutController paginationController = CheckoutController(
@@ -38,6 +42,20 @@ class Checkout extends StatefulWidget {
 }
 
 class _CheckoutState extends State<Checkout> {
+  //paypal stuff
+  //todo: change this to production from sandbox creds
+  final String payPalClientId =
+      'AXYh1f38rSBrHwVZlhNMrybwLoa4xrLUnjW-g-G92ZH-Uu1c13caF-tlc7KNykAuz3YfPD9bD0W0_U0r';
+  final String payPalSecretKey =
+      'EAI55p1vNOqaUkdUEbaaGUnV3x0_W3yTo1Fv4ZWY4W4IwcBa1NXdqtCcIPyM30-aDJR8m6_pldyvDa5u';
+
+  // Set to your currency
+  final String currency = 'USD';
+
+  // Payment details
+  String payPalPaymentStatus = '';
+  bool isPayPalLoading = false;
+
   //payment methods
   late Razorpay _razorpay;
   bool _isRazorpayProcessing = false;
@@ -74,6 +92,7 @@ class _CheckoutState extends State<Checkout> {
 
   double shippingCharge = 0;
   double finalAmount = 0;
+  double usdPrice = 80;
   double onlineCharge = 0;
 
   String? _selectedOptionCountry = "";
@@ -90,6 +109,159 @@ class _CheckoutState extends State<Checkout> {
   bool showCheckoutAddressWidget = false;
   bool shouldShowCheckoutDetails = false;
   bool _tncChecked = false;
+
+  void _startPayPalPayment() async {
+    String amountInUSD = "";
+    final NumberFormat formatter = NumberFormat("#.00");
+    if (usdPrice != 0) {
+      amountInUSD = formatter.format(finalAmount / usdPrice);
+    }
+
+    if (kDebugMode) {
+      print(
+        "amountInUSD is $amountInUSD and usdPrice is $usdPrice and final amount is $finalAmount",
+      );
+    }
+
+    setState(() {
+      isPayPalLoading = true;
+      payPalPaymentStatus = '';
+    });
+    try {
+      // Define the items being purchased
+      List<PayPalItem> items = [
+        PayPalItem(
+          name: 'HJ Vyas Products',
+          price: amountInUSD,
+          quantity: "1",
+          currency: currency,
+        ),
+      ];
+
+      // Navigation and checkout configuration
+      await Navigator.of(context).push(
+        MaterialPageRoute(
+          builder:
+              (context) => WillPopScope(
+                // Handle back button press
+                onWillPop: () async {
+                  // This will be called when the system back button is pressed
+                  setState(() {
+                    payPalPaymentStatus = 'Payment Cancelled';
+                    isPayPalLoading = false;
+                    errorForPayment("Payment Cancelled.");
+                  });
+                  return true; // Allow the pop
+                },
+                child: PaypalCheckoutView(
+                  sandboxMode: true,
+                  //todo: change this
+                  clientId: payPalClientId,
+                  secretKey: payPalSecretKey,
+                  transactions: [
+                    {
+                      "amount": {
+                        "total": amountInUSD,
+                        "currency": currency,
+                        "details": {
+                          "subtotal": amountInUSD,
+                          "shipping": '0',
+                          "shipping_discount": 0,
+                        },
+                      },
+                      "description": "Payment for Premium Widget",
+                      "item_list": {
+                        "items": items.map((item) => item.toJson()).toList(),
+                      },
+                    },
+                  ],
+                  note: "Contact us for any questions on your order.",
+                  onSuccess: (Map params) async {
+                    // Handle successful payment
+                    if (kDebugMode) {
+                      print("onSuccess: $params");
+                    }
+                    setState(() {
+                      payPalPaymentStatus =
+                          'Payment Successful!\nTransaction ID: ${params['paymentId']}';
+                      isPayPalLoading = false;
+                    });
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PaymentSuccessPage(),
+                      ),
+                    );
+                  },
+                  onError: (error) {
+                    // Handle payment errors
+                    print("onError: $error");
+                    setState(() {
+                      payPalPaymentStatus = 'Payment Error: $error';
+                      errorForPayment("Payment Error: $error");
+                      isPayPalLoading = false;
+                    });
+                    Navigator.pop(context);
+                  },
+                  onCancel: () {
+                    // Handle payment cancellation
+                    print('Payment cancelled by user');
+                    setState(() {
+                      payPalPaymentStatus = 'Payment Cancelled';
+                      errorForPayment("Payment Cancelled");
+                      isPayPalLoading = false;
+                    });
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+        ),
+      );
+
+      // Check if we returned without any callbacks being triggered
+      // This happens if the modal is dismissed in a way not caught by callbacks
+      if (mounted && isPayPalLoading) {
+        setState(() {
+          payPalPaymentStatus = 'Payment Cancelled';
+          isPayPalLoading = false;
+        });
+      }
+    } catch (e) {
+      setState(() {
+        payPalPaymentStatus = 'Error: ${e.toString()}';
+        isPayPalLoading = false;
+      });
+      print(e);
+    }
+  }
+
+  void errorForPayment(String errorMessage) {
+    // // Show success dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Alert"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(errorMessage),
+              const SizedBox(height: 8),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: const Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   void updatePaymentMethod(String newValue) {
     setState(() {
@@ -141,7 +313,8 @@ class _CheckoutState extends State<Checkout> {
     int amountInPaise = (enteredAmount * 100).toInt();
 
     var options = {
-      'key': 'rzp_test_Aqr4FyB60dGtTR',//todo: change this to production
+      'key': 'rzp_test_Aqr4FyB60dGtTR',
+      //todo: change this to production
       // Replace with your Razorpay test key
       'amount': amountInPaise,
       // Amount in paise
@@ -196,8 +369,10 @@ class _CheckoutState extends State<Checkout> {
     showSnackbar("External Wallet Selected: ${response.walletName}");
   }
 
-  Future<void> updateRazorPayOrderStatus(String? razorPayOrderId,
-      String? razorPayPaymentId) async {
+  Future<void> updateRazorPayOrderStatus(
+    String? razorPayOrderId,
+    String? razorPayPaymentId,
+  ) async {
     //todo: test this with prod
 
     //todo: remove following 2 lines
@@ -205,7 +380,9 @@ class _CheckoutState extends State<Checkout> {
     razorPayPaymentId ??= "test_razorPayPaymentId";
 
     await widget.paginationController.addRazorpayStatus(
-        orderNo!, razorPayOrderId, razorPayPaymentId
+      orderNo!,
+      razorPayOrderId,
+      razorPayPaymentId,
     );
 
     //todo: open success page
@@ -361,14 +538,16 @@ class _CheckoutState extends State<Checkout> {
     addOrderResponse = widget.paginationController.addOrderResponse.value;
 
     if (null != addOrderResponse) {
-      if(addOrderResponse!.orderNo != null && addOrderResponse!.orderNo.isNotEmpty) {
+      if (addOrderResponse!.orderNo != null &&
+          addOrderResponse!.orderNo.isNotEmpty) {
         orderNo = addOrderResponse!.orderNo.toString();
-        if(_selectedPaymentMethod == "ICICI Bank Payment Gateway") {
+        if (_selectedPaymentMethod == "ICICI Bank Payment Gateway") {
           _startRazorPayPayment();
+        } else if (_selectedPaymentMethod == "PayPal (Outside India Users)") {
+          _startPayPalPayment();
         }
       }
     }
-
   }
 
   void getPackingWeightAndWeightType() {
@@ -689,6 +868,12 @@ class _CheckoutState extends State<Checkout> {
           shippingStatusResponse =
               widget.paginationController.shippingStatusResponse.value;
 
+          usdPrice = double.parse(
+            shippingStatusResponse!.shippingStatusList
+                .elementAt(0)
+                .rupeeExchangeRate,
+          );
+
           if (null !=
               widget.paginationController.shippingChargesResponse.value) {
             shippingCharge = double.parse(
@@ -839,7 +1024,6 @@ class _CheckoutState extends State<Checkout> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-
                                   //cart total
                                   CartTotalRow(
                                     "Cart Total",
@@ -883,7 +1067,8 @@ class _CheckoutState extends State<Checkout> {
                                     ),
                                   ),
 
-                                  SizedBox(height: 20.0), // Description
+                                  SizedBox(height: 20.0),
+                                  // Description
                                   //your delivery address
                                   Text(
                                     "Your Delivery Address",
@@ -895,7 +1080,8 @@ class _CheckoutState extends State<Checkout> {
                                     ),
                                   ),
 
-                                  SizedBox(height: 10.0), // Description
+                                  SizedBox(height: 10.0),
+                                  // Description
                                   //Select Country
                                   Text(
                                     "Select Country",
@@ -1273,7 +1459,6 @@ class _CheckoutState extends State<Checkout> {
                                     SizedBox(height: 10),
 
                                     if (showCheckoutAddressWidget) ...[
-
                                       CheckoutAddressWidget(
                                         _onGiftPackValueUpdate,
                                         _giftPacksChecked,
@@ -1423,7 +1608,6 @@ class _CheckoutState extends State<Checkout> {
                                   //             "Pay ₹${finalAmount.toStringAsFixed(2)}",
                                   //           ),
                                   // ),
-
                                   SizedBox(height: 100),
                                 ],
                               ),
