@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,6 +14,7 @@ class PaymentSuccessPage extends StatefulWidget {
 
 class _PaymentSuccessPageState extends State<PaymentSuccessPage>
     with TickerProviderStateMixin {
+  bool _isDelayedAnimationPlaying = false;
   late AnimationController _animationController; // Combine controllers
   late Animation<double> _fadeAnimation;
   static const Color backgroundColor = Color.fromARGB(
@@ -58,6 +60,13 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage>
     super.initState();
     clearSharedPreferences();
 
+    // Start the timer in initState
+    Future.delayed(const Duration(seconds: 1), () {
+      setState(() {
+        _isDelayedAnimationPlaying = true;
+      });
+    });
+
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 800), // Use a single controller
@@ -93,17 +102,29 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage>
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 // Animated checkmark
-                SizedBox(
-                  width: width, // Use the available width
-                  height: width, // Make height equal to width (square)
-                  child: Lottie.asset(
-                    'assets/success_anime.json',
-                    // Replace with your Lottie asset path
-                    fit: BoxFit.contain,
-                    // Or any other BoxFit as needed.  contain is usually best
-                    repeat: false,
+                if (_isDelayedAnimationPlaying)
+                  SizedBox(
+                    width: width, // Use the available width
+                    height: width, // Make height equal to width (square)
+                    child: Lottie.asset(
+                      'assets/success_anime.json',
+                      // Replace with your Lottie asset path
+                      fit: BoxFit.contain,
+                      // Or any other BoxFit as needed.  contain is usually best
+                      repeat: false,
+                    ),
                   ),
-                ),
+
+                if(!_isDelayedAnimationPlaying)
+                  SizedBox(
+                    width: width, // Use the available width
+                    height: width, // Make height equal to width (square)
+                    child: LoadingAnimationWidget.fourRotatingDots(
+                      color: Colors.white,
+                      size: 20,
+                    ),
+                  ),
+
                 const SizedBox(height: 40),
 
                 // Thank you text (with fade animation)
