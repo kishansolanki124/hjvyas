@@ -100,7 +100,7 @@ flutter:
   assets:
     - images/
     - icons/
-    - assets/check_animation.json
+    - assets/
 
 
   # To add assets to your application, add an assets section, like this:

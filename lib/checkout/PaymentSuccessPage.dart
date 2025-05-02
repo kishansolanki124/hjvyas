@@ -1,33 +1,56 @@
 import 'package:flutter/material.dart';
-import 'package:hjvyas/splash/splash.dart';
 import 'package:lottie/lottie.dart';
+
+import '../home/navigation.dart';
 
 class PaymentSuccessPage extends StatefulWidget {
   const PaymentSuccessPage({super.key});
 
   @override
-  _PaymentSuccessPageState createState() => _PaymentSuccessPageState();
+  State<PaymentSuccessPage> createState() => _PaymentSuccessPageState();
 }
 
 class _PaymentSuccessPageState extends State<PaymentSuccessPage>
-    with SingleTickerProviderStateMixin {
-  // Animation controller for the check animation.
-  late AnimationController _animationController;
+    with TickerProviderStateMixin {
+  late AnimationController _animationController; // Combine controllers
+  late Animation<double> _fadeAnimation;
+  static const Color backgroundColor = Color.fromARGB(
+    255,
+    31,
+    47,
+    80,
+  ); //constant color
+  static const TextStyle titleTextStyle = TextStyle(
+    //constant text style
+    color: Colors.white,
+    fontSize: 28,
+    fontWeight: FontWeight.bold,
+  );
+  static const TextStyle subtitleTextStyle = TextStyle(
+    color: Colors.white,
+    fontSize: 18,
+  );
 
-  // Initialize the animation controller.
   @override
   void initState() {
     super.initState();
+
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 2), // Adjust the duration as needed
+      duration: const Duration(milliseconds: 800), // Use a single controller
     );
 
-    // Start the animation.  It will play once and stop.
-    _animationController.forward();
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      //simplified
+      CurvedAnimation(parent: _animationController, curve: Curves.easeIn),
+    );
+
+    // Start animations in sequence
+    Future.delayed(const Duration(milliseconds: 300), () {
+      _animationController.forward(); // Start the animation
+    });
   }
 
-  // Dispose the animation controller to prevent memory leaks.
   @override
   void dispose() {
     _animationController.dispose();
@@ -37,75 +60,88 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 0, 0, 50), // Dark blue background
+      backgroundColor: backgroundColor, //use constant color
       body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              // Use Lottie animation for the checkmark.
-              Lottie.asset(
-                'assets/check_animation.json', // Replace with your animation file
-                controller: _animationController,
-                onLoaded: (composition) {
-                  // You can get the duration of the animation here if needed.
-                  // print("Animation duration: ${composition.duration}");
-                },
-                width: 200, // Adjust size as needed
-                height: 200,
-                repeat: false, // Ensure it plays only once.  0 for no repeat, -1 for infinite
-                // Add autoPlay: true if you want it to start automatically without controller.forward()
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Thank you for your purchase!',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 10),
-              const Text(
-                'Your payment was successful.',
-                style: TextStyle(
-                  fontSize: 18,
-                  color: Colors.white,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 30),
-              ElevatedButton(
-                onPressed: () {
-                  // Navigate to the home page (replace with your actual navigation logic)
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (context) =>
-                      SplashScreen(), // Replace with your HomePage widget
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.white, // White button
-                  foregroundColor:
-                  const Color.fromARGB(255, 0, 0, 50), // Dark blue text
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 40, vertical: 12),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(
-                        8), // Add some rounding to the button
+        child: LayoutBuilder(
+          // Use LayoutBuilder to get the available width
+          builder: (context, constraints) {
+            final width = constraints.maxWidth; // Get the maximum width
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Animated checkmark
+                SizedBox(
+                  width: width, // Use the available width
+                  height: width, // Make height equal to width (square)
+                  child: Lottie.asset(
+                    'assets/success_anime.json',
+                    // Replace with your Lottie asset path
+                    fit: BoxFit.contain,
+                    // Or any other BoxFit as needed.  contain is usually best
+                    repeat: false,
                   ),
                 ),
-                child: const Text(
-                  'Go to Homepage',
-                  style: TextStyle(fontSize: 18),
+                const SizedBox(height: 40),
+
+                // Thank you text (with fade animation)
+                FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Payment Successful!',
+                        style: titleTextStyle, //use constant text style
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Thank you for your purchase',
+                        style: subtitleTextStyle, //use constant text style
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
+
+                const SizedBox(height: 40),
+
+                // Home button (with fade animation)
+                FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 40),
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Navigate to the home page (replace with your actual navigation logic)
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder:
+                                (context) =>
+                                    NavigationBarApp(), // Replace with your HomePage widget
+                          ),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: backgroundColor,
+                        //use constant color
+                        minimumSize: const Size(double.infinity, 50),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 5,
+                      ),
+                      child: const Text(
+                        'Back to Home',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          },
         ),
       ),
     );
