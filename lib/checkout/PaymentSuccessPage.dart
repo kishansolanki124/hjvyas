@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../home/navigation.dart';
 
@@ -23,17 +24,39 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage>
   static const TextStyle titleTextStyle = TextStyle(
     //constant text style
     color: Colors.white,
-    fontSize: 28,
-    fontWeight: FontWeight.bold,
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
+    fontFamily: "Montserrat",
   );
   static const TextStyle subtitleTextStyle = TextStyle(
     color: Colors.white,
-    fontSize: 18,
+    fontWeight: FontWeight.w500,
+    fontFamily: "Montserrat",
+    fontSize: 16,
   );
+
+  void openHomePageAndClearPreviousPages() {
+    Navigator.of(context).pushAndRemoveUntil(
+      // Create the new route for the destination page.
+      MaterialPageRoute(builder: (context) => const NavigationBarApp()),
+      // A predicate that is always false removes all existing routes.
+      (Route<dynamic> route) => false,
+    );
+  }
+
+  // Instance of SharedPreferences
+  late SharedPreferences _prefs;
+
+  Future<void> clearSharedPreferences() async {
+    _prefs = await SharedPreferences.getInstance();
+    await _prefs.clear();
+    print("SharedPreferences cleared!"); // Optional: Confirmation
+  }
 
   @override
   void initState() {
     super.initState();
+    clearSharedPreferences();
 
     _animationController = AnimationController(
       vsync: this,
@@ -110,20 +133,13 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage>
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     child: ElevatedButton(
                       onPressed: () {
-                        // Navigate to the home page (replace with your actual navigation logic)
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder:
-                                (context) =>
-                                    NavigationBarApp(), // Replace with your HomePage widget
-                          ),
-                        );
+                        openHomePageAndClearPreviousPages();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white,
                         foregroundColor: backgroundColor,
                         //use constant color
-                        minimumSize: const Size(double.infinity, 50),
+                        minimumSize: const Size(200, 50),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -132,7 +148,8 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage>
                       child: const Text(
                         'Back to Home',
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
+                          fontFamily: "Montserrat",
                           fontWeight: FontWeight.w600,
                         ),
                       ),
