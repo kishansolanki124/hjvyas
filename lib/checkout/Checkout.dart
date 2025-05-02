@@ -881,7 +881,7 @@ class _CheckoutState extends State<Checkout> {
                   .paginationController
                   .shippingChargesResponse
                   .value!
-                  .finalCharge, //actually we are showing final charge i.e. shipping + online charges
+                  .shippingCharge, //actually we are showing final charge i.e. shipping + online charges
             );
             onlineCharge = double.parse(
               widget
