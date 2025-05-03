@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:hjvyas/splash/NoIntternetScreen.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,6 +25,8 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen>
     with TickerProviderStateMixin {
+  late Future<LogoResponse?> _dataFuture;
+
   late AnimationController _animationController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _opacityAnimation;
@@ -43,10 +46,84 @@ class _SplashScreenState extends State<SplashScreen>
     ImageWithProgress(imageURL: imageUrl);
   }
 
+  void showAlert() {
+    setState(() {
+      showNoInternetDialog();
+    });
+  }
+
+  void showNoInternetDialog() {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Color.fromARGB(255, 31, 47, 80),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16.0),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  '"No Internet Connection',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 22.0,
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                const SizedBox(height: 16.0),
+                Text(
+                  'Unable to connect to the network. Please check your connection and try again.',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: "Montserrat",
+                    fontSize: 16.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 24.0),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 123, 138, 195),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20.0,
+                      vertical: 12.0,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text(
+                    'Retry',
+                    style: TextStyle(
+                      fontFamily: "Montserrat",
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.0,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
+
     _initPrefs(); // Initialize shared preferences in initState
+
+    _dataFuture = fetchData(); // Initialize once
 
     // Configure the animation controller
     _animationController = AnimationController(
@@ -82,6 +159,17 @@ class _SplashScreenState extends State<SplashScreen>
     });
   }
 
+  Future<LogoResponse?> fetchData() async {
+    return await widget._userRepo.logo();
+  }
+
+  // Method to refresh data
+  void _refreshData() {
+    setState(() {
+      _dataFuture = fetchData(); // Create new Future when needed
+    });
+  }
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -92,23 +180,24 @@ class _SplashScreenState extends State<SplashScreen>
     await _prefs.setString("logo", value);
   }
 
-  void startTimer() {
-    //Start a timer that runs for 3 seconds
-    Timer(Duration(seconds: 1), () {
-      // Navigate to the home page after 3 seconds
-      Navigator.of(
-        context,
-        //).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
-      ).pushReplacement(
-        MaterialPageRoute(builder: (context) => NavigationBarApp()),
-      );
-    });
-  }
+  // void startTimer() {
+  //   //Start a timer that runs for 3 seconds
+  //   Timer(Duration(seconds: 1), () {
+  //     // Navigate to the home page after 3 seconds
+  //     Navigator.of(
+  //       context,
+  //       //).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+  //     ).pushReplacement(
+  //       MaterialPageRoute(builder: (context) => NavigationBarApp()),
+  //     );
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<LogoResponse>(
-      future: widget._userRepo.logo(),
+    return FutureBuilder<LogoResponse?>(
+      //future: widget._userRepo.logo(),
+      future: _dataFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           startAnimation(snapshot.data!.logoList.elementAt(0).image);
@@ -122,9 +211,16 @@ class _SplashScreenState extends State<SplashScreen>
           );
         } else if (snapshot.hasError) {
           if (snapshot.error.toString() == 'No internet connection') {
-            return Center(child: Text('Error: Internt issue vhala'));//todo
+            //showAlert();
+            return NoInternetScreen(
+              onRetry: () {
+                _refreshData();
+                //widget._userRepo.logo();
+              },
+            );
+            //return Center(child: Text('Error: Internt issue vhala'));//todo
           } else {
-            return Center(child: Text('Error: ${snapshot.error}'));//todo
+            return Center(child: Text('Error: ${snapshot.error}')); //todo
           }
         }
 
