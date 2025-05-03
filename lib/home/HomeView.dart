@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../api/models/HomeMediaResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
-import '../notification/Notification.dart';
+import '../notification/NotificationList.dart';
 import '../product_detail/ImageWithProgress.dart';
 import '../utils/NetworkImageWithProgress.dart';
 import 'PaginationController.dart';
