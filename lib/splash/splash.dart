@@ -109,19 +109,6 @@ class _SplashScreenState extends State<SplashScreen>
     await _prefs.setString("logo", value);
   }
 
-  // void startTimer() {
-  //   //Start a timer that runs for 3 seconds
-  //   Timer(Duration(seconds: 1), () {
-  //     // Navigate to the home page after 3 seconds
-  //     Navigator.of(
-  //       context,
-  //       //).pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
-  //     ).pushReplacement(
-  //       MaterialPageRoute(builder: (context) => NavigationBarApp()),
-  //     );
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<LogoResponse?>(
@@ -139,18 +126,21 @@ class _SplashScreenState extends State<SplashScreen>
             snapshot.data!.logoList.elementAt(0).image,
           );
         } else if (snapshot.hasError) {
-          if (snapshot.error.toString() == 'No internet connection') {
-            //showAlert();
-            return NoInternetScreen(
-              onRetry: () {
-                _refreshData();
-                //widget._userRepo.logo();
-              },
-            );
-            //return Center(child: Text('Error: Internt issue vhala'));//todo
-          } else {
-            return Center(child: Text('Error: ${snapshot.error}')); //todo
-          }
+          return NoInternetScreen(
+            onRetry: () {
+              _refreshData();
+            },
+          );
+
+          // if (snapshot.error.toString() == 'No internet connection') {
+          //   return NoInternetScreen(
+          //     onRetry: () {
+          //       _refreshData();
+          //     },
+          //   );
+          // } else {
+          //   return Center(child: Text('Error: ${snapshot.error}'));
+          // }
         }
 
         //return Center(child: CircularProgressIndicator());
