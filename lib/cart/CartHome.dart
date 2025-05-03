@@ -614,3 +614,4 @@ class _CartPageState extends State<CartPage> {
     );
   }
 }
+//todo: productTesterStatus if its disabled then user should be able to checkout without it

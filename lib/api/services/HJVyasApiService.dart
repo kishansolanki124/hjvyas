@@ -623,6 +623,7 @@ class HJVyasApiService {
     String packing_weight_type,
     String packing_quantity,
     String packing_price,
+    String notes,
   ) async {
     // First check basic connectivity
     if (!await ConnectivityService.isConnected) {
@@ -659,6 +660,7 @@ class HJVyasApiService {
         'packing_weight_type': packing_weight_type,
         'packing_quantity': packing_quantity,
         'packing_price': packing_price,
+        'notes': notes,
       };
 
       if (kDebugMode) {

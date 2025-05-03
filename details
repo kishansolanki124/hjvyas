@@ -23,3 +23,10 @@ Hero widget fo animation between navigation (using tags in widget)
 InheritedModel used to pass data to parent widget
 
 AnimatedContainer for animation
+
+
+
+  // Your CCAvenue credentials
+  final String merchantId = '26833';
+  final String accessCode = 'AVDG01BA07CA91GDAC';
+  final String workingKey = '1B94F2D638174A5A5D0F6E82F0516F3B';

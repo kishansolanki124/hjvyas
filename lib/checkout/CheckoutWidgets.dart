@@ -39,20 +39,6 @@ Widget radioTwoOption(
   _onValueChanged,
   _selectedOption,
 ) {
-  bool isGujaratOn =
-      (shippingStatusResponse!.shippingStatusList!.elementAt(0).gujaratStatus ==
-              "on")
-          ? true
-          : false;
-
-  bool otherStateOn =
-      (shippingStatusResponse!.shippingStatusList!
-                  .elementAt(0)
-                  .outofgujaratStatus ==
-              "on")
-          ? true
-          : false;
-
   if (option1 == "India") {
     //country radio options
   } else if (option1 == "Gujarat") {
@@ -133,6 +119,155 @@ Widget radioTwoOption(
   );
 }
 
+Widget paymentOptions(
+  ShippingStatusListItem shippingStatusListItem,
+  selectedPaymentMethod,
+  updatePaymentMethod,
+) {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    mainAxisAlignment: MainAxisAlignment.start,
+    children: <Widget>[
+      //Select Payment Option
+      Text(
+        "Select Payment Option",
+        style: TextStyle(
+          fontSize: 14.0,
+          fontFamily: "Montserrat",
+          color: Colors.white,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+
+      //icici payment
+      if (shippingStatusListItem.razorpayGateway == "on") ...[
+        Row(
+          children: [
+            Radio<String>(
+              value: 'ICICI Bank Payment Gateway',
+              groupValue: selectedPaymentMethod,
+              onChanged: (value) {
+                updatePaymentMethod(value);
+              },
+              // Selected color
+              fillColor: WidgetStateProperty.resolveWith<Color>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.selected)) {
+                  return Colors.white; // Selected color
+                }
+                return Colors.white; // Default color
+              }),
+            ),
+            GestureDetector(
+              onTap: () {
+                updatePaymentMethod(
+                  'ICICI Bank Payment Gateway',
+                ); // Update selected option
+              },
+              child: Text(
+                'ICICI Bank Payment Gateway',
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontFamily: "Montserrat",
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(40, 0, 0, 0),
+          child: Text(
+            "(Support Any Bank Debit Card, Credit Card, Master Card , Visa Card, Maestro Card, Net Banking, Wallet, UPI)",
+            style: TextStyle(
+              fontSize: 12.0,
+              fontFamily: "Montserrat",
+              color: Color.fromARGB(255, 123, 138, 195),
+            ),
+          ),
+        ),
+      ],
+
+      //CCAVenue Payment
+      if (shippingStatusListItem.ccavenueGateway == "on")
+        Row(
+          children: [
+            Radio<String>(
+              value: 'CCAvenue Payment Gateway',
+              groupValue: selectedPaymentMethod,
+              onChanged: (value) {
+                updatePaymentMethod(value);
+              },
+              // Selected color
+              fillColor: WidgetStateProperty.resolveWith<Color>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.selected)) {
+                  return Colors.white; // Selected color
+                }
+                return Colors.white; // Default color
+              }),
+            ),
+            GestureDetector(
+              onTap: () {
+                updatePaymentMethod(
+                  'CCAvenue Payment Gateway',
+                ); // Update selected option
+              },
+              child: Text(
+                'CCAvenue Payment Gateway',
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontFamily: "Montserrat",
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+
+      //PayPal Payment
+      if (shippingStatusListItem.paypalGateway == "on")
+        Row(
+          children: [
+            Radio<String>(
+              value: "PayPal (Outside India Users)",
+              groupValue: selectedPaymentMethod,
+              onChanged: (value) {
+                updatePaymentMethod(value);
+              },
+              // Selected color
+              fillColor: WidgetStateProperty.resolveWith<Color>((
+                Set<WidgetState> states,
+              ) {
+                if (states.contains(WidgetState.selected)) {
+                  return Colors.white; // Selected color
+                }
+                return Colors.white; // Default color
+              }),
+            ),
+            GestureDetector(
+              onTap: () {
+                updatePaymentMethod(
+                  'PayPal (Outside India Users)',
+                ); // Update selected option
+              },
+              child: Text(
+                'PayPal (Outside India Users)',
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontFamily: "Montserrat",
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+    ],
+  );
+}
+
 Widget CheckoutAddressWidget(
   _onGiftPackValueUpdate,
   _giftPacksChecked,
@@ -140,12 +275,14 @@ Widget CheckoutAddressWidget(
   _tncChecked,
   _nameController,
   _emailController,
-  _areaController,
-  _subAreaController,
+  // _areaController,
+  // _subAreaController,
   _deliveryAddressController,
   _zipcodeController,
   _cityController,
+  _stateController,
   List<StateListItem> stateList,
+  _selectedOptionCity,
   _selectedOptionState,
   _selectedOptionCountry,
   selectedVariantInquiry,
@@ -155,6 +292,7 @@ Widget CheckoutAddressWidget(
   _giftReceiverNameController,
   _giftSenderMobileController,
   _giftReceiverMobileController,
+  VoidCallback showTNC,
 ) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -216,7 +354,7 @@ Widget CheckoutAddressWidget(
           hintStyle: TextStyle(
             color: Colors.white,
             fontFamily: "Montserrat",
-            fontSize: 14,
+            fontSize: 12,
           ),
 
           focusedBorder: OutlineInputBorder(
@@ -239,87 +377,96 @@ Widget CheckoutAddressWidget(
           isDense: true, //make textfield compact
         ),
       ),
-
-      SizedBox(height: 20),
-
-      //area
-      TextField(
-        controller: _areaController,
-        keyboardType: TextInputType.streetAddress,
-        textCapitalization: TextCapitalization.words,
+      Text(
+        "(no spam, you get an email for your order details)",
         style: TextStyle(
-          color: Colors.white,
+          fontSize: 12.0,
           fontFamily: "Montserrat",
-          fontSize: 14,
-        ),
-        decoration: InputDecoration(
-          hintText: "Area",
-          hintStyle: TextStyle(
-            color: Colors.white,
-            fontFamily: "Montserrat",
-            fontSize: 14,
-          ),
-
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(0)),
-            borderSide: BorderSide(
-              width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(0)),
-            borderSide: BorderSide(
-              width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
-            ),
-          ),
-          contentPadding: EdgeInsets.all(8),
-          isDense: true, //make textfield compact
+          color: Color.fromARGB(255, 123, 138, 195),
         ),
       ),
 
       SizedBox(height: 20),
 
-      //sub area
-      TextField(
-        controller: _subAreaController,
-        keyboardType: TextInputType.streetAddress,
-        textCapitalization: TextCapitalization.words,
-        style: TextStyle(
-          color: Colors.white,
-          fontFamily: "Montserrat",
-          fontSize: 14,
-        ),
-        decoration: InputDecoration(
-          hintText: "Sub Area",
-          hintStyle: TextStyle(
-            color: Colors.white,
-            fontFamily: "Montserrat",
-            fontSize: 14,
-          ),
+      // //area
+      // TextField(
+      //   controller: _areaController,
+      //   keyboardType: TextInputType.streetAddress,
+      //   textCapitalization: TextCapitalization.words,
+      //   style: TextStyle(
+      //     color: Colors.white,
+      //     fontFamily: "Montserrat",
+      //     fontSize: 14,
+      //   ),
+      //   decoration: InputDecoration(
+      //     hintText: "Area",
+      //     hintStyle: TextStyle(
+      //       color: Colors.white,
+      //       fontFamily: "Montserrat",
+      //       fontSize: 14,
+      //     ),
+      //
+      //     focusedBorder: OutlineInputBorder(
+      //       borderRadius: BorderRadius.all(Radius.circular(0)),
+      //       borderSide: BorderSide(
+      //         width: 1,
+      //         color: Color.fromARGB(255, 123, 138, 195),
+      //       ),
+      //     ),
+      //     enabledBorder: OutlineInputBorder(
+      //       borderRadius: BorderRadius.all(Radius.circular(0)),
+      //       borderSide: BorderSide(
+      //         width: 1,
+      //         color: Color.fromARGB(255, 123, 138, 195),
+      //       ),
+      //     ),
+      //     contentPadding: EdgeInsets.all(8),
+      //     isDense: true, //make textfield compact
+      //   ),
+      // ),
+      //
+      // SizedBox(height: 20),
 
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(0)),
-            borderSide: BorderSide(
-              width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
-            ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(0)),
-            borderSide: BorderSide(
-              width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
-            ),
-          ),
-          contentPadding: EdgeInsets.all(8),
-          isDense: true, //make textfield compact
-        ),
-      ),
+      // //sub area
+      // TextField(
+      //   controller: _subAreaController,
+      //   keyboardType: TextInputType.streetAddress,
+      //   textCapitalization: TextCapitalization.words,
+      //   style: TextStyle(
+      //     color: Colors.white,
+      //     fontFamily: "Montserrat",
+      //     fontSize: 14,
+      //   ),
+      //   decoration: InputDecoration(
+      //     hintText: "Sub Area",
+      //     hintStyle: TextStyle(
+      //       color: Colors.white,
+      //       fontFamily: "Montserrat",
+      //       fontSize: 14,
+      //     ),
+      //
+      //     focusedBorder: OutlineInputBorder(
+      //       borderRadius: BorderRadius.all(Radius.circular(0)),
+      //       borderSide: BorderSide(
+      //         width: 1,
+      //         color: Color.fromARGB(255, 123, 138, 195),
+      //       ),
+      //     ),
+      //     enabledBorder: OutlineInputBorder(
+      //       borderRadius: BorderRadius.all(Radius.circular(0)),
+      //       borderSide: BorderSide(
+      //         width: 1,
+      //         color: Color.fromARGB(255, 123, 138, 195),
+      //       ),
+      //     ),
+      //     contentPadding: EdgeInsets.all(8),
+      //     isDense: true, //make textfield compact
+      //   ),
+      // ),
+      //
+      // SizedBox(height: 20),
 
-      SizedBox(height: 20),
-
+      //Delivery Address: (Enter Full Address With Street, Road, Building Name,No etc)
       //Delivery Address
       TextField(
         controller: _deliveryAddressController,
@@ -407,43 +554,47 @@ Widget CheckoutAddressWidget(
       ),
 
       //City
-      TextField(
-        controller: _cityController,
-        keyboardType: TextInputType.streetAddress,
-        textCapitalization: TextCapitalization.words,
-        style: TextStyle(
-          color: Colors.white,
-          fontFamily: "Montserrat",
-          fontSize: 14,
-        ),
-        decoration: InputDecoration(
-          hintText: "City",
-          hintStyle: TextStyle(
+      if (_selectedOptionCountry != "India" ||
+          _selectedOptionState != "Gujarat" ||
+          _selectedOptionCity != "Jamnagar") ...[
+        TextField(
+          controller: _cityController,
+          keyboardType: TextInputType.streetAddress,
+          textCapitalization: TextCapitalization.words,
+          style: TextStyle(
             color: Colors.white,
             fontFamily: "Montserrat",
             fontSize: 14,
           ),
+          decoration: InputDecoration(
+            hintText: "City",
+            hintStyle: TextStyle(
+              color: Colors.white,
+              fontFamily: "Montserrat",
+              fontSize: 14,
+            ),
 
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(0)),
-            borderSide: BorderSide(
-              width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(
+                width: 1,
+                color: Color.fromARGB(255, 123, 138, 195),
+              ),
             ),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(0)),
-            borderSide: BorderSide(
-              width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(
+                width: 1,
+                color: Color.fromARGB(255, 123, 138, 195),
+              ),
             ),
+            contentPadding: EdgeInsets.all(8),
+            isDense: true, //make textfield compact
           ),
-          contentPadding: EdgeInsets.all(8),
-          isDense: true, //make textfield compact
         ),
-      ),
 
-      SizedBox(height: 20),
+        SizedBox(height: 20),
+      ],
 
       if (_selectedOptionState == "Outside Gujarat" &&
           _selectedOptionCountry == "India") ...[
@@ -472,7 +623,7 @@ Widget CheckoutAddressWidget(
               selectedVariantInquiry(newValue);
             },
             items:
-                stateList!.map((StateListItem item) {
+                stateList.map((StateListItem item) {
                   return DropdownMenuItem<StateListItem>(
                     value: item,
                     child: Text(
@@ -502,6 +653,46 @@ Widget CheckoutAddressWidget(
           ),
         ),
 
+        SizedBox(height: 20),
+      ],
+
+      //state input field for out side india
+      if (_selectedOptionCountry != "India") ...[
+        TextField(
+          controller: _stateController,
+          keyboardType: TextInputType.streetAddress,
+          textCapitalization: TextCapitalization.words,
+          style: TextStyle(
+            color: Colors.white,
+            fontFamily: "Montserrat",
+            fontSize: 14,
+          ),
+          decoration: InputDecoration(
+            hintText: "State",
+            hintStyle: TextStyle(
+              color: Colors.white,
+              fontFamily: "Montserrat",
+              fontSize: 14,
+            ),
+
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(
+                width: 1,
+                color: Color.fromARGB(255, 123, 138, 195),
+              ),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(0)),
+              borderSide: BorderSide(
+                width: 1,
+                color: Color.fromARGB(255, 123, 138, 195),
+              ),
+            ),
+            contentPadding: EdgeInsets.all(8),
+            isDense: true, //make textfield compact
+          ),
+        ),
         SizedBox(height: 20),
       ],
 
@@ -592,7 +783,8 @@ Widget CheckoutAddressWidget(
         ),
       ),
 
-      SizedBox(height: 10), //gift pack Checkbox
+      SizedBox(height: 10),
+      //gift pack Checkbox
       Row(
         children: [
           Checkbox(
@@ -615,7 +807,7 @@ Widget CheckoutAddressWidget(
               _onGiftPackValueUpdate(_giftPacksChecked);
             },
             child: Text(
-              'Gift Packing : (Please mark the checkbox)',
+              "If It\'s Gift Please Mark the Check box",
               style: TextStyle(
                 color: Colors.white,
                 fontFamily: "Montserrat",
@@ -800,7 +992,8 @@ Widget CheckoutAddressWidget(
         ),
       ],
 
-      SizedBox(height: 10), //TNC Checkbox
+      SizedBox(height: 10),
+      //TNC Checkbox
       Row(
         children: [
           Checkbox(
@@ -823,9 +1016,23 @@ Widget CheckoutAddressWidget(
               _tncCheckedValueUpdate(_tncChecked);
             },
             child: Text(
-              'I Agree : (Terms & Conditions)',
+              'I Agree : ',
               style: TextStyle(
                 color: Colors.white,
+                fontFamily: "Montserrat",
+                fontSize: 12,
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              showTNC.call();
+            },
+            child: Text(
+              '(Terms & Conditions)',
+              style: TextStyle(
+                decoration: TextDecoration.underline,
+                color: Color.fromARGB(255, 123, 138, 195),
                 fontFamily: "Montserrat",
                 fontSize: 12,
               ),
@@ -835,136 +1042,6 @@ Widget CheckoutAddressWidget(
       ),
 
       SizedBox(height: 20),
-    ],
-  );
-}
-
-Widget paymentOptions(_selectedPaymentMethod, updatePaymentMethod) {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    mainAxisAlignment: MainAxisAlignment.start,
-    children: <Widget>[
-      //Select Payment Option
-      Text(
-        "Select Payment Option",
-        style: TextStyle(
-          fontSize: 14.0,
-          fontFamily: "Montserrat",
-          color: Colors.white,
-          fontWeight: FontWeight.w600,
-        ),
-      ),
-
-      //icici payment
-      Row(
-        children: [
-          Radio<String>(
-            value: 'ICICI Bank Payment Gateway',
-            groupValue: _selectedPaymentMethod,
-            onChanged: (value) {
-              updatePaymentMethod(value);
-            },
-            // Selected color
-            fillColor: WidgetStateProperty.resolveWith<Color>((
-              Set<WidgetState> states,
-            ) {
-              if (states.contains(WidgetState.selected)) {
-                return Colors.white; // Selected color
-              }
-              return Colors.white; // Default color
-            }),
-          ),
-          GestureDetector(
-            onTap: () {
-              updatePaymentMethod(
-                'ICICI Bank Payment Gateway',
-              ); // Update selected option
-            },
-            child: Text(
-              'ICICI Bank Payment Gateway',
-              style: TextStyle(
-                fontSize: 14.0,
-                fontFamily: "Montserrat",
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-
-      //CCAVenue Payment
-      Row(
-        children: [
-          Radio<String>(
-            value: 'CCAvenue Payment Gateway',
-            groupValue: _selectedPaymentMethod,
-            onChanged: (value) {
-              updatePaymentMethod(value);
-            },
-            // Selected color
-            fillColor: WidgetStateProperty.resolveWith<Color>((
-              Set<WidgetState> states,
-            ) {
-              if (states.contains(WidgetState.selected)) {
-                return Colors.white; // Selected color
-              }
-              return Colors.white; // Default color
-            }),
-          ),
-          GestureDetector(
-            onTap: () {
-              updatePaymentMethod(
-                'CCAvenue Payment Gateway',
-              ); // Update selected option
-            },
-            child: Text(
-              'CCAvenue Payment Gateway',
-              style: TextStyle(
-                fontSize: 14.0,
-                fontFamily: "Montserrat",
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
-
-      //PayPal Payment
-      Row(
-        children: [
-          Radio<String>(
-            value: "PayPal (Outside India Users)",
-            groupValue: _selectedPaymentMethod,
-            onChanged: (value) {
-              updatePaymentMethod(value);
-            },
-            // Selected color
-            fillColor: WidgetStateProperty.resolveWith<Color>((
-              Set<WidgetState> states,
-            ) {
-              if (states.contains(WidgetState.selected)) {
-                return Colors.white; // Selected color
-              }
-              return Colors.white; // Default color
-            }),
-          ),
-          GestureDetector(
-            onTap: () {
-              updatePaymentMethod(
-                'PayPal (Outside India Users)',
-              ); // Update selected option
-            },
-            child: Text(
-              'PayPal (Outside India Users)',
-              style: TextStyle(
-                fontSize: 14.0,
-                fontFamily: "Montserrat",
-                color: Colors.white,
-              ),
-            ),
-          ),
-        ],
-      ),
     ],
   );
 }

@@ -29,6 +29,10 @@ Product Details:
 10. out of stock products notify me textfield cursor color and imoptoin. Try
 to set cursor color of entire app's to app blue color instead of setting at
 individual level.
+11. Product details out of stock flag coming now with product id 11, use it
+Products you may like list ma price and weight missing che. E add krjo etle set kari dais.
+12. Add to cart logic
+
 
 Static Pages:
 1. common error page retry page
@@ -70,6 +74,7 @@ Cart Page:
 
 3. Notification:
 https://mithaiwalahjvyas.com/get_notification API not working.
+https://mithaiwalahjvyas.com/hjvyasapi/get_notification
 
 dynamic view handle for payment
 
@@ -80,3 +85,12 @@ read chat of Nandish bhai and do the needful changess.
 3. Cart badge selection/not selectioon badge position issue
 4. add if payment is  disabled then dont show it or if message is available then show that message
 5. on submit click of checkout, progress bar should be in at button positino, update it view
+
+[4:27 PM, 5/3/2025] Nandish Patel Rajkot: baki app ma checkout ma area sub area remove kari nakh jo ne address, email ma note ma apde vat thai e rite text web mathi lai le jo ne gift vadu text pan web mathi lai le jo
+[4:28 PM, 5/3/2025] Nandish Patel Rajkot: notification ma atyare number remove kari nakh jo
+
+ne add to cart ma kai biju logic male to jo le jo
+
+App Icon
+
+Notification badge count remove from home page

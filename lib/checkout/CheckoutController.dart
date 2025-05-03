@@ -116,6 +116,7 @@ class CheckoutController extends GetxController {
     String packing_weight_type,
     String packing_quantity,
     String packing_price,
+    String notes,
   ) async {
     addOrderResponseLoading(true);
     try {
@@ -147,6 +148,7 @@ class CheckoutController extends GetxController {
         packing_weight_type,
         packing_quantity,
         packing_price,
+        notes,
       );
     } finally {
       addOrderResponseLoading(false);

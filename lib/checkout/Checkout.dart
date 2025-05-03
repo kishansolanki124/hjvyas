@@ -9,18 +9,26 @@ import 'package:hjvyas/checkout/PaymentSuccessPage.dart';
 import 'package:intl/intl.dart'; // Import the intl package
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
+import '../about/AboutWidgets.dart';
 import '../api/models/AddOrderResponse.dart';
 import '../api/models/CartItemModel.dart';
 import '../api/models/ProductCartResponse.dart';
 import '../api/models/ShippingStatusResponse.dart';
+import '../api/models/StaticPageResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product_detail/ProductDetailWidget.dart';
+import '../repositories/HJVyasRepository.dart';
 import 'CheckoutController.dart';
 import 'PayPalItem.dart';
+import 'TermsAndConditionPopup.dart';
 
 class Checkout extends StatefulWidget {
   final CheckoutController paginationController = CheckoutController(
+    getIt<HJVyasApiService>(),
+  );
+
+  final HJVyasRepository _userRepo = HJVyasRepository(
     getIt<HJVyasApiService>(),
   );
 
@@ -49,6 +57,9 @@ class _CheckoutState extends State<Checkout> {
   final String payPalSecretKey =
       'EAI55p1vNOqaUkdUEbaaGUnV3x0_W3yTo1Fv4ZWY4W4IwcBa1NXdqtCcIPyM30-aDJR8m6_pldyvDa5u';
 
+  String razorPayKey = "";
+  String razorpayOrderid = "";
+
   // Set to your currency
   final String currency = 'USD';
 
@@ -76,12 +87,14 @@ class _CheckoutState extends State<Checkout> {
   final TextEditingController _giftReceiverMobileController =
       TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _areaController = TextEditingController();
-  final TextEditingController _subAreaController = TextEditingController();
+
+  //final TextEditingController _areaController = TextEditingController();
+  //final TextEditingController _subAreaController = TextEditingController();
   final TextEditingController _deliveryAddressController =
       TextEditingController();
   final TextEditingController _zipcodeController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _stateController = TextEditingController();
 
   //final TextEditingController _stateController = TextEditingController();
   final TextEditingController _alternatePhoneController =
@@ -92,6 +105,7 @@ class _CheckoutState extends State<Checkout> {
 
   double shippingCharge = 0;
   double finalAmount = 0;
+  double finalCharge = 0;
   double usdPrice = 80;
   double onlineCharge = 0;
 
@@ -131,7 +145,7 @@ class _CheckoutState extends State<Checkout> {
       // Define the items being purchased
       List<PayPalItem> items = [
         PayPalItem(
-          name: 'HJ Vyas Products',
+          name: orderNo ??= 'HJ Vyas Products',
           price: amountInUSD,
           quantity: "1",
           currency: currency,
@@ -154,8 +168,8 @@ class _CheckoutState extends State<Checkout> {
                   return true; // Allow the pop
                 },
                 child: PaypalCheckoutView(
-                  sandboxMode: true,
                   //todo: change this
+                  sandboxMode: true,
                   clientId: payPalClientId,
                   secretKey: payPalSecretKey,
                   transactions: [
@@ -245,10 +259,7 @@ class _CheckoutState extends State<Checkout> {
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(errorMessage),
-              const SizedBox(height: 8),
-            ],
+            children: [Text(errorMessage), const SizedBox(height: 8)],
           ),
           actions: [
             TextButton(
@@ -279,6 +290,7 @@ class _CheckoutState extends State<Checkout> {
       if (kDebugMode) {
         print('_country is ${countryListItem!.countryName}');
       }
+      _hideCheckoutAddressWidget();
     });
   }
 
@@ -313,17 +325,26 @@ class _CheckoutState extends State<Checkout> {
     int amountInPaise = (enteredAmount * 100).toInt();
 
     var options = {
-      'key': 'rzp_test_Aqr4FyB60dGtTR',
-      //todo: change this to production
+      //'key': 'rzp_test_Aqr4FyB60dGtTR',
+      'key': razorPayKey,
       // Replace with your Razorpay test key
       'amount': amountInPaise,
       // Amount in paise
       'name': 'HJ Vyas',
-      'description': 'Purchase Description',
+      'description':
+          (orderNo != null && orderNo!.isNotEmpty)
+              ? "H.J. Vyas Order No. $orderNo"
+              : "Order Description",
       'prefill': {
         'contact': _phoneController.text,
         // Replace with customer's phone
         'email': _emailController.text,
+        // Replace with customer's email
+      },
+      'notes': {
+        'address': _deliveryAddressController.text,
+        // Replace with customer's phone
+        'merchant_order_id': orderNo,
         // Replace with customer's email
       },
       'external': {
@@ -358,7 +379,11 @@ class _CheckoutState extends State<Checkout> {
       _isRazorpayProcessing = false;
     });
 
-    showSnackbar("Payment Failed: ${response.message}");
+    if (response.message!.toLowerCase().contains("undefined")) {
+      showSnackbar("Payment Failed. Please try again!");
+    } else {
+      showSnackbar("Payment Failed: ${response.message}");
+    }
   }
 
   void _handleRazorPayExternalWallet(ExternalWalletResponse response) {
@@ -369,31 +394,31 @@ class _CheckoutState extends State<Checkout> {
     showSnackbar("External Wallet Selected: ${response.walletName}");
   }
 
-  Future<void> updateRazorPayOrderStatus(
-    String? razorPayOrderId,
-    String? razorPayPaymentId,
-  ) async {
+  Future<void> updateRazorPayOrderStatus(String? razorPayPaymentId) async {
     //todo: test this with prod
-
-    //todo: remove following 2 lines
-    razorPayOrderId ??= "test_razorPayOrderId";
-    razorPayPaymentId ??= "test_razorPayPaymentId";
-
     await widget.paginationController.addRazorpayStatus(
       orderNo!,
-      razorPayOrderId,
-      razorPayPaymentId,
+      razorpayOrderid,
+      razorPayPaymentId!,
     );
 
-    //todo: open success page
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PaymentSuccessPage()),
+    );
   }
 
   void _handleRazorPayPaymentSuccess(PaymentSuccessResponse response) {
+    print('response.paymentId: ${response.paymentId}');
+    print('response.orderId: ${response.orderId}');
+    print('response.signature: ${response.signature}');
+    print('response.data: ${response.data}');
+
     setState(() {
       _isRazorpayProcessing = false;
     });
 
-    updateRazorPayOrderStatus(response.orderId, response.paymentId);
+    updateRazorPayOrderStatus(response.paymentId);
 
     // // Show success dialog
     // showDialog(
@@ -432,16 +457,22 @@ class _CheckoutState extends State<Checkout> {
       showSnackbar(_validateName(_nameController.text).toString());
     } else if (_validateEmail(_emailController.text) != null) {
       showSnackbar(_validateEmail(_emailController.text).toString());
-    } else if (_validateCity(_areaController.text) != null) {
-      showSnackbar("Area field is required.");
-    } else if (_validateCity(_subAreaController.text) != null) {
-      showSnackbar("Sub Area field is required.");
-    } else if (_validateCity(_deliveryAddressController.text) != null) {
+    }
+    // else if (_validateCity(_areaController.text) != null) {
+    //   showSnackbar("Area field is required.");
+    // }
+    // else if (_validateCity(_subAreaController.text) != null) {
+    //   showSnackbar("Sub Area field is required.");
+    // }
+    else if (_validateCity(_deliveryAddressController.text) != null) {
       showSnackbar("Delivery Address is required.");
     } else if (_validateZipcode(_zipcodeController.text) != null) {
       showSnackbar(_validateZipcode(_zipcodeController.text).toString());
     } else if (_validateCity(_cityController.text) != null) {
       showSnackbar(_validateCity(_cityController.text).toString());
+    } else if (_selectedOptionCountry != "India" &&
+        _validateState(_stateController.text) != null) {
+      showSnackbar("State name is required.");
     } else if (stateListItem == null) {
       showSnackbar("State name is required.");
     } else if (_alternatePhone(_alternatePhoneController.text) != null) {
@@ -465,6 +496,33 @@ class _CheckoutState extends State<Checkout> {
       }
     } else {
       placeOrder();
+    }
+  }
+
+  StaticPageResponse? staticPageResponse;
+  Future<void> getStaticPage() async {
+    staticPageResponse = await widget._userRepo.getStaticpage();
+  }
+
+  Future<void> showTNC() async {
+    await getStaticPage();
+    if(staticPageResponse != null){
+      print('showTNC function called.');
+      showGeneralDialog(
+        context: context,
+        barrierDismissible: true,
+        barrierLabel: "Terms and Conditions",
+        transitionDuration: const Duration(milliseconds: 300),
+        pageBuilder: (_, __, ___) {
+          return TermsAndConditionPopup(imageUrl: getItemByName(
+            staticPageResponse!.staticpageList,
+            "Terms",
+          )!.description, onClose: () => {});
+        },
+        transitionBuilder: (context, animation, secondaryAnimation, child) {
+          return FadeTransition(opacity: animation, child: child);
+        },
+      );
     }
   }
 
@@ -495,6 +553,22 @@ class _CheckoutState extends State<Checkout> {
 
     getPackingWeightAndWeightType();
 
+    String payment_type = "";
+
+    String notes = "";
+    if (_notesController.text.toString() != null &&
+        _notesController.text.isNotEmpty) {
+      notes = _notesController.text.toString();
+    }
+
+    if (_selectedPaymentMethod == "ICICI Bank Payment Gateway") {
+      payment_type = "icici";
+    } else if (_selectedPaymentMethod == "PayPal (Outside India Users)") {
+      payment_type = "paypal";
+    } else {
+      payment_type = "ccavenue";
+    }
+
     await widget.paginationController.addOrder(
       _nameController.text.toString(),
       _emailController.text.toString(),
@@ -508,7 +582,7 @@ class _CheckoutState extends State<Checkout> {
           ? "India"
           : countryListItem!.countryName,
       _selectedOptionCountry != "India"
-          ? ""
+          ? _stateController.text.toString()
           : (_selectedOptionState == "Gujarat"
               ? "Gujarat"
               : stateListItem!.stateName),
@@ -518,11 +592,10 @@ class _CheckoutState extends State<Checkout> {
       _giftReceiverNameController.text.toString(),
       _giftReceiverMobileController.text.toString(),
       widget.productTesterId,
-      finalAmount.toString(),
+      widget.total.toString(),
       shippingCharge.toString(),
       onlineCharge.toString(),
-      "icici",
-      //todo payment_type value icici, ccavenue, paypal any one
+      payment_type,
       "android",
       //todo: value android, ios any one value
       productIds.replaceAll("combo_", ""),
@@ -533,6 +606,7 @@ class _CheckoutState extends State<Checkout> {
       packingWeightType,
       packingQuantity,
       packingPrice,
+      notes,
     );
 
     addOrderResponse = widget.paginationController.addOrderResponse.value;
@@ -540,6 +614,9 @@ class _CheckoutState extends State<Checkout> {
     if (null != addOrderResponse) {
       if (addOrderResponse!.orderNo != null &&
           addOrderResponse!.orderNo.isNotEmpty) {
+        razorPayKey = addOrderResponse!.keyId;
+        razorpayOrderid = addOrderResponse!.razorpayOrderid;
+
         orderNo = addOrderResponse!.orderNo.toString();
         if (_selectedPaymentMethod == "ICICI Bank Payment Gateway") {
           _startRazorPayPayment();
@@ -625,6 +702,16 @@ class _CheckoutState extends State<Checkout> {
     return null;
   }
 
+  String? _validateState(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'State is required';
+    }
+    if (value.length < 2) {
+      return 'State name is too short';
+    }
+    return null;
+  }
+
   String? _validateZipcode(String? value) {
     if (value == null || value.isEmpty) {
       return 'Zipcode is required';
@@ -668,12 +755,12 @@ class _CheckoutState extends State<Checkout> {
     _phoneController.dispose();
     _nameController.dispose();
     _emailController.dispose();
-    _areaController.dispose();
-    _subAreaController.dispose();
+    //_areaController.dispose();
+    //_subAreaController.dispose();
     _deliveryAddressController.dispose();
     _zipcodeController.dispose();
     _cityController.dispose();
-    //_stateController.dispose();
+    _stateController.dispose();
     _alternatePhoneController.dispose();
     _notesController.dispose();
     _giftSenderNameController.dispose();
@@ -688,12 +775,25 @@ class _CheckoutState extends State<Checkout> {
   }
 
   Future<void> getShippingCharge() async {
-    String countryOutside = _selectedOptionCountry == "India" ? "no" : "yes";
-    String stateOutofGujarat = _selectedOptionState == "Gujarat" ? "no" : "yes";
+    String countryOutside =
+        _selectedOptionCountry == "India"
+            ? "no"
+            : (countryListItem != null)
+            ? countryListItem!.id
+            : "yes";
+
+    String stateOutofGujarat =
+        (_selectedOptionState == "Gujarat" || _selectedOptionCountry != "India")
+            ? "no"
+            : "yes";
+
     String cityJamnagar =
-        (stateOutofGujarat == "no" && _selectedOptionCity == "Jamnagar")
+        (stateOutofGujarat == "no" &&
+                _selectedOptionCity == "Jamnagar" &&
+                _selectedOptionCountry == "India")
             ? "yes"
             : "no";
+
     String cityOther =
         (stateOutofGujarat == "no" &&
                 countryOutside == "no" &&
@@ -897,6 +997,13 @@ class _CheckoutState extends State<Checkout> {
                   .value!
                   .finalAmount, //actually we are showing final charge i.e. shipping + online charges
             );
+            finalCharge = double.parse(
+              widget
+                  .paginationController
+                  .shippingChargesResponse
+                  .value!
+                  .finalCharge, //actually we are showing final charge i.e. shipping + online charges
+            );
           }
 
           bool outSideIndia =
@@ -1017,8 +1124,9 @@ class _CheckoutState extends State<Checkout> {
                             ),
                           ),
 
-                          SizedBox(height: 8.0), // Description
+                          SizedBox(height: 8.0),
 
+                          // Description
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
@@ -1034,7 +1142,7 @@ class _CheckoutState extends State<Checkout> {
                                   //shipping charge
                                   CartTotalRow(
                                     "Shipping Charge",
-                                    "₹ $shippingCharge",
+                                    "₹ $finalCharge",
                                     10,
                                   ),
 
@@ -1466,12 +1574,14 @@ class _CheckoutState extends State<Checkout> {
                                         _tncChecked,
                                         _nameController,
                                         _emailController,
-                                        _areaController,
-                                        _subAreaController,
+                                        //_areaController,
+                                        //_subAreaController,
                                         _deliveryAddressController,
                                         _zipcodeController,
                                         _cityController,
+                                        _stateController,
                                         shippingStatusResponse!.stateList,
+                                        _selectedOptionCity,
                                         _selectedOptionState,
                                         _selectedOptionCountry,
                                         selectedVariantInquiry,
@@ -1481,13 +1591,34 @@ class _CheckoutState extends State<Checkout> {
                                         _giftReceiverNameController,
                                         _giftSenderMobileController,
                                         _giftReceiverMobileController,
+                                        showTNC,
                                       ),
 
-                                      //payment options
-                                      paymentOptions(
-                                        _selectedPaymentMethod,
-                                        updatePaymentMethod,
-                                      ),
+                                      if (shippingStatusResponse != null &&
+                                          (shippingStatusResponse!
+                                                      .shippingStatusList
+                                                      .elementAt(0)
+                                                      .razorpayGateway ==
+                                                  "on" ||
+                                              shippingStatusResponse!
+                                                      .shippingStatusList
+                                                      .elementAt(0)
+                                                      .ccavenueGateway ==
+                                                  "on" ||
+                                              shippingStatusResponse!
+                                                      .shippingStatusList
+                                                      .elementAt(0)
+                                                      .paypalGateway ==
+                                                  "on")) ...[
+                                        //payment options
+                                        paymentOptions(
+                                          shippingStatusResponse!
+                                              .shippingStatusList
+                                              .elementAt(0),
+                                          _selectedPaymentMethod,
+                                          updatePaymentMethod,
+                                        ),
+                                      ],
 
                                       //submit button
                                       widget
