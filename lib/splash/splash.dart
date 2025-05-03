@@ -12,7 +12,9 @@ import '../product_detail/ImageWithProgress.dart';
 import '../repositories/HJVyasRepository.dart';
 
 class SplashScreen extends StatefulWidget {
-  final HJVyasRepository _userRepo = HJVyasRepository(getIt<HJVyasApiService>());
+  final HJVyasRepository _userRepo = HJVyasRepository(
+    getIt<HJVyasApiService>(),
+  );
 
   SplashScreen({super.key});
 
@@ -20,7 +22,11 @@ class SplashScreen extends StatefulWidget {
   _SplashScreenState createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen>
+    with TickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _opacityAnimation;
 
   // Instance of SharedPreferences
   late SharedPreferences _prefs;
@@ -30,11 +36,56 @@ class _SplashScreenState extends State<SplashScreen> {
     _prefs = await SharedPreferences.getInstance();
   }
 
+  startAnimation(String imageUrl) {
+    _animationController.forward();
+
+    // Preload the image in the background
+    ImageWithProgress(imageURL: imageUrl);
+  }
 
   @override
   void initState() {
     super.initState();
     _initPrefs(); // Initialize shared preferences in initState
+
+    // Configure the animation controller
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
+
+    // Create a scale animation that starts small and ends larger
+    _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutBack),
+    );
+
+    // Create an opacity animation
+    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
+      ),
+    );
+
+    // Navigate to the home screen after animation completes
+    _animationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        // Add a short delay after animation completes before navigating
+        Future.delayed(const Duration(seconds: 1), () {
+          if (mounted) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const NavigationBarApp()),
+            );
+          }
+        });
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   Future<void> _saveString(String value) async {
@@ -60,24 +111,41 @@ class _SplashScreenState extends State<SplashScreen> {
       future: widget._userRepo.logo(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          startTimer();
+          startAnimation(snapshot.data!.logoList.elementAt(0).image);
+
           _saveString(snapshot.data!.logoList.elementAt(0).image);
-          return splashScreenWidget(snapshot.data!.logoList.elementAt(0).image);
+          return splashScreenWidget(
+            _animationController,
+            _opacityAnimation,
+            _scaleAnimation,
+            snapshot.data!.logoList.elementAt(0).image,
+          );
         } else if (snapshot.hasError) {
           if (snapshot.error.toString() == 'No internet connection') {
-            return Center(child: Text('Error: Internt issue vhala'));
+            return Center(child: Text('Error: Internt issue vhala'));//todo
           } else {
-            return Center(child: Text('Error: ${snapshot.error}'));
+            return Center(child: Text('Error: ${snapshot.error}'));//todo
           }
         }
+
         //return Center(child: CircularProgressIndicator());
-        return splashScreenWidget("");
+        return splashScreenWidget(
+          _animationController,
+          _opacityAnimation,
+          _scaleAnimation,
+          "",
+        );
       },
     );
   }
 }
 
-Widget splashScreenWidget(String imageUrl) {
+Widget splashScreenWidget(
+  animationController,
+  opacityAnimation,
+  scaleAnimation,
+  String imageUrl,
+) {
   return Stack(
     fit: StackFit.expand, // Ensures the background image fills the screen
     children: <Widget>[
@@ -98,12 +166,22 @@ Widget splashScreenWidget(String imageUrl) {
       // Centered Logo
       if (imageUrl.isNotEmpty)
         Center(
-          child: SizedBox(
-            width: 200,
-            height: 200,
-            child: ImageWithProgress(imageURL: imageUrl),
+          child: AnimatedBuilder(
+            animation: animationController,
+            builder: (context, child) {
+              return Opacity(
+                opacity: opacityAnimation.value,
+                child: Transform.scale(
+                  scale: scaleAnimation.value,
+                  child: SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: ImageWithProgress(imageURL: imageUrl),
+                  ),
+                ),
+              );
+            },
           ),
-          //Image.asset("images/logo.png", width: 200, height: 200)
         ),
     ],
   );

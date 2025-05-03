@@ -1,415 +1,190 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:uuid/uuid.dart';
-import 'package:webview_flutter/webview_flutter.dart';
+import 'package:flutter/services.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    // Set system UI overlay style to match the dark theme
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.light,
+      ),
+    );
+
     return MaterialApp(
-      title: 'CCAvenue Flutter Demo',
+      title: 'App Splash Screen',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        brightness: Brightness.dark,
       ),
-      home: PaymentScreen(),
+      home: const SplashScreen(),
     );
   }
 }
 
-class PaymentScreen extends StatefulWidget {
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({Key? key}) : super(key: key);
+
   @override
-  _PaymentScreenState createState() => _PaymentScreenState();
+  State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _PaymentScreenState extends State<PaymentScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _uuid = Uuid();
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+  // Replace this with your actual app icon URL
+  final String appIconUrl = 'https://www.mithaiwalahjvyas.com/uploads/app_logo_img/1161-logo.png';
 
-  // Form controllers
-  final _amountController = TextEditingController(text: '10.00');
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
-
-  bool _isProcessing = false;
-  String _paymentStatus = '';
-
-  @override
-  void dispose() {
-    _amountController.dispose();
-    _nameController.dispose();
-    _emailController.dispose();
-    _phoneController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _initiatePayment() async {
-    if (_formKey.currentState!.validate()) {
-      setState(() {
-        _isProcessing = true;
-        _paymentStatus = '';
-      });
-
-      // Generate a unique order ID
-      final orderId =
-          'ORD_${_uuid.v4().substring(0, 8)}_${DateTime.now().millisecondsSinceEpoch}';
-
-      try {
-        // Navigate to CCAvenue payment page
-        final result = await Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder:
-                (context) => CCAvenuePay(
-                  orderId: orderId,
-                  amount: double.parse(_amountController.text),
-                  customerName: _nameController.text,
-                  customerEmail: _emailController.text,
-                  customerPhone: _phoneController.text,
-                ),
-          ),
-        );
-
-        // Handle payment result
-        if (result != null) {
-          setState(() {
-            _paymentStatus =
-                'Payment ${result['status']}: ${result['message'] ?? ''}';
-
-            if (result['status'] == 'success') {
-              _resetForm();
-            }
-          });
-        }
-      } catch (e) {
-        setState(() {
-          _paymentStatus = 'Error: ${e.toString()}';
-        });
-      } finally {
-        setState(() {
-          _isProcessing = false;
-        });
-      }
-    }
-  }
-
-  void _resetForm() {
-    _amountController.text = '100.00';
-    _nameController.clear();
-    _emailController.clear();
-    _phoneController.clear();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('CCAvenue Payment Demo')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Payment form
-                TextFormField(
-                  controller: _amountController,
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
-                  decoration: InputDecoration(
-                    labelText: 'Amount (INR)',
-                    prefixText: '₹',
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter an amount';
-                    }
-                    if (double.tryParse(value) == null ||
-                        double.parse(value) <= 0) {
-                      return 'Please enter a valid amount';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 12),
-                TextFormField(
-                  controller: _nameController,
-                  decoration: InputDecoration(labelText: 'Full Name'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 12),
-                TextFormField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(labelText: 'Email Address'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your email';
-                    }
-                    if (!RegExp(
-                      r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                    ).hasMatch(value)) {
-                      return 'Please enter a valid email';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 12),
-                TextFormField(
-                  controller: _phoneController,
-                  keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(labelText: 'Phone Number'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your phone number';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 24),
-                ElevatedButton(
-                  onPressed: _isProcessing ? null : _initiatePayment,
-                  style: ElevatedButton.styleFrom(
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  child:
-                      _isProcessing
-                          ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    Colors.white,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(width: 12),
-                              Text('Processing...'),
-                            ],
-                          )
-                          : Text('Pay Now with CCAvenue'),
-                ),
-                if (_paymentStatus.isNotEmpty) ...[
-                  SizedBox(height: 16),
-                  Container(
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color:
-                          _paymentStatus.contains('success')
-                              ? Colors.green.shade50
-                              : _paymentStatus.contains('failed') ||
-                                  _paymentStatus.contains('Error')
-                              ? Colors.red.shade50
-                              : Colors.grey.shade50,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      _paymentStatus,
-                      style: TextStyle(
-                        color:
-                            _paymentStatus.contains('success')
-                                ? Colors.green.shade800
-                                : _paymentStatus.contains('failed') ||
-                                    _paymentStatus.contains('Error')
-                                ? Colors.red.shade800
-                                : Colors.grey.shade800,
-                      ),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// CCAvenue Payment Widget Implementation in the same file
-class CCAvenuePay extends StatefulWidget {
-  final String orderId;
-  final double amount;
-  final String customerName;
-  final String customerEmail;
-  final String customerPhone;
-
-  const CCAvenuePay({
-    Key? key,
-    required this.orderId,
-    required this.amount,
-    required this.customerName,
-    required this.customerEmail,
-    required this.customerPhone,
-  }) : super(key: key);
-
-  @override
-  _CCAvenuePayState createState() => _CCAvenuePayState();
-}
-
-class _CCAvenuePayState extends State<CCAvenuePay> {
-  late WebViewController _controller;
-  bool _isLoading = true;
-
-  // Your CCAvenue credentials
-  final String merchantId = '26833';
-  final String accessCode = 'AVDG01BA07CA91GDAC';
-  final String workingKey = '1B94F2D638174A5A5D0F6E82F0516F3B';
-
-  // Your server URL that will generate the encrypted request
-  final String _serverUrl = "https://your-server.com/ccavenue-encrypt";
-
-  // The CCAvenue payment URL
-  final String _ccavenueUrl =
-      "https://test.ccavenue.com/transaction/transaction.do";
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _opacityAnimation;
+  // Removed unnecessary state variables
 
   @override
   void initState() {
     super.initState();
-    // Initialize CCAvenue payment
-    _initiateCCAvenue();
-  }
 
-  Future<void> _initiateCCAvenue() async {
-    // Prepare the payment parameters
-    final Map<String, String> params = {
-      'merchant_id': merchantId,
-      'order_id': widget.orderId,
-      'currency': 'INR',
-      'amount': widget.amount.toString(),
-      'redirect_url': 'https://your-server.com/ccavenue-response',
-      'cancel_url': 'https://your-server.com/ccavenue-response',
-      'language': 'EN',
-      'customer_name': widget.customerName,
-      'customer_email': widget.customerEmail,
-      'customer_phone': widget.customerPhone,
-      'merchant_param1': 'Flutter App',
-      'merchant_param2': 'CCAvenue Integration',
-    };
+    // Configure the animation controller
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    );
 
-    try {
-      // Option 1: Using your own server to encrypt data
-      final response = await http.post(Uri.parse(_serverUrl), body: params);
+    // Create a scale animation that starts small and ends larger
+    _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: Curves.easeOutBack,
+      ),
+    );
 
-      if (response.statusCode == 200) {
-        final encryptedData = response.body;
-        _loadCCAvenue(encryptedData);
-      } else {
-        _showError("Failed to encrypt payment data");
-      }
+    // Create an opacity animation
+    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _animationController,
+        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
+      ),
+    );
 
-      // Option 2: Local encryption (Not recommended for production)
-      // Only use this for testing purposes
-      /*
-      final String encryptedData = _encryptData(params);
-      _loadCCAvenue(encryptedData);
-      */
-    } catch (e) {
-      _showError("Error: ${e.toString()}");
-    }
-  }
+    // Start the animation once the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _animationController.forward();
 
-  void _loadCCAvenue(String encryptedData) {
-    // HTML form to submit to CCAvenue
-    final String htmlForm = '''
-      <html>
-        <head>
-          <title>CCAvenue Payment</title>
-        </head>
-        <body onload="document.forms['payment_form'].submit();">
-          <form id="payment_form" method="post" action="$_ccavenueUrl">
-            <input type="hidden" name="encRequest" value="$encryptedData">
-            <input type="hidden" name="access_code" value="$accessCode">
-          </form>
-        </body>
-      </html>
-    ''';
+      // Preload the image in the background
+      precacheImage(NetworkImage(appIconUrl), context);
+    });
 
-    _controller =
-        WebViewController()
-          ..setJavaScriptMode(JavaScriptMode.unrestricted)
-          ..setNavigationDelegate(
-            NavigationDelegate(
-              onPageStarted: (String url) {
-                setState(() {
-                  _isLoading = true;
-                });
-              },
-              onPageFinished: (String url) {
-                setState(() {
-                  _isLoading = false;
-                });
-
-                // Handle the response from CCAvenue
-                _handleResponse(url);
-              },
-              onWebResourceError: (WebResourceError error) {
-                _showError("WebView error: ${error.description}");
-              },
-            ),
-          )
-          ..loadHtmlString(htmlForm);
-  }
-
-  void _handleResponse(String url) {
-    // Parse response URL
-    if (url.contains('your-server.com/ccavenue-response')) {
-      // Extract parameters from URL or let your server handle it
-      // For security reasons, verification should be done on your server
-
-      // Example of success navigation
-      if (url.contains('order_status=Success')) {
-        Navigator.pop(context, {
-          'status': 'success',
-          'order_id': widget.orderId,
-        });
-      } else {
-        Navigator.pop(context, {
-          'status': 'failed',
-          'order_id': widget.orderId,
+    // Navigate to the home screen after animation completes
+    _animationController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        // Add a short delay after animation completes before navigating
+        Future.delayed(const Duration(seconds: 1), () {
+          if (mounted) {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          }
         });
       }
-    }
+    });
   }
 
-  void _showError(String message) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(message)));
-    Navigator.pop(context, {'status': 'error', 'message': message});
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('CCAvenue Payment'),
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () => Navigator.pop(context, {'status': 'cancelled'}),
+      backgroundColor: const Color(0xFF0A1931), // Dark blue background
+      body: Center(
+        child: AnimatedBuilder(
+          animation: _animationController,
+          builder: (context, child) {
+            return Opacity(
+              opacity: _opacityAnimation.value,
+              child: Transform.scale(
+                scale: _scaleAnimation.value,
+                child: _buildImageContainer(),
+              ),
+            );
+          },
         ),
       ),
-      body: Stack(
-        children: [
-          WebViewWidget(controller: _controller),
-          if (_isLoading) const Center(child: CircularProgressIndicator()),
-        ],
+    );
+  }
+
+  // Removed the intermediate method to directly show the image with built-in loading handling
+
+  Widget _buildImageContainer() {
+    return Container(
+      width: 180,
+      height: 180,
+      color: Colors.transparent,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: Image.network(
+          appIconUrl,
+          fit: BoxFit.contain,
+          loadingBuilder: (context, child, loadingProgress) {
+            if (loadingProgress == null) return child;
+            return Center(
+              child: CircularProgressIndicator(
+                value: loadingProgress.expectedTotalBytes != null
+                    ? loadingProgress.cumulativeBytesLoaded /
+                    loadingProgress.expectedTotalBytes!
+                    : null,
+                valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
+              ),
+            );
+          },
+          errorBuilder: (context, error, stackTrace) {
+            print('Error loading image: $error');
+            return const Center(
+              child: Icon(
+                Icons.error_outline,
+                color: Colors.white,
+                size: 50,
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+// Removed unused helper methods since they're now integrated into _buildImageContainer()
+}
+
+// Placeholder for your main app screen
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: const Color(0xFF0A1931),
+      appBar: AppBar(
+        title: const Text('Your App'),
+        backgroundColor: const Color(0xFF0A1931),
+        elevation: 0,
+      ),
+      body: const Center(
+        child: Text(
+          'Main App Content',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+          ),
+        ),
       ),
     );
   }
