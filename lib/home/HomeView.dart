@@ -78,18 +78,11 @@ class _HomeViewState extends State<HomeView> {
                   padEnds: false,
                   scrollDirection: Axis.vertical,
                   controller: widget.paginationController.pageController,
-                  itemCount: widget.paginationController.items.length + 1,
-                  // +1 for last item
+                  itemCount: widget.paginationController.items.length,
                   itemBuilder: (context, index) {
                     if (index < widget.paginationController.items.length) {
                       return homePageItem(
                         widget.paginationController.items[index],
-                      );
-                    } else {
-                      //todo change this last item
-                      return ColoredBox(
-                        color: Colors.black,
-                        child: SizedBox(height: double.maxFinite),
                       );
                     }
                   },
