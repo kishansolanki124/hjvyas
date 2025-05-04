@@ -8,7 +8,7 @@ import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product_detail/ImageWithProgress.dart';
 import '../splash/NoIntternetScreen.dart';
-import '../utils/NetworkImageWithProgress.dart';
+import '../utils/MenuImageViewWidget.dart';
 import 'CategoryController.dart';
 import 'MenuListItem.dart';
 
@@ -101,7 +101,7 @@ class _MenuScreenState extends State<MenuScreen> {
         color: Colors.blueGrey,
         child: Stack(
           children: [
-            NetworkImageWithProgress(
+            MenuImageViewWidget(
               imageUrl: categoryList.elementAt(selectedIndex).categoryImage,
             ),
 

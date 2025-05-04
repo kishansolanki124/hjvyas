@@ -5,10 +5,10 @@ import '../product/ProductListGridView.dart';
 
 class MenuListItem extends StatelessWidget {
   final String states;
-  CategoryListItem categoryListItem;
+  final CategoryListItem categoryListItem;
   final Color selectedColor;
 
-  MenuListItem(
+  const MenuListItem(
     this.categoryListItem,
     this.selectedColor,
     this.states, {
