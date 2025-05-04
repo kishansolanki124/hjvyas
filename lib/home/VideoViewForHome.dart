@@ -51,10 +51,24 @@ class _VideoViewForHomeState extends State<VideoViewForHome> {
               return Stack(
                 alignment: Alignment.center,
                 children: <Widget>[
-                  AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: VideoPlayer(_controller),
+                  LayoutBuilder(
+                    builder: (context, constraints) {
+                      return SizedBox.expand(
+                        // Use SizedBox.expand
+                        child: FittedBox(
+                          // Use FittedBox
+                          fit: BoxFit.cover,
+                          child: SizedBox(
+                            width: constraints.maxWidth,
+                            // Use the available constraints.
+                            height: constraints.maxHeight,
+                            child: VideoPlayer(_controller),
+                          ),
+                        ),
+                      );
+                    },
                   ),
+
                   if (_videoEnded) // Show play button when video ends
                     IconButton(
                       onPressed: () {
