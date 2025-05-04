@@ -11,10 +11,6 @@ import '../product_detail/ImageWithProgress.dart';
 import '../product_detail/ProductDetail.dart';
 import '../splash/NoIntternetScreen.dart';
 import '../utils/CommonAppProgress.dart';
-import 'ProductGridFirstItem.dart';
-import 'ProductGridFourthItem.dart';
-import 'ProductGridSecondItem.dart';
-import 'ProductGridThirdItem.dart';
 import 'ProductListItemWidget.dart';
 
 class ProductListGridView extends StatefulWidget {
@@ -267,55 +263,55 @@ Widget productListTopView(String logoURL, String title) {
   );
 }
 
-Widget productListItem(ProductListItem item, int index, navigateToDetails) {
-  Widget lloadWidget;
-
-  if (index % 4 == 0) {
-    lloadWidget = ProductGridFirstItem(
-      imageUrl: item.productImage,
-      title: item.productName,
-      price: item.productPrice,
-      productWeight: item.productWeight,
-      productLife: item.productLife,
-      calories: item.productCalories,
-      productSoldout: item.productSoldout,
-    );
-  } else if (index % 4 == 1) {
-    lloadWidget = ProductGridSecondItem(
-      imageUrl: item.productImage,
-      title: item.productName,
-      price: item.productPrice,
-      productWeight: item.productWeight,
-      productLife: item.productLife,
-      calories: item.productCalories,
-      productSoldout: item.productSoldout,
-    );
-  } else if (index % 4 == 2) {
-    lloadWidget = ProductGridThirdItem(
-      imageUrl: item.productImage,
-      title: item.productName,
-      price: item.productPrice,
-      productWeight: item.productWeight,
-      productLife: item.productLife,
-      calories: item.productCalories,
-      productSoldout: item.productSoldout,
-    );
-  } else {
-    lloadWidget = ProductGridFourthItem(
-      imageUrl: item.productImage,
-      title: item.productName,
-      price: item.productPrice,
-      productWeight: item.productWeight,
-      productLife: item.productLife,
-      calories: item.productCalories,
-      productSoldout: item.productSoldout,
-    );
-  }
-
-  return GestureDetector(
-    onTap: () {
-      navigateToDetails(index, item);
-    },
-    child: lloadWidget,
-  );
-}
+// Widget productListItem(ProductListItem item, int index, navigateToDetails) {
+//   Widget lloadWidget;
+//
+//   if (index % 4 == 0) {
+//     lloadWidget = ProductGridFirstItem(
+//       imageUrl: item.productImage,
+//       title: item.productName,
+//       price: item.productPrice,
+//       productWeight: item.productWeight,
+//       productLife: item.productLife,
+//       calories: item.productCalories,
+//       productSoldout: item.productSoldout,
+//     );
+//   } else if (index % 4 == 1) {
+//     lloadWidget = ProductGridSecondItem(
+//       imageUrl: item.productImage,
+//       title: item.productName,
+//       price: item.productPrice,
+//       productWeight: item.productWeight,
+//       productLife: item.productLife,
+//       calories: item.productCalories,
+//       productSoldout: item.productSoldout,
+//     );
+//   } else if (index % 4 == 2) {
+//     lloadWidget = ProductGridThirdItem(
+//       imageUrl: item.productImage,
+//       title: item.productName,
+//       price: item.productPrice,
+//       productWeight: item.productWeight,
+//       productLife: item.productLife,
+//       calories: item.productCalories,
+//       productSoldout: item.productSoldout,
+//     );
+//   } else {
+//     lloadWidget = ProductGridFourthItem(
+//       imageUrl: item.productImage,
+//       title: item.productName,
+//       price: item.productPrice,
+//       productWeight: item.productWeight,
+//       productLife: item.productLife,
+//       calories: item.productCalories,
+//       productSoldout: item.productSoldout,
+//     );
+//   }
+//
+//   return GestureDetector(
+//     onTap: () {
+//       navigateToDetails(index, item);
+//     },
+//     child: lloadWidget,
+//   );
+// }

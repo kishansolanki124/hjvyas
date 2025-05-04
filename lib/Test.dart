@@ -1,155 +1,125 @@
 import 'package:flutter/material.dart';
+import 'package:hjvyas/api/models/ProductListResponse.dart';
 
-void main() {
-  runApp(MyApp());
+import '../product_detail/ProductDetail.dart';
+import 'ProductGridFirstItem.dart';
+import 'ProductGridFourthItem.dart';
+import 'ProductGridSecondItem.dart';
+import 'ProductGridThirdItem.dart';
+
+class ProductListItemWidget extends StatefulWidget {
+  int index;
+  ProductListItem item;
+
+  ProductListItemWidget({required this.index, required this.item, super.key});
+
+  @override
+  State<ProductListItemWidget> createState() => _ProductListItemState();
 }
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Shared Element Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: HomePage(),
-    );
-  }
-}
+class _ProductListItemState extends State<ProductListItemWidget>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController;
+  late final Animation<Offset> _slideAnimation;
 
-class HomePage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text('Home')),
-      body: GestureDetector(
-        onTap: () {
-          Navigator.push(
-            context,
-            PageRouteBuilder(
-              transitionDuration: Duration(milliseconds: 600),
-              reverseTransitionDuration: Duration(milliseconds: 600),
-              pageBuilder: (context, animation, secondaryAnimation) => DetailPage(),
-              transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                return FadeTransition(
-                  opacity: animation,
-                  child: child,
-                );
-              },
-            ),
-          );
-        },
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Hero(
-                tag: 'imageHero',
-                child: Image.network(
-                  'https://picsum.photos/200',
-                  width: 200,
-                  height: 200,
-                ),
-              ),
-              SizedBox(height: 20),
-              TweenAnimationBuilder(
-                tween: Tween<double>(begin: 1, end: 1),
-                duration: Duration(milliseconds: 600),
-                builder: (context, value, child) {
-                  return Transform.translate(
-                    offset: Offset(0, 0),
-                    child: Transform.scale(
-                      scale: value,
-                      child: child,
-                    ),
-                  );
-                },
-                child: Text(
-                  'Welcome',
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.blue,
-                    fontWeight: FontWeight.normal,
-                  ),
-                ),
-              ),
-            ],
-          ),
+  void navigateToDetails(int index, ProductListItem item) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder:
+            (context) => ProductDetail(
+          productId: item.productId,
+          isOutOfStock: item.productSoldout.isEmpty ? false : true,
         ),
       ),
     );
   }
-}
 
+  @override
+  void initState() {
+    super.initState();
 
-class DetailPage extends StatelessWidget {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 1), // Start from bottom
+      end: Offset.zero, // End at normal position
+    ).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutQuad),
+    );
+
+    // Stagger the animations based on index
+    Future.delayed(Duration(milliseconds: 100 * widget.index), () {
+      if (mounted) {
+        _animationController.forward();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
+    Widget lloadWidget;
+
+    if (widget.index % 4 == 0) {
+      lloadWidget = ProductGridFirstItem(
+        imageUrl: widget.item.productImage,
+        title: widget.item.productName,
+        price: widget.item.productPrice,
+        productWeight: widget.item.productWeight,
+        productLife: widget.item.productLife,
+        calories: widget.item.productCalories,
+        productSoldout: widget.item.productSoldout,
+      );
+    } else if (widget.index % 4 == 1) {
+      lloadWidget = ProductGridSecondItem(
+        imageUrl: widget.item.productImage,
+        title: widget.item.productName,
+        price: widget.item.productPrice,
+        productWeight: widget.item.productWeight,
+        productLife: widget.item.productLife,
+        calories: widget.item.productCalories,
+        productSoldout: widget.item.productSoldout,
+      );
+    } else if (widget.index % 4 == 2) {
+      lloadWidget = ProductGridThirdItem(
+        imageUrl: widget.item.productImage,
+        title: widget.item.productName,
+        price: widget.item.productPrice,
+        productWeight: widget.item.productWeight,
+        productLife: widget.item.productLife,
+        calories: widget.item.productCalories,
+        productSoldout: widget.item.productSoldout,
+      );
+    } else {
+      lloadWidget = ProductGridFourthItem(
+        imageUrl: widget.item.productImage,
+        title: widget.item.productName,
+        price: widget.item.productPrice,
+        productWeight: widget.item.productWeight,
+        productLife: widget.item.productLife,
+        calories: widget.item.productCalories,
+        productSoldout: widget.item.productSoldout,
+      );
+    }
+
+    return SlideTransition(
+      position: _slideAnimation,
+      child: FadeTransition(
+        opacity: _animationController,
+        child: GestureDetector(
+          onTap: () {
+            navigateToDetails(widget.index, widget.item);
           },
-        ),
-        title: Text('Details'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Animated text that moves from center to top-left
-            TweenAnimationBuilder(
-              tween: Tween<double>(begin: 0, end: 1),
-              duration: Duration(milliseconds: 600),
-              builder: (context, value, child) {
-                return Transform.translate(
-                  offset: Offset(-100 * (1 - value), -50 * (1 - value)),
-                  child: Opacity(
-                    opacity: value,
-                    child: Transform.scale(
-                      scale: 0.8 + (value * 0.2),
-                      child: child,
-                    ),
-                  ),
-                );
-              },
-              child: Text(
-                'Welcome',
-                style: TextStyle(
-                  fontSize: 32,
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            SizedBox(height: 20),
-            Expanded(
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Hero(
-                  tag: 'imageHero',
-                  child: Image.network(
-                    'https://picsum.photos/200',
-                    width: 300,
-                    height: 300,
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text(
-                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
-                    'Nullam euismod, nisl eget aliquam ultricies, nunc nisl '
-                    'aliquet nunc, quis aliquam nisl nunc eu nisl.',
-                style: TextStyle(fontSize: 16),
-              ),
-            ),
-          ],
+          child: lloadWidget,
         ),
       ),
     );

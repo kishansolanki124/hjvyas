@@ -17,7 +17,11 @@ class ProductListItemWidget extends StatefulWidget {
   State<ProductListItemWidget> createState() => _ProductListItemState();
 }
 
-class _ProductListItemState extends State<ProductListItemWidget> {
+class _ProductListItemState extends State<ProductListItemWidget>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController;
+  late final Animation<Offset> _slideAnimation;
+
   void navigateToDetails(int index, ProductListItem item) {
     Navigator.push(
       context,
@@ -34,6 +38,31 @@ class _ProductListItemState extends State<ProductListItemWidget> {
   @override
   void initState() {
     super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0, 1), // Start from bottom
+      end: Offset.zero, // End at normal position
+    ).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutQuad),
+    );
+
+    // Stagger the animations based on index
+    Future.delayed(Duration(milliseconds: 100 * widget.index), () {
+      if (mounted) {
+        _animationController.forward();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -82,11 +111,17 @@ class _ProductListItemState extends State<ProductListItemWidget> {
       );
     }
 
-    return GestureDetector(
-      onTap: () {
-        navigateToDetails(widget.index, widget.item);
-      },
-      child: lloadWidget,
+    return SlideTransition(
+      position: _slideAnimation,
+      child: FadeTransition(
+        opacity: _animationController,
+        child: GestureDetector(
+          onTap: () {
+            navigateToDetails(widget.index, widget.item);
+          },
+          child: lloadWidget,
+        ),
+      ),
     );
   }
 }
