@@ -34,12 +34,12 @@ class _VerticalPageViewDemoState extends State<VerticalPageViewDemo> with Single
   void initState() {
     super.initState();
 
-    // Initialize regular page controller for normal navigation after first animation
-    _pageController = PageController();
+    // Initialize page controller with viewportFraction set to 0.8
+    _pageController = PageController(viewportFraction: 0.8);
 
-    // Set up animation controller for initial entrance animation
+    // Set up animation controller for initial slide
     _animationController = AnimationController(
-      duration: Duration(milliseconds: 800),
+      duration: Duration(milliseconds: 1000),
       vsync: this,
     );
 
@@ -49,7 +49,7 @@ class _VerticalPageViewDemoState extends State<VerticalPageViewDemo> with Single
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _animationController,
-      curve: Curves.easeOutQuart,
+      curve: Curves.easeOut,
     ));
 
     // Start the entrance animation after the widget is built
@@ -71,15 +71,15 @@ class _VerticalPageViewDemoState extends State<VerticalPageViewDemo> with Single
       appBar: AppBar(
         title: Text('Vertical PageView Demo'),
         actions: [
-          // Button to reset the entrance animation
+          // Button to reset the animation
           IconButton(
             icon: Icon(Icons.refresh),
             onPressed: () {
-              _animationController.reset();
-              _pageController.jumpToPage(0);
               setState(() {
                 _currentPage = 0;
               });
+              _pageController.jumpToPage(0);
+              _animationController.reset();
               _animationController.forward();
             },
           ),
@@ -88,10 +88,9 @@ class _VerticalPageViewDemoState extends State<VerticalPageViewDemo> with Single
       body: AnimatedBuilder(
         animation: _animationController,
         builder: (context, child) {
-          // When animation value is very close to 1.0, use the PageView directly
-          // This prevents issues with gesture detection during animation
-          if (_animationController.value > 0.99) {
-            return PageView.builder(
+          return SlideTransition(
+            position: _slideAnimation,
+            child: PageView.builder(
               controller: _pageController,
               scrollDirection: Axis.vertical,
               itemCount: _totalPages,
@@ -100,23 +99,20 @@ class _VerticalPageViewDemoState extends State<VerticalPageViewDemo> with Single
                   _currentPage = index;
                 });
               },
-              itemBuilder: _buildPage,
-            );
-          }
-
-          // During initial animation, show the SlideTransition
-          return SlideTransition(
-            position: _slideAnimation,
-            child: _buildPage(context, 0),
+              itemBuilder: (context, index) {
+                return _buildPage(context, index);
+              },
+            ),
           );
         },
       ),
     );
   }
 
-  // Method to build each page with custom transitions
+  // Method to build each page
   Widget _buildPage(BuildContext context, int index) {
     return Container(
+      width: double.infinity,
       color: _getPageColor(index),
       child: Center(
         child: Column(

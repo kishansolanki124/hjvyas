@@ -22,17 +22,47 @@ class HomeView extends StatefulWidget {
   State<HomeView> createState() => _HomeViewState();
 }
 
-class _HomeViewState extends State<HomeView> {
+class _HomeViewState extends State<HomeView>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<Offset> _slideAnimation;
+
   String logoURL = "";
   @override
   void initState() {
     super.initState();
     _initPrefs(); // Initialize shared preferences in initState
+
+    // Set up animation controller for initial entrance animation
+    _animationController = AnimationController(
+      duration: Duration(milliseconds: 800),
+      vsync: this,
+    );
+
+    // Create a slide transition from bottom (1.0) to position (0.0)
+    _slideAnimation = Tween<Offset>(
+      begin: Offset(0.0, 1.0),
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutQuart),
+    );
+
+    // Start the entrance animation after the widget is built
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _animationController.forward();
+    });
+
     widget.paginationController.loadInitialData(); // Explicit call
   }
 
   // Instance of SharedPreferences
   late SharedPreferences _prefs;
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
 
   // Initialize SharedPreferences
   Future<void> _initPrefs() async {
@@ -73,20 +103,26 @@ class _HomeViewState extends State<HomeView> {
           child: Stack(
             children: <Widget>[
               //PageView (list of media)
-              Center(
-                child: PageView.builder(
-                  padEnds: false,
-                  scrollDirection: Axis.vertical,
-                  controller: widget.paginationController.pageController,
-                  itemCount: widget.paginationController.items.length,
-                  itemBuilder: (context, index) {
-                    if (index < widget.paginationController.items.length) {
-                      return homePageItem(
-                        widget.paginationController.items[index],
-                      );
-                    }
-                  },
-                ),
+              AnimatedBuilder(
+                animation: _animationController,
+                builder: (context, child) {
+                  return SlideTransition(
+                    position: _slideAnimation,
+                    child: PageView.builder(
+                      padEnds: false,
+                      scrollDirection: Axis.vertical,
+                      controller: widget.paginationController.pageController,
+                      itemCount: widget.paginationController.items.length,
+                      itemBuilder: (context, index) {
+                        if (index < widget.paginationController.items.length) {
+                          return homePageItem(
+                            widget.paginationController.items[index],
+                          );
+                        }
+                      },
+                    ),
+                  );
+                },
               ),
 
               // Top right Notification Button with badge
