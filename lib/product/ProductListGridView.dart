@@ -1,19 +1,18 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:hjvyas/api/models/ProductListResponse.dart';
 import 'package:hjvyas/product/ProductPaginationController.dart';
 
 import '../api/models/CategoryListResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product_detail/ImageWithProgress.dart';
-import '../product_detail/ProductDetail.dart';
 import '../splash/NoIntternetScreen.dart';
 import '../utils/CommonAppProgress.dart';
 import 'ProductListItemWidget.dart';
 
 class ProductListGridView extends StatefulWidget {
+
   final ProductPaginationController paginationController =
       ProductPaginationController(getIt<HJVyasApiService>());
 
@@ -39,19 +38,6 @@ class _ProductListGridViewState extends State<ProductListGridView> {
     widget.paginationController.loadInitialData(
       int.parse(widget.categoryListItem.categoryId),
     ); // Explicit call
-  }
-
-  void _navigateToDetails(int index, ProductListItem item) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder:
-            (context) => ProductDetail(
-              productId: item.productId,
-              isOutOfStock: item.productSoldout.isEmpty ? false : true,
-            ),
-      ),
-    );
   }
 
   void _refreshData() {
@@ -117,101 +103,94 @@ class _ProductListGridViewState extends State<ProductListGridView> {
                         ),
                       ],
 
-                      //todo: animation for product from bottom
-                      if (widget.paginationController.items.isNotEmpty &&
-                          !widget.paginationController.isLoading.value) ...[
-                        SliverGrid(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2, // 2 columns
-                                childAspectRatio:
-                                    (1 / 1.9), // Adjust item aspect ratio
-                              ),
-                          delegate: SliverChildBuilderDelegate(
-                            (context, index) {
-                              final isOddCount =
-                                  widget.paginationController.items.length %
-                                      2 !=
-                                  0;
-                              if (isOddCount &&
-                                  index ==
-                                      widget
-                                          .paginationController
-                                          .items
-                                          .length &&
-                                  widget.paginationController.items.length ==
-                                      widget.paginationController.totalItems) {
-                                if (kDebugMode) {
-                                  print(
-                                    'isOddCount $isOddCount and length is'
-                                    ' ${widget.paginationController.items.length}',
-                                  );
-                                }
-
-                                if ((widget.paginationController.items.length +
-                                            1) %
-                                        4 ==
-                                    0) {
-                                  // return Stack(
-                                  //   children: [
-                                  //     SizedBox(
-                                  //       height: 110,
-                                  //       child: Container(color: Colors.white),
-                                  //     ),
-                                  //   ],
-                                  // );
-                                } else {
-                                  // return SizedBox(
-                                  //   height: 200,
-                                  //   child: Align(
-                                  //     alignment: Alignment.bottomCenter,
-                                  //     child: Stack(
-                                  //       children: [
-                                  //         SizedBox(
-                                  //           height: 120,
-                                  //           child: Container(color: Colors.white),
-                                  //         ),
-                                  //       ],
-                                  //     ),
-                                  //   ),
-                                  // );
-                                }
-                              }
-
-                              // Return normal items
-                              if (index <
-                                  widget.paginationController.items.length) {
-                                return ProductListItemWidget(
-                                  index: index,
-                                  item:
-                                      widget.paginationController.items[index],
+                      SliverGrid(
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2, // 2 columns
+                              childAspectRatio:
+                                  (1 / 1.9), // Adjust item aspect ratio
+                            ),
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) {
+                            final isOddCount =
+                                widget.paginationController.items.length % 2 !=
+                                0;
+                            if (isOddCount &&
+                                index ==
+                                    widget.paginationController.items.length &&
+                                widget.paginationController.items.length ==
+                                    widget.paginationController.totalItems) {
+                              if (kDebugMode) {
+                                print(
+                                  'isOddCount $isOddCount and length is'
+                                  ' ${widget.paginationController.items.length}',
                                 );
                               }
 
-                              return null;
-                            },
-                            childCount:
-                                widget.paginationController.items.length +
-                                (widget.paginationController.items.length % 2) +
-                                (widget.paginationController.items.length ==
-                                        widget.paginationController.totalItems
-                                    ? 1
-                                    : 0),
-                          ),
+                              if ((widget.paginationController.items.length +
+                                          1) %
+                                      4 ==
+                                  0) {
+                                // return Stack(
+                                //   children: [
+                                //     SizedBox(
+                                //       height: 110,
+                                //       child: Container(color: Colors.white),
+                                //     ),
+                                //   ],
+                                // );
+                              } else {
+                                // return SizedBox(
+                                //   height: 200,
+                                //   child: Align(
+                                //     alignment: Alignment.bottomCenter,
+                                //     child: Stack(
+                                //       children: [
+                                //         SizedBox(
+                                //           height: 120,
+                                //           child: Container(color: Colors.white),
+                                //         ),
+                                //       ],
+                                //     ),
+                                //   ),
+                                // );
+                              }
+                            }
+
+                            // Return normal items
+                            if (index <
+                                widget.paginationController.items.length) {
+                              return ProductListItemWidget(
+                                index: index,
+                                item: widget.paginationController.items[index],
+                              );
+                            }
+
+                            return null;
+                          },
+                          childCount:
+                              widget.paginationController.items.length +
+                              (widget.paginationController.items.length % 2) +
+                              (widget.paginationController.items.length ==
+                                      widget.paginationController.totalItems
+                                  ? 1
+                                  : 0),
                         ),
-                        SliverToBoxAdapter(
-                          child:
-                              widget.paginationController.isLoading.value
-                                  ? Padding(
-                                    padding: EdgeInsets.all(16.0),
-                                    child: Center(
-                                      child: CircularProgressIndicator(),
-                                    ),
-                                  )
-                                  //: SizedBox.shrink(),
-                                  : SizedBox(height: 100),
-                        ),
-                      ],
+                      ),
+                      SliverToBoxAdapter(
+                        child:
+                            (widget.paginationController.isLoading.value &&
+                                    widget
+                                        .paginationController
+                                        .items
+                                        .isNotEmpty)
+                                ? Padding(
+                                  padding: EdgeInsets.all(16.0),
+                                  child: Center(child: getCommonProgressBar()),
+                                )
+                                //: SizedBox.shrink(),
+                                : SizedBox(height: 100),
+                      ),
                     ],
                   ),
                 ),
