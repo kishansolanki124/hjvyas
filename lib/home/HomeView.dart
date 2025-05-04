@@ -195,8 +195,6 @@ class _HomeViewState extends State<HomeView>
             ),
           ),
         );
-
-        //todo: //no internet
       }),
     );
   }
