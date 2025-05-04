@@ -1,120 +1,155 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Animated ListView Demo',
+      title: 'Shared Element Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        useMaterial3: true,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const AnimatedListScreen(),
+      home: HomePage(),
     );
   }
 }
 
-class AnimatedListScreen extends StatefulWidget {
-  const AnimatedListScreen({Key? key}) : super(key: key);
-
+class HomePage extends StatelessWidget {
   @override
-  State<AnimatedListScreen> createState() => _AnimatedListScreenState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Home')),
+      body: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration: Duration(milliseconds: 600),
+              reverseTransitionDuration: Duration(milliseconds: 600),
+              pageBuilder: (context, animation, secondaryAnimation) => DetailPage(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              },
+            ),
+          );
+        },
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Hero(
+                tag: 'imageHero',
+                child: Image.network(
+                  'https://picsum.photos/200',
+                  width: 200,
+                  height: 200,
+                ),
+              ),
+              SizedBox(height: 20),
+              TweenAnimationBuilder(
+                tween: Tween<double>(begin: 1, end: 1),
+                duration: Duration(milliseconds: 600),
+                builder: (context, value, child) {
+                  return Transform.translate(
+                    offset: Offset(0, 0),
+                    child: Transform.scale(
+                      scale: value,
+                      child: child,
+                    ),
+                  );
+                },
+                child: Text(
+                  'Welcome',
+                  style: TextStyle(
+                    fontSize: 24,
+                    color: Colors.blue,
+                    fontWeight: FontWeight.normal,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
-class _AnimatedListScreenState extends State<AnimatedListScreen> {
-  // Pre-populated list with 10 items
-  final List<String> _items = List.generate(10, (index) => 'Item ${index + 1}');
 
+class DetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Animated ListView Demo'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: Text('Details'),
       ),
-      body: ListView.builder(
-        itemCount: _items.length,
-        itemBuilder: (context, index) {
-          return AnimatedListItem(
-            index: index,
-            child: ListTile(
-              title: Text(_items[index]),
-              leading: CircleAvatar(
-                child: Text('${index + 1}'),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Animated text that moves from center to top-left
+            TweenAnimationBuilder(
+              tween: Tween<double>(begin: 0, end: 1),
+              duration: Duration(milliseconds: 600),
+              builder: (context, value, child) {
+                return Transform.translate(
+                  offset: Offset(-100 * (1 - value), -50 * (1 - value)),
+                  child: Opacity(
+                    opacity: value,
+                    child: Transform.scale(
+                      scale: 0.8 + (value * 0.2),
+                      child: child,
+                    ),
+                  ),
+                );
+              },
+              child: Text(
+                'Welcome',
+                style: TextStyle(
+                  fontSize: 32,
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class AnimatedListItem extends StatefulWidget {
-  final Widget child;
-  final int index;
-
-  const AnimatedListItem({
-    Key? key,
-    required this.child,
-    required this.index,
-  }) : super(key: key);
-
-  @override
-  State<AnimatedListItem> createState() => _AnimatedListItemState();
-}
-
-class _AnimatedListItemState extends State<AnimatedListItem>
-    with SingleTickerProviderStateMixin {
-
-  late final AnimationController _animationController;
-  late final Animation<Offset> _slideAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 400),
-    );
-
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 1), // Start from bottom
-      end: Offset.zero,          // End at normal position
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutQuad,
-    ));
-
-    // Stagger the animations based on index
-    Future.delayed(Duration(milliseconds: 100 * widget.index), () {
-      if (mounted) {
-        _animationController.forward();
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return SlideTransition(
-      position: _slideAnimation,
-      child: FadeTransition(
-        opacity: _animationController,
-        child: Card(
-          margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          child: widget.child,
+            SizedBox(height: 20),
+            Expanded(
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Hero(
+                  tag: 'imageHero',
+                  child: Image.network(
+                    'https://picsum.photos/200',
+                    width: 300,
+                    height: 300,
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Text(
+                'Lorem ipsum dolor sit amet, consectetur adipiscing elit. '
+                    'Nullam euismod, nisl eget aliquam ultricies, nunc nisl '
+                    'aliquet nunc, quis aliquam nisl nunc eu nisl.',
+                style: TextStyle(fontSize: 16),
+              ),
+            ),
+          ],
         ),
       ),
     );

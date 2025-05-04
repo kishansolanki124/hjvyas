@@ -121,6 +121,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 childCount: categoryList.length,
                 builder: (context, index) {
                   return MenuListItem(
+                    logoURL,
                     categoryList.elementAt(selectedIndex),
                     _selectedIndex == index
                         //currentState == states[index].names
@@ -136,10 +137,13 @@ class _MenuScreenState extends State<MenuScreen> {
             if (logoURL.isNotEmpty)
               Align(
                 alignment: Alignment.topCenter,
-                child: SizedBox(
-                  width: 120,
-                  height: 120,
-                  child: ImageWithProgress(imageURL: logoURL),
+                child: Hero(
+                  tag: "app_logo",
+                  child: SizedBox(
+                    width: 120,
+                    height: 120,
+                    child: ImageWithProgress(imageURL: logoURL),
+                  ),
                 ),
               ),
           ],

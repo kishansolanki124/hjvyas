@@ -7,7 +7,9 @@ import 'package:hjvyas/product/ProductPaginationController.dart';
 import '../api/models/CategoryListResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
+import '../product_detail/ImageWithProgress.dart';
 import '../product_detail/ProductDetail.dart';
+import '../utils/CommonAppProgress.dart';
 import 'ProductGridFirstItem.dart';
 import 'ProductGridFourthItem.dart';
 import 'ProductGridSecondItem.dart';
@@ -18,14 +20,21 @@ class ProductListGridView extends StatefulWidget {
       ProductPaginationController(getIt<HJVyasApiService>());
 
   CategoryListItem categoryListItem;
+  String logoURL;
 
-  ProductListGridView({super.key, required this.categoryListItem});
+  ProductListGridView({
+    super.key,
+    required this.categoryListItem,
+    required this.logoURL,
+  });
 
   @override
   State<ProductListGridView> createState() => _ProductListGridViewState();
 }
 
 class _ProductListGridViewState extends State<ProductListGridView> {
+  String logoURL = "";
+
   @override
   void initState() {
     super.initState();
@@ -51,15 +60,6 @@ class _ProductListGridViewState extends State<ProductListGridView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() {
-        if (widget.paginationController.items.isEmpty &&
-            widget.paginationController.isLoading.value) {
-          //todo: change this
-          return Container(
-            color: Color.fromARGB(255, 31, 47, 80),
-            child: Center(child: CircularProgressIndicator()),
-          );
-        }
-
         return NotificationListener<ScrollNotification>(
           onNotification: (notification) {
             if (notification is ScrollEndNotification &&
@@ -80,104 +80,119 @@ class _ProductListGridViewState extends State<ProductListGridView> {
             ),
             child: Column(
               children: <Widget>[
-                // A non-scrolling widget at the top
                 // Use Expanded or Flexible to give the CustomScrollView a portion of the space
                 Expanded(
                   child: CustomScrollView(
                     slivers: [
                       SliverToBoxAdapter(
                         child: productListTopView(
+                          widget.logoURL,
                           widget.categoryListItem.categoryName,
                         ),
                       ),
 
-                      SliverGrid(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, // 2 columns
-                              childAspectRatio:
-                                  (1 / 1.9), // Adjust item aspect ratio
-                            ),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final isOddCount =
-                                widget.paginationController.items.length % 2 !=
-                                0;
-                            if (isOddCount &&
-                                index ==
-                                    widget.paginationController.items.length &&
-                                widget.paginationController.items.length ==
-                                    widget.paginationController.totalItems) {
-                              if (kDebugMode) {
-                                print(
-                                  'isOddCount $isOddCount and length is'
-                                  ' ${widget.paginationController.items.length}',
+                      if (widget.paginationController.items.isEmpty &&
+                          widget.paginationController.isLoading.value) ...[
+                        SliverToBoxAdapter(child: getCommonProgressBar()),
+                      ],
+
+                      //todo: error handler
+                      //todo: animation for product from bottom
+                      //todo: animation for product categoory title
+                      if (widget.paginationController.items.isNotEmpty &&
+                          !widget.paginationController.isLoading.value) ...[
+                        SliverGrid(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2, // 2 columns
+                                childAspectRatio:
+                                    (1 / 1.9), // Adjust item aspect ratio
+                              ),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              final isOddCount =
+                                  widget.paginationController.items.length %
+                                      2 !=
+                                  0;
+                              if (isOddCount &&
+                                  index ==
+                                      widget
+                                          .paginationController
+                                          .items
+                                          .length &&
+                                  widget.paginationController.items.length ==
+                                      widget.paginationController.totalItems) {
+                                if (kDebugMode) {
+                                  print(
+                                    'isOddCount $isOddCount and length is'
+                                    ' ${widget.paginationController.items.length}',
+                                  );
+                                }
+
+                                if ((widget.paginationController.items.length +
+                                            1) %
+                                        4 ==
+                                    0) {
+                                  // return Stack(
+                                  //   children: [
+                                  //     SizedBox(
+                                  //       height: 110,
+                                  //       child: Container(color: Colors.white),
+                                  //     ),
+                                  //   ],
+                                  // );
+                                } else {
+                                  // return SizedBox(
+                                  //   height: 200,
+                                  //   child: Align(
+                                  //     alignment: Alignment.bottomCenter,
+                                  //     child: Stack(
+                                  //       children: [
+                                  //         SizedBox(
+                                  //           height: 120,
+                                  //           child: Container(color: Colors.white),
+                                  //         ),
+                                  //       ],
+                                  //     ),
+                                  //   ),
+                                  // );
+                                }
+                              }
+
+                              // Return normal items
+                              if (index <
+                                  widget.paginationController.items.length) {
+                                return productListItem(
+                                  widget.paginationController.items[index],
+                                  index,
+                                  _navigateToDetails,
                                 );
                               }
 
-                              if ((widget.paginationController.items.length +
-                                          1) %
-                                      4 ==
-                                  0) {
-                                // return Stack(
-                                //   children: [
-                                //     SizedBox(
-                                //       height: 110,
-                                //       child: Container(color: Colors.white),
-                                //     ),
-                                //   ],
-                                // );
-                              } else {
-                                // return SizedBox(
-                                //   height: 200,
-                                //   child: Align(
-                                //     alignment: Alignment.bottomCenter,
-                                //     child: Stack(
-                                //       children: [
-                                //         SizedBox(
-                                //           height: 120,
-                                //           child: Container(color: Colors.white),
-                                //         ),
-                                //       ],
-                                //     ),
-                                //   ),
-                                // );
-                              }
-                            }
-
-                            // Return normal items
-                            if (index <
-                                widget.paginationController.items.length) {
-                              return productListItem(
-                                widget.paginationController.items[index],
-                                index,
-                                _navigateToDetails,
-                              );
-                            }
-
-                            return null;
-                          },
-                          childCount:
-                              widget.paginationController.items.length +
-                              (widget.paginationController.items.length % 2) +
-                              (widget.paginationController.items.length ==
-                                      widget.paginationController.totalItems
-                                  ? 1
-                                  : 0),
+                              return null;
+                            },
+                            childCount:
+                                widget.paginationController.items.length +
+                                (widget.paginationController.items.length % 2) +
+                                (widget.paginationController.items.length ==
+                                        widget.paginationController.totalItems
+                                    ? 1
+                                    : 0),
+                          ),
                         ),
-                      ),
-                      SliverToBoxAdapter(
-                        child:
-                            widget.paginationController.isLoading.value
-                                ? Padding(
-                                  padding: EdgeInsets.all(16.0),
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                )
-                                //: SizedBox.shrink(),
-                                : SizedBox(height: 100),
-                      ),
+                        SliverToBoxAdapter(
+                          child:
+                              widget.paginationController.isLoading.value
+                                  ? Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Center(
+                                      child: CircularProgressIndicator(),
+                                    ),
+                                  )
+                                  //: SizedBox.shrink(),
+                                  : SizedBox(height: 100),
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -190,7 +205,7 @@ class _ProductListGridViewState extends State<ProductListGridView> {
   }
 }
 
-Widget productListTopView(String title) {
+Widget productListTopView(String logoURL, String title) {
   return Padding(
     padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
     child: Row(
@@ -210,15 +225,20 @@ Widget productListTopView(String title) {
           ),
         ),
 
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Image.asset(
-              "images/logo.png",
-              height: 80, // Adjust logo height as needed
+        if (logoURL.isNotEmpty)
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Hero(
+                tag: "app_logo",
+                child: SizedBox(
+                  width: 120,
+                  height: 120,
+                  child: ImageWithProgress(imageURL: logoURL),
+                ),
+              ),
             ),
           ),
-        ),
       ],
     ),
   );

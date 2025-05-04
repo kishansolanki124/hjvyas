@@ -4,11 +4,13 @@ import '../api/models/CategoryListResponse.dart';
 import '../product/ProductListGridView.dart';
 
 class MenuListItem extends StatelessWidget {
+  final String logoURL;
   final String states;
   final CategoryListItem categoryListItem;
   final Color selectedColor;
 
   const MenuListItem(
+    this.logoURL,
     this.categoryListItem,
     this.selectedColor,
     this.states, {
@@ -31,6 +33,7 @@ class MenuListItem extends StatelessWidget {
                     builder:
                         (context) => ProductListGridView(
                           categoryListItem: categoryListItem,
+                          logoURL: logoURL,
                         ),
                   ),
                 );
