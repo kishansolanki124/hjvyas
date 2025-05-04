@@ -1,13 +1,12 @@
 Menu or Category Page:
 3. APi loading common progress
 
-Product List:
-4. Product list page ma bottom nav dekhavu joiye
 
 Combo:
 1. hide bottom nav on scroll
 
-Product listing page:
+Product List:
+4. Product list page ma bottom nav dekhavu joiye
 9. Test with smaller and larger devices.
 10. Give fix height to each item
 
@@ -63,9 +62,6 @@ along with price.
 Cart Page:
 1. test with static price from shared pref and click on checkout to check values.
 
-3. Notification:
-https://mithaiwalahjvyas.com/get_notification API not working.
-https://mithaiwalahjvyas.com/hjvyasapi/get_notification
 
 dynamic view handle for payment
 
@@ -83,5 +79,3 @@ read chat of Nandish bhai and do the needful changess.
 ne add to cart ma kai biju logic male to jo le jo
 
 App Icon
-
-Notification badge count remove from home page

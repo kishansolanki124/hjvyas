@@ -132,7 +132,6 @@ class _NotificationListState extends State<NotificationList> {
                         ),
                       ],
 
-                      //todo: error view
                       if (widget.paginationController.items.isNotEmpty)
                         Expanded(
                           child: ListView.builder(
