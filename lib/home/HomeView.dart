@@ -8,6 +8,7 @@ import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../notification/NotificationList.dart';
 import '../product_detail/ImageWithProgress.dart';
+import '../utils/CommonAppProgress.dart';
 import '../utils/NetworkImageWithProgress.dart';
 import 'PaginationController.dart';
 
@@ -83,8 +84,7 @@ class _HomeViewState extends State<HomeView>
       body: Obx(() {
         if (widget.paginationController.items.isEmpty &&
             widget.paginationController.isLoading.value) {
-          //todo change this
-          return Center(child: CircularProgressIndicator());
+          return getCommonProgressBar();
         }
 
         return NotificationListener<ScrollNotification>(
@@ -100,73 +100,84 @@ class _HomeViewState extends State<HomeView>
             }
             return false;
           },
-          child: Stack(
-            children: <Widget>[
-              //PageView (list of media)
-              AnimatedBuilder(
-                animation: _animationController,
-                builder: (context, child) {
-                  return SlideTransition(
-                    position: _slideAnimation,
-                    child: PageView.builder(
-                      padEnds: false,
-                      scrollDirection: Axis.vertical,
-                      controller: widget.paginationController.pageController,
-                      itemCount: widget.paginationController.items.length,
-                      itemBuilder: (context, index) {
-                        if (index < widget.paginationController.items.length) {
-                          return homePageItem(
-                            widget.paginationController.items[index],
-                          );
-                        }
-                      },
-                    ),
-                  );
-                },
+          child: Container(
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage("images/bg.jpg"),
+                fit: BoxFit.cover,
               ),
-
-              // Top right Notification Button with badge
-              Positioned(
-                top: 16.0, // Adjust top padding as needed
-                right: 16.0, // Adjust right padding as needed
-
-                child: IconButton(
-                  onPressed: () {},
-                  icon: Badge(
-                    offset: Offset.fromDirection(6, -4),
-                    largeSize: 18,
-                    backgroundColor: Colors.red,
-                    label: Text("2"),
-                    textStyle: TextStyle(fontSize: 12),
-                    child: IconButton(
-                      icon: Image.asset(
-                        'icons/notification_icon.png',
-                        height: 24,
-                        width: 24,
+            ),
+            child: Stack(
+              children: <Widget>[
+                //PageView (list of media)
+                AnimatedBuilder(
+                  animation: _animationController,
+                  builder: (context, child) {
+                    return SlideTransition(
+                      position: _slideAnimation,
+                      child: PageView.builder(
+                        padEnds: false,
+                        scrollDirection: Axis.vertical,
+                        controller: widget.paginationController.pageController,
+                        itemCount: widget.paginationController.items.length,
+                        itemBuilder: (context, index) {
+                          if (index <
+                              widget.paginationController.items.length) {
+                            return homePageItem(
+                              widget.paginationController.items[index],
+                            );
+                          }
+                        },
                       ),
-                      //iconSize: 10,
-                      onPressed: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (context) => NotificationList(),
-                          ),
-                        );
-                      },
+                    );
+                  },
+                ),
+
+                // Top right Notification Button with badge
+                Positioned(
+                  top: 16.0, // Adjust top padding as needed
+                  right: 16.0, // Adjust right padding as needed
+
+                  child: IconButton(
+                    onPressed: () {},
+                    icon: Badge(
+                      offset: Offset.fromDirection(6, -4),
+                      largeSize: 18,
+                      backgroundColor: Colors.transparent,
+                      //if need to show badge then make it red
+                      label: Text(""),
+                      //set badge count over here
+                      textStyle: TextStyle(fontSize: 12),
+                      child: IconButton(
+                        icon: Image.asset(
+                          'icons/notification_icon.png',
+                          height: 24,
+                          width: 24,
+                        ),
+                        //iconSize: 10,
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => NotificationList(),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
-              ),
 
-              if (logoURL.isNotEmpty)
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: SizedBox(
-                    width: 120,
-                    height: 120,
-                    child: ImageWithProgress(imageURL: logoURL),
+                if (logoURL.isNotEmpty)
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: SizedBox(
+                      width: 120,
+                      height: 120,
+                      child: ImageWithProgress(imageURL: logoURL),
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         );
       }),
