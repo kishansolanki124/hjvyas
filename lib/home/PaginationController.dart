@@ -16,6 +16,7 @@ class PaginationController extends GetxController {
 
   var items = <SliderListItem>[].obs;
   var isLoading = false.obs;
+  var isError = false.obs;
   var currentPage = 0;
   var totalItems = 0;
   final int itemsPerPage = 10; // Adjust based on API
@@ -29,6 +30,7 @@ class PaginationController extends GetxController {
   Future<void> loadInitialData() async {
     isLoading(true);
     try {
+      isError.value = false;
       final newItems = await _service.homeMediaApi(
         currentPage.toString(),
         itemsPerPage.toString(),
@@ -36,7 +38,10 @@ class PaginationController extends GetxController {
       items.assignAll(newItems.sliderList);
       totalItems = newItems.totalRecords;
       currentPage += 10;
-    } finally {
+    } catch(exception) {
+      isError.value = true;
+      exception.printError();
+    } finally{
       isLoading(false);
     }
   }

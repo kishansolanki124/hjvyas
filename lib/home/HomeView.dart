@@ -8,6 +8,7 @@ import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../notification/NotificationList.dart';
 import '../product_detail/ImageWithProgress.dart';
+import '../splash/NoIntternetScreen.dart';
 import '../utils/CommonAppProgress.dart';
 import '../utils/NetworkImageWithProgress.dart';
 import 'PaginationController.dart';
@@ -56,6 +57,14 @@ class _HomeViewState extends State<HomeView>
     widget.paginationController.loadInitialData(); // Explicit call
   }
 
+  Future<void> fetchData() async {
+    widget.paginationController.loadInitialData(); // Explicit call
+  }
+
+  void _refreshData() {
+    fetchData();
+  }
+
   // Instance of SharedPreferences
   late SharedPreferences _prefs;
 
@@ -85,6 +94,15 @@ class _HomeViewState extends State<HomeView>
         if (widget.paginationController.items.isEmpty &&
             widget.paginationController.isLoading.value) {
           return getCommonProgressBar();
+        }
+
+        //internet or API issue
+        if (widget.paginationController.isError.value) {
+          return NoInternetScreen(
+            onRetry: () {
+              _refreshData();
+            },
+          );
         }
 
         return NotificationListener<ScrollNotification>(
@@ -121,12 +139,9 @@ class _HomeViewState extends State<HomeView>
                         controller: widget.paginationController.pageController,
                         itemCount: widget.paginationController.items.length,
                         itemBuilder: (context, index) {
-                          if (index <
-                              widget.paginationController.items.length) {
-                            return homePageItem(
-                              widget.paginationController.items[index],
-                            );
-                          }
+                          return homePageItem(
+                            widget.paginationController.items[index],
+                          );
                         },
                       ),
                     );
