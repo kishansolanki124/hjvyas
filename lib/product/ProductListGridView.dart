@@ -9,6 +9,7 @@ import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product_detail/ImageWithProgress.dart';
 import '../product_detail/ProductDetail.dart';
+import '../splash/NoIntternetScreen.dart';
 import '../utils/CommonAppProgress.dart';
 import 'ProductGridFirstItem.dart';
 import 'ProductGridFourthItem.dart';
@@ -56,6 +57,16 @@ class _ProductListGridViewState extends State<ProductListGridView> {
     );
   }
 
+  void _refreshData() {
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    await widget.paginationController.loadInitialData(
+      int.parse(widget.categoryListItem.categoryId),
+    ); // Explicit call
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -96,9 +107,20 @@ class _ProductListGridViewState extends State<ProductListGridView> {
                         SliverToBoxAdapter(child: getCommonProgressBar()),
                       ],
 
-                      //todo: error handler
+                      if (widget.paginationController.items.isEmpty &&
+                          widget.paginationController.isError.value) ...[
+                        //error handling
+                        SliverToBoxAdapter(
+                          child: NoInternetScreen(
+                            showBackgroundImage: false,
+                            onRetry: () {
+                              _refreshData();
+                            },
+                          ),
+                        ),
+                      ],
+
                       //todo: animation for product from bottom
-                      //todo: animation for product categoory title
                       if (widget.paginationController.items.isNotEmpty &&
                           !widget.paginationController.isLoading.value) ...[
                         SliverGrid(

@@ -20,6 +20,7 @@ class ProductPaginationController extends GetxController {
   var productTesterList = <ProductTesterListItem>[].obs;
   var items = <ProductListItem>[].obs;
   var isLoading = false.obs;
+  var isError = false.obs;
   var cartItemsLoading = false.obs;
   var testerItemsLoading = false.obs;
   var cartMaxQty = 0;
@@ -60,6 +61,7 @@ class ProductPaginationController extends GetxController {
   }
 
   Future<void> loadInitialData(int categoryId) async {
+    isError(false);
     isLoading(true);
     try {
       final newItems = await _service.getProduct(
@@ -70,6 +72,10 @@ class ProductPaginationController extends GetxController {
       items.assignAll(newItems.productList);
       totalItems = newItems.totalRecords;
       currentPage += 10;
+      isError(false);
+    } catch (exception) {
+      isError(true);
+      exception.printError();
     } finally {
       isLoading(false);
     }
