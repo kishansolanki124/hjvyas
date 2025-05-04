@@ -26,6 +26,7 @@ class CategoryController extends GetxController {
       categories.assignAll(
         response.categoryList,
       ); // Assuming response has .categories
+      error("");
     } catch (e) {
       error(e.toString());
     } finally {

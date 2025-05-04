@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:hjvyas/utils/CommonAppProgress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/models/CategoryListResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product_detail/ImageWithProgress.dart';
+import '../splash/NoIntternetScreen.dart';
 import '../utils/NetworkImageWithProgress.dart';
 import 'CategoryController.dart';
 import 'MenuListItem.dart';
@@ -54,17 +56,31 @@ class _MenuScreenState extends State<MenuScreen> {
     });
   }
 
+  Future<void> fetchData() async {
+    return await widget.categoryController.loadCategories(); // Explicit call
+  }
+
+  // Method to refresh data
+  void _refreshData() {
+    setState(() {
+      fetchData(); // Create new Future when needed
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
       if (widget.categoryController.isLoading.value) {
-        //todo change this
-        return Center(child: CircularProgressIndicator());
+        //progress bar
+        return getCommonProgressBarFullScreen();
       }
 
       if (widget.categoryController.error.isNotEmpty) {
-        //todo change this
-        return Center(child: Text('Error: ${widget.categoryController.error}'));
+        return NoInternetScreen(
+          onRetry: () {
+            _refreshData();
+          },
+        );
       }
 
       return menuScreen(
