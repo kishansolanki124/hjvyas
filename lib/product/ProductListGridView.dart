@@ -15,6 +15,7 @@ import 'ProductGridFirstItem.dart';
 import 'ProductGridFourthItem.dart';
 import 'ProductGridSecondItem.dart';
 import 'ProductGridThirdItem.dart';
+import 'ProductListItemWidget.dart';
 
 class ProductListGridView extends StatefulWidget {
   final ProductPaginationController paginationController =
@@ -184,10 +185,10 @@ class _ProductListGridViewState extends State<ProductListGridView> {
                               // Return normal items
                               if (index <
                                   widget.paginationController.items.length) {
-                                return productListItem(
-                                  widget.paginationController.items[index],
-                                  index,
-                                  _navigateToDetails,
+                                return ProductListItemWidget(
+                                  index: index,
+                                  item:
+                                      widget.paginationController.items[index],
                                 );
                               }
 
