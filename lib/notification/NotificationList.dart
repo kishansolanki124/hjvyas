@@ -4,6 +4,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product_detail/ProductDetailWidget.dart';
+import '../utils/CommonAppProgress.dart';
 import 'NotificationListItemWdiget.dart';
 import 'NotificationPaginationController.dart';
 
@@ -30,14 +31,14 @@ class _NotificationListState extends State<NotificationList> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() {
-        if (widget.paginationController.items.isEmpty &&
-            widget.paginationController.isLoading.value) {
-          //todo: change this
-          return Container(
-            color: Color.fromARGB(255, 31, 47, 80),
-            child: Center(child: CircularProgressIndicator()),
-          );
-        }
+        // if (widget.paginationController.items.isEmpty &&
+        //     widget.paginationController.isLoading.value) {
+        //   //todo: change this
+        //   return Container(
+        //     color: Color.fromARGB(255, 31, 47, 80),
+        //     child: Center(child: CircularProgressIndicator()),
+        //   );
+        // }
 
         return NotificationListener<ScrollNotification>(
           onNotification: (notification) {
@@ -115,8 +116,18 @@ class _NotificationListState extends State<NotificationList> {
                         ),
 
                         SizedBox(height: 8.0), // Description
+
                         // 3. Expanded List
-                        Expanded(
+                        if (widget.paginationController.items.isEmpty &&
+                            widget.paginationController.isLoading.value) ...[
+                          getCommonProgressBar(),
+                        ],
+
+                        //todo: error view
+
+
+                        if(widget.paginationController.items.isNotEmpty)
+                          Expanded(
                           child: ListView.builder(
                             itemCount: widget.paginationController.totalItems,
                             itemBuilder: (context, index) {

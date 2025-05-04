@@ -93,7 +93,7 @@ class _HomeViewState extends State<HomeView>
       body: Obx(() {
         if (widget.paginationController.items.isEmpty &&
             widget.paginationController.isLoading.value) {
-          return getCommonProgressBar();
+          return getCommonProgressBarFullScreen();
         }
 
         //internet or API issue
