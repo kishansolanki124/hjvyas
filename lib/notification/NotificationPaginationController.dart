@@ -13,9 +13,9 @@ class NotificationPaginationController extends GetxController {
 
   NotificationPaginationController(this._service);
 
-
   var items = <NotificationListItem>[].obs;
   var isLoading = false.obs;
+  var isError = false.obs;
   var currentPage = 0;
   var totalItems = 0;
   final int itemsPerPage = 10; // Adjust based on API
@@ -31,6 +31,11 @@ class NotificationPaginationController extends GetxController {
       //totalItems = newItems.totalRecords;//todo work on this its not coming from API
       totalItems = items.length;
       currentPage += 10;
+      isError(false);
+
+    } catch (exception) {
+      isError(true);
+      exception.printError();
     } finally {
       isLoading(false);
     }

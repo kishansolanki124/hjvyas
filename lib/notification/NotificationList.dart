@@ -4,6 +4,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product_detail/ProductDetailWidget.dart';
+import '../splash/NoIntternetScreen.dart';
 import '../utils/CommonAppProgress.dart';
 import 'NotificationListItemWdiget.dart';
 import 'NotificationPaginationController.dart';
@@ -23,6 +24,14 @@ class _NotificationListState extends State<NotificationList> {
     widget.paginationController.loadInitialData(); // Explicit call
   }
 
+  void _refreshData() {
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    widget.paginationController.loadInitialData(); // Explicit call
+  }
+
   void _onBackPressed(BuildContext context) {
     Navigator.of(context).pop();
   }
@@ -31,15 +40,6 @@ class _NotificationListState extends State<NotificationList> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() {
-        // if (widget.paginationController.items.isEmpty &&
-        //     widget.paginationController.isLoading.value) {
-        //   //todo: change this
-        //   return Container(
-        //     color: Color.fromARGB(255, 31, 47, 80),
-        //     child: Center(child: CircularProgressIndicator()),
-        //   );
-        // }
-
         return NotificationListener<ScrollNotification>(
           onNotification: (notification) {
             if (notification is ScrollEndNotification &&
@@ -87,47 +87,54 @@ class _NotificationListState extends State<NotificationList> {
 
                 backButton(() => _onBackPressed(context)),
 
-                SafeArea(
-                  // Use SafeArea to avoid overlapping with system UI
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        SizedBox(height: 60.0),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      SizedBox(height: 60.0),
 
-                        // Title
-                        Center(
-                          child: Container(
-                            color: Color.fromARGB(255, 31, 47, 80),
-                            child: Padding(
-                              padding: EdgeInsets.all(10),
-                              child: Text(
-                                'Notification',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontFamily: "Montserrat",
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.white,
-                                ),
+                      // Title
+                      Center(
+                        child: Container(
+                          color: Color.fromARGB(255, 31, 47, 80),
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              'Notification',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontFamily: "Montserrat",
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
                               ),
                             ),
                           ),
                         ),
+                      ),
 
-                        SizedBox(height: 8.0), // Description
+                      SizedBox(height: 8.0), // Description
+                      // 3. Expanded List
+                      if (widget.paginationController.items.isEmpty &&
+                          widget.paginationController.isLoading.value) ...[
+                        //progress bar
+                        getCommonProgressBar(),
+                      ],
 
-                        // 3. Expanded List
-                        if (widget.paginationController.items.isEmpty &&
-                            widget.paginationController.isLoading.value) ...[
-                          getCommonProgressBar(),
-                        ],
+                      if (widget.paginationController.isError.value) ...[
+                        Expanded(
+                          child: NoInternetScreen(
+                            showBackgroundImage: false,
+                            onRetry: () {
+                              _refreshData();
+                            },
+                          ),
+                        ),
+                      ],
 
-                        //todo: error view
-
-
-                        if(widget.paginationController.items.isNotEmpty)
-                          Expanded(
+                      //todo: error view
+                      if (widget.paginationController.items.isNotEmpty)
+                        Expanded(
                           child: ListView.builder(
                             itemCount: widget.paginationController.totalItems,
                             itemBuilder: (context, index) {
@@ -137,12 +144,12 @@ class _NotificationListState extends State<NotificationList> {
                                 title: item.name,
                                 description: item.description,
                                 date: item.pdate,
+                                index: index,
                               );
                             }, // Use your custom list widget here
                           ),
                         ),
-                      ],
-                    ),
+                    ],
                   ),
                 ),
               ],

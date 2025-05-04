@@ -2,17 +2,25 @@ import 'package:flutter/material.dart';
 
 class NoInternetScreen extends StatelessWidget {
   final VoidCallback onRetry;
+  bool showBackgroundImage = true;
 
-  const NoInternetScreen({super.key, required this.onRetry});
+  NoInternetScreen({
+    super.key,
+    this.showBackgroundImage = true,
+    required this.onRetry,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 31, 47, 80),
+      backgroundColor: Colors.transparent,
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage("images/bg.jpg"),
+            image:
+                showBackgroundImage
+                    ? AssetImage("images/bg.jpg")
+                    : AssetImage(""),
             fit: BoxFit.cover,
           ),
         ),
