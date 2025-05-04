@@ -1,102 +1,66 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    // Set system UI overlay style to match the dark theme
-    SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-      ),
-    );
-
     return MaterialApp(
-      title: 'App Splash Screen',
-      debugShowCheckedModeBanner: false,
+      title: 'Vertical PageView Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        brightness: Brightness.dark,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const SplashScreen(),
+      home: VerticalPageViewDemo(),
     );
   }
 }
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({Key? key}) : super(key: key);
-
+class VerticalPageViewDemo extends StatefulWidget {
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  _VerticalPageViewDemoState createState() => _VerticalPageViewDemoState();
 }
 
-class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
-  // Replace this with your actual app icon URL
-  final String appIconUrl = 'https://www.mithaiwalahjvyas.com/uploads/app_logo_img/1161-logo.png';
-
+class _VerticalPageViewDemoState extends State<VerticalPageViewDemo> with SingleTickerProviderStateMixin {
+  late PageController _pageController;
   late AnimationController _animationController;
-  late Animation<double> _scaleAnimation;
-  late Animation<double> _opacityAnimation;
-  // Removed unnecessary state variables
+  late Animation<Offset> _slideAnimation;
+  final int _totalPages = 5;
+  int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
 
-    // Configure the animation controller
+    // Initialize regular page controller for normal navigation after first animation
+    _pageController = PageController();
+
+    // Set up animation controller for initial entrance animation
     _animationController = AnimationController(
+      duration: Duration(milliseconds: 800),
       vsync: this,
-      duration: const Duration(seconds: 4),
     );
 
-    // Create a scale animation that starts small and ends larger
-    _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: Curves.easeOutBack,
-      ),
-    );
+    // Create a slide transition from bottom (1.0) to position (0.0)
+    _slideAnimation = Tween<Offset>(
+      begin: Offset(0.0, 1.0),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _animationController,
+      curve: Curves.easeOutQuart,
+    ));
 
-    // Create an opacity animation
-    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(
-        parent: _animationController,
-        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
-      ),
-    );
-
-    // Start the animation once the widget is built
+    // Start the entrance animation after the widget is built
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _animationController.forward();
-
-      // Preload the image in the background
-      precacheImage(NetworkImage(appIconUrl), context);
-    });
-
-    // Navigate to the home screen after animation completes
-    _animationController.addStatusListener((status) {
-      if (status == AnimationStatus.completed) {
-        // Add a short delay after animation completes before navigating
-        Future.delayed(const Duration(seconds: 1), () {
-          if (mounted) {
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
-            );
-          }
-        });
-      }
     });
   }
 
   @override
   void dispose() {
+    _pageController.dispose();
     _animationController.dispose();
     super.dispose();
   }
@@ -104,88 +68,115 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0A1931), // Dark blue background
-      body: Center(
-        child: AnimatedBuilder(
-          animation: _animationController,
-          builder: (context, child) {
-            return Opacity(
-              opacity: _opacityAnimation.value,
-              child: Transform.scale(
-                scale: _scaleAnimation.value,
-                child: _buildImageContainer(),
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-  // Removed the intermediate method to directly show the image with built-in loading handling
-
-  Widget _buildImageContainer() {
-    return Container(
-      width: 180,
-      height: 180,
-      color: Colors.transparent,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(20),
-        child: Image.network(
-          appIconUrl,
-          fit: BoxFit.contain,
-          loadingBuilder: (context, child, loadingProgress) {
-            if (loadingProgress == null) return child;
-            return Center(
-              child: CircularProgressIndicator(
-                value: loadingProgress.expectedTotalBytes != null
-                    ? loadingProgress.cumulativeBytesLoaded /
-                    loadingProgress.expectedTotalBytes!
-                    : null,
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.white),
-              ),
-            );
-          },
-          errorBuilder: (context, error, stackTrace) {
-            print('Error loading image: $error');
-            return const Center(
-              child: Icon(
-                Icons.error_outline,
-                color: Colors.white,
-                size: 50,
-              ),
-            );
-          },
-        ),
-      ),
-    );
-  }
-
-// Removed unused helper methods since they're now integrated into _buildImageContainer()
-}
-
-// Placeholder for your main app screen
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0A1931),
       appBar: AppBar(
-        title: const Text('Your App'),
-        backgroundColor: const Color(0xFF0A1931),
-        elevation: 0,
-      ),
-      body: const Center(
-        child: Text(
-          'Main App Content',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 24,
+        title: Text('Vertical PageView Demo'),
+        actions: [
+          // Button to reset the entrance animation
+          IconButton(
+            icon: Icon(Icons.refresh),
+            onPressed: () {
+              _animationController.reset();
+              _pageController.jumpToPage(0);
+              setState(() {
+                _currentPage = 0;
+              });
+              _animationController.forward();
+            },
           ),
+        ],
+      ),
+      body: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          // When animation value is very close to 1.0, use the PageView directly
+          // This prevents issues with gesture detection during animation
+          if (_animationController.value > 0.99) {
+            return PageView.builder(
+              controller: _pageController,
+              scrollDirection: Axis.vertical,
+              itemCount: _totalPages,
+              onPageChanged: (index) {
+                setState(() {
+                  _currentPage = index;
+                });
+              },
+              itemBuilder: _buildPage,
+            );
+          }
+
+          // During initial animation, show the SlideTransition
+          return SlideTransition(
+            position: _slideAnimation,
+            child: _buildPage(context, 0),
+          );
+        },
+      ),
+    );
+  }
+
+  // Method to build each page with custom transitions
+  Widget _buildPage(BuildContext context, int index) {
+    return Container(
+      color: _getPageColor(index),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Page ${index + 1}',
+              style: TextStyle(
+                fontSize: 32,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              index == _totalPages - 1
+                  ? 'You reached the bottom!'
+                  : 'Swipe down to continue',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.white70,
+              ),
+            ),
+            SizedBox(height: 40),
+            // Page indicator
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(_totalPages, (i) =>
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 5),
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: i == index ? Colors.white : Colors.white38,
+                    ),
+                  )
+              ),
+            ),
+          ],
         ),
       ),
     );
+  }
+
+  // Helper method to get different colors for different pages
+  Color _getPageColor(int index) {
+    switch (index) {
+      case 0:
+        return Colors.blue;
+      case 1:
+        return Colors.green;
+      case 2:
+        return Colors.orange;
+      case 3:
+        return Colors.purple;
+      case 4:
+        return Colors.red;
+      default:
+        return Colors.teal;
+    }
   }
 }
