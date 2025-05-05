@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
@@ -57,8 +58,9 @@ String getTwoDecimalPrice(double doublePrice) {
 }
 
 void showSnackbar(BuildContext context, String s) {
+  hideKeyboard(context);
   var snackBar = SnackBar(
-    duration: const Duration(seconds: 2),
+    duration: const Duration(milliseconds: 1500),
     backgroundColor: Color.fromARGB(255, 123, 138, 195),
     content: Text(
       s,
@@ -71,4 +73,22 @@ void showSnackbar(BuildContext context, String s) {
     ),
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
+
+// Function to hide the keyboard
+void hideKeyboard(BuildContext context) {
+  // 1. Using FocusNode (Preferred)
+  FocusScopeNode currentFocus = FocusScope.of(context);
+  if (!currentFocus.hasPrimaryFocus && currentFocus.hasFocus) {
+    FocusManager.instance.primaryFocus?.unfocus();
+  }
+
+  // 2. Using SystemChannels (Fallback - Less Preferred)
+  // This method is less preferred because it's more of a direct,
+  // platform-level approach and might have side effects.  The
+  // FocusNode method is generally better within the Flutter framework.
+  //
+  // Check the platform before using this, although it generally works on both.
+  // Removed the check, as the method works on both iOS and Android and the check was causing an issue.
+  SystemChannels.textInput.invokeMethod('TextInput.hide');
 }

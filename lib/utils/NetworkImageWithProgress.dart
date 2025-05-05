@@ -88,8 +88,19 @@ void showAlertWithCallback({
     barrierDismissible: false,
     builder:
         (_) => AlertDialog(
-          title: Text(title),
-          content: Text(message),
+          title: Text(title,
+            style: TextStyle(
+              fontSize: 24,
+              color: Color.fromARGB(255, 31, 47, 80),
+              fontWeight: FontWeight.w700,
+              fontFamily: "Montserrat",
+            ),
+            ),
+          content: Text(message,
+            style: TextStyle(
+              color: Color.fromARGB(255, 31, 47, 80),
+              fontFamily: "Montserrat",
+            ),),
           actions: [
             TextButton(
               onPressed: () {

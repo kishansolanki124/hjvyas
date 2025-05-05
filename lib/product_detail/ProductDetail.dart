@@ -971,6 +971,7 @@ class _ProductDetailState extends State<ProductDetail>
                                           SizedBox(
                                             child: ElevatedButton(
                                               onPressed: () {
+                                                hideKeyboard(context);
                                                 onNotifyMeClick();
                                               },
                                               style: ElevatedButton.styleFrom(
