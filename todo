@@ -1,5 +1,3 @@
-1. issue when same item is selected from bottomsheet
-
 Combo Details:
 1. Out of stock from details APi and not from listing
 
@@ -63,6 +61,8 @@ App Icon
 double tap to exit snackbar or toast
 =====================================
 Final stage:
+
+1. bottom nav is slightly moved to right issue.
 
 1. Common snackbar for all screens, available at utils folder
 

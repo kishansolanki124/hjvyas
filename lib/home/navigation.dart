@@ -90,6 +90,10 @@ class _NavigationExampleState extends State<NavigationExample>
   Widget homeNavigationWidget = HomeView();
 
   void _onItemTapped(int index) {
+    if (index == currentPageIndex) {
+      return;
+    }
+
     setState(() {
       currentPageIndex = index;
       homeNavigationWidget = returnWhateverScreen(
