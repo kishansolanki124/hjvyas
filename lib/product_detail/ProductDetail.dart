@@ -289,7 +289,7 @@ class _ProductDetailState extends State<ProductDetail>
     // Initialize animation controller
     _corosoulAnimationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1200),
+      duration: const Duration(milliseconds: 1000),
     );
 
     // Animation starts completely off-screen (offset much larger than -1.0)
@@ -306,6 +306,28 @@ class _ProductDetailState extends State<ProductDetail>
     // Animation starts completely off-screen (offset much larger than -1.0)
     _fromBottomSlideAnimation = Tween<Offset>(
       begin: const Offset(0, 1), // Much higher above the screen
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _corosoulAnimationController,
+        curve: Curves.easeOutQuart,
+      ),
+    );
+
+    // Animation starts completely off-screen (offset much larger than -1.0)
+    _fromLeftSlideAnimation = Tween<Offset>(
+      begin: const Offset(-3.0, 0.0), // Start from far left, outside
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _corosoulAnimationController,
+        curve: Curves.easeOutQuart,
+      ),
+    );
+
+    // Animation starts completely off-screen (offset much larger than -1.0)
+    _fromRightSlideAnimation = Tween<Offset>(
+      begin: const Offset(3.0, 0.0), // Start from far right, outside
       end: Offset.zero,
     ).animate(
       CurvedAnimation(
@@ -547,15 +569,15 @@ class _ProductDetailState extends State<ProductDetail>
   late AnimationController _corosoulAnimationController;
   late Animation<Offset> _fromTopSlideAnimation;
   late Animation<Offset> _fromBottomSlideAnimation;
+  late Animation<Offset> _fromLeftSlideAnimation;
+  late Animation<Offset> _fromRightSlideAnimation;
 
   late AnimationController _cartIconAnimationController;
   late Animation<double> _scaleAnimation;
   late Animation<double> _bounceAnimation;
 
   Future<void> fetchData() async {
-    widget.categoryController.getProductDetail(
-      widget.productId,
-    );
+    widget.categoryController.getProductDetail(widget.productId);
   }
 
   void _refreshData() {
@@ -634,9 +656,12 @@ class _ProductDetailState extends State<ProductDetail>
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                productDetailCorosoulDots(
-                                  productDetailResponse!.productGalleryList,
-                                  _currentImageIndex,
+                                SlideTransition(
+                                  position: _fromLeftSlideAnimation,
+                                  child: productDetailCorosoulDots(
+                                    productDetailResponse!.productGalleryList,
+                                    _currentImageIndex,
+                                  ),
                                 ),
                                 //volume or audio icon
                                 if (productDetailItem!
@@ -647,25 +672,29 @@ class _ProductDetailState extends State<ProductDetail>
                                         .isNotEmpty ||
                                     productDetailItem!
                                         .productAudioEnglish
-                                        .isNotEmpty)
-                                  GestureDetector(
-                                    onTap: () {
-                                      showAudioFilesDialog(context);
-                                    },
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                        20,
-                                        10,
-                                        30,
-                                        0,
-                                      ),
-                                      child: Image.asset(
-                                        height: 30,
-                                        width: 30,
-                                        "images/audio_icon.png",
+                                        .isNotEmpty) ...[
+                                  SlideTransition(
+                                    position: _fromRightSlideAnimation,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        showAudioFilesDialog(context);
+                                      },
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                          20,
+                                          10,
+                                          30,
+                                          0,
+                                        ),
+                                        child: Image.asset(
+                                          height: 30,
+                                          width: 30,
+                                          "images/audio_icon.png",
+                                        ),
                                       ),
                                     ),
                                   ),
+                                ],
                               ],
                             ),
                           ],
@@ -1165,16 +1194,23 @@ class _ProductDetailState extends State<ProductDetail>
                             SizedBox(height: 50),
                           ],
                         ),
-                        productDetailCenterImageRound(
-                          productDetailResponse!.productDetail
-                              .elementAt(0)
-                              .productImage,
+                        SlideTransition(
+                          position: _fromBottomSlideAnimation,
+                          child: productDetailCenterImageRound(
+                            productDetailResponse!.productDetail
+                                .elementAt(0)
+                                .productImage,
+                          ),
                         ),
                       ],
                     ],
                   ),
                 ),
-                backButton(_onBackPressed),
+
+                SlideTransition(
+                  position: _fromLeftSlideAnimation,
+                  child: backButton(_onBackPressed),
+                ),
 
                 // //cart icon with badge
                 // GestureDetector(
@@ -1217,59 +1253,62 @@ class _ProductDetailState extends State<ProductDetail>
                 //     ),
                 //   ),
                 // ),
-                GestureDetector(
-                  onTap: () {
-                    navigateToCartPage();
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 20, 0),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: AnimatedBuilder(
-                        animation: _cartIconAnimationController,
-                        builder: (context, child) {
-                          return Transform.translate(
-                            offset: Offset(0, _bounceAnimation.value),
-                            child: Transform.scale(
-                              scale: _scaleAnimation.value,
-                              child: Stack(
-                                clipBehavior: Clip.none,
-                                children: [
-                                  Icon(
-                                    Icons.shopping_cart,
-                                    size: 30,
-                                    color: Colors.white,
-                                  ),
-                                  if (_cartItemList.isNotEmpty)
-                                    Positioned(
-                                      right: -5,
-                                      top: -5,
-                                      child: Container(
-                                        padding: EdgeInsets.all(2),
-                                        decoration: BoxDecoration(
-                                          color: Colors.red,
-                                          shape: BoxShape.circle,
-                                        ),
-                                        constraints: BoxConstraints(
-                                          minWidth: 18,
-                                          minHeight: 18,
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            '${_cartItemList.length}',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 10,
+                SlideTransition(
+                  position: _fromRightSlideAnimation,
+                  child: GestureDetector(
+                    onTap: () {
+                      navigateToCartPage();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 20, 0),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: AnimatedBuilder(
+                          animation: _cartIconAnimationController,
+                          builder: (context, child) {
+                            return Transform.translate(
+                              offset: Offset(0, _bounceAnimation.value),
+                              child: Transform.scale(
+                                scale: _scaleAnimation.value,
+                                child: Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Icon(
+                                      Icons.shopping_cart,
+                                      size: 30,
+                                      color: Colors.white,
+                                    ),
+                                    if (_cartItemList.isNotEmpty)
+                                      Positioned(
+                                        right: -5,
+                                        top: -5,
+                                        child: Container(
+                                          padding: EdgeInsets.all(2),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          constraints: BoxConstraints(
+                                            minWidth: 18,
+                                            minHeight: 18,
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              '${_cartItemList.length}',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                              ),
                                             ),
                                           ),
                                         ),
                                       ),
-                                    ),
-                                ],
+                                  ],
+                                ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
@@ -1283,10 +1322,13 @@ class _ProductDetailState extends State<ProductDetail>
         floatingActionButton:
             productDetailResponse?.productDetail.elementAt(0).productSoldout !=
                     "yes"
-                ? addToCartFullWidthButton(
-                  floatingButtonPrice,
-                  _onPressed,
-                  getCartText(),
+                ? SlideTransition(
+                  position: _fromBottomSlideAnimation,
+                  child: addToCartFullWidthButton(
+                    floatingButtonPrice,
+                    _onPressed,
+                    getCartText(),
+                  ),
                 )
                 : null,
       );
