@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hjvyas/api/models/ComboListResponse.dart';
 
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
-import '../product_detail/ProductDetail.dart';
 import 'ComboDetail.dart';
 import 'ComboFirstItem.dart';
 import 'ComboFourthItem.dart';
@@ -26,13 +24,18 @@ class Combowidget extends StatefulWidget {
 }
 
 class _CombowidgetState extends State<Combowidget> {
+  bool scrollBarShowing = true;
+
   void _navigateToDetails(int index, ComboListItem item) {
     Navigator.push(
       context,
       MaterialPageRoute(
         builder:
             (context) => //ProductDetail(item: item),
-            ComboDetail(comboId: item.comboId, isOutOfStock: item.comboSoldout.isEmpty ? false : true),
+                ComboDetail(
+              comboId: item.comboId,
+              isOutOfStock: item.comboSoldout.isEmpty ? false : true,
+            ),
       ),
     );
   }
@@ -42,30 +45,33 @@ class _CombowidgetState extends State<Combowidget> {
   void initState() {
     super.initState();
     widget.paginationController.loadInitialData(); // Explicit call
-    _scrollController.addListener(_onScroll); // Listen to scroll events
+    //_scrollController.addListener(_onScroll); // Listen to scroll events
   }
 
-  void _onScroll() {
-    // Check the scroll direction
-    if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      // If scrolling down, hide the BottomNavigationBar
-      widget.updateBottomNavBarVisibility(false);
-    } else if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.forward) {
-      // If scrolling up, show the BottomNavigationBar
-      widget.updateBottomNavBarVisibility(true);
-    }
-    // You might also want to hide it if the user scrolls to the very bottom or top.
-    if (_scrollController.offset <=
-        _scrollController.position.minScrollExtent) {
-      widget.updateBottomNavBarVisibility(true);
-    }
-  }
+  // void _onScroll() {
+  //   // Check the scroll direction
+  //   if (_scrollController.position.userScrollDirection ==
+  //       ScrollDirection.reverse) {
+  //     // If scrolling down, hide the BottomNavigationBar
+  //     widget.updateBottomNavBarVisibility(false);
+  //     print('On scroll update bottom nav visibility status to ${widget.updateBottomNavBarVisibility}');
+  //   } else if (_scrollController.position.userScrollDirection ==
+  //       ScrollDirection.forward) {
+  //     // If scrolling up, show the BottomNavigationBar
+  //     widget.updateBottomNavBarVisibility(true);
+  //     print('On scroll update bottom nav visibility status to ${widget.updateBottomNavBarVisibility}');
+  //   }
+  //   // You might also want to hide it if the user scrolls to the very bottom or top.
+  //   if (_scrollController.offset <=
+  //       _scrollController.position.minScrollExtent) {
+  //     widget.updateBottomNavBarVisibility(true);
+  //     print('On scroll update bottom nav visibility status to ${widget.updateBottomNavBarVisibility}');
+  //   }
+  // }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll); // Remove the listener
+    //_scrollController.removeListener(_onScroll); // Remove the listener
     _scrollController.dispose();
     super.dispose();
   }
@@ -77,11 +83,31 @@ class _CombowidgetState extends State<Combowidget> {
         body: Obx(() {
           if (widget.paginationController.items.isEmpty &&
               widget.paginationController.isLoading.value) {
+            //todo: change this
             return Center(child: CircularProgressIndicator());
           }
 
+          //todo: add error handler with retry
+
           return NotificationListener<ScrollNotification>(
             onNotification: (notification) {
+              if (notification is ScrollUpdateNotification) {
+                // Check if user is scrolling up or down
+                if (notification.scrollDelta! > 0 && scrollBarShowing) {
+                  // Scrolling down, hide the bottom bar
+                  setState(() {
+                    scrollBarShowing = false;
+                    widget.updateBottomNavBarVisibility(false);
+                  });
+                } else if (notification.scrollDelta! < 0 && !scrollBarShowing) {
+                  // Scrolling up, show the bottom bar
+                  setState(() {
+                    scrollBarShowing = true;
+                    widget.updateBottomNavBarVisibility(true);
+                  });
+                }
+              }
+
               if (notification is ScrollEndNotification &&
                   notification.metrics.pixels ==
                       notification.metrics.maxScrollExtent) {

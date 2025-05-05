@@ -97,6 +97,7 @@ class _NavigationExampleState extends State<NavigationExample>
       homeNavigationWidget = ProductListGridView(
         categoryListItem: categoryListItem,
         logoURL: logoURL,
+          updateBottomNavBarVisibility: _updateBottomNavBarVisibility,
       );
     });
   }

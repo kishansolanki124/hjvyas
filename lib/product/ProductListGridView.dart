@@ -19,10 +19,13 @@ class ProductListGridView extends StatefulWidget {
   CategoryListItem categoryListItem;
   String logoURL;
 
+  final void Function(bool) updateBottomNavBarVisibility; // Callback function
+
   ProductListGridView({
     super.key,
     required this.categoryListItem,
     required this.logoURL,
+    required this.updateBottomNavBarVisibility,
   });
 
   @override
@@ -31,6 +34,8 @@ class ProductListGridView extends StatefulWidget {
 
 class _ProductListGridViewState extends State<ProductListGridView> {
   String logoURL = "";
+
+  bool scrollBarShowing = true;
 
   @override
   void initState() {
@@ -68,6 +73,23 @@ class _ProductListGridViewState extends State<ProductListGridView> {
         body: Obx(() {
           return NotificationListener<ScrollNotification>(
             onNotification: (notification) {
+              if (notification is ScrollUpdateNotification) {
+                // Check if user is scrolling up or down
+                if (notification.scrollDelta! > 0 && scrollBarShowing) {
+                  // Scrolling down, hide the bottom bar
+                  setState(() {
+                    scrollBarShowing = false;
+                    widget.updateBottomNavBarVisibility(false);
+                  });
+                } else if (notification.scrollDelta! < 0 && !scrollBarShowing) {
+                  // Scrolling up, show the bottom bar
+                  setState(() {
+                    scrollBarShowing = true;
+                    widget.updateBottomNavBarVisibility(true);
+                  });
+                }
+              }
+
               if (notification is ScrollEndNotification &&
                   notification.metrics.pixels ==
                       notification.metrics.maxScrollExtent) {

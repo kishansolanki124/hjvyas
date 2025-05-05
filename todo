@@ -2,7 +2,7 @@ Combo:
 1. hide bottom nav on scroll
 
 Product List:
-4. Product list page ma bottom nav dekhavu joiye
+1. hide bottom nav on scroll
 9. Test with smaller and larger devices.
 10. Give fix height to each item
 
@@ -75,3 +75,4 @@ read chat of Nandish bhai and do the needful changess.
 ne add to cart ma kai biju logic male to jo le jo
 
 App Icon
+double tap to exit snackbar or toast
