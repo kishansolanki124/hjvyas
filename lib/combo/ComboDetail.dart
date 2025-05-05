@@ -18,6 +18,7 @@ import '../injection_container.dart';
 import '../product/ProductListWidgets.dart';
 import '../product_detail/FullWidthButton.dart';
 import '../product_detail/ProductDetailWidget.dart';
+import '../utils/CommonAppProgress.dart';
 import '../utils/FloatingImageViewer.dart';
 import '../utils/NetworkImageWithProgress.dart';
 import 'ComboDetailController.dart';
@@ -39,7 +40,7 @@ class _ProductDetailState extends State<ComboDetail>
     with TickerProviderStateMixin {
   late SharedPreferences _prefs;
 
-  List<CartItemModel> _cartItemList = [];
+  final List<CartItemModel> _cartItemList = [];
 
   // Initialize SharedPreferences
   Future<void> _initPrefs() async {
@@ -78,7 +79,7 @@ class _ProductDetailState extends State<ComboDetail>
   }
 
   int getQuantity() {
-    int initialQuantity = 1;
+    int initialQuantity = 0;
     if (kDebugMode) {
       print('_cartItemList size is $_cartItemList');
     }
@@ -100,7 +101,7 @@ class _ProductDetailState extends State<ComboDetail>
   }
 
   void initPriceAndQuantity() {
-    int initialQuantity = 1;
+    int initialQuantity = 0;
     if (kDebugMode) {
       print('_cartItemList size is $_cartItemList');
     }
@@ -120,8 +121,10 @@ class _ProductDetailState extends State<ComboDetail>
 
     //setState(() {
     selectedItemQuantity = initialQuantity;
-    floatingButtonPrice =
-        double.parse(comboDetailItem!.comboPrice) * selectedItemQuantity;
+    if (null != comboDetailItem) {
+      floatingButtonPrice =
+          double.parse(comboDetailItem!.comboPrice) * selectedItemQuantity;
+    }
     //});
   }
 
@@ -130,67 +133,93 @@ class _ProductDetailState extends State<ComboDetail>
   }
 
   Future<void> _addToCart() async {
-    // Convert each CustomObject in the list to a JSON map,
-    // then encode the whole list as a JSON string
-    CartItemModel cartItemModel = CartItemModel(
-      productType: "combo",
-      productPackingId: getComboProductUniqueId(comboDetailItem!.comboId),
-      quantity: selectedItemQuantity.toString(),
-      comboDetail: comboDetailResponse!.comboDetail,
-    );
+    if (selectedItemQuantity == 0) {
+      bool itemExist = false;
+      int itemExistPosition = -1;
 
-    bool itemExist = false;
-    int itemExistPosition = -1;
+      if (kDebugMode) {
+        print('_cartItemList size addtoCart is ${_cartItemList.length}');
+      }
 
-    if (kDebugMode) {
-      print('_cartItemList size addtoCart is ${_cartItemList.length}');
-    }
-
-    if (_cartItemList.isNotEmpty) {
-      for (var i = 0; i < _cartItemList.length; i++) {
-        //check if item exist in cart, then update quantity only
-        if (_cartItemList.elementAt(i).productPackingId ==
-            getComboProductUniqueId(comboDetailItem!.comboId)) {
-          //item exist
-          itemExist = true;
-          itemExistPosition = i;
-          if (kDebugMode) {
-            print('itemExistPosition addtoCart is $itemExistPosition');
+      if (_cartItemList.isNotEmpty) {
+        for (var i = 0; i < _cartItemList.length; i++) {
+          //check if item exist in cart, then update quantity only
+          if (_cartItemList.elementAt(i).productPackingId ==
+              getComboProductUniqueId(comboDetailItem!.comboId)) {
+            //item exist
+            itemExist = true;
+            itemExistPosition = i;
+            if (kDebugMode) {
+              print('itemExistPosition addtoCart is $itemExistPosition');
+            }
+            break;
           }
-          break;
         }
       }
-    }
 
-    if (itemExist) {
-      _cartItemList[itemExistPosition] = cartItemModel;
+      if (itemExist && _cartItemList.length > itemExistPosition) {
+        _cartItemList.removeAt(itemExistPosition);
+
+        if (kDebugMode) {
+          print('_cartItemList is inside addTocart is $_cartItemList');
+        }
+
+        final List<String> stringList =
+            _cartItemList.map((item) => jsonEncode(item.toJson())).toList();
+        await _prefs.setStringList("cart_list", stringList);
+        addToCartText = "Add to Cart";
+        showSnackbar(context, "Item removed from the cart.");
+      } else {
+        showSnackbar(context, "Please update quantity to Add to Cart.");
+      }
     } else {
-      _cartItemList.add(cartItemModel);
+      // Convert each CustomObject in the list to a JSON map,
+      // then encode the whole list as a JSON string
+      CartItemModel cartItemModel = CartItemModel(
+        productType: "combo",
+        productPackingId: getComboProductUniqueId(comboDetailItem!.comboId),
+        quantity: selectedItemQuantity.toString(),
+        comboDetail: comboDetailResponse!.comboDetail,
+      );
+
+      bool itemExist = false;
+      int itemExistPosition = -1;
+
+      if (kDebugMode) {
+        print('_cartItemList size addtoCart is ${_cartItemList.length}');
+      }
+
+      if (_cartItemList.isNotEmpty) {
+        for (var i = 0; i < _cartItemList.length; i++) {
+          //check if item exist in cart, then update quantity only
+          if (_cartItemList.elementAt(i).productPackingId ==
+              getComboProductUniqueId(comboDetailItem!.comboId)) {
+            //item exist
+            itemExist = true;
+            itemExistPosition = i;
+            if (kDebugMode) {
+              print('itemExistPosition addtoCart is $itemExistPosition');
+            }
+            break;
+          }
+        }
+      }
+
+      if (itemExist) {
+        _cartItemList[itemExistPosition] = cartItemModel;
+      } else {
+        _cartItemList.add(cartItemModel);
+      }
+
+      if (kDebugMode) {
+        print('_cartItemList is inside addTocart is $_cartItemList');
+      }
+
+      final List<String> stringList =
+          _cartItemList.map((item) => jsonEncode(item.toJson())).toList();
+      await _prefs.setStringList("cart_list", stringList);
+      showSnackbar(context, "Cart updated.");
     }
-
-    if (kDebugMode) {
-      print('_cartItemList is inside addTocart is $_cartItemList');
-    }
-
-    final List<String> stringList =
-        _cartItemList.map((item) => jsonEncode(item.toJson())).toList();
-    await _prefs.setStringList("cart_list", stringList);
-    showSnackbar("Cart updated.");
-  }
-
-  void showSnackbar(String s) {
-    var snackBar = SnackBar(
-      backgroundColor: Colors.white,
-      content: Text(
-        s,
-        style: TextStyle(
-          fontSize: 14.0,
-          fontFamily: "Montserrat",
-          color: Color.fromARGB(255, 32, 47, 80),
-        ),
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   bool _showBottomNavBar = true; //BottomNavigationBar visibility
@@ -198,7 +227,9 @@ class _ProductDetailState extends State<ComboDetail>
   int _currentImageIndex = 0;
 
   double floatingButtonPrice = 0;
-  int selectedItemQuantity = 1;
+  int selectedItemQuantity = 0;
+
+  String addToCartText = "Add to Cart";
 
   //ProductPackingListItem? _selectedVariant;
   ComboDetailResponse? comboDetailResponse;
@@ -251,9 +282,9 @@ class _ProductDetailState extends State<ComboDetail>
 
   void onNotifyMeClick() {
     if (_validatePhone(_phoneController.text) != null) {
-      showSnackbar(_validatePhone(_phoneController.text).toString());
+      showSnackbar(context, _validatePhone(_phoneController.text).toString());
     } else if (_validateEmail(_emailController.text) != null) {
-      showSnackbar(_validateEmail(_emailController.text).toString());
+      showSnackbar(context, _validateEmail(_emailController.text).toString());
     } else {
       showSuccessDialogForNotifyMe();
     }
@@ -388,11 +419,10 @@ class _ProductDetailState extends State<ComboDetail>
   }
 
   void _incrementQuantity() {
-    //todo: product_max_qty handle here
-    // if (int.parse(comboDetailItem!.max) == selectedItemQuantity) {
-    //   showSnackbar("You have added max quantity into cart.");
-    //   return;
-    // }
+    if (int.parse(comboDetailItem!.comboMaxQty) == selectedItemQuantity) {
+      showSnackbar(context, "You have added max quantity.");
+      return;
+    }
     setState(() {
       selectedItemQuantity++;
       floatingButtonPrice =
@@ -400,21 +430,8 @@ class _ProductDetailState extends State<ComboDetail>
     });
   }
 
-  // void _onChangedDropDownValue(ProductPackingListItem newValue) {
-  //   setState(() {
-  //     _selectedVariant = newValue;
-  //     selectedItemQuantity = getQuantity();
-  //     if (kDebugMode) {
-  //       print('selectedItemQuantity is $selectedItemQuantity');
-  //     }
-  //     floatingButtonPrice =
-  //         double.parse(comboDetailItem!.comboPrice) *
-  //         selectedItemQuantity;
-  //   });
-  // }
-
   void _decrementQuantity() {
-    if (selectedItemQuantity > 1) {
+    if (selectedItemQuantity > 0) {
       setState(() {
         selectedItemQuantity--;
         floatingButtonPrice =
@@ -436,6 +453,10 @@ class _ProductDetailState extends State<ComboDetail>
         print('Add to Cart button pressed!');
       }
     });
+  }
+
+  String getCartText() {
+    return addToCartText;
   }
 
   void _onBackPressed() {
@@ -468,9 +489,9 @@ class _ProductDetailState extends State<ComboDetail>
         }
       }
 
-      if (floatingButtonPrice == 0) {
-        floatingButtonPrice = double.parse(comboDetailItem!.comboPrice);
-      }
+      // if (floatingButtonPrice == 0) {
+      //   floatingButtonPrice = double.parse(comboDetailItem!.comboPrice);
+      // }
       //_selectedVariantInquiry ??= cateogories.inquiryType.split(', ').first;
       return Scaffold(
         body: Container(
@@ -1047,7 +1068,7 @@ class _ProductDetailState extends State<ComboDetail>
                 ? addToCartFullWidthButton(
                   floatingButtonPrice,
                   _onPressed,
-                  "Add To Cart",
+                  getCartText(),
                 )
                 : null,
       );
