@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../api/models/ProductDetailResponse.dart';
+import '../utils/CommonAppProgress.dart';
 
 Widget addToCartFullWidthButton(double price, _onPressed) {
   return Padding(
@@ -24,7 +25,7 @@ Widget addToCartFullWidthButton(double price, _onPressed) {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Text(
-                '₹ $price',
+                '₹ ${getTwoDecimalPrice(price)}',
                 style: TextStyle(
                   fontSize: 18.0,
                   fontFamily: "Montserrat",

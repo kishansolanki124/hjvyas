@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
 Widget getCommonProgressBarFullScreen() {
@@ -41,4 +42,14 @@ Widget getCommonProgressBar() {
       ),
     ),
   );
+}
+
+String getTwoDecimalPrice(double doublePrice) {
+  String twoDecimalPrice = "";
+  final NumberFormat formatter = NumberFormat("#.00");
+  if (doublePrice != 0) {
+    twoDecimalPrice = formatter.format(doublePrice);
+    return twoDecimalPrice;
+  }
+  return "";
 }
