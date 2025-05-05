@@ -13,12 +13,14 @@ class ComboPaginationController extends GetxController {
 
   var items = <ComboListItem>[].obs;
   var isLoading = false.obs;
+  var isError = false.obs;
   var currentPage = 0;
   var totalItems = 0;
   final int itemsPerPage = 10; // Adjust based on API
 
   Future<void> loadInitialData() async {
     isLoading(true);
+    isError(false);
     try {
       final newItems = await _service.getCombo(
         currentPage.toString(),
@@ -27,6 +29,9 @@ class ComboPaginationController extends GetxController {
       items.assignAll(newItems.comboList);
       totalItems = newItems.totalRecords;
       currentPage += 10;
+    } catch (exception) {
+      exception.printError();
+      isError(true);
     } finally {
       isLoading(false);
     }

@@ -3,6 +3,8 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
+import '../splash/NoIntternetScreen.dart';
+import '../utils/CommonAppProgress.dart';
 import 'ComboListItemWidget.dart';
 import 'ComboPaginationController.dart';
 
@@ -21,20 +23,6 @@ class ComboWidget extends StatefulWidget {
 class _ComboWidgetState extends State<ComboWidget> {
   bool scrollBarShowing = true;
 
-  // void _navigateToDetails(int index, ComboListItem item) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder:
-  //           (context) => //ProductDetail(item: item),
-  //               ComboDetail(
-  //             comboId: item.comboId,
-  //             isOutOfStock: item.comboSoldout.isEmpty ? false : true,
-  //           ),
-  //     ),
-  //   );
-  // }
-
   final ScrollController _scrollController = ScrollController();
   @override
   void initState() {
@@ -43,32 +31,18 @@ class _ComboWidgetState extends State<ComboWidget> {
     //_scrollController.addListener(_onScroll); // Listen to scroll events
   }
 
-  // void _onScroll() {
-  //   // Check the scroll direction
-  //   if (_scrollController.position.userScrollDirection ==
-  //       ScrollDirection.reverse) {
-  //     // If scrolling down, hide the BottomNavigationBar
-  //     widget.updateBottomNavBarVisibility(false);
-  //     print('On scroll update bottom nav visibility status to ${widget.updateBottomNavBarVisibility}');
-  //   } else if (_scrollController.position.userScrollDirection ==
-  //       ScrollDirection.forward) {
-  //     // If scrolling up, show the BottomNavigationBar
-  //     widget.updateBottomNavBarVisibility(true);
-  //     print('On scroll update bottom nav visibility status to ${widget.updateBottomNavBarVisibility}');
-  //   }
-  //   // You might also want to hide it if the user scrolls to the very bottom or top.
-  //   if (_scrollController.offset <=
-  //       _scrollController.position.minScrollExtent) {
-  //     widget.updateBottomNavBarVisibility(true);
-  //     print('On scroll update bottom nav visibility status to ${widget.updateBottomNavBarVisibility}');
-  //   }
-  // }
-
   @override
   void dispose() {
-    //_scrollController.removeListener(_onScroll); // Remove the listener
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void _refreshData() {
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    await widget.paginationController.loadInitialData(); // Explicit call
   }
 
   @override
@@ -76,14 +50,6 @@ class _ComboWidgetState extends State<ComboWidget> {
     return SafeArea(
       child: Scaffold(
         body: Obx(() {
-          if (widget.paginationController.items.isEmpty &&
-              widget.paginationController.isLoading.value) {
-            //todo: change this
-            return Center(child: CircularProgressIndicator());
-          }
-
-          //todo: add error handler with retry
-
           return NotificationListener<ScrollNotification>(
             onNotification: (notification) {
               if (notification is ScrollUpdateNotification) {
@@ -125,6 +91,24 @@ class _ComboWidgetState extends State<ComboWidget> {
                       slivers: [
                         SliverToBoxAdapter(child: productListTopView()),
 
+                        if (widget.paginationController.items.isEmpty &&
+                            widget.paginationController.isLoading.value) ...[
+                          SliverToBoxAdapter(child: getCommonProgressBar()),
+                        ],
+
+                        if (widget.paginationController.items.isEmpty &&
+                            widget.paginationController.isError.value) ...[
+                          //error handling
+                          SliverToBoxAdapter(
+                            child: NoInternetScreen(
+                              showBackgroundImage: false,
+                              onRetry: () {
+                                _refreshData();
+                              },
+                            ),
+                          ),
+                        ],
+
                         SliverGrid(
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
@@ -145,7 +129,11 @@ class _ComboWidgetState extends State<ComboWidget> {
                         ),
                         SliverToBoxAdapter(
                           child:
-                              widget.paginationController.isLoading.value
+                              (widget.paginationController.isLoading.value &&
+                                      widget
+                                          .paginationController
+                                          .items
+                                          .isNotEmpty)
                                   ? Padding(
                                     padding: EdgeInsets.all(16.0),
                                     child: Center(
@@ -201,58 +189,3 @@ Widget productListTopView() {
     ),
   );
 }
-
-// Widget comboListItem(ComboListItem item, int index, navigateToDetails) {
-//   Widget lloadWidget;
-//
-//   if (index % 4 == 0) {
-//     lloadWidget = ComboFirstItem(
-//       imageUrl: item.comboImage,
-//       title: item.comboName,
-//       price: item.comboPrice,
-//       comboWeight: item.comboWeight,
-//       comboSoldout: item.comboSoldout,
-//       comboSpecification: item.comboSpecification,
-//     );
-//   } else if (index % 4 == 1) {
-//     lloadWidget = ComboSecondItem(
-//       imageUrl: item.comboImage,
-//       title: item.comboName,
-//       price: item.comboPrice,
-//       comboWeight: item.comboWeight,
-//       comboSoldout: item.comboSoldout,
-//       comboSpecification: item.comboSpecification,
-//     );
-//   } else if (index % 4 == 2) {
-//     lloadWidget = ComboThirdItem(
-//       imageUrl: item.comboImage,
-//       title: item.comboName,
-//       price: item.comboPrice,
-//       comboWeight: item.comboWeight,
-//       comboSoldout: item.comboSoldout,
-//       comboSpecification: item.comboSpecification,
-//     );
-//   } else {
-//     lloadWidget = ComboFourthItem(
-//       imageUrl: item.comboImage,
-//       title: item.comboName,
-//       price: item.comboPrice,
-//       comboWeight: item.comboWeight,
-//       comboSoldout: item.comboSoldout,
-//       comboSpecification: item.comboSpecification,
-//     );
-//   }
-//
-//   return SlideTransition(
-//       position: _slideAnimation,
-//       child: FadeTransition(
-//       opacity: _animationController,
-//       child: GestureDetector(
-//     onTap: () {
-//       navigateToDetails(index, item);
-//     },
-//     child: lloadWidget,
-//   ),
-//   ),
-//   );
-// }
