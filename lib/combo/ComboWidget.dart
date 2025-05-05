@@ -1,44 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
-import 'package:hjvyas/api/models/ComboListResponse.dart';
 
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
-import 'ComboDetail.dart';
-import 'ComboFirstItem.dart';
-import 'ComboFourthItem.dart';
+import 'ComboListItemWidget.dart';
 import 'ComboPaginationController.dart';
-import 'ComboSecondItem.dart';
-import 'ComboThirdItem.dart';
 
-class Combowidget extends StatefulWidget {
+class ComboWidget extends StatefulWidget {
   final ComboPaginationController paginationController =
       ComboPaginationController(getIt<HJVyasApiService>());
 
   final void Function(bool) updateBottomNavBarVisibility; // Callback function
 
-  Combowidget({super.key, required this.updateBottomNavBarVisibility});
+  ComboWidget({super.key, required this.updateBottomNavBarVisibility});
 
   @override
-  State<Combowidget> createState() => _CombowidgetState();
+  State<ComboWidget> createState() => _ComboWidgetState();
 }
 
-class _CombowidgetState extends State<Combowidget> {
+class _ComboWidgetState extends State<ComboWidget> {
   bool scrollBarShowing = true;
 
-  void _navigateToDetails(int index, ComboListItem item) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder:
-            (context) => //ProductDetail(item: item),
-                ComboDetail(
-              comboId: item.comboId,
-              isOutOfStock: item.comboSoldout.isEmpty ? false : true,
-            ),
-      ),
-    );
-  }
+  // void _navigateToDetails(int index, ComboListItem item) {
+  //   Navigator.push(
+  //     context,
+  //     MaterialPageRoute(
+  //       builder:
+  //           (context) => //ProductDetail(item: item),
+  //               ComboDetail(
+  //             comboId: item.comboId,
+  //             isOutOfStock: item.comboSoldout.isEmpty ? false : true,
+  //           ),
+  //     ),
+  //   );
+  // }
 
   final ScrollController _scrollController = ScrollController();
   @override
@@ -139,10 +134,9 @@ class _CombowidgetState extends State<Combowidget> {
                               ),
                           delegate: SliverChildBuilderDelegate(
                             (context, index) {
-                              return comboListItem(
-                                widget.paginationController.items[index],
-                                index,
-                                _navigateToDetails,
+                              return ComboListItemWidget(
+                                item: widget.paginationController.items[index],
+                                index: index,
                               );
                             },
                             childCount:
@@ -208,51 +202,57 @@ Widget productListTopView() {
   );
 }
 
-Widget comboListItem(ComboListItem item, int index, navigateToDetails) {
-  Widget lloadWidget;
-
-  if (index % 4 == 0) {
-    lloadWidget = ComboFirstItem(
-      imageUrl: item.comboImage,
-      title: item.comboName,
-      price: item.comboPrice,
-      comboWeight: item.comboWeight,
-      comboSoldout: item.comboSoldout,
-      comboSpecification: item.comboSpecification,
-    );
-  } else if (index % 4 == 1) {
-    lloadWidget = ComboSecondItem(
-      imageUrl: item.comboImage,
-      title: item.comboName,
-      price: item.comboPrice,
-      comboWeight: item.comboWeight,
-      comboSoldout: item.comboSoldout,
-      comboSpecification: item.comboSpecification,
-    );
-  } else if (index % 4 == 2) {
-    lloadWidget = ComboThirdItem(
-      imageUrl: item.comboImage,
-      title: item.comboName,
-      price: item.comboPrice,
-      comboWeight: item.comboWeight,
-      comboSoldout: item.comboSoldout,
-      comboSpecification: item.comboSpecification,
-    );
-  } else {
-    lloadWidget = ComboFourthItem(
-      imageUrl: item.comboImage,
-      title: item.comboName,
-      price: item.comboPrice,
-      comboWeight: item.comboWeight,
-      comboSoldout: item.comboSoldout,
-      comboSpecification: item.comboSpecification,
-    );
-  }
-
-  return GestureDetector(
-    onTap: () {
-      navigateToDetails(index, item);
-    },
-    child: lloadWidget,
-  );
-}
+// Widget comboListItem(ComboListItem item, int index, navigateToDetails) {
+//   Widget lloadWidget;
+//
+//   if (index % 4 == 0) {
+//     lloadWidget = ComboFirstItem(
+//       imageUrl: item.comboImage,
+//       title: item.comboName,
+//       price: item.comboPrice,
+//       comboWeight: item.comboWeight,
+//       comboSoldout: item.comboSoldout,
+//       comboSpecification: item.comboSpecification,
+//     );
+//   } else if (index % 4 == 1) {
+//     lloadWidget = ComboSecondItem(
+//       imageUrl: item.comboImage,
+//       title: item.comboName,
+//       price: item.comboPrice,
+//       comboWeight: item.comboWeight,
+//       comboSoldout: item.comboSoldout,
+//       comboSpecification: item.comboSpecification,
+//     );
+//   } else if (index % 4 == 2) {
+//     lloadWidget = ComboThirdItem(
+//       imageUrl: item.comboImage,
+//       title: item.comboName,
+//       price: item.comboPrice,
+//       comboWeight: item.comboWeight,
+//       comboSoldout: item.comboSoldout,
+//       comboSpecification: item.comboSpecification,
+//     );
+//   } else {
+//     lloadWidget = ComboFourthItem(
+//       imageUrl: item.comboImage,
+//       title: item.comboName,
+//       price: item.comboPrice,
+//       comboWeight: item.comboWeight,
+//       comboSoldout: item.comboSoldout,
+//       comboSpecification: item.comboSpecification,
+//     );
+//   }
+//
+//   return SlideTransition(
+//       position: _slideAnimation,
+//       child: FadeTransition(
+//       opacity: _animationController,
+//       child: GestureDetector(
+//     onTap: () {
+//       navigateToDetails(index, item);
+//     },
+//     child: lloadWidget,
+//   ),
+//   ),
+//   );
+// }

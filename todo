@@ -1,10 +1,4 @@
-Combo List:
-1. Same animation of product ist
-
-Product Details:
-add to cart animation should have background circular effect to highlight more
-
-menu list to product list hero element stopped working
+1. issue when same item is selected from bottomsheet
 
 Combo Details:
 1. Out of stock from details APi and not from listing

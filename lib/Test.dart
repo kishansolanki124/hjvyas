@@ -1,181 +1,211 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
-import 'dart:async';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Animated Carousel Demo',
+      title: 'Buzz Effect Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: const CarouselDemo(),
+      home: BuzzEffectDemo(),
     );
   }
 }
 
-class CarouselDemo extends StatefulWidget {
-  const CarouselDemo({Key? key}) : super(key: key);
-
+class BuzzEffectDemo extends StatefulWidget {
   @override
-  State<CarouselDemo> createState() => _CarouselDemoState();
+  _BuzzEffectDemoState createState() => _BuzzEffectDemoState();
 }
 
-class _CarouselDemoState extends State<CarouselDemo> with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<Offset> _slideAnimation;
+class _BuzzEffectDemoState extends State<BuzzEffectDemo>
+    with TickerProviderStateMixin {
+  late AnimationController _waveController;
+  late AnimationController _buzzController;
+  late Animation<double> _waveAnimation;
+  late Animation<Offset> _buzzAnimation;
 
-  final List<String> imageList = [
-    'https://via.placeholder.com/350x200/FF5733/FFFFFF?text=Image+1',
-    'https://via.placeholder.com/350x200/33FF57/FFFFFF?text=Image+2',
-    'https://via.placeholder.com/350x200/5733FF/FFFFFF?text=Image+3',
-    'https://via.placeholder.com/350x200/33B5FF/FFFFFF?text=Image+4',
+  final List<Color> _gradientColors = [
+    Colors.red,
+    Colors.redAccent,
+    Colors.deepOrange,
   ];
 
   @override
   void initState() {
     super.initState();
 
-    // Initialize animation controller
-    _animationController = AnimationController(
+    // Wave animation controller
+    _waveController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500),
+      duration: Duration(milliseconds: 800),
     );
 
-    // Animation starts completely off-screen (offset much larger than -1.0)
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0.0, -3.0), // Much higher above the screen
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeOutCubic,
-    ));
+    // Buzz animation controller (vibration effect)
+    _buzzController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 200),
+    );
 
-    // Ensure the animation starts after the widget is properly built and screen is displayed
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Timer(const Duration(milliseconds: 600), () {
-        if (mounted) {
-          _animationController.forward();
-        }
-      });
+    _waveAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _waveController,
+        curve: Curves.easeOut,
+      ),
+    )..addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _waveController.reset();
+      }
     });
+
+    // Create a shaking/vibration effect
+    _buzzAnimation = TweenSequence<Offset>(
+      [
+        TweenSequenceItem(
+          tween: Tween<Offset>(begin: Offset.zero, end: Offset(-0.03, 0)),
+          weight: 1,
+        ),
+        TweenSequenceItem(
+          tween: Tween<Offset>(begin: Offset(-0.03, 0), end: Offset(0.03, 0)),
+          weight: 1,
+        ),
+        TweenSequenceItem(
+          tween: Tween<Offset>(begin: Offset(0.03, 0), end: Offset(-0.03, 0)),
+          weight: 1,
+        ),
+        TweenSequenceItem(
+          tween: Tween<Offset>(begin: Offset(-0.03, 0), end: Offset.zero),
+          weight: 1,
+        ),
+      ],
+    ).animate(
+      CurvedAnimation(
+        parent: _buzzController,
+        curve: Curves.easeInOut,
+      ),
+    );
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    _waveController.dispose();
+    _buzzController.dispose();
     super.dispose();
+  }
+
+  void _startAnimation() {
+    // Reset and start both animations
+    _waveController.reset();
+    _buzzController.reset();
+    _waveController.forward();
+    _buzzController.forward();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Animated Carousel Demo'),
-      ),
+      appBar: AppBar(title: Text('Buzz Effect Demo')),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+        child: Stack(
+          alignment: Alignment.center,
           children: [
-            const SizedBox(height: 20),
-            const Text(
-              'Carousel sliding in from top',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            // Wave effect
+            AnimatedBuilder(
+              animation: _waveAnimation,
+              builder: (context, child) {
+                return CustomPaint(
+                  painter: WavePainter(
+                    progress: _waveAnimation.value,
+                    colors: _gradientColors,
+                  ),
+                  size: Size(200, 200),
+                );
+              },
             ),
-            const SizedBox(height: 40),
-            // The carousel is wrapped in a SizedBox to maintain its space in the layout
-            SizedBox(
-              height: 200, // Match the CarouselSlider height
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  // The animated carousel slides in from outside the screen
-                  SlideTransition(
-                    position: _slideAnimation,
-                    child: CarouselSlider(
-                      options: CarouselOptions(
-                        height: 200.0,
-                        enlargeCenterPage: true,
-                        autoPlay: true,
-                        aspectRatio: 16/9,
-                        autoPlayCurve: Curves.fastOutSlowIn,
-                        enableInfiniteScroll: true,
-                        autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                        viewportFraction: 0.8,
+
+            // Button with buzz effect
+            AnimatedBuilder(
+              animation: _buzzAnimation,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: _buzzAnimation.value * 20,
+                  child: ElevatedButton(
+                    onPressed: _startAnimation,
+                    style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 32,
+                        vertical: 16,
                       ),
-                      items: imageList.map((item) => Container(
-                        margin: const EdgeInsets.all(5.0),
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                          child: Stack(
-                            children: <Widget>[
-                              Image.network(
-                                item,
-                                fit: BoxFit.cover,
-                                width: 1000.0,
-                                loadingBuilder: (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return const Center(child: CircularProgressIndicator());
-                                },
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    color: Colors.grey[300],
-                                    child: const Center(
-                                      child: Text('Image not available',
-                                        style: TextStyle(color: Colors.black54),
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                              Positioned(
-                                bottom: 0.0,
-                                left: 0.0,
-                                right: 0.0,
-                                child: Container(
-                                  decoration: const BoxDecoration(
-                                    gradient: LinearGradient(
-                                      colors: [
-                                        Color.fromARGB(200, 0, 0, 0),
-                                        Color.fromARGB(0, 0, 0, 0)
-                                      ],
-                                      begin: Alignment.bottomCenter,
-                                      end: Alignment.topCenter,
-                                    ),
-                                  ),
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10.0,
-                                    horizontal: 20.0,
-                                  ),
-                                  child: Text(
-                                    'Item ${imageList.indexOf(item) + 1}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )).toList(),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      elevation: 8,
+                    ),
+                    child: Text(
+                      'BUZZ ME!',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ],
-              ),
+                );
+              },
             ),
           ],
         ),
       ),
     );
+  }
+}
+
+class WavePainter extends CustomPainter {
+  final double progress;
+  final List<Color> colors;
+
+  WavePainter({required this.progress, required this.colors});
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final maxRadius = size.width / 2;
+    final currentRadius = maxRadius * progress;
+
+    // Create gradient
+    final gradient = RadialGradient(
+      colors: colors,
+      stops: [0.0, 0.5, 1.0],
+    );
+
+    final paint = Paint()
+      ..shader = gradient.createShader(
+        Rect.fromCircle(center: center, radius: currentRadius),
+      )
+      ..style = PaintingStyle.fill
+      ..isAntiAlias = true;
+
+    // Draw the filled circle with gradient
+    canvas.drawCircle(center, currentRadius, paint);
+
+    // Optional: Add a subtle border
+    canvas.drawCircle(
+      center,
+      currentRadius,
+      Paint()
+        ..color = colors.first.withOpacity(0.8)
+        ..style = PaintingStyle.stroke
+        ..strokeWidth = 2.0,
+    );
+  }
+
+  @override
+  bool shouldRepaint(covariant WavePainter oldDelegate) {
+    return oldDelegate.progress != progress ||
+        oldDelegate.colors != colors;
   }
 }
