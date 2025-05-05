@@ -484,17 +484,7 @@ class _ProductDetailState extends State<ProductDetail>
 
     // When returning from Widget2, this code will execute
     if (result != null) {
-      //todo: work here for cart update, add to cart button text update and
-      // total count update of this item if cart empty
-      if (kDebugMode) {
-        print('result is not null');
-      }
       _loadList();
-      // setState(() {
-      //   myValue = result;
-      // });
-      // // Or call any function you need
-      // updateFunction(result);
     }
   }
 

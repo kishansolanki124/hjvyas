@@ -233,7 +233,7 @@ class _CartPageState extends State<CartPage> {
 
     await getProductTester();
 
-    showSnackbar("Cart updated."); // Show the message
+    showSnackbar("Basket updated."); // Show the message
   }
 
   // Function to format price
