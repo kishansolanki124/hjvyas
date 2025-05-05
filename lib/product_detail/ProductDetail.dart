@@ -27,49 +27,18 @@ import 'ProductDetailWidget.dart';
 
 class ProductDetail extends StatefulWidget {
   final String productId;
-  final bool isOutOfStock;
 
-  const ProductDetail({
-    super.key,
-    required this.productId,
-    required this.isOutOfStock,
-  });
+  final ProductDetailController categoryController = ProductDetailController(
+    getIt<HJVyasApiService>(),
+  );
+
+  ProductDetail({super.key, required this.productId});
 
   @override
   State<ProductDetail> createState() => _ProductDetailState();
 }
 
-class _ProductDetailState extends State<ProductDetail> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: FoodProductDetailsPage(
-        productId: widget.productId,
-        isOutOfStock: widget.isOutOfStock,
-      ),
-    );
-  }
-}
-
-class FoodProductDetailsPage extends StatefulWidget {
-  final ProductDetailController categoryController = ProductDetailController(
-    getIt<HJVyasApiService>(),
-  );
-
-  String productId = "";
-  bool isOutOfStock = false;
-
-  FoodProductDetailsPage({
-    super.key,
-    required this.productId,
-    required this.isOutOfStock,
-  });
-
-  @override
-  _FoodProductDetailsPageState createState() => _FoodProductDetailsPageState();
-}
-
-class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
+class _ProductDetailState extends State<ProductDetail>
     with TickerProviderStateMixin {
   // Instance of SharedPreferences
   late SharedPreferences _prefs;
@@ -693,12 +662,18 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                   productDetailResponse!.productDetail
                                       .elementAt(0)
                                       .productPrice,
-                                  widget.isOutOfStock,
+                                  productDetailResponse!.productDetail
+                                          .elementAt(0)
+                                          .productSoldout ==
+                                      "yes",
                                 ),
 
                                 //out of stock
                                 //notify me content
-                                if (widget.isOutOfStock)
+                                if (productDetailResponse!.productDetail
+                                        .elementAt(0)
+                                        .productSoldout ==
+                                    "yes")
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -955,7 +930,10 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: <Widget>[
-                                    if (!widget.isOutOfStock)
+                                    if (productDetailResponse!.productDetail
+                                            .elementAt(0)
+                                            .productSoldout !=
+                                        "yes")
                                       productDetailDropDown(
                                         productDetailResponse!
                                             .productPackingList,
@@ -963,7 +941,10 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                         _onChangedDropDownValue,
                                       ),
 
-                                    if (!widget.isOutOfStock)
+                                    if (productDetailResponse!.productDetail
+                                            .elementAt(0)
+                                            .productSoldout !=
+                                        "yes")
                                       productDetailItemCounter(
                                         _decrementQuantity,
                                         _incrementQuantity,
@@ -1222,7 +1203,11 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         //add to cart button
         floatingActionButton:
-            _showBottomNavBar && !widget.isOutOfStock
+            _showBottomNavBar &&
+                    productDetailResponse!.productDetail
+                            .elementAt(0)
+                            .productSoldout !=
+                        "yes"
                 ? addToCartFullWidthButton(floatingButtonPrice, _onPressed)
                 : null,
       );

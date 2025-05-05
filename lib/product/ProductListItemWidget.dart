@@ -28,9 +28,7 @@ class _ProductListItemState extends State<ProductListItemWidget>
       MaterialPageRoute(
         builder:
             (context) => ProductDetail(
-              productId: item.productId,
-              isOutOfStock: item.productSoldout.isEmpty ? false : true,
-            ),
+              productId: item.productId,),
       ),
     );
   }

@@ -436,11 +436,7 @@ Widget productDetailYouMayLike(List<ProductMoreListItem> moreItemList) {
                   MaterialPageRoute(
                     builder:
                         (context) => //ProductDetail(item: item),
-                            ProductDetail(
-                          productId: product.productId,
-                          //todo: currently out of stock not available in more item list
-                          isOutOfStock: false,
-                        ),
+                            ProductDetail(productId: product.productId),
                   ),
                 );
               },
@@ -707,7 +703,6 @@ Widget comboDetailTabs(tabController, activeTabIndex) {
             ),
           ),
         ),
-
       ],
     ),
   );
