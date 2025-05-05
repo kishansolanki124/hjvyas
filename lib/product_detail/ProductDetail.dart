@@ -773,6 +773,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                       // 5. Input text or Edit text with hint "Enter your mobile no."
                                       // with 10 digit max length and input type should be only numbers
                                       TextField(
+                                        textInputAction: TextInputAction.next,
                                         controller: _phoneController,
                                         keyboardType: TextInputType.number,
                                         maxLength: 14,
@@ -836,6 +837,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                       // 6. Input text or Edit text with hint "Enter your email id"
                                       // with input type email
                                       TextField(
+                                        textInputAction: TextInputAction.done,
                                         controller: _emailController,
                                         keyboardType:
                                             TextInputType.emailAddress,

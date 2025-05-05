@@ -29,7 +29,12 @@ class _NavigationBarAppState extends State<NavigationBarApp> {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false, // Remove the debug banner
-      theme: ThemeData(useMaterial3: true),
+      theme: ThemeData(
+        useMaterial3: true,
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Color.fromARGB(255, 123, 138, 195), //cursor color
+        ),
+      ),
       home: const NavigationExample(),
     );
   }
