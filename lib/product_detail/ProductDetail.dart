@@ -12,6 +12,7 @@ import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hjvyas/cart/CartHome.dart';
 import 'package:hjvyas/product_detail/ImageWithProgress.dart';
 import 'package:hjvyas/product_detail/ProductDetailController.dart';
+import 'package:hjvyas/splash/NoIntternetScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/models/CartItemModel.dart';
@@ -124,9 +125,11 @@ class _ProductDetailState extends State<ProductDetail>
     }
 
     selectedItemQuantity = initialQuantity;
-    floatingButtonPrice =
-        double.parse(_selectedVariant!.productPackingPrice) *
-        selectedItemQuantity;
+    if (null != _selectedVariant) {
+      floatingButtonPrice =
+          double.parse(_selectedVariant!.productPackingPrice) *
+          selectedItemQuantity;
+    }
     //});
   }
 
@@ -549,31 +552,41 @@ class _ProductDetailState extends State<ProductDetail>
   late Animation<double> _scaleAnimation;
   late Animation<double> _bounceAnimation;
 
+  Future<void> fetchData() async {
+    widget.categoryController.getProductDetail(
+      widget.productId,
+    );
+  }
+
+  void _refreshData() {
+    fetchData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (widget.categoryController.loading.value) {
-        //todo change this
-        return Center(child: CircularProgressIndicator());
-      }
-
       if (widget.categoryController.error.value.isNotEmpty) {
-        //todo change this
-        return Center(child: Text('Error: ${widget.categoryController.error}'));
+        return NoInternetScreen(
+          onRetry: () {
+            _refreshData();
+          },
+        );
       }
 
       productDetailResponse ??=
           widget.categoryController.productDetailResponse.value;
 
-      productDetailItem ??= productDetailResponse!.productDetail.elementAt(0);
+      productDetailItem ??= productDetailResponse?.productDetail.elementAt(0);
 
       if (_selectedVariant == null) {
-        _selectedVariant = productDetailResponse!.productPackingList.elementAt(
+        _selectedVariant = productDetailResponse?.productPackingList.elementAt(
           0,
         );
-        initPriceAndQuantity();
-        if (kDebugMode) {
-          print('selectedItemQuantity is $selectedItemQuantity');
+        if (_selectedVariant != null) {
+          initPriceAndQuantity();
+          if (kDebugMode) {
+            print('selectedItemQuantity is $selectedItemQuantity');
+          }
         }
       }
 
@@ -599,552 +612,565 @@ class _ProductDetailState extends State<ProductDetail>
                 SingleChildScrollView(
                   child: Stack(
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          // 1. Image Carousel with Dots
-                          SlideTransition(
-                            position: _fromTopSlideAnimation,
-                            child: productDetailViewpager(
-                              productDetailResponse!.productGalleryList,
-                              _onPageChange,
-                            ),
-                          ),
+                      if (widget.categoryController.loading.value) ...[
+                        getCommonProgressBar(),
+                      ],
 
-                          // 2. Image Carousel Dots and volume
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              productDetailCorosoulDots(
+                      if (!widget.categoryController.loading.value &&
+                          productDetailResponse != null) ...[
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            // 1. Image Carousel with Dots
+                            SlideTransition(
+                              position: _fromTopSlideAnimation,
+                              child: productDetailViewpager(
                                 productDetailResponse!.productGalleryList,
-                                _currentImageIndex,
+                                _onPageChange,
                               ),
-                              //volume or audio icon
-                              if (productDetailItem!
-                                      .productAudioGujarati
-                                      .isNotEmpty ||
-                                  productDetailItem!
-                                      .productAudioHindi
-                                      .isNotEmpty ||
-                                  productDetailItem!
-                                      .productAudioEnglish
-                                      .isNotEmpty)
-                                GestureDetector(
-                                  onTap: () {
-                                    showAudioFilesDialog(context);
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(
-                                      20,
-                                      10,
-                                      30,
-                                      0,
-                                    ),
-                                    child: Image.asset(
-                                      height: 30,
-                                      width: 30,
-                                      "images/audio_icon.png",
+                            ),
+
+                            // 2. Image Carousel Dots and volume
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                productDetailCorosoulDots(
+                                  productDetailResponse!.productGalleryList,
+                                  _currentImageIndex,
+                                ),
+                                //volume or audio icon
+                                if (productDetailItem!
+                                        .productAudioGujarati
+                                        .isNotEmpty ||
+                                    productDetailItem!
+                                        .productAudioHindi
+                                        .isNotEmpty ||
+                                    productDetailItem!
+                                        .productAudioEnglish
+                                        .isNotEmpty)
+                                  GestureDetector(
+                                    onTap: () {
+                                      showAudioFilesDialog(context);
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                        20,
+                                        10,
+                                        30,
+                                        0,
+                                      ),
+                                      child: Image.asset(
+                                        height: 30,
+                                        width: 30,
+                                        "images/audio_icon.png",
+                                      ),
                                     ),
                                   ),
-                                ),
-                            ],
-                          ),
-                        ],
-                      ),
-
-                      //square border app color
-                      IgnorePointer(
-                        child: SlideTransition(
-                          position: _fromTopSlideAnimation,
-                          child: Container(
-                            height: 672,
-                            margin: EdgeInsets.only(
-                              left: 16.0,
-                              right: 16.0,
-                              bottom: 0,
+                              ],
                             ),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                left: BorderSide(
-                                  color: Color.fromARGB(255, 123, 138, 195),
-                                  width: 2.0,
-                                ),
-                                bottom: BorderSide(
-                                  color: Color.fromARGB(255, 123, 138, 195),
-                                  width: 2.0,
-                                ),
-                                right: BorderSide(
-                                  color: Color.fromARGB(255, 123, 138, 195),
-                                  width: 2.0,
-                                ),
+                          ],
+                        ),
+
+                        //square border app color
+                        IgnorePointer(
+                          child: SlideTransition(
+                            position: _fromTopSlideAnimation,
+                            child: Container(
+                              height: 672,
+                              margin: EdgeInsets.only(
+                                left: 16.0,
+                                right: 16.0,
+                                bottom: 0,
                               ),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(0),
+                              decoration: BoxDecoration(
+                                border: Border(
+                                  left: BorderSide(
+                                    color: Color.fromARGB(255, 123, 138, 195),
+                                    width: 2.0,
+                                  ),
+                                  bottom: BorderSide(
+                                    color: Color.fromARGB(255, 123, 138, 195),
+                                    width: 2.0,
+                                  ),
+                                  right: BorderSide(
+                                    color: Color.fromARGB(255, 123, 138, 195),
+                                    width: 2.0,
+                                  ),
+                                ),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(0),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
 
-                      Column(
-                        children: [
-                          SizedBox(height: 600),
+                        Column(
+                          children: [
+                            SizedBox(height: 600),
 
-                          //3. name and price
-                          // 4. Dropdown of variant and Counter (Horizontal)
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 8.0,
-                              horizontal: 16,
-                            ),
-                            child: SlideTransition(
-                              position: _fromBottomSlideAnimation,
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: <Widget>[
-                                  //3. name and price
-                                  productDetailNameAndPrice(
-                                    productDetailResponse!.productDetail
-                                        .elementAt(0)
-                                        .productName,
-                                    productDetailResponse!.productDetail
-                                        .elementAt(0)
-                                        .productPrice,
-                                    productDetailResponse!.productDetail
-                                            .elementAt(0)
-                                            .productSoldout ==
-                                        "yes",
-                                  ),
-
-                                  //out of stock
-                                  //notify me content
-                                  if (productDetailResponse!.productDetail
+                            //3. name and price
+                            // 4. Dropdown of variant and Counter (Horizontal)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 8.0,
+                                horizontal: 16,
+                              ),
+                              child: SlideTransition(
+                                position: _fromBottomSlideAnimation,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    //3. name and price
+                                    productDetailNameAndPrice(
+                                      productDetailResponse!.productDetail
                                           .elementAt(0)
-                                          .productSoldout ==
-                                      "yes")
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      // Align text to the left
-                                      children: <Widget>[
-                                        // 1. "We're Sorry!" text in bold
-                                        Text(
-                                          "We're Sorry!",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14.0,
-                                            // Adjust size as needed
-                                            fontWeight: FontWeight.w500,
-                                            fontFamily: "Montserrat",
-                                          ),
-                                        ),
-
-                                        SizedBox(height: 8.0),
-                                        // Add some vertical spacing
-                                        // 2. "This item has sold out" text in normal font
-                                        Text(
-                                          "This Item Has Sold Out. We Will Get Back Soon With This Product.",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14.0,
-                                            // Adjust size as needed
-                                            fontFamily: "Montserrat",
-                                          ),
-                                        ),
-
-                                        SizedBox(height: 16.0),
-
-                                        // 3. "Notify Me !" Text with leading email icon
-                                        Row(
-                                          children: [
-                                            Image.asset(
-                                              width: 24,
-                                              height: 24,
-                                              "icons/notify_me_icon.png",
-                                            ),
-                                            // Use the email icon
-                                            SizedBox(width: 8.0),
-
-                                            Text(
-                                              "Notify Me !",
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 16.0,
-                                                // Adjust size as needed
-                                                fontWeight: FontWeight.w500,
-                                                fontFamily: "Montserrat",
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-
-                                        SizedBox(height: 8.0),
-
-                                        // 4. Text "Notify me when Product is Available"
-                                        Text(
-                                          "Notify Me When Product Is Available.",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 14.0,
-                                            // Adjust size as needed
-                                            fontFamily: "Montserrat",
-                                          ),
-                                        ),
-
-                                        SizedBox(height: 8.0),
-
-                                        // 5. Input text or Edit text with hint "Enter your mobile no."
-                                        // with 10 digit max length and input type should be only numbers
-                                        TextField(
-                                          textInputAction: TextInputAction.next,
-                                          controller: _phoneController,
-                                          keyboardType: TextInputType.number,
-                                          maxLength: 14,
-                                          inputFormatters: <TextInputFormatter>[
-                                            FilteringTextInputFormatter
-                                                .digitsOnly,
-                                          ],
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: "Montserrat",
-                                            fontSize: 14,
-                                          ),
-                                          // Set text color to white
-                                          decoration: InputDecoration(
-                                            hintText: "Enter Your Mobile No.",
-                                            hintStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: "Montserrat",
-                                              fontSize: 14,
-                                            ),
-
-                                            focusedBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(0),
-                                              ),
-                                              borderSide: BorderSide(
-                                                width: 1,
-                                                color: Color.fromARGB(
-                                                  255,
-                                                  123,
-                                                  138,
-                                                  195,
-                                                ),
-                                              ),
-                                            ),
-                                            // disabledBorder: OutlineInputBorder(
-                                            //   borderRadius: BorderRadius.all(Radius.circular(4)),
-                                            //   borderSide: BorderSide(width: 1,color: Colors.orange),
-                                            // ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(0),
-                                              ),
-                                              borderSide: BorderSide(
-                                                width: 1,
-                                                color: Color.fromARGB(
-                                                  255,
-                                                  123,
-                                                  138,
-                                                  195,
-                                                ),
-                                              ),
-                                            ),
-
-                                            contentPadding: EdgeInsets.all(8),
-                                            isDense:
-                                                true, //make textfield compact
-                                          ),
-                                        ),
-
-                                        // 6. Input text or Edit text with hint "Enter your email id"
-                                        // with input type email
-                                        TextField(
-                                          textInputAction: TextInputAction.done,
-                                          controller: _emailController,
-                                          keyboardType:
-                                              TextInputType.emailAddress,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontFamily: "Montserrat",
-                                            fontSize: 14,
-                                          ),
-                                          decoration: InputDecoration(
-                                            hintText: "Enter your email id",
-                                            hintStyle: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: "Montserrat",
-                                              fontSize: 14,
-                                            ),
-                                            focusedBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(0),
-                                              ),
-                                              borderSide: BorderSide(
-                                                width: 1,
-                                                color: Color.fromARGB(
-                                                  255,
-                                                  123,
-                                                  138,
-                                                  195,
-                                                ),
-                                              ),
-                                            ),
-                                            // disabledBorder: OutlineInputBorder(
-                                            //   borderRadius: BorderRadius.all(Radius.circular(4)),
-                                            //   borderSide: BorderSide(width: 1,color: Colors.orange),
-                                            // ),
-                                            enabledBorder: OutlineInputBorder(
-                                              borderRadius: BorderRadius.all(
-                                                Radius.circular(0),
-                                              ),
-                                              borderSide: BorderSide(
-                                                width: 1,
-                                                color: Color.fromARGB(
-                                                  255,
-                                                  123,
-                                                  138,
-                                                  195,
-                                                ),
-                                              ),
-                                            ),
-                                            contentPadding: EdgeInsets.all(8),
-                                            isDense:
-                                                true, //make textfield compact
-                                          ),
-                                        ),
-
-                                        SizedBox(height: 18.0),
-
-                                        // 7. Notify Me square Button in black color text and sky color background
-                                        SizedBox(
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              onNotifyMeClick();
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor: Color.fromARGB(
-                                                255,
-                                                123,
-                                                138,
-                                                195,
-                                              ),
-                                              // Sky color
-                                              //foregroundColor: Colors.black,
-                                              // Black text color
-                                              shape: RoundedRectangleBorder(
-                                                borderRadius:
-                                                    BorderRadius
-                                                        .zero, // Square corners
-                                              ),
-                                              padding: EdgeInsets.symmetric(
-                                                vertical: 10.0,
-                                                horizontal: 12,
-                                              ), // Add some vertical padding
-                                            ),
-
-                                            child: Obx(() {
-                                              if (widget
-                                                  .categoryController
-                                                  .adInquiryLoading
-                                                  .value) {
-                                                return SizedBox(
-                                                  width: 20,
-                                                  height: 20,
-                                                  child:
-                                                      CircularProgressIndicator(
-                                                        strokeWidth: 2,
-                                                        color: Colors.white,
-                                                      ),
-                                                );
-                                              }
-                                              return Text(
-                                                "Notify Me",
-                                                style: TextStyle(
-                                                  fontSize: 16.0,
-                                                  fontFamily: "Montserrat",
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Colors.black,
-                                                ), // Adjust size
-                                              );
-                                            }),
-                                          ),
-                                        ),
-                                      ],
+                                          .productName,
+                                      productDetailResponse!.productDetail
+                                          .elementAt(0)
+                                          .productPrice,
+                                      productDetailResponse!.productDetail
+                                              .elementAt(0)
+                                              .productSoldout ==
+                                          "yes",
                                     ),
 
-                                  // 4. Dropdown of variant and Counter (Horizontal)
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      if (productDetailResponse!.productDetail
-                                              .elementAt(0)
-                                              .productSoldout !=
-                                          "yes")
-                                        productDetailDropDown(
-                                          productDetailResponse!
-                                              .productPackingList,
-                                          _selectedVariant,
-                                          _onChangedDropDownValue,
-                                        ),
+                                    //out of stock
+                                    //notify me content
+                                    if (productDetailResponse!.productDetail
+                                            .elementAt(0)
+                                            .productSoldout ==
+                                        "yes")
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        // Align text to the left
+                                        children: <Widget>[
+                                          // 1. "We're Sorry!" text in bold
+                                          Text(
+                                            "We're Sorry!",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14.0,
+                                              // Adjust size as needed
+                                              fontWeight: FontWeight.w500,
+                                              fontFamily: "Montserrat",
+                                            ),
+                                          ),
 
-                                      if (productDetailResponse!.productDetail
-                                              .elementAt(0)
-                                              .productSoldout !=
-                                          "yes")
-                                        productDetailItemCounter(
-                                          _decrementQuantity,
-                                          _incrementQuantity,
-                                          selectedItemQuantity,
-                                        ),
-                                    ],
+                                          SizedBox(height: 8.0),
+                                          // Add some vertical spacing
+                                          // 2. "This item has sold out" text in normal font
+                                          Text(
+                                            "This Item Has Sold Out. We Will Get Back Soon With This Product.",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14.0,
+                                              // Adjust size as needed
+                                              fontFamily: "Montserrat",
+                                            ),
+                                          ),
+
+                                          SizedBox(height: 16.0),
+
+                                          // 3. "Notify Me !" Text with leading email icon
+                                          Row(
+                                            children: [
+                                              Image.asset(
+                                                width: 24,
+                                                height: 24,
+                                                "icons/notify_me_icon.png",
+                                              ),
+                                              // Use the email icon
+                                              SizedBox(width: 8.0),
+
+                                              Text(
+                                                "Notify Me !",
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 16.0,
+                                                  // Adjust size as needed
+                                                  fontWeight: FontWeight.w500,
+                                                  fontFamily: "Montserrat",
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+
+                                          SizedBox(height: 8.0),
+
+                                          // 4. Text "Notify me when Product is Available"
+                                          Text(
+                                            "Notify Me When Product Is Available.",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 14.0,
+                                              // Adjust size as needed
+                                              fontFamily: "Montserrat",
+                                            ),
+                                          ),
+
+                                          SizedBox(height: 8.0),
+
+                                          // 5. Input text or Edit text with hint "Enter your mobile no."
+                                          // with 10 digit max length and input type should be only numbers
+                                          TextField(
+                                            textInputAction:
+                                                TextInputAction.next,
+                                            controller: _phoneController,
+                                            keyboardType: TextInputType.number,
+                                            maxLength: 14,
+                                            inputFormatters:
+                                                <TextInputFormatter>[
+                                                  FilteringTextInputFormatter
+                                                      .digitsOnly,
+                                                ],
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: "Montserrat",
+                                              fontSize: 14,
+                                            ),
+                                            // Set text color to white
+                                            decoration: InputDecoration(
+                                              hintText: "Enter Your Mobile No.",
+                                              hintStyle: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: "Montserrat",
+                                                fontSize: 14,
+                                              ),
+
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(0),
+                                                ),
+                                                borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: Color.fromARGB(
+                                                    255,
+                                                    123,
+                                                    138,
+                                                    195,
+                                                  ),
+                                                ),
+                                              ),
+                                              // disabledBorder: OutlineInputBorder(
+                                              //   borderRadius: BorderRadius.all(Radius.circular(4)),
+                                              //   borderSide: BorderSide(width: 1,color: Colors.orange),
+                                              // ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(0),
+                                                ),
+                                                borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: Color.fromARGB(
+                                                    255,
+                                                    123,
+                                                    138,
+                                                    195,
+                                                  ),
+                                                ),
+                                              ),
+
+                                              contentPadding: EdgeInsets.all(8),
+                                              isDense:
+                                                  true, //make textfield compact
+                                            ),
+                                          ),
+
+                                          // 6. Input text or Edit text with hint "Enter your email id"
+                                          // with input type email
+                                          TextField(
+                                            textInputAction:
+                                                TextInputAction.done,
+                                            controller: _emailController,
+                                            keyboardType:
+                                                TextInputType.emailAddress,
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontFamily: "Montserrat",
+                                              fontSize: 14,
+                                            ),
+                                            decoration: InputDecoration(
+                                              hintText: "Enter your email id",
+                                              hintStyle: TextStyle(
+                                                color: Colors.white,
+                                                fontFamily: "Montserrat",
+                                                fontSize: 14,
+                                              ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(0),
+                                                ),
+                                                borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: Color.fromARGB(
+                                                    255,
+                                                    123,
+                                                    138,
+                                                    195,
+                                                  ),
+                                                ),
+                                              ),
+                                              // disabledBorder: OutlineInputBorder(
+                                              //   borderRadius: BorderRadius.all(Radius.circular(4)),
+                                              //   borderSide: BorderSide(width: 1,color: Colors.orange),
+                                              // ),
+                                              enabledBorder: OutlineInputBorder(
+                                                borderRadius: BorderRadius.all(
+                                                  Radius.circular(0),
+                                                ),
+                                                borderSide: BorderSide(
+                                                  width: 1,
+                                                  color: Color.fromARGB(
+                                                    255,
+                                                    123,
+                                                    138,
+                                                    195,
+                                                  ),
+                                                ),
+                                              ),
+                                              contentPadding: EdgeInsets.all(8),
+                                              isDense:
+                                                  true, //make textfield compact
+                                            ),
+                                          ),
+
+                                          SizedBox(height: 18.0),
+
+                                          // 7. Notify Me square Button in black color text and sky color background
+                                          SizedBox(
+                                            child: ElevatedButton(
+                                              onPressed: () {
+                                                onNotifyMeClick();
+                                              },
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Color.fromARGB(
+                                                  255,
+                                                  123,
+                                                  138,
+                                                  195,
+                                                ),
+                                                // Sky color
+                                                //foregroundColor: Colors.black,
+                                                // Black text color
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius
+                                                          .zero, // Square corners
+                                                ),
+                                                padding: EdgeInsets.symmetric(
+                                                  vertical: 10.0,
+                                                  horizontal: 12,
+                                                ), // Add some vertical padding
+                                              ),
+
+                                              child: Obx(() {
+                                                if (widget
+                                                    .categoryController
+                                                    .adInquiryLoading
+                                                    .value) {
+                                                  return SizedBox(
+                                                    width: 20,
+                                                    height: 20,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                          strokeWidth: 2,
+                                                          color: Colors.white,
+                                                        ),
+                                                  );
+                                                }
+                                                return Text(
+                                                  "Notify Me",
+                                                  style: TextStyle(
+                                                    fontSize: 16.0,
+                                                    fontFamily: "Montserrat",
+                                                    fontWeight: FontWeight.w600,
+                                                    color: Colors.black,
+                                                  ), // Adjust size
+                                                );
+                                              }),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                    // 4. Dropdown of variant and Counter (Horizontal)
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        if (productDetailResponse!.productDetail
+                                                .elementAt(0)
+                                                .productSoldout !=
+                                            "yes")
+                                          productDetailDropDown(
+                                            productDetailResponse!
+                                                .productPackingList,
+                                            _selectedVariant,
+                                            _onChangedDropDownValue,
+                                          ),
+
+                                        if (productDetailResponse!.productDetail
+                                                .elementAt(0)
+                                                .productSoldout !=
+                                            "yes")
+                                          productDetailItemCounter(
+                                            _decrementQuantity,
+                                            _incrementQuantity,
+                                            selectedItemQuantity,
+                                          ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+
+                            // 5. Horizontal List of Square Images of Product Ingredients
+                            if (productDetailResponse!
+                                .productIngredientsList
+                                .isNotEmpty)
+                              productDetailIngredients(
+                                productDetailResponse!.productIngredientsList,
+                              ),
+
+                            //Product Terms
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16.0,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text(
+                                    'Terms :',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontFamily: "Montserrat",
+                                      fontWeight: FontWeight.w700,
+                                    ),
                                   ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    productDetailResponse!.productDetail
+                                        .elementAt(0)
+                                        .productTerms,
+                                    textAlign: TextAlign.justify,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                      fontFamily: "Montserrat",
+                                    ),
+                                  ),
+                                  SizedBox(height: 24),
                                 ],
                               ),
                             ),
-                          ),
 
-                          // 5. Horizontal List of Square Images of Product Ingredients
-                          if (productDetailResponse!
-                              .productIngredientsList
-                              .isNotEmpty)
-                            productDetailIngredients(
-                              productDetailResponse!.productIngredientsList,
-                            ),
+                            // 7. Tab Layout with Two Tabs
+                            productDetailTabs(_tabController, activeTabIndex),
 
-                          //Product Terms
-                          Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 16.0,
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Text(
-                                  'Terms :',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontFamily: "Montserrat",
-                                    fontWeight: FontWeight.w700,
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  productDetailResponse!.productDetail
-                                      .elementAt(0)
-                                      .productTerms,
-                                  textAlign: TextAlign.justify,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                    fontFamily: "Montserrat",
-                                  ),
-                                ),
-                                SizedBox(height: 24),
-                              ],
-                            ),
-                          ),
-
-                          // 7. Tab Layout with Two Tabs
-                          productDetailTabs(_tabController, activeTabIndex),
-
-                          //tabs content
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: AutoScaleTabBarView(
-                              controller: _tabController,
-                              children: [
-                                // Description Tab (tab 1)
-                                Html(
-                                  data:
-                                      productDetailResponse!.productDetail
-                                          .elementAt(0)
-                                          .productDescription,
-                                  style: {
-                                    //"h1": Style(fontSize: FontSize.xxLarge),
-                                    "p": Style(
-                                      fontWeight: FontWeight.w400,
-                                      //fontSize: 14,
-                                      fontFamily: "Montserrat",
-                                      fontSize: FontSize.medium,
-                                      textAlign: TextAlign.justify,
-                                      color: Colors.white,
-                                    ),
-                                    "strong": Style(
-                                      fontWeight: FontWeight.w600,
-                                      //fontSize: 14,
-                                      fontFamily: "Montserrat",
-                                      fontSize: FontSize.large,
-                                      textAlign: TextAlign.justify,
-                                      color: Colors.white,
-                                    ),
-                                    //"a": Style(color: Colors.blue, decoration: TextDecoration.underline),
-                                    //"table": Style(border: Border.all(color: Colors.grey)),
-                                    //"th": Style(padding: EdgeInsets.all(8), backgroundColor: Colors.lightBlue),
-                                    //"td": Style(padding: EdgeInsets.all(8)),
-                                    //"div": Style(margin: EdgeInsets.only(bottom: 10)),
-                                    // "img": Style(
-                                    //   width: Width.percent(100), // Make images responsive.
-                                    //   height: Height.auto(),
-                                    // ),
-                                  },
-                                ), // Text(
-                                // Nutrition Info Tab (tab 2)
-                                GestureDetector(
-                                  onTap: () {
-                                    showImageViewer(
-                                      context,
-                                      productDetailItem!.productNutritionImage,
-                                    );
-                                  },
-                                  child: SizedBox(
-                                    height: 200,
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(top: 8.0),
-                                      child: ImageWithProgress(
-                                        imageURL:
-                                            productDetailResponse!.productDetail
-                                                .elementAt(0)
-                                                .productNutritionImage,
+                            //tabs content
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ),
+                              child: AutoScaleTabBarView(
+                                controller: _tabController,
+                                children: [
+                                  // Description Tab (tab 1)
+                                  Html(
+                                    data:
+                                        productDetailResponse!.productDetail
+                                            .elementAt(0)
+                                            .productDescription,
+                                    style: {
+                                      //"h1": Style(fontSize: FontSize.xxLarge),
+                                      "p": Style(
+                                        fontWeight: FontWeight.w400,
+                                        //fontSize: 14,
+                                        fontFamily: "Montserrat",
+                                        fontSize: FontSize.medium,
+                                        textAlign: TextAlign.justify,
+                                        color: Colors.white,
+                                      ),
+                                      "strong": Style(
+                                        fontWeight: FontWeight.w600,
+                                        //fontSize: 14,
+                                        fontFamily: "Montserrat",
+                                        fontSize: FontSize.large,
+                                        textAlign: TextAlign.justify,
+                                        color: Colors.white,
+                                      ),
+                                      //"a": Style(color: Colors.blue, decoration: TextDecoration.underline),
+                                      //"table": Style(border: Border.all(color: Colors.grey)),
+                                      //"th": Style(padding: EdgeInsets.all(8), backgroundColor: Colors.lightBlue),
+                                      //"td": Style(padding: EdgeInsets.all(8)),
+                                      //"div": Style(margin: EdgeInsets.only(bottom: 10)),
+                                      // "img": Style(
+                                      //   width: Width.percent(100), // Make images responsive.
+                                      //   height: Height.auto(),
+                                      // ),
+                                    },
+                                  ), // Text(
+                                  // Nutrition Info Tab (tab 2)
+                                  GestureDetector(
+                                    onTap: () {
+                                      showImageViewer(
+                                        context,
+                                        productDetailItem!
+                                            .productNutritionImage,
+                                      );
+                                    },
+                                    child: SizedBox(
+                                      height: 200,
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 8.0,
+                                        ),
+                                        child: ImageWithProgress(
+                                          imageURL:
+                                              productDetailResponse!
+                                                  .productDetail
+                                                  .elementAt(0)
+                                                  .productNutritionImage,
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
 
-                                // Text(
-                                //   widget.nutritionInfo,
-                                //   textAlign: TextAlign.justify,
-                                //   style: TextStyle(
-                                //     fontSize: 14,
-                                //     color: Colors.white,
-                                //     fontFamily: "Montserrat",
-                                //   ),
-                                // ),
-                              ],
-                            ),
-                          ),
-
-                          // 8. You May Also Like Product Listing Horizontally
-                          if (productDetailResponse!.productMoreList.isNotEmpty)
-                            productDetailYouMayLike(
-                              productDetailResponse!.productMoreList,
+                                  // Text(
+                                  //   widget.nutritionInfo,
+                                  //   textAlign: TextAlign.justify,
+                                  //   style: TextStyle(
+                                  //     fontSize: 14,
+                                  //     color: Colors.white,
+                                  //     fontFamily: "Montserrat",
+                                  //   ),
+                                  // ),
+                                ],
+                              ),
                             ),
 
-                          SizedBox(height: 50),
-                        ],
-                      ),
+                            // 8. You May Also Like Product Listing Horizontally
+                            if (productDetailResponse!
+                                .productMoreList
+                                .isNotEmpty)
+                              productDetailYouMayLike(
+                                productDetailResponse!.productMoreList,
+                              ),
 
-                      //product center image
-                      Hero(
-                        tag: "kishan",
-                        child: productDetailCenterImageRound(
+                            SizedBox(height: 50),
+                          ],
+                        ),
+                        productDetailCenterImageRound(
                           productDetailResponse!.productDetail
                               .elementAt(0)
                               .productImage,
                         ),
-                      ),
+                      ],
                     ],
                   ),
                 ),
@@ -1255,7 +1281,7 @@ class _ProductDetailState extends State<ProductDetail>
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         //add to cart button
         floatingActionButton:
-            productDetailResponse!.productDetail.elementAt(0).productSoldout !=
+            productDetailResponse?.productDetail.elementAt(0).productSoldout !=
                     "yes"
                 ? addToCartFullWidthButton(
                   floatingButtonPrice,

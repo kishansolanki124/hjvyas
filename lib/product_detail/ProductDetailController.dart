@@ -23,6 +23,7 @@ class ProductDetailController extends GetxController {
 
   Future<void> getProductDetail(String productId) async {
     try {
+      error("");
       loading(true);
       final response = await _service.getProductDetail(productId);
       productDetailResponse.value = response;

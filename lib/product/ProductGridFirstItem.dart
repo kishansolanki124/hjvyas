@@ -55,9 +55,7 @@ class _ProductGridFirstItemState extends State<ProductGridFirstItem> {
 
               if (widget.productSoldout.isNotEmpty) soldOutText(),
 
-              Hero(
-                  tag: "kishan",
-                  child: productListImage(widget.imageUrl)),
+              productListImage(widget.imageUrl),
             ],
           ),
         ],
