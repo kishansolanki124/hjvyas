@@ -18,6 +18,7 @@ import '../injection_container.dart';
 import '../product/ProductListWidgets.dart';
 import '../product_detail/FullWidthButton.dart';
 import '../product_detail/ProductDetailWidget.dart';
+import '../splash/NoIntternetScreen.dart';
 import '../utils/CommonAppProgress.dart';
 import '../utils/FloatingImageViewer.dart';
 import '../utils/NetworkImageWithProgress.dart';
@@ -243,8 +244,6 @@ class _ProductDetailState extends State<ComboDetail>
       showSnackbar(context, "Cart updated.");
     }
   }
-
-  bool _showBottomNavBar = true; //BottomNavigationBar visibility
 
   int _currentImageIndex = 0;
 
@@ -547,24 +546,30 @@ class _ProductDetailState extends State<ComboDetail>
     });
   }
 
+  Future<void> fetchData() async {
+    widget.categoryController.getComboDetail(widget.comboId);
+  }
+
+  void _refreshData() {
+    fetchData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
-      if (widget.categoryController.loading.value) {
-        //todo change this
-        return Center(child: CircularProgressIndicator());
-      }
-
       if (widget.categoryController.error.value.isNotEmpty) {
-        //todo change this
-        return Center(child: Text('Error: ${widget.categoryController.error}'));
+        return NoInternetScreen(
+          onRetry: () {
+            _refreshData();
+          },
+        );
       }
 
       comboDetailResponse ??=
           widget.categoryController.comboDetailResponse.value;
 
       if (comboDetailItem == null) {
-        comboDetailItem = comboDetailResponse!.comboDetail.elementAt(0);
+        comboDetailItem = comboDetailResponse?.comboDetail.elementAt(0);
         initPriceAndQuantity();
         if (kDebugMode) {
           print('selectedItemQuantity is $selectedItemQuantity');
@@ -589,6 +594,12 @@ class _ProductDetailState extends State<ComboDetail>
                 SingleChildScrollView(
                   child: Stack(
                     children: [
+                      if (widget.categoryController.loading.value) ...[
+                        getCommonProgressBar(),
+                      ],
+
+                      if (!widget.categoryController.loading.value &&
+                          comboDetailResponse != null) ...[
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -789,6 +800,8 @@ class _ProductDetailState extends State<ComboDetail>
                                         // 5. Input text or Edit text with hint "Enter your mobile no."
                                         // with 10 digit max length and input type should be only numbers
                                         TextField(
+                                          textInputAction:
+                                          TextInputAction.next,
                                           controller: _phoneController,
                                           keyboardType: TextInputType.number,
                                           maxLength: 14,
@@ -852,6 +865,8 @@ class _ProductDetailState extends State<ComboDetail>
                                         // 6. Input text or Edit text with hint "Enter your email id"
                                         // with input type email
                                         TextField(
+                                          textInputAction:
+                                          TextInputAction.done,
                                           controller: _emailController,
                                           keyboardType:
                                               TextInputType.emailAddress,
@@ -1099,6 +1114,7 @@ class _ProductDetailState extends State<ComboDetail>
                         ),
                       ),
                     ],
+                    ],
                   ),
                 ),
                 SlideTransition(
@@ -1221,8 +1237,7 @@ class _ProductDetailState extends State<ComboDetail>
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         //add to cart button
         floatingActionButton:
-            _showBottomNavBar &&
-                    comboDetailResponse!.comboDetail
+            comboDetailResponse?.comboDetail
                             .elementAt(0)
                             .comboSoldout !=
                         "yes"

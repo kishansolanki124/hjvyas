@@ -22,6 +22,7 @@ class ComboDetailController extends GetxController {
 
   Future<void> getComboDetail(String comboId) async {
     try {
+      error("");
       loading(true);
       final response = await _service.getComboDetail(comboId);
       comboDetailResponse.value = response;
