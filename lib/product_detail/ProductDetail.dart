@@ -491,6 +491,26 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
     });
   }
 
+  void navigateToCartPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CartPage()),
+    );
+
+    print('cart page open');
+
+    // When returning from Widget2, this code will execute
+    if (result != null) {
+      print('result is not null');
+      _loadList();
+      // setState(() {
+      //   myValue = result;
+      // });
+      // // Or call any function you need
+      // updateFunction(result);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -1068,14 +1088,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                 //cart icon with badge
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => //ProductDetail(item: item),
-                                CartPage(),
-                      ),
-                    );
+                    navigateToCartPage();
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(
