@@ -1,69 +1,66 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'FAB Slide Animation',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        useMaterial3: true,
-      ),
-      home: const HomePage(),
+      title: 'Cart Animation Demo',
+      theme: ThemeData(primarySwatch: Colors.blue),
+      home: MyHomePage(),
     );
   }
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
-
+class MyHomePage extends StatefulWidget {
   @override
-  State<HomePage> createState() => _HomePageState();
+  _MyHomePageState createState() => _MyHomePageState();
 }
 
-class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<Offset> _animation;
-  bool _isVisible = true;
+class _MyHomePageState extends State<MyHomePage> with TickerProviderStateMixin {
+  int _cartItemCount = 0;
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _bounceAnimation;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
+
+    _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 300),
+      duration: Duration(milliseconds: 800),
+    )..addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _animationController.reverse();
+      }
+    });
+
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.5).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.elasticOut),
     );
 
-    _animation = Tween<Offset>(
-      begin: Offset.zero,
-      end: const Offset(0, 2), // Move down by 2x its height
-    ).animate(CurvedAnimation(
-      parent: _controller,
-      curve: Curves.easeInOut,
-    ));
+    _bounceAnimation = Tween<double>(begin: 0.0, end: -15.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
+    );
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _animationController.dispose();
     super.dispose();
   }
 
-  void _toggleFAB() {
+  void _addToCart() {
     setState(() {
-      if (_isVisible) {
-        _controller.forward();
-      } else {
-        _controller.reverse();
+      _cartItemCount++;
+      if (_animationController.status == AnimationStatus.forward) {
+        _animationController.reset();
       }
-      _isVisible = !_isVisible;
+      _animationController.forward();
     });
   }
 
@@ -71,34 +68,69 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('FAB Slide Animation'),
-        centerTitle: true,
+        title: Text('Shopping App'),
+        actions: [
+          Padding(
+            padding: EdgeInsets.only(right: 16.0),
+            child: AnimatedBuilder(
+              animation: _animationController,
+              builder: (context, child) {
+                return Transform.translate(
+                  offset: Offset(0, _bounceAnimation.value),
+                  child: Transform.scale(
+                    scale: _scaleAnimation.value,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Icon(Icons.shopping_cart, size: 30),
+                        if (_cartItemCount > 0)
+                          Positioned(
+                            right: -5,
+                            top: -5,
+                            child: Container(
+                              padding: EdgeInsets.all(2),
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              constraints: BoxConstraints(
+                                minWidth: 18,
+                                minHeight: 18,
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '$_cartItemCount',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
-              'FAB is ${_isVisible ? 'visible' : 'hidden'}',
-              style: const TextStyle(fontSize: 20),
-            ),
-            const SizedBox(height: 20),
+            Text('Product Name'),
+            SizedBox(height: 20),
             ElevatedButton(
-              onPressed: _toggleFAB,
-              child: Text(_isVisible ? 'Hide FAB' : 'Show FAB'),
+              onPressed: _addToCart,
+              child: Text('Add to Cart'),
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              ),
             ),
           ],
-        ),
-      ),
-      floatingActionButton: SlideTransition(
-        position: _animation,
-        child: FloatingActionButton(
-          onPressed: () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('FAB pressed!')),
-            );
-          },
-          child: const Icon(Icons.add),
         ),
       ),
     );

@@ -2,8 +2,6 @@ Combo List:
 1. Same animation of product ist
 
 Product Details:
-8. Test with smaller and larger devices.
-9. cart button on top right side to navigate to that page.
 9. can show animatino on top right cart icon on Add To Cart Click.
 10. out of stock products notify me textfield cursor color and imoptoin. Try
 to set cursor color of entire app's to app blue color instead of setting at
@@ -78,3 +76,6 @@ Final stage:
 
 Product List:
 9. Test with smaller and larger devices.
+
+Product Details:
+8. Test with smaller and larger devices.
