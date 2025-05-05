@@ -380,6 +380,7 @@ Widget productDetailYouMayLike(List<ProductMoreListItem> moreItemList) {
             final product = moreItemList.elementAt(index);
 
             Widget youMayLikeWidget = ProductYouMayLikeItem(
+              index: index,
               productMoreListItem: product,
             );
 
