@@ -171,6 +171,8 @@ Widget productDetailDropDown(
     padding: EdgeInsets.symmetric(horizontal: 6.0),
     // Add some padding inside the border
     child: DropdownButton<ProductPackingListItem>(
+      isExpanded: true,
+      // Important! Makes dropdown use all available width
       icon: Image.asset(
         'icons/dropdown_icon.png', // Replace with your icon path
         width: 12, // Adjust width as needed
@@ -178,18 +180,6 @@ Widget productDetailDropDown(
       ),
       // Custom icon
       value: _selectedVariant,
-      hint: Text(
-        "${productPackingList.elementAt(0).productWeight} ${productPackingList.elementAt(0).productWeightType} "
-        "(₹${productPackingList.elementAt(0).productPackingPrice}) - "
-        "${productPackingList.elementAt(0).productPieces} Pieces",
-        style: TextStyle(
-          backgroundColor: Color.fromARGB(255, 31, 47, 80),
-          fontSize: 12,
-          color: Colors.white,
-          fontFamily: "Montserrat",
-          //fontWeight: FontWeight.w700,
-        ),
-      ),
       underline: SizedBox(),
       dropdownColor: Color.fromARGB(255, 31, 47, 80),
       // This line hides the bottom line
@@ -215,6 +205,29 @@ Widget productDetailDropDown(
         //   _selectedVariant = newValue;
         // });
         onChangedDropDownValue(newValue);
+      },
+
+      // This controls how the selected item appears in the closed dropdown
+      selectedItemBuilder: (BuildContext context) {
+        return productPackingList.map<Widget>((
+          ProductPackingListItem variation,
+        ) {
+          return Center(
+            child: Text(
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+              "${variation.productWeight} ${variation.productWeightType} "
+              "(₹${variation.productPackingPrice}) - ${variation.productPieces} Pieces",
+              style: TextStyle(
+                backgroundColor: Colors.transparent,
+                fontSize: 12,
+                color: Colors.white,
+                fontFamily: "Montserrat",
+                //fontWeight: FontWeight.w700,
+              ),
+            ),
+          );
+        }).toList();
       },
     ),
   );

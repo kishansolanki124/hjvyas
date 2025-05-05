@@ -486,7 +486,7 @@ class _ProductDetailState extends State<ProductDetail>
 
   void _incrementQuantity() {
     if (int.parse(productDetailItem!.productMaxQty) == selectedItemQuantity) {
-      showSnackbar(context, "You have added max quantity into cart.");
+      showSnackbar(context, "You have added max quantity.");
       return;
     }
     setState(() {
@@ -1025,32 +1025,32 @@ class _ProductDetailState extends State<ProductDetail>
                                       ),
 
                                     // 4. Dropdown of variant and Counter (Horizontal)
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        if (productDetailResponse!.productDetail
-                                                .elementAt(0)
-                                                .productSoldout !=
-                                            "yes")
-                                          productDetailDropDown(
-                                            productDetailResponse!
-                                                .productPackingList,
-                                            _selectedVariant,
-                                            _onChangedDropDownValue,
+                                    if (productDetailResponse!.productDetail
+                                            .elementAt(0)
+                                            .productSoldout !=
+                                        "yes")
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Expanded(
+                                            child: productDetailDropDown(
+                                              productDetailResponse!
+                                                  .productPackingList,
+                                              _selectedVariant,
+                                              _onChangedDropDownValue,
+                                            ),
                                           ),
 
-                                        if (productDetailResponse!.productDetail
-                                                .elementAt(0)
-                                                .productSoldout !=
-                                            "yes")
+                                          SizedBox(width: 8),
+
                                           productDetailItemCounter(
                                             _decrementQuantity,
                                             _incrementQuantity,
                                             selectedItemQuantity,
                                           ),
-                                      ],
-                                    ),
+                                        ],
+                                      ),
                                   ],
                                 ),
                               ),
