@@ -1137,10 +1137,13 @@ class _ProductDetailState extends State<ProductDetail>
                       ),
 
                       //product center image
-                      productDetailCenterImageRound(
-                        productDetailResponse!.productDetail
-                            .elementAt(0)
-                            .productImage,
+                      Hero(
+                        tag: "kishan",
+                        child: productDetailCenterImageRound(
+                          productDetailResponse!.productDetail
+                              .elementAt(0)
+                              .productImage,
+                        ),
                       ),
                     ],
                   ),
