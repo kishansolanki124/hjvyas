@@ -4,7 +4,6 @@ import 'package:autoscale_tabbarview/autoscale_tabbarview.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
@@ -193,8 +192,6 @@ class _ProductDetailState extends State<ProductDetail>
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
-  bool _showBottomNavBar = true; //BottomNavigationBar visibility
-
   int _currentImageIndex = 0;
 
   double floatingButtonPrice = 0;
@@ -248,15 +245,11 @@ class _ProductDetailState extends State<ProductDetail>
         activeTabIndex = _tabController.index;
       });
     });
-
-    _scrollController.addListener(_onScroll); // Listen to scroll events
   }
 
   @override
   void dispose() {
     _animationController.dispose();
-    _scrollController.removeListener(_onScroll); // Remove the listener
-    _scrollController.dispose();
 
     _phoneController.dispose();
     _emailController.dispose();
@@ -331,18 +324,6 @@ class _ProductDetailState extends State<ProductDetail>
     }
   }
 
-  // This method will be called by ScrollWidget when the user scrolls
-  void _updateBottomNavBarVisibility(bool show) {
-    if (mounted) {
-      // //check if the widget is mounted before calling setState
-      setState(() {
-        _showBottomNavBar = show;
-      });
-    }
-  }
-
-  final ScrollController _scrollController = ScrollController();
-
   void showImageViewer(BuildContext context, String imageUrl) {
     showGeneralDialog(
       context: context,
@@ -401,24 +382,6 @@ class _ProductDetailState extends State<ProductDetail>
             audioTitles: audioTitles,
           ),
     );
-  }
-
-  void _onScroll() {
-    // Check the scroll direction
-    if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      // If scrolling down, hide the BottomNavigationBar
-      _updateBottomNavBarVisibility(false);
-    } else if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.forward) {
-      // If scrolling up, show the BottomNavigationBar
-      _updateBottomNavBarVisibility(true);
-    }
-    // You might also want to hide it if the user scrolls to the very bottom or top.
-    if (_scrollController.offset <=
-        _scrollController.position.minScrollExtent) {
-      _updateBottomNavBarVisibility(true);
-    }
   }
 
   void _incrementQuantity() {
@@ -492,11 +455,13 @@ class _ProductDetailState extends State<ProductDetail>
       MaterialPageRoute(builder: (context) => CartPage()),
     );
 
-    print('cart page open');
-
     // When returning from Widget2, this code will execute
     if (result != null) {
-      print('result is not null');
+      //todo: work here for cart update, add to cart button text update and
+      // total count update of this item if cart empty
+      if (kDebugMode) {
+        print('result is not null');
+      }
       _loadList();
       // setState(() {
       //   myValue = result;
@@ -558,7 +523,6 @@ class _ProductDetailState extends State<ProductDetail>
             child: Stack(
               children: [
                 SingleChildScrollView(
-                  controller: _scrollController, // Attach the scroll controller
                   child: Stack(
                     children: [
                       Column(
@@ -1203,11 +1167,8 @@ class _ProductDetailState extends State<ProductDetail>
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         //add to cart button
         floatingActionButton:
-            _showBottomNavBar &&
-                    productDetailResponse!.productDetail
-                            .elementAt(0)
-                            .productSoldout !=
-                        "yes"
+            productDetailResponse!.productDetail.elementAt(0).productSoldout !=
+                    "yes"
                 ? addToCartFullWidthButton(floatingButtonPrice, _onPressed)
                 : null,
       );
