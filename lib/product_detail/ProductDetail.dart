@@ -142,7 +142,9 @@ class _ProductDetailState extends State<ProductDetail>
             //item exist
             itemExist = true;
             itemExistPosition = i;
-            print('itemExistPosition addtoCart is $itemExistPosition');
+            if (kDebugMode) {
+              print('itemExistPosition addtoCart is $itemExistPosition');
+            }
             break;
           }
         }
@@ -158,8 +160,8 @@ class _ProductDetailState extends State<ProductDetail>
         final List<String> stringList =
             _cartItemList.map((item) => jsonEncode(item.toJson())).toList();
         await _prefs.setStringList("cart_list", stringList);
-        showSnackbar(context, "Item removed from the cart.");
         addToCartText = "Add to Cart";
+        showSnackbar(context, "Item removed from the cart.");
       } else {
         showSnackbar(context, "Please update quantity to Add to Cart.");
       }
@@ -189,7 +191,9 @@ class _ProductDetailState extends State<ProductDetail>
             //item exist
             itemExist = true;
             itemExistPosition = i;
-            print('itemExistPosition addtoCart is $itemExistPosition');
+            if (kDebugMode) {
+              print('itemExistPosition addtoCart is $itemExistPosition');
+            }
             break;
           }
         }
