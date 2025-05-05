@@ -232,11 +232,15 @@ class ProductMoreListItem {
   final String productId;
   final String productName;
   final String productImage;
+  final String productWeight;
+  final String productPrice;
 
   ProductMoreListItem({
     this.productId = "",
     this.productName = "",
     this.productImage = "",
+    this.productWeight = "",
+    this.productPrice = "",
   });
 
   factory ProductMoreListItem.fromJson(Map<String, dynamic>? json) =>
@@ -244,11 +248,15 @@ class ProductMoreListItem {
         productId: asString(json, 'product_id'),
         productName: asString(json, 'product_name'),
         productImage: asString(json, 'product_image'),
+        productWeight: asString(json, 'product_weight'),
+        productPrice: asString(json, 'product_price'),
       );
 
   Map<String, dynamic> toJson() => {
     'product_id': productId,
     'product_name': productName,
     'product_image': productImage,
+    'product_weight': productWeight,
+    'product_price': productPrice,
   };
 }

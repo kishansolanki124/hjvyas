@@ -370,7 +370,7 @@ Widget productDetailYouMayLike(List<ProductMoreListItem> moreItemList) {
       ),
       SizedBox(height: 8),
       SizedBox(
-        height: 160, // Adjust height as needed
+        height: 180, // Adjust height as needed
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -424,6 +424,21 @@ Widget productDetailYouMayLike(List<ProductMoreListItem> moreItemList) {
                         ),
                       ),
                     ),
+
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 1),
+                      child: Text(
+                        "₹ ${product.productPrice ?? ''} -  ${product.productWeight}",
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "Montserrat",
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -445,9 +460,6 @@ Widget productDetailYouMayLike(List<ProductMoreListItem> moreItemList) {
           },
         ),
       ),
-
-      //todo: when API have price and weight, add over here
-      //todo: also handle out of stock from here click, currently out of stock NA in response
     ],
   );
 }
