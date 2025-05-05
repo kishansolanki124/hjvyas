@@ -1,9 +1,9 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
@@ -38,6 +38,16 @@ class ComboDetail extends StatefulWidget {
 
 class _ProductDetailState extends State<ComboDetail>
     with TickerProviderStateMixin {
+  late AnimationController _corosoulAnimationController;
+  late Animation<Offset> _fromTopSlideAnimation;
+  late Animation<Offset> _fromBottomSlideAnimation;
+  late Animation<Offset> _fromLeftSlideAnimation;
+  late Animation<Offset> _fromRightSlideAnimation;
+
+  late AnimationController _cartIconAnimationController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _bounceAnimation;
+
   late SharedPreferences _prefs;
 
   final List<CartItemModel> _cartItemList = [];
@@ -45,6 +55,18 @@ class _ProductDetailState extends State<ComboDetail>
   // Initialize SharedPreferences
   Future<void> _initPrefs() async {
     _prefs = await SharedPreferences.getInstance();
+  }
+
+  void navigateToCartPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CartPage()),
+    );
+
+    // When returning from Widget2, this code will execute
+    if (result != null) {
+      _loadList();
+    }
   }
 
   // Helper function to load the list from SharedPreferences
@@ -242,18 +264,103 @@ class _ProductDetailState extends State<ComboDetail>
   @override
   void initState() {
     super.initState();
+
+    initCorosoulViewAnimation();
+
+    _cartIconAnimationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 600),
+    )..addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _cartIconAnimationController.reverse();
+      }
+    });
+
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.3).animate(
+      CurvedAnimation(
+        parent: _cartIconAnimationController,
+        curve: Curves.easeOut,
+      ),
+    );
+
+    _bounceAnimation = Tween<double>(begin: 0.0, end: -8.0).animate(
+      CurvedAnimation(
+        parent: _cartIconAnimationController,
+        curve: Curves.easeOut,
+      ),
+    );
+
     // Initialize shared preferences in initState
     _initPrefs();
     _loadList();
     widget.categoryController.getComboDetail(widget.comboId); // Explicit call
+  }
 
-    _scrollController.addListener(_onScroll); // Listen to scroll events
+  void initCorosoulViewAnimation() {
+    // Initialize animation controller
+    _corosoulAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+
+    // Animation starts completely off-screen (offset much larger than -1.0)
+    _fromTopSlideAnimation = Tween<Offset>(
+      begin: const Offset(0.0, -3.0), // Much higher above the screen
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _corosoulAnimationController,
+        curve: Curves.easeOutCubic,
+      ),
+    );
+
+    // Animation starts completely off-screen (offset much larger than -1.0)
+    _fromBottomSlideAnimation = Tween<Offset>(
+      begin: const Offset(0, 1), // Much higher above the screen
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _corosoulAnimationController,
+        curve: Curves.easeOutQuart,
+      ),
+    );
+
+    // Animation starts completely off-screen (offset much larger than -1.0)
+    _fromLeftSlideAnimation = Tween<Offset>(
+      begin: const Offset(-3.0, 0.0), // Start from far left, outside
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _corosoulAnimationController,
+        curve: Curves.easeOutQuart,
+      ),
+    );
+
+    // Animation starts completely off-screen (offset much larger than -1.0)
+    _fromRightSlideAnimation = Tween<Offset>(
+      begin: const Offset(3.0, 0.0), // Start from far right, outside
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _corosoulAnimationController,
+        curve: Curves.easeOutQuart,
+      ),
+    );
+
+    // Ensure the animation starts after the widget is properly built and screen is displayed
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Timer(const Duration(milliseconds: 600), () {
+        if (mounted) {
+          _corosoulAnimationController.forward();
+        }
+      });
+    });
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll); // Remove the listener
-    _scrollController.dispose();
+    _cartIconAnimationController.dispose();
+    _corosoulAnimationController.dispose();
 
     _phoneController.dispose();
     _emailController.dispose();
@@ -328,18 +435,6 @@ class _ProductDetailState extends State<ComboDetail>
     }
   }
 
-  // This method will be called by ScrollWidget when the user scrolls
-  void _updateBottomNavBarVisibility(bool show) {
-    if (mounted) {
-      // //check if the widget is mounted before calling setState
-      setState(() {
-        _showBottomNavBar = show;
-      });
-    }
-  }
-
-  final ScrollController _scrollController = ScrollController();
-
   void showImageViewer(BuildContext context, String imageUrl) {
     showGeneralDialog(
       context: context,
@@ -400,24 +495,6 @@ class _ProductDetailState extends State<ComboDetail>
   //   );
   // }
 
-  void _onScroll() {
-    // Check the scroll direction
-    if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.reverse) {
-      // If scrolling down, hide the BottomNavigationBar
-      _updateBottomNavBarVisibility(false);
-    } else if (_scrollController.position.userScrollDirection ==
-        ScrollDirection.forward) {
-      // If scrolling up, show the BottomNavigationBar
-      _updateBottomNavBarVisibility(true);
-    }
-    // You might also want to hide it if the user scrolls to the very bottom or top.
-    if (_scrollController.offset <=
-        _scrollController.position.minScrollExtent) {
-      _updateBottomNavBarVisibility(true);
-    }
-  }
-
   void _incrementQuantity() {
     if (int.parse(comboDetailItem!.comboMaxQty) == selectedItemQuantity) {
       showSnackbar(context, "You have added max quantity.");
@@ -448,6 +525,11 @@ class _ProductDetailState extends State<ComboDetail>
 
   void _onPressed() {
     setState(() {
+      if (_cartIconAnimationController.status == AnimationStatus.forward) {
+        _cartIconAnimationController.reset();
+      }
+      _cartIconAnimationController.forward();
+
       _addToCart();
       if (kDebugMode) {
         print('Add to Cart button pressed!');
@@ -505,7 +587,6 @@ class _ProductDetailState extends State<ComboDetail>
             child: Stack(
               children: [
                 SingleChildScrollView(
-                  controller: _scrollController, // Attach the scroll controller
                   child: Stack(
                     children: [
                       Column(
@@ -1005,49 +1086,109 @@ class _ProductDetailState extends State<ComboDetail>
                 ),
                 backButton(_onBackPressed),
 
-                //cart icon with badge
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (context) => //ComboDetail(item: item),
-                                CartPage(),
-                      ),
-                    );
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 8.0,
-                    ),
-                    child: Align(
-                      alignment: Alignment.topRight,
-                      child: Badge(
-                        largeSize: 16,
-                        backgroundColor:
-                            _cartItemList.isEmpty
-                                ? Colors.transparent
-                                : Colors.red,
-                        label: Text(
-                          _cartItemList.isEmpty
-                              ? ""
-                              : _cartItemList.length.toString(),
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: "Montserrat",
-                          ),
-                        ),
-                        textStyle: TextStyle(fontSize: 16),
-                        child: SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Image.asset(
-                            "icons/my_bag_icon.png",
-                            color: Colors.white,
-                          ),
+                // //cart icon with badge
+                // GestureDetector(
+                //   onTap: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder:
+                //             (context) => //ComboDetail(item: item),
+                //                 CartPage(),
+                //       ),
+                //     );
+                //   },
+                //   child: Padding(
+                //     padding: EdgeInsets.symmetric(
+                //       horizontal: 20.0,
+                //       vertical: 8.0,
+                //     ),
+                //     child: Align(
+                //       alignment: Alignment.topRight,
+                //       child: Badge(
+                //         largeSize: 16,
+                //         backgroundColor:
+                //             _cartItemList.isEmpty
+                //                 ? Colors.transparent
+                //                 : Colors.red,
+                //         label: Text(
+                //           _cartItemList.isEmpty
+                //               ? ""
+                //               : _cartItemList.length.toString(),
+                //           style: TextStyle(
+                //             fontSize: 10,
+                //             fontWeight: FontWeight.w700,
+                //             fontFamily: "Montserrat",
+                //           ),
+                //         ),
+                //         textStyle: TextStyle(fontSize: 16),
+                //         child: SizedBox(
+                //           width: 30,
+                //           height: 30,
+                //           child: Image.asset(
+                //             "icons/my_bag_icon.png",
+                //             color: Colors.white,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                SlideTransition(
+                  position: _fromRightSlideAnimation,
+                  child: GestureDetector(
+                    onTap: () {
+                      navigateToCartPage();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 20, 20, 0),
+                      child: Align(
+                        alignment: Alignment.topRight,
+                        child: AnimatedBuilder(
+                          animation: _cartIconAnimationController,
+                          builder: (context, child) {
+                            return Transform.translate(
+                              offset: Offset(0, _bounceAnimation.value),
+                              child: Transform.scale(
+                                scale: _scaleAnimation.value,
+                                child: Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Icon(
+                                      Icons.shopping_cart,
+                                      size: 30,
+                                      color: Colors.white,
+                                    ),
+                                    if (_cartItemList.isNotEmpty)
+                                      Positioned(
+                                        right: -5,
+                                        top: -5,
+                                        child: Container(
+                                          padding: EdgeInsets.all(2),
+                                          decoration: BoxDecoration(
+                                            color: Colors.red,
+                                            shape: BoxShape.circle,
+                                          ),
+                                          constraints: BoxConstraints(
+                                            minWidth: 18,
+                                            minHeight: 18,
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              '${_cartItemList.length}',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 10,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),
