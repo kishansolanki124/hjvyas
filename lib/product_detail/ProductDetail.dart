@@ -244,6 +244,24 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
   @override
   void initState() {
     super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 600),
+    )..addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _animationController.reverse();
+      }
+    });
+
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.3).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
+    );
+
+    _bounceAnimation = Tween<double>(begin: 0.0, end: -8.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOut),
+    );
+
     // Initialize shared preferences in initState
     _initPrefs();
     _loadList();
@@ -267,6 +285,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
   @override
   void dispose() {
+    _animationController.dispose();
     _scrollController.removeListener(_onScroll); // Remove the listener
     _scrollController.dispose();
 
@@ -478,6 +497,13 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
 
   void _onPressed() {
     setState(() {
+      if (_animationController.status == AnimationStatus.forward) {
+        _animationController.reset();
+      }
+      _animationController.forward();
+    });
+
+    setState(() {
       _addToCart();
       if (kDebugMode) {
         print('Add to Cart button pressed!');
@@ -510,6 +536,10 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
       // updateFunction(result);
     }
   }
+
+  late AnimationController _animationController;
+  late Animation<double> _scaleAnimation;
+  late Animation<double> _bounceAnimation;
 
   @override
   Widget build(BuildContext context) {
@@ -1085,43 +1115,100 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                 ),
                 backButton(_onBackPressed),
 
-                //cart icon with badge
+                // //cart icon with badge
+                // GestureDetector(
+                //   onTap: () {
+                //     navigateToCartPage();
+                //   },
+                //   child: Padding(
+                //     padding: EdgeInsets.symmetric(
+                //       horizontal: 20.0,
+                //       vertical: 8.0,
+                //     ),
+                //     child: Align(
+                //       alignment: Alignment.topRight,
+                //       child: Badge(
+                //         largeSize: 16,
+                //         backgroundColor:
+                //             _cartItemList.isEmpty
+                //                 ? Colors.transparent
+                //                 : Colors.red,
+                //         label: Text(
+                //           _cartItemList.isEmpty
+                //               ? ""
+                //               : _cartItemList.length.toString(),
+                //           style: TextStyle(
+                //             fontSize: 10,
+                //             fontWeight: FontWeight.w700,
+                //             fontFamily: "Montserrat",
+                //           ),
+                //         ),
+                //         textStyle: TextStyle(fontSize: 16),
+                //         child: SizedBox(
+                //           width: 30,
+                //           height: 30,
+                //           child: Image.asset(
+                //             "icons/my_bag_icon.png",
+                //             color: Colors.white,
+                //           ),
+                //         ),
+                //       ),
+                //     ),
+                //   ),
+                // ),
                 GestureDetector(
                   onTap: () {
                     navigateToCartPage();
                   },
                   child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 8.0,
-                    ),
+                    padding: const EdgeInsets.fromLTRB(0, 20, 20, 0),
                     child: Align(
                       alignment: Alignment.topRight,
-                      child: Badge(
-                        largeSize: 16,
-                        backgroundColor:
-                            _cartItemList.isEmpty
-                                ? Colors.transparent
-                                : Colors.red,
-                        label: Text(
-                          _cartItemList.isEmpty
-                              ? ""
-                              : _cartItemList.length.toString(),
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w700,
-                            fontFamily: "Montserrat",
-                          ),
-                        ),
-                        textStyle: TextStyle(fontSize: 16),
-                        child: SizedBox(
-                          width: 30,
-                          height: 30,
-                          child: Image.asset(
-                            "icons/my_bag_icon.png",
-                            color: Colors.white,
-                          ),
-                        ),
+                      child: AnimatedBuilder(
+                        animation: _animationController,
+                        builder: (context, child) {
+                          return Transform.translate(
+                            offset: Offset(0, _bounceAnimation.value),
+                            child: Transform.scale(
+                              scale: _scaleAnimation.value,
+                              child: Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  Icon(
+                                    Icons.shopping_cart,
+                                    size: 30,
+                                    color: Colors.white,
+                                  ),
+                                  if (_cartItemList.isNotEmpty)
+                                    Positioned(
+                                      right: -5,
+                                      top: -5,
+                                      child: Container(
+                                        padding: EdgeInsets.all(2),
+                                        decoration: BoxDecoration(
+                                          color: Colors.red,
+                                          shape: BoxShape.circle,
+                                        ),
+                                        constraints: BoxConstraints(
+                                          minWidth: 18,
+                                          minHeight: 18,
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            '${_cartItemList.length}',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),
