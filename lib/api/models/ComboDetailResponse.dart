@@ -54,6 +54,7 @@ class ComboDetailItem {
   final String comboPrice;
   final String comboDescription;
   final String comboImage;
+  final String comboSoldout;
 
   ComboDetailItem({
     this.comboId = "",
@@ -62,6 +63,7 @@ class ComboDetailItem {
     this.comboPrice = "",
     this.comboDescription = "",
     this.comboImage = "",
+    this.comboSoldout = "",
   });
 
   factory ComboDetailItem.fromJson(Map<String, dynamic>? json) =>
@@ -72,6 +74,7 @@ class ComboDetailItem {
         comboPrice: asString(json, 'combo_price'),
         comboDescription: asString(json, 'combo_description'),
         comboImage: asString(json, 'combo_image'),
+        comboSoldout: asString(json, 'combo_soldout'),
       );
 
   Map<String, dynamic> toJson() => {
@@ -81,6 +84,7 @@ class ComboDetailItem {
     'combo_price': comboPrice,
     'combo_description': comboDescription,
     'combo_image': comboImage,
+    'combo_soldout': comboSoldout,
   };
 }
 

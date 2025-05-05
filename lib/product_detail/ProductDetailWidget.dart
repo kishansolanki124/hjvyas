@@ -451,7 +451,7 @@ Widget comboDetailYouMayLike(List<ComboMoreListItem> moreItemList) {
                 ),
                 child: Column(
                   children: [
-                    if (product.productImage != null)
+                    if (product.productImage.isNotEmpty)
                       SizedBox(
                         height: 110,
                         width: 110,
@@ -477,7 +477,7 @@ Widget comboDetailYouMayLike(List<ComboMoreListItem> moreItemList) {
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 2),
                       child: Text(
-                        product.comboName ?? '',
+                        product.comboName,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
@@ -501,11 +501,7 @@ Widget comboDetailYouMayLike(List<ComboMoreListItem> moreItemList) {
                   MaterialPageRoute(
                     builder:
                         (context) => //ProductDetail(item: item),
-                            ComboDetail(
-                          comboId: product.comboId,
-                          //todo: currently out of stock not available in more item list
-                          isOutOfStock: false,
-                        ),
+                            ComboDetail(comboId: product.comboId),
                   ),
                 );
               },

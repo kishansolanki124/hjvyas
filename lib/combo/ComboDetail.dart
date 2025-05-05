@@ -23,52 +23,20 @@ import '../utils/NetworkImageWithProgress.dart';
 import 'ComboDetailController.dart';
 
 class ComboDetail extends StatefulWidget {
-  final String comboId;
-  final bool isOutOfStock;
+  final ComboDetailController categoryController = ComboDetailController(
+    getIt<HJVyasApiService>(),
+  );
 
-  const ComboDetail({
-    super.key,
-    required this.comboId,
-    required this.isOutOfStock,
-  });
+  final String comboId;
+
+  ComboDetail({super.key, required this.comboId});
 
   @override
   State<ComboDetail> createState() => _ProductDetailState();
 }
 
-class _ProductDetailState extends State<ComboDetail> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: FoodProductDetailsPage(
-        comboId: widget.comboId,
-        isOutOfStock: widget.isOutOfStock,
-      ),
-    );
-  }
-}
-
-class FoodProductDetailsPage extends StatefulWidget {
-  final ComboDetailController categoryController = ComboDetailController(
-    getIt<HJVyasApiService>(),
-  );
-
-  String comboId = "";
-  bool isOutOfStock = false;
-
-  FoodProductDetailsPage({
-    super.key,
-    required this.comboId,
-    required this.isOutOfStock,
-  });
-
-  @override
-  _FoodProductDetailsPageState createState() => _FoodProductDetailsPageState();
-}
-
-class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
+class _ProductDetailState extends State<ComboDetail>
     with TickerProviderStateMixin {
-  // Instance of SharedPreferences
   late SharedPreferences _prefs;
 
   List<CartItemModel> _cartItemList = [];
@@ -186,7 +154,9 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
           //item exist
           itemExist = true;
           itemExistPosition = i;
-          print('itemExistPosition addtoCart is $itemExistPosition');
+          if (kDebugMode) {
+            print('itemExistPosition addtoCart is $itemExistPosition');
+          }
           break;
         }
       }
@@ -618,12 +588,18 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                   comboDetailResponse!.comboDetail
                                       .elementAt(0)
                                       .comboPrice,
-                                  widget.isOutOfStock,
+                                  comboDetailResponse!.comboDetail
+                                          .elementAt(0)
+                                          .comboSoldout ==
+                                      "yes",
                                 ),
 
                                 //out of stock
                                 //notify me content
-                                if (widget.isOutOfStock)
+                                if (comboDetailResponse!.comboDetail
+                                        .elementAt(0)
+                                        .comboSoldout ==
+                                    "yes")
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -885,7 +861,10 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
                                     //     _selectedVariant,
                                     //     _onChangedDropDownValue,
                                     //   ),
-                                    if (!widget.isOutOfStock)
+                                    if (comboDetailResponse!.comboDetail
+                                            .elementAt(0)
+                                            .comboSoldout !=
+                                        "yes")
                                       productDetailItemCounter(
                                         _decrementQuantity,
                                         _incrementQuantity,
@@ -1060,8 +1039,16 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         //add to cart button
         floatingActionButton:
-            _showBottomNavBar && !widget.isOutOfStock
-                ? addToCartFullWidthButton(floatingButtonPrice, _onPressed, "Add To Cart")
+            _showBottomNavBar &&
+                    comboDetailResponse!.comboDetail
+                            .elementAt(0)
+                            .comboSoldout !=
+                        "yes"
+                ? addToCartFullWidthButton(
+                  floatingButtonPrice,
+                  _onPressed,
+                  "Add To Cart",
+                )
                 : null,
       );
     });

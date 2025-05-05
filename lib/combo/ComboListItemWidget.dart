@@ -28,7 +28,7 @@ class _ComboListItemWidgetState extends State<ComboListItemWidget>
       MaterialPageRoute(
         builder:
             (context) =>
-                ComboDetail(comboId: widget.item.comboId, isOutOfStock: false),
+                ComboDetail(comboId: widget.item.comboId),
       ),
     );
   }
