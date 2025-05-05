@@ -2,9 +2,10 @@ Combo List:
 1. Same animation of product ist
 
 Product Details:
-12. Add to cart logic change for UX
 13. animations for loading product details page
 Test notify me alert dialog
+
+menu list to product list hero element stopped working
 
 Combo Details:
 1. Out of stock from details APi and not from listing
@@ -20,6 +21,7 @@ Static Pages:
 Cart page:
 1. Empty cart screen
 2. two decimal points price
+If cart page is empty then remove all items even if its empty
 
 Checkout:
 1. india ->
@@ -68,6 +70,8 @@ App Icon
 double tap to exit snackbar or toast
 =====================================
 Final stage:
+
+1. Common snackbar for all screens, available at utils folder
 
 Product List:
 9. Test with smaller and larger devices.

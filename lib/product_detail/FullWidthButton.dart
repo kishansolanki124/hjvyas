@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../api/models/ProductDetailResponse.dart';
 import '../utils/CommonAppProgress.dart';
 
-Widget addToCartFullWidthButton(double price, _onPressed) {
+Widget addToCartFullWidthButton(double price, _onPressed, String cartText) {
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16.0),
     // Optional horizontal padding
@@ -37,7 +37,7 @@ Widget addToCartFullWidthButton(double price, _onPressed) {
                   Image.asset(height: 30, width: 30, 'icons/cart_icon.png'),
                   SizedBox(width: 8.0),
                   Text(
-                    'Add to Cart',
+                    cartText,
                     style: TextStyle(
                       fontSize: 18.0,
                       fontFamily: "Montserrat",

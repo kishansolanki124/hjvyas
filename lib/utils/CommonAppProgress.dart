@@ -47,9 +47,28 @@ Widget getCommonProgressBar() {
 String getTwoDecimalPrice(double doublePrice) {
   String twoDecimalPrice = "";
   final NumberFormat formatter = NumberFormat("#.00");
-  if (doublePrice != 0) {
+  if (doublePrice > 0) {
     twoDecimalPrice = formatter.format(doublePrice);
     return twoDecimalPrice;
+  } else if (doublePrice == 0) {
+    return "0.00";
   }
   return "";
+}
+
+void showSnackbar(BuildContext context, String s) {
+  var snackBar = SnackBar(
+    duration: const Duration(seconds: 2),
+    backgroundColor: Color.fromARGB(255, 123, 138, 195),
+    content: Text(
+      s,
+      style: TextStyle(
+        fontSize: 14.0,
+        fontFamily: "Montserrat",
+        fontWeight: FontWeight.w600,
+        color: Colors.white,
+      ),
+    ),
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }

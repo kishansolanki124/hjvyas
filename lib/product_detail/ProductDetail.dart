@@ -18,6 +18,7 @@ import '../api/models/ProductDetailResponse.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product/ProductListWidgets.dart';
+import '../utils/CommonAppProgress.dart';
 import '../utils/FloatingImageViewer.dart';
 import '../utils/NetworkImageWithProgress.dart';
 import 'AudioFilesDialog.dart';
@@ -81,7 +82,7 @@ class _ProductDetailState extends State<ProductDetail>
   }
 
   int getQuantity() {
-    int initialQuantity = 1;
+    int initialQuantity = 0;
     if (kDebugMode) {
       print('_cartItemList size is $_cartItemList');
     }
@@ -103,7 +104,7 @@ class _ProductDetailState extends State<ProductDetail>
   }
 
   void initPriceAndQuantity() {
-    int initialQuantity = 1;
+    int initialQuantity = 0;
     if (kDebugMode) {
       print('_cartItemList size is $_cartItemList');
     }
@@ -121,7 +122,6 @@ class _ProductDetailState extends State<ProductDetail>
       }
     }
 
-    //setState(() {
     selectedItemQuantity = initialQuantity;
     floatingButtonPrice =
         double.parse(_selectedVariant!.productPackingPrice) *
@@ -130,72 +130,94 @@ class _ProductDetailState extends State<ProductDetail>
   }
 
   Future<void> _addToCart() async {
-    // Convert each CustomObject in the list to a JSON map,
-    // then encode the whole list as a JSON string
-    CartItemModel cartItemModel = CartItemModel(
-      productType: "product",
-      productPackingId: _selectedVariant!.packingId,
-      quantity: selectedItemQuantity.toString(),
-      productDetail: productDetailResponse!.productDetail,
-      productPackingList: productDetailResponse!.productPackingList,
-    );
+    if (selectedItemQuantity == 0) {
+      bool itemExist = false;
+      int itemExistPosition = -1;
 
-    bool itemExist = false;
-    int itemExistPosition = -1;
-
-    if (kDebugMode) {
-      print('_cartItemList size addtoCart is ${_cartItemList.length}');
-    }
-
-    if (_cartItemList.isNotEmpty) {
-      for (var i = 0; i < _cartItemList.length; i++) {
-        //check if item exist in cart, then update quantity only
-        if (_cartItemList.elementAt(i).productPackingId ==
-            _selectedVariant!.packingId) {
-          //item exist
-          itemExist = true;
-          itemExistPosition = i;
-          print('itemExistPosition addtoCart is $itemExistPosition');
-          break;
+      if (_cartItemList.isNotEmpty) {
+        for (var i = 0; i < _cartItemList.length; i++) {
+          //check if item exist in cart, then update quantity only
+          if (_cartItemList.elementAt(i).productPackingId ==
+              _selectedVariant!.packingId) {
+            //item exist
+            itemExist = true;
+            itemExistPosition = i;
+            print('itemExistPosition addtoCart is $itemExistPosition');
+            break;
+          }
         }
       }
-    }
 
-    if (itemExist) {
-      _cartItemList[itemExistPosition] = cartItemModel;
+      if (itemExist && _cartItemList.length > itemExistPosition) {
+        _cartItemList.removeAt(itemExistPosition);
+
+        if (kDebugMode) {
+          print('_cartItemList is inside addTocart is $_cartItemList');
+        }
+
+        final List<String> stringList =
+            _cartItemList.map((item) => jsonEncode(item.toJson())).toList();
+        await _prefs.setStringList("cart_list", stringList);
+        showSnackbar(context, "Item removed from the cart.");
+        addToCartText = "Add to Cart";
+      } else {
+        showSnackbar(context, "Please update quantity to Add to Cart.");
+      }
     } else {
-      _cartItemList.add(cartItemModel);
+      // Convert each CustomObject in the list to a JSON map,
+      // then encode the whole list as a JSON string
+      CartItemModel cartItemModel = CartItemModel(
+        productType: "product",
+        productPackingId: _selectedVariant!.packingId,
+        quantity: selectedItemQuantity.toString(),
+        productDetail: productDetailResponse!.productDetail,
+        productPackingList: productDetailResponse!.productPackingList,
+      );
+
+      bool itemExist = false;
+      int itemExistPosition = -1;
+
+      if (kDebugMode) {
+        print('_cartItemList size addtoCart is ${_cartItemList.length}');
+      }
+
+      if (_cartItemList.isNotEmpty) {
+        for (var i = 0; i < _cartItemList.length; i++) {
+          //check if item exist in cart, then update quantity only
+          if (_cartItemList.elementAt(i).productPackingId ==
+              _selectedVariant!.packingId) {
+            //item exist
+            itemExist = true;
+            itemExistPosition = i;
+            print('itemExistPosition addtoCart is $itemExistPosition');
+            break;
+          }
+        }
+      }
+
+      if (itemExist) {
+        _cartItemList[itemExistPosition] = cartItemModel;
+      } else {
+        _cartItemList.add(cartItemModel);
+      }
+
+      if (kDebugMode) {
+        print('_cartItemList is inside addTocart is $_cartItemList');
+      }
+
+      final List<String> stringList =
+          _cartItemList.map((item) => jsonEncode(item.toJson())).toList();
+      await _prefs.setStringList("cart_list", stringList);
+      showSnackbar(context, "Product added to the basket.");
     }
-
-    if (kDebugMode) {
-      print('_cartItemList is inside addTocart is $_cartItemList');
-    }
-
-    final List<String> stringList =
-        _cartItemList.map((item) => jsonEncode(item.toJson())).toList();
-    await _prefs.setStringList("cart_list", stringList);
-    showSnackbar("Cart updated.");
-  }
-
-  void showSnackbar(String s) {
-    var snackBar = SnackBar(
-      backgroundColor: Colors.white,
-      content: Text(
-        s,
-        style: TextStyle(
-          fontSize: 14.0,
-          fontFamily: "Montserrat",
-          color: Color.fromARGB(255, 32, 47, 80),
-        ),
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   int _currentImageIndex = 0;
 
   double floatingButtonPrice = 0;
-  int selectedItemQuantity = 1;
+  int selectedItemQuantity = 0;
+
+  String addToCartText = "Add to Cart";
 
   ProductPackingListItem? _selectedVariant;
   ProductDetailResponse? productDetailResponse;
@@ -278,9 +300,9 @@ class _ProductDetailState extends State<ProductDetail>
 
   void onNotifyMeClick() {
     if (_validatePhone(_phoneController.text) != null) {
-      showSnackbar(_validatePhone(_phoneController.text).toString());
+      showSnackbar(context, _validatePhone(_phoneController.text).toString());
     } else if (_validateEmail(_emailController.text) != null) {
-      showSnackbar(_validateEmail(_emailController.text).toString());
+      showSnackbar(context, _validateEmail(_emailController.text).toString());
     } else {
       showSuccessDialogForNotifyMe();
     }
@@ -386,7 +408,7 @@ class _ProductDetailState extends State<ProductDetail>
 
   void _incrementQuantity() {
     if (int.parse(productDetailItem!.productMaxQty) == selectedItemQuantity) {
-      showSnackbar("You have added max quantity into cart.");
+      showSnackbar(context, "You have added max quantity into cart.");
       return;
     }
     setState(() {
@@ -411,7 +433,7 @@ class _ProductDetailState extends State<ProductDetail>
   }
 
   void _decrementQuantity() {
-    if (selectedItemQuantity > 1) {
+    if (selectedItemQuantity > 0) {
       setState(() {
         selectedItemQuantity--;
         floatingButtonPrice =
@@ -436,11 +458,16 @@ class _ProductDetailState extends State<ProductDetail>
     });
 
     setState(() {
+      addToCartText = "Add to Cart";
       _addToCart();
       if (kDebugMode) {
         print('Add to Cart button pressed!');
       }
     });
+  }
+
+  String getCartText() {
+    return addToCartText;
   }
 
   void _onBackPressed() {
@@ -503,13 +530,13 @@ class _ProductDetailState extends State<ProductDetail>
         }
       }
 
-      if (floatingButtonPrice == 0) {
-        floatingButtonPrice = double.parse(
-          productDetailResponse!.productPackingList
-              .elementAt(0)
-              .productPackingPrice,
-        );
-      }
+      // if (floatingButtonPrice == 0) {
+      //   floatingButtonPrice = double.parse(
+      //     productDetailResponse!.productPackingList
+      //         .elementAt(0)
+      //         .productPackingPrice,
+      //   );
+      // }
       //_selectedVariantInquiry ??= cateogories.inquiryType.split(', ').first;
       return Scaffold(
         body: Container(
@@ -1169,7 +1196,11 @@ class _ProductDetailState extends State<ProductDetail>
         floatingActionButton:
             productDetailResponse!.productDetail.elementAt(0).productSoldout !=
                     "yes"
-                ? addToCartFullWidthButton(floatingButtonPrice, _onPressed)
+                ? addToCartFullWidthButton(
+                  floatingButtonPrice,
+                  _onPressed,
+                  getCartText(),
+                )
                 : null,
       );
     });

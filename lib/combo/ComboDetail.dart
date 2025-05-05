@@ -1061,7 +1061,7 @@ class _FoodProductDetailsPageState extends State<FoodProductDetailsPage>
         //add to cart button
         floatingActionButton:
             _showBottomNavBar && !widget.isOutOfStock
-                ? addToCartFullWidthButton(floatingButtonPrice, _onPressed)
+                ? addToCartFullWidthButton(floatingButtonPrice, _onPressed, "Add To Cart")
                 : null,
       );
     });
