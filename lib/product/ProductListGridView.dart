@@ -5,6 +5,7 @@ import 'package:hjvyas/product/ProductPaginationController.dart';
 
 import '../api/models/CategoryListResponse.dart';
 import '../api/services/HJVyasApiService.dart';
+import '../home/navigation.dart';
 import '../injection_container.dart';
 import '../product_detail/ImageWithProgress.dart';
 import '../splash/NoIntternetScreen.dart';
@@ -12,7 +13,6 @@ import '../utils/CommonAppProgress.dart';
 import 'ProductListItemWidget.dart';
 
 class ProductListGridView extends StatefulWidget {
-
   final ProductPaginationController paginationController =
       ProductPaginationController(getIt<HJVyasApiService>());
 
@@ -52,153 +52,173 @@ class _ProductListGridViewState extends State<ProductListGridView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Obx(() {
-        return NotificationListener<ScrollNotification>(
-          onNotification: (notification) {
-            if (notification is ScrollEndNotification &&
-                notification.metrics.pixels ==
-                    notification.metrics.maxScrollExtent) {
-              widget.paginationController.loadMore(
-                int.parse(widget.categoryListItem.categoryId),
-              );
-            }
-            return false;
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage("images/bg.jpg"),
-                fit: BoxFit.cover,
+    return PopScope(
+      // Handle the back button press using the current recommended API
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+
+        NavigationExample.of(context)?.navigateToMenuPage();
+
+        // final homeState = context.findAncestorStateOfType<_HomeWidgetState>();
+        // homeState?._navigateToWidget(0);
+        //return true;
+      },
+      child: Scaffold(
+        body: Obx(() {
+          return NotificationListener<ScrollNotification>(
+            onNotification: (notification) {
+              if (notification is ScrollEndNotification &&
+                  notification.metrics.pixels ==
+                      notification.metrics.maxScrollExtent) {
+                widget.paginationController.loadMore(
+                  int.parse(widget.categoryListItem.categoryId),
+                );
+              }
+              return false;
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("images/bg.jpg"),
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            child: Column(
-              children: <Widget>[
-                // Use Expanded or Flexible to give the CustomScrollView a portion of the space
-                Expanded(
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverToBoxAdapter(
-                        child: productListTopView(
-                          widget.logoURL,
-                          widget.categoryListItem.categoryName,
-                        ),
-                      ),
-
-                      if (widget.paginationController.items.isEmpty &&
-                          widget.paginationController.isLoading.value) ...[
-                        SliverToBoxAdapter(child: getCommonProgressBar()),
-                      ],
-
-                      if (widget.paginationController.items.isEmpty &&
-                          widget.paginationController.isError.value) ...[
-                        //error handling
+              child: Column(
+                children: <Widget>[
+                  // Use Expanded or Flexible to give the CustomScrollView a portion of the space
+                  Expanded(
+                    child: CustomScrollView(
+                      slivers: [
                         SliverToBoxAdapter(
-                          child: NoInternetScreen(
-                            showBackgroundImage: false,
-                            onRetry: () {
-                              _refreshData();
-                            },
+                          child: productListTopView(
+                            widget.logoURL,
+                            widget.categoryListItem.categoryName,
                           ),
                         ),
-                      ],
 
-                      SliverGrid(
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2, // 2 columns
-                              childAspectRatio:
-                                  (1 / 1.9), // Adjust item aspect ratio
+                        if (widget.paginationController.items.isEmpty &&
+                            widget.paginationController.isLoading.value) ...[
+                          SliverToBoxAdapter(child: getCommonProgressBar()),
+                        ],
+
+                        if (widget.paginationController.items.isEmpty &&
+                            widget.paginationController.isError.value) ...[
+                          //error handling
+                          SliverToBoxAdapter(
+                            child: NoInternetScreen(
+                              showBackgroundImage: false,
+                              onRetry: () {
+                                _refreshData();
+                              },
                             ),
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final isOddCount =
-                                widget.paginationController.items.length % 2 !=
-                                0;
-                            if (isOddCount &&
-                                index ==
-                                    widget.paginationController.items.length &&
-                                widget.paginationController.items.length ==
-                                    widget.paginationController.totalItems) {
-                              if (kDebugMode) {
-                                print(
-                                  'isOddCount $isOddCount and length is'
-                                  ' ${widget.paginationController.items.length}',
+                          ),
+                        ],
+
+                        SliverGrid(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2, // 2 columns
+                                childAspectRatio:
+                                    (1 / 1.9), // Adjust item aspect ratio
+                              ),
+                          delegate: SliverChildBuilderDelegate(
+                            (context, index) {
+                              final isOddCount =
+                                  widget.paginationController.items.length %
+                                      2 !=
+                                  0;
+                              if (isOddCount &&
+                                  index ==
+                                      widget
+                                          .paginationController
+                                          .items
+                                          .length &&
+                                  widget.paginationController.items.length ==
+                                      widget.paginationController.totalItems) {
+                                if (kDebugMode) {
+                                  print(
+                                    'isOddCount $isOddCount and length is'
+                                    ' ${widget.paginationController.items.length}',
+                                  );
+                                }
+
+                                if ((widget.paginationController.items.length +
+                                            1) %
+                                        4 ==
+                                    0) {
+                                  // return Stack(
+                                  //   children: [
+                                  //     SizedBox(
+                                  //       height: 110,
+                                  //       child: Container(color: Colors.white),
+                                  //     ),
+                                  //   ],
+                                  // );
+                                } else {
+                                  // return SizedBox(
+                                  //   height: 200,
+                                  //   child: Align(
+                                  //     alignment: Alignment.bottomCenter,
+                                  //     child: Stack(
+                                  //       children: [
+                                  //         SizedBox(
+                                  //           height: 120,
+                                  //           child: Container(color: Colors.white),
+                                  //         ),
+                                  //       ],
+                                  //     ),
+                                  //   ),
+                                  // );
+                                }
+                              }
+
+                              // Return normal items
+                              if (index <
+                                  widget.paginationController.items.length) {
+                                return ProductListItemWidget(
+                                  index: index,
+                                  item:
+                                      widget.paginationController.items[index],
                                 );
                               }
 
-                              if ((widget.paginationController.items.length +
-                                          1) %
-                                      4 ==
-                                  0) {
-                                // return Stack(
-                                //   children: [
-                                //     SizedBox(
-                                //       height: 110,
-                                //       child: Container(color: Colors.white),
-                                //     ),
-                                //   ],
-                                // );
-                              } else {
-                                // return SizedBox(
-                                //   height: 200,
-                                //   child: Align(
-                                //     alignment: Alignment.bottomCenter,
-                                //     child: Stack(
-                                //       children: [
-                                //         SizedBox(
-                                //           height: 120,
-                                //           child: Container(color: Colors.white),
-                                //         ),
-                                //       ],
-                                //     ),
-                                //   ),
-                                // );
-                              }
-                            }
-
-                            // Return normal items
-                            if (index <
-                                widget.paginationController.items.length) {
-                              return ProductListItemWidget(
-                                index: index,
-                                item: widget.paginationController.items[index],
-                              );
-                            }
-
-                            return null;
-                          },
-                          childCount:
-                              widget.paginationController.items.length +
-                              (widget.paginationController.items.length % 2) +
-                              (widget.paginationController.items.length ==
-                                      widget.paginationController.totalItems
-                                  ? 1
-                                  : 0),
+                              return null;
+                            },
+                            childCount:
+                                widget.paginationController.items.length +
+                                (widget.paginationController.items.length % 2) +
+                                (widget.paginationController.items.length ==
+                                        widget.paginationController.totalItems
+                                    ? 1
+                                    : 0),
+                          ),
                         ),
-                      ),
-                      SliverToBoxAdapter(
-                        child:
-                            (widget.paginationController.isLoading.value &&
-                                    widget
-                                        .paginationController
-                                        .items
-                                        .isNotEmpty)
-                                ? Padding(
-                                  padding: EdgeInsets.all(16.0),
-                                  child: Center(child: getCommonProgressBar()),
-                                )
-                                //: SizedBox.shrink(),
-                                : SizedBox(height: 100),
-                      ),
-                    ],
+                        SliverToBoxAdapter(
+                          child:
+                              (widget.paginationController.isLoading.value &&
+                                      widget
+                                          .paginationController
+                                          .items
+                                          .isNotEmpty)
+                                  ? Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Center(
+                                      child: getCommonProgressBar(),
+                                    ),
+                                  )
+                                  //: SizedBox.shrink(),
+                                  : SizedBox(height: 100),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        );
-      }),
+          );
+        }),
+      ),
     );
   }
 }

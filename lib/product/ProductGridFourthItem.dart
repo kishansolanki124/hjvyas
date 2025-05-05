@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'ProductListWidgets.dart';
 
-class ProductGridFourthItem extends StatelessWidget {
+class ProductGridFourthItem extends StatefulWidget {
   final String imageUrl;
   final String title;
   final String price;
@@ -22,6 +22,11 @@ class ProductGridFourthItem extends StatelessWidget {
   });
 
   @override
+  State<ProductGridFourthItem> createState() => _ProductGridFourthItemState();
+}
+
+class _ProductGridFourthItemState extends State<ProductGridFourthItem> {
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
@@ -34,20 +39,23 @@ class ProductGridFourthItem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              productListImage(imageUrl),
+              productListImage(widget.imageUrl),
 
-              productListTitleWidget(title),
+              productListTitleWidget(widget.title),
 
-              if (productSoldout.isNotEmpty) soldOutText(),
+              if (widget.productSoldout.isNotEmpty) soldOutText(),
 
               //"₹ 900.00 - 300 grams"
-              if (productSoldout.isEmpty) productListVariationWidget(price, productWeight),
+              if (widget.productSoldout.isEmpty)
+                productListVariationWidget(widget.price, widget.productWeight),
 
               //"Product life: 300 days"
-              if (productSoldout.isEmpty) productListLife(productLife),
+              if (widget.productSoldout.isEmpty)
+                productListLife(widget.productLife),
 
               //"Calories: 470"
-              if (productSoldout.isEmpty) productListCalories(calories),
+              if (widget.productSoldout.isEmpty)
+                productListCalories(widget.calories),
             ],
           ),
         ],

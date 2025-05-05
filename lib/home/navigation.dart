@@ -1,11 +1,12 @@
-import 'package:double_back_to_close_app/double_back_to_close_app.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hjvyas/api/models/CategoryListResponse.dart';
 
 import '../about/AboutHome.dart';
 import '../cart/CartHome.dart';
 import '../combo/Combo.dart';
 import '../menu/MenuScreen.dart';
+import '../product/ProductListGridView.dart';
 import 'HomeView.dart';
 
 class NavigationBarApp extends StatefulWidget {
@@ -36,6 +37,11 @@ class _NavigationBarAppState extends State<NavigationBarApp> {
 
 class NavigationExample extends StatefulWidget {
   const NavigationExample({super.key});
+
+  // Static method to access the state
+  static _NavigationExampleState? of(BuildContext context) {
+    return context.findAncestorStateOfType<_NavigationExampleState>();
+  }
 
   @override
   State<NavigationExample> createState() => _NavigationExampleState();
@@ -70,9 +76,34 @@ class _NavigationExampleState extends State<NavigationExample>
     return screenList.elementAt(index);
   }
 
+  Widget homeNavigationWidget = HomeView();
+
   void _onItemTapped(int index) {
     setState(() {
       currentPageIndex = index;
+      homeNavigationWidget = returnWhateverScreen(
+        currentPageIndex,
+        _updateBottomNavBarVisibility,
+      );
+    });
+  }
+
+  void navigateToProductList(
+    CategoryListItem categoryListItem,
+    String logoURL,
+  ) {
+
+    setState(() {
+      homeNavigationWidget = ProductListGridView(
+        categoryListItem: categoryListItem,
+        logoURL: logoURL,
+      );
+    });
+  }
+
+  void navigateToMenuPage() {
+    setState(() {
+      homeNavigationWidget = MenuScreen();
     });
   }
 
@@ -81,23 +112,7 @@ class _NavigationExampleState extends State<NavigationExample>
     //final ThemeData theme = Theme.of(context);
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 32, 47, 80),
-      body: DoubleBackToCloseApp(
-        snackBar: const SnackBar(
-          backgroundColor: Colors.white,
-          content: Text(
-            'Tap back again to exit.',
-            style: TextStyle(
-              fontSize: 14.0,
-              fontFamily: "Montserrat",
-              color: Color.fromARGB(255, 32, 47, 80),
-            ),
-          ),
-        ),
-        child: returnWhateverScreen(
-              currentPageIndex,
-              _updateBottomNavBarVisibility,
-            ),
-      ),
+      body: homeNavigationWidget,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Padding(
         padding: const EdgeInsets.fromLTRB(20.0, 0, 10.0, 0),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../api/models/CategoryListResponse.dart';
-import '../product/ProductListGridView.dart';
+import '../home/navigation.dart';
 
 class MenuListItem extends StatelessWidget {
   final String logoURL;
@@ -28,15 +28,23 @@ class MenuListItem extends StatelessWidget {
           GestureDetector(
             onTap: () {
               if (selectedColor == Colors.white) {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder:
-                        (context) => ProductListGridView(
-                          categoryListItem: categoryListItem,
-                          logoURL: logoURL,
-                        ),
-                  ),
-                );
+                // Get the _HomeWidgetState and call its navigation method
+                // final homeState =
+                // context.findAncestorStateOfType<_NavigationExampleState>();
+                // homeState?._navigateToWidget(1);
+                NavigationExample.of(
+                  context,
+                )?.navigateToProductList(categoryListItem, logoURL);
+
+                // Navigator.of(context).push(
+                //   MaterialPageRoute(
+                //     builder:
+                //         (context) => ProductListGridView(
+                //           categoryListItem: categoryListItem,
+                //           logoURL: logoURL,
+                //         ),
+                //   ),
+                // );
               }
             },
             child: Text(

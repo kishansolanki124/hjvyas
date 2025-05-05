@@ -8,10 +8,10 @@ import 'ProductGridSecondItem.dart';
 import 'ProductGridThirdItem.dart';
 
 class ProductListItemWidget extends StatefulWidget {
-  int index;
-  ProductListItem item;
+  final int index;
+  final ProductListItem item;
 
-  ProductListItemWidget({required this.index, required this.item, super.key});
+  ProductListItemWidget({required this.index, required this.item});
 
   @override
   State<ProductListItemWidget> createState() => _ProductListItemState();

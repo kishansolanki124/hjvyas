@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'ProductListWidgets.dart';
 
-class ProductGridSecondItem extends StatelessWidget {
+class ProductGridSecondItem extends StatefulWidget {
+
   final String imageUrl;
   final String title;
   final String price;
@@ -22,6 +23,11 @@ class ProductGridSecondItem extends StatelessWidget {
   });
 
   @override
+  State<ProductGridSecondItem> createState() => _ProductGridSecondItemState();
+}
+
+class _ProductGridSecondItemState extends State<ProductGridSecondItem> {
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
@@ -34,33 +40,33 @@ class ProductGridSecondItem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              productListImage(imageUrl),
+              productListImage(widget.imageUrl),
 
-              productListTitleWidget(title, Colors.white, 0.0),
+              productListTitleWidget(widget.title, Colors.white, 0.0),
 
               SizedBox(height: 10),
 
               //"₹ 900.00 - 300 grams"
-              if (productSoldout.isEmpty)
+              if (widget.productSoldout.isEmpty)
                 productListVariationWidget(
-                  price,
-                  productWeight,
+                  widget.price,
+                  widget.productWeight,
                   //Color.fromARGB(255, 1, 1, 1),
                 ),
 
               //"Product life: 300 days"
-              if (productSoldout.isEmpty)
-                productListLife(productLife,
+              if (widget.productSoldout.isEmpty)
+                productListLife(widget.productLife,
                     //Color.fromARGB(255, 139, 139, 139)
                 ),
 
               //"Calories: 470"
-              if (productSoldout.isEmpty)
-                productListCalories(calories,
+              if (widget.productSoldout.isEmpty)
+                productListCalories(widget.calories,
                     //Color.fromARGB(255, 139, 139, 139)
                     ),
 
-              if (productSoldout.isNotEmpty) soldOutText(),
+              if (widget.productSoldout.isNotEmpty) soldOutText(),
             ],
           ),
         ],

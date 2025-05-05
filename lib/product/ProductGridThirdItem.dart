@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'ProductListWidgets.dart';
 
-class ProductGridThirdItem extends StatelessWidget {
+class ProductGridThirdItem extends StatefulWidget {
+
   final String imageUrl;
   final String title;
   final String price;
@@ -22,6 +23,11 @@ class ProductGridThirdItem extends StatelessWidget {
   });
 
   @override
+  State<ProductGridThirdItem> createState() => _ProductGridThirdItemState();
+}
+
+class _ProductGridThirdItemState extends State<ProductGridThirdItem> {
+  @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 200,
@@ -34,28 +40,30 @@ class ProductGridThirdItem extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              productListTitleWidget(title,
-                  //Color.fromARGB(255, 1, 1, 1)
-                   ),
+              productListTitleWidget(
+                widget.title,
+                //Color.fromARGB(255, 1, 1, 1)
+              ),
 
               //"₹ 900.00 - 300 grams"
-              if (productSoldout.isEmpty)
+              if (widget.productSoldout.isEmpty)
                 productListVariationWidget(
-                  price,
-                  productWeight),
-                  //,
-                  //Color.fromARGB(255, 1, 1, 1),),
-
+                  widget.price,
+                  widget.productWeight,
+                ), //,
+              //Color.fromARGB(255, 1, 1, 1),),
 
               //"Product life: 300 days"
-              if (productSoldout.isEmpty) productListLife(productLife),
+              if (widget.productSoldout.isEmpty)
+                productListLife(widget.productLife),
 
               //"Calories: 470"
-              if (productSoldout.isEmpty) productListCalories(calories),
+              if (widget.productSoldout.isEmpty)
+                productListCalories(widget.calories),
 
-              if (productSoldout.isNotEmpty) soldOutText(),
+              if (widget.productSoldout.isNotEmpty) soldOutText(),
 
-              productListImage(imageUrl),
+              productListImage(widget.imageUrl),
             ],
           ),
         ],
