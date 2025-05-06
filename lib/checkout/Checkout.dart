@@ -1662,12 +1662,18 @@ class _CheckoutState extends State<Checkout> {
                                               .paginationController
                                               .addOrderResponseLoading
                                               .value
-                                          ? SizedBox(
-                                            width: 20,
-                                            height: 20,
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 2,
-                                              color: Colors.white,
+                                          ? Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              vertical: 10.0,
+                                              horizontal: 12,
+                                            ),
+                                            child: SizedBox(
+                                              width: 20,
+                                              height: 20,
+                                              child: CircularProgressIndicator(
+                                                strokeWidth: 2,
+                                                color: Colors.white,
+                                              ),
                                             ),
                                           )
                                           : SizedBox(
