@@ -257,15 +257,39 @@ class _CheckoutState extends State<Checkout> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Alert"),
+          title: Text(
+            "Alert",
+            style: TextStyle(
+              fontSize: 24,
+              color: Color.fromARGB(255, 31, 47, 80),
+              fontWeight: FontWeight.w700,
+              fontFamily: "Montserrat",
+            ),
+          ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [Text(errorMessage), const SizedBox(height: 8)],
+            children: [
+              Text(
+                errorMessage,
+                style: TextStyle(
+                  color: Color.fromARGB(255, 31, 47, 80),
+                  fontFamily: "Montserrat",
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
           ),
           actions: [
             TextButton(
-              child: const Text("OK"),
+              child: const Text(
+                "OK",
+                style: TextStyle(
+                  color: Color.fromARGB(255, 31, 47, 80),
+                  fontWeight: FontWeight.w600,
+                  fontFamily: "Montserrat",
+                ),
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
               },
@@ -369,7 +393,7 @@ class _CheckoutState extends State<Checkout> {
         _isRazorpayProcessing = false;
       });
       debugPrint('Error: $e');
-      showSnackbar("Error: $e");
+      showSnackbar(context, "Error: $e");
       // Fluttertoast.showToast(
       //   msg: "Error: $e",
       //   toastLength: Toast.LENGTH_LONG,
@@ -390,9 +414,9 @@ class _CheckoutState extends State<Checkout> {
     });
 
     if (response.message!.toLowerCase().contains("undefined")) {
-      showSnackbar("Payment Failed. Please try again!");
+      showSnackbar(context, "Payment Failed. Please try again!");
     } else {
-      showSnackbar("Payment Failed: ${response.message}");
+      showSnackbar(context, "Payment Failed: ${response.message}");
     }
   }
 
@@ -401,7 +425,7 @@ class _CheckoutState extends State<Checkout> {
       _isRazorpayProcessing = false;
     });
 
-    showSnackbar("External Wallet Selected: ${response.walletName}");
+    showSnackbar(context, "External Wallet Selected: ${response.walletName}");
   }
 
   Future<void> updateRazorPayOrderStatus(String? razorPayPaymentId) async {
@@ -462,45 +486,51 @@ class _CheckoutState extends State<Checkout> {
 
   void onOrderPlaced() {
     if (_validatePhone(_phoneController.text) != null) {
-      showSnackbar(_validatePhone(_phoneController.text).toString());
+      showSnackbar(context, _validatePhone(_phoneController.text).toString());
     } else if (_validateName(_nameController.text) != null) {
-      showSnackbar(_validateName(_nameController.text).toString());
+      showSnackbar(context, _validateName(_nameController.text).toString());
     } else if (_validateEmail(_emailController.text) != null) {
-      showSnackbar(_validateEmail(_emailController.text).toString());
+      showSnackbar(context, _validateEmail(_emailController.text).toString());
     }
     // else if (_validateCity(_areaController.text) != null) {
-    //   showSnackbar("Area field is required.");
+    //   showSnackbar(context,"Area field is required.");
     // }
     // else if (_validateCity(_subAreaController.text) != null) {
-    //   showSnackbar("Sub Area field is required.");
+    //   showSnackbar(context,"Sub Area field is required.");
     // }
     else if (_validateCity(_deliveryAddressController.text) != null) {
-      showSnackbar("Delivery Address is required.");
+      showSnackbar(context, "Delivery Address is required.");
     } else if (_validateZipcode(_zipcodeController.text) != null) {
-      showSnackbar(_validateZipcode(_zipcodeController.text).toString());
+      showSnackbar(
+        context,
+        _validateZipcode(_zipcodeController.text).toString(),
+      );
     } else if (_validateCity(_cityController.text) != null) {
-      showSnackbar(_validateCity(_cityController.text).toString());
+      showSnackbar(context, _validateCity(_cityController.text).toString());
     } else if (_selectedOptionCountry != "India" &&
         _validateState(_stateController.text) != null) {
-      showSnackbar("State name is required.");
+      showSnackbar(context, "State name is required.");
     } else if (stateListItem == null) {
-      showSnackbar("State name is required.");
+      showSnackbar(context, "State name is required.");
     } else if (_alternatePhone(_alternatePhoneController.text) != null) {
-      showSnackbar(_alternatePhone(_alternatePhoneController.text).toString());
+      showSnackbar(
+        context,
+        _alternatePhone(_alternatePhoneController.text).toString(),
+      );
     } else if (!_tncChecked) {
-      showSnackbar("Kindly click on I Agree to accept TNC.");
+      showSnackbar(context, "Kindly click on I Agree to accept TNC.");
     } else if (null == _selectedPaymentMethod ||
         _selectedPaymentMethod!.isEmpty) {
-      showSnackbar("Kindly select any payment method.");
+      showSnackbar(context, "Kindly select any payment method.");
     } else if (_giftPacksChecked) {
       if (_validateName(_giftSenderNameController.text) != null) {
-        showSnackbar("Gift Sender Name is required.");
+        showSnackbar(context, "Gift Sender Name is required.");
       } else if (_validateName(_giftReceiverNameController.text) != null) {
-        showSnackbar("Gift Receiver Name is required.");
+        showSnackbar(context, "Gift Receiver Name is required.");
       } else if (_validatePhone(_giftSenderMobileController.text) != null) {
-        showSnackbar("Gift Sender Mobile Number is required.");
+        showSnackbar(context, "Gift Sender Mobile Number is required.");
       } else if (_validatePhone(_giftReceiverMobileController.text) != null) {
-        showSnackbar("Gift Receiver Mobile Number is required.");
+        showSnackbar(context, "Gift Receiver Mobile Number is required.");
       } else {
         placeOrder();
       }
@@ -671,25 +701,10 @@ class _CheckoutState extends State<Checkout> {
     packingWeightType = unitsList.join(', ');
   }
 
-  void showSnackbar(String s) {
-    var snackBar = SnackBar(
-      backgroundColor: Colors.white,
-      content: Text(
-        s,
-        style: TextStyle(
-          fontSize: 14.0,
-          fontFamily: "Montserrat",
-          color: Color.fromARGB(255, 32, 47, 80),
-        ),
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   void onContinueClick() {
     hideKeyboard(context);
     if (_validatePhone(_phoneController.text) != null) {
-      showSnackbar(_validatePhone(_phoneController.text).toString());
+      showSnackbar(context, _validatePhone(_phoneController.text).toString());
     } else {
       getShippingCharge();
     }
