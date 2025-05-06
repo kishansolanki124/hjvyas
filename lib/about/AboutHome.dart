@@ -25,7 +25,8 @@ class AboutHome extends StatefulWidget {
   State<AboutHome> createState() => _AboutHomeState();
 }
 
-class _AboutHomeState extends State<AboutHome> {
+class _AboutHomeState extends State<AboutHome>
+    with SingleTickerProviderStateMixin {
   // void _onBackPressed(BuildContext context) {
   //   Navigator.of(context).pop();
   // }
@@ -77,10 +78,39 @@ class _AboutHomeState extends State<AboutHome> {
     });
   }
 
+  late final AnimationController _animationController;
+  late final Animation<Offset> _slideAnimation;
+
   @override
   void initState() {
     super.initState();
+
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 400),
+    );
+
+    _slideAnimation = Tween<Offset>(
+      begin: const Offset(0.0, -3.0), // Much higher above the screen
+      end: Offset.zero, // End at normal position
+    ).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeOutQuad),
+    );
+
+    // Stagger the animations based on index
+    Future.delayed(Duration(milliseconds: 500), () {
+      if (mounted) {
+        _animationController.forward();
+      }
+    });
+
     _dataFuture = widget._userRepo.getStaticpage();
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 
   @override
@@ -90,6 +120,8 @@ class _AboutHomeState extends State<AboutHome> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return staticPageMainContent(
+            _animationController,
+            _slideAnimation,
             widget.categoryController,
             _tabNames,
             _imagePaths,
@@ -112,6 +144,8 @@ class _AboutHomeState extends State<AboutHome> {
 }
 
 Widget staticPageMainContent(
+  AnimationController _animationController,
+  Animation<Offset> _slideAnimation,
   categoryController,
   _tabNames,
   _imagePaths,
@@ -132,26 +166,32 @@ Widget staticPageMainContent(
         ),
 
         //square border on top
-        IgnorePointer(
-          child: Container(
-            height: 100,
-            margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 0),
-            decoration: BoxDecoration(
-              border: Border(
-                left: BorderSide(
-                  color: Color.fromARGB(255, 123, 138, 195),
-                  width: 2.0,
-                ),
-                bottom: BorderSide(
-                  color: Color.fromARGB(255, 123, 138, 195),
-                  width: 2.0,
-                ),
-                right: BorderSide(
-                  color: Color.fromARGB(255, 123, 138, 195),
-                  width: 2.0,
+        SlideTransition(
+          position: _slideAnimation,
+          child: FadeTransition(
+            opacity: _animationController,
+            child: IgnorePointer(
+              child: Container(
+                height: 100,
+                margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 0),
+                decoration: BoxDecoration(
+                  border: Border(
+                    left: BorderSide(
+                      color: Color.fromARGB(255, 123, 138, 195),
+                      width: 2.0,
+                    ),
+                    bottom: BorderSide(
+                      color: Color.fromARGB(255, 123, 138, 195),
+                      width: 2.0,
+                    ),
+                    right: BorderSide(
+                      color: Color.fromARGB(255, 123, 138, 195),
+                      width: 2.0,
+                    ),
+                  ),
+                  borderRadius: BorderRadius.all(Radius.circular(0)),
                 ),
               ),
-              borderRadius: BorderRadius.all(Radius.circular(0)),
             ),
           ),
         ),
@@ -164,25 +204,30 @@ Widget staticPageMainContent(
             children: <Widget>[
               SizedBox(height: 60.0),
 
-              // Horizontal menu
-              Center(
-                child: Container(
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      // Distribute items evenly
-                      children: List.generate(_imagePaths.length, (index) {
-                        return _buildSelectItem(
-                          _tabNames,
-                          _imagePaths,
-                          _imagePathsSelected,
-                          index,
-                          _selectedIndex,
-                          _changeIndex,
-                        );
-                      }),
+              SlideTransition(
+                position: _slideAnimation,
+                child: FadeTransition(
+                  opacity: _animationController,
+                  child: Center(
+                    child: Container(
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          // Distribute items evenly
+                          children: List.generate(_imagePaths.length, (index) {
+                            return _buildSelectItem(
+                              _tabNames,
+                              _imagePaths,
+                              _imagePathsSelected,
+                              index,
+                              _selectedIndex,
+                              _changeIndex,
+                            );
+                          }),
+                        ),
+                      ),
                     ),
                   ),
                 ),
