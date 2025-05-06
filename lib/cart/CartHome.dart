@@ -21,27 +21,13 @@ import 'CartItemWidget.dart';
 import 'EmptyCart.dart';
 import 'TesterItemWidget.dart';
 
-class CartItem {
-  String imageUrl;
-  String title;
-  double pricePerKg;
-  int count;
-
-  CartItem({
-    required this.imageUrl,
-    required this.title,
-    required this.pricePerKg,
-    this.count = 1,
-  });
-
-  double get totalPrice => pricePerKg * count;
-}
-
 class CartPage extends StatefulWidget {
+  bool showBackButton;
+
   final ProductPaginationController paginationController =
       ProductPaginationController(getIt<HJVyasApiService>());
 
-  CartPage({super.key});
+  CartPage({super.key, this.showBackButton = false});
 
   @override
   _CartPageState createState() => _CartPageState();
@@ -292,7 +278,7 @@ class _CartPageState extends State<CartPage>
 
           if (!widget.paginationController.cartItemsLoading.value &&
               widget.paginationController.cartItems.isEmpty) {
-            return EmptyCart();
+            return EmptyCart(showBackButton: widget.showBackButton);
           }
 
           cartMaxQty = widget.paginationController.cartMaxQty;

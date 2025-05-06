@@ -3,9 +3,12 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../home/navigation.dart';
+import '../product_detail/ProductDetailWidget.dart';
 
 class EmptyCart extends StatefulWidget {
-  const EmptyCart({super.key});
+  bool showBackButton = false;
+
+  EmptyCart({super.key, this.showBackButton = false});
 
   @override
   State<EmptyCart> createState() => _EmptyCartState();
@@ -31,6 +34,11 @@ class _EmptyCartState extends State<EmptyCart>
     super.dispose();
   }
 
+  // Keep track of the selected option
+  void _onBackPressed(BuildContext context) {
+    Navigator.of(context).pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -42,103 +50,118 @@ class _EmptyCartState extends State<EmptyCart>
               fit: BoxFit.cover,
             ),
           ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AnimatedBuilder(
-                  animation: _bounceController,
-                  builder: (context, child) {
-                    return Transform.translate(
-                      offset: Offset(0, -30 * _bounceAnimation.value),
-                      child: Transform.rotate(
-                        angle:
-                            0.1 *
-                            math.sin(_bounceController.value * math.pi * 2),
-                        child: child,
+          child: Stack(
+            children: [
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    AnimatedBuilder(
+                      animation: _bounceController,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(0, -30 * _bounceAnimation.value),
+                          child: Transform.rotate(
+                            angle:
+                                0.1 *
+                                math.sin(_bounceController.value * math.pi * 2),
+                            child: child,
+                          ),
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              const Color.fromARGB(255, 123, 138, 195),
+                              //Colors.white.withOpacity(0.7),
+                              Color.fromARGB(200, 255, 255, 255),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          shape: BoxShape.circle,
+                        ),
+                        padding: const EdgeInsets.all(25),
+                        child: const Icon(
+                          Icons.shopping_cart_rounded,
+                          size: 70,
+                          color: Colors.white,
+                        ),
                       ),
-                    );
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [
-                          const Color.fromARGB(
-                            255,
-                            123,
-                            138,
-                            195,
-                          ), //Colors.white.withOpacity(0.7),
-                          Color.fromARGB(200, 255, 255, 255),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
+                    ),
+                    const SizedBox(height: 40),
+                    Text(
+                      'Hungry for Shopping?',
+                      style: Theme.of(
+                        context,
+                      ).textTheme.headlineSmall?.copyWith(
+                        color: Colors.white,
+                        fontFamily: "Montserrat",
+                        fontSize: 22,
+                        fontWeight: FontWeight.w700,
                       ),
-                      shape: BoxShape.circle,
                     ),
-                    padding: const EdgeInsets.all(25),
-                    child: const Icon(
-                      Icons.shopping_cart_rounded,
-                      size: 70,
-                      color: Colors.white,
+                    const Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 22,
+                      ),
+                      child: Text(
+                        'Your cart is waiting to be filled with amazing products. '
+                        'Let\'s find something you\'ll love!',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "Montserrat",
+                          fontSize: 14,
+                        ),
+                      ),
                     ),
-                  ),
+
+                    FilledButton.tonal(
+                      onPressed: () {
+                        if (widget.showBackButton) {
+                          print('back button pressed');
+                          Navigator.of(context).pop();
+                        } else {
+                          NavigationExample.of(context)?.navigateToMenuPage();
+                        }
+                      },
+                      style: FilledButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(
+                          255,
+                          123,
+                          138,
+                          195,
+                        ),
+                        foregroundColor: Colors.white,
+                        shape: StadiumBorder(),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 36,
+                          vertical: 16,
+                        ),
+                      ),
+                      child: const Text(
+                        'Start Shopping',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "Montserrat",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 40),
-                Text(
-                  'Hungry for Shopping?',
-                  style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: Colors.white,
-                    fontFamily: "Montserrat",
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 40, vertical: 22),
-                  child: Text(
-                    'Your cart is waiting to be filled with amazing products. '
-                    'Let\'s find something you\'ll love!',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: "Montserrat",
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
-                FilledButton.tonal(
-                  onPressed: () {
-                    //todo: not working when clicked from product details page
-                    NavigationExample.of(context)?.navigateToMenuPage();
-                  },
-                  style: FilledButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 123, 138, 195),
-                    foregroundColor: Colors.white,
-                    shape: StadiumBorder(),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 36,
-                      vertical: 16,
-                    ),
-                  ),
-                  child: const Text(
-                    'Start Shopping',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontFamily: "Montserrat",
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+
+              if (widget.showBackButton)
+                backButton(() => _onBackPressed(context)),
+            ],
           ),
         ),
       ),
     );
   }
 }
-
-//todo: back button visible when navigated from product/combo details and "Start Shopping"
-//should be hidden when back butotn enabled. Vice versa from navigation

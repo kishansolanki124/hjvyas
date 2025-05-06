@@ -559,7 +559,7 @@ class _ProductDetailState extends State<ProductDetail>
   void navigateToCartPage() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CartPage()),
+      MaterialPageRoute(builder: (context) => CartPage(showBackButton: true)),
     );
 
     // When returning from Widget2, this code will execute
