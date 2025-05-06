@@ -517,7 +517,6 @@ class _CheckoutState extends State<Checkout> {
   Future<void> showTNC() async {
     await getStaticPage();
     if (staticPageResponse != null) {
-      print('showTNC function called.');
       showGeneralDialog(
         context: context,
         barrierDismissible: true,

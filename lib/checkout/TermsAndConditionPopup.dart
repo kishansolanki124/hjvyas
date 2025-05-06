@@ -50,15 +50,18 @@ class _TermsAndConditionPopupState extends State<TermsAndConditionPopup> {
     return Scaffold(
       body: Container(
         color: Color.fromARGB(255, 31, 47, 80),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 8, 0, 0),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  //top center title
+                  backButton(() => _onBackPressed(context)),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                      alignment: Alignment.topCenter,
                       child: Text(
                         "Terms & Condition",
                         style: TextStyle(
@@ -69,14 +72,18 @@ class _TermsAndConditionPopupState extends State<TermsAndConditionPopup> {
                         ),
                       ),
                     ),
-                    loadHTMLContent(widget.imageUrl),
-                  ],
+                  ),
+                ],
+              ),
+
+              //html content
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Column(children: [loadHTMLContent(widget.imageUrl)]),
                 ),
               ),
-            ),
-
-            backButton(() => _onBackPressed(context)),
-          ],
+            ],
+          ),
         ),
       ),
     );
