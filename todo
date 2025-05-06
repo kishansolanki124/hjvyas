@@ -8,7 +8,8 @@ Static Pages:
 Cart page:
 2. two decimal points price
 If cart page is empty then remove all items even if its empty
-
+3. handle tester status from API
+3. tester products animation from right to left
 
 General:
 1. keep only portrait mode app
