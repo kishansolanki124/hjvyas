@@ -5,11 +5,11 @@ import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../menu/CategoryController.dart';
 import '../repositories/HJVyasRepository.dart';
+import '../splash/NoIntternetScreen.dart';
 import 'AboutWidgets.dart';
 import 'ContactUs.dart';
 
 class AboutHome extends StatefulWidget {
-
   final CategoryController categoryController = CategoryController(
     getIt<HJVyasApiService>(),
   );
@@ -63,10 +63,30 @@ class _AboutHomeState extends State<AboutHome> {
     'icons/term_icon_a.png',
   ];
 
+  Future<StaticPageResponse> fetchData() async {
+    return await widget._userRepo.getStaticpage();
+  }
+
+  late Future<StaticPageResponse> _dataFuture;
+
+  // Method to refresh data
+  void _refreshData() {
+    setState(() {
+      _dataFuture = fetchData(); // Create new Future when needed
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _dataFuture = widget._userRepo.getStaticpage();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<StaticPageResponse>(
-      future: widget._userRepo.getStaticpage(),
+      future: _dataFuture,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return staticPageMainContent(
@@ -79,13 +99,18 @@ class _AboutHomeState extends State<AboutHome> {
             snapshot.data!.staticpageList,
           );
         } else if (snapshot.hasError) {
-          if (snapshot.error.toString() == 'No internet connection') {
-            //todo: change this to common error page retry page
-            return Center(child: Text('Error: Internt issue vhala'));
-          } else {
-            //todo: change this to common error page
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
+          return NoInternetScreen(
+            onRetry: () {
+              _refreshData();
+            },
+          );
+          // if (snapshot.error.toString() == 'No internet connection') {
+          //   //todo: change this to common error page retry page
+          //   return Center(child: Text('Error: Internt issue vhala'));
+          // } else {
+          //   //todo: change this to common error page
+          //   return Center(child: Text('Error: ${snapshot.error}'));
+          // }
         }
         //todo: change this to common progress
         return Center(child: CircularProgressIndicator());
@@ -95,7 +120,7 @@ class _AboutHomeState extends State<AboutHome> {
 }
 
 Widget staticPageMainContent(
-    categoryController,
+  categoryController,
   _tabNames,
   _imagePaths,
   _imagePathsSelected,
@@ -176,7 +201,8 @@ Widget staticPageMainContent(
                   if (_selectedIndex == 0)
                     AboutUsContentWidget("About Us", staticpageList),
 
-                  if (_selectedIndex == 1) ContactUs(categoryController: categoryController,),
+                  if (_selectedIndex == 1)
+                    ContactUs(categoryController: categoryController),
 
                   if (_selectedIndex == 2)
                     AboutUsContentWidget("Refund Policy", staticpageList),
