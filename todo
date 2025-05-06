@@ -3,6 +3,7 @@ To Nandish bhai:
 2. Combo Detail API:
 -> combo_price parameter missing weight. In product detail API, product_price contains weight
 along with price.
+-> Need App icon in square resolution
 =====================================
 Final stage:
 

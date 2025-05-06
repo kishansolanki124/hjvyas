@@ -242,7 +242,7 @@ class _ProductDetailState extends State<ComboDetail>
       final List<String> stringList =
           _cartItemList.map((item) => jsonEncode(item.toJson())).toList();
       await _prefs.setStringList("cart_list", stringList);
-      showSnackbar(context, "Cart updated.");
+      showSnackbar(context, "Product added to the Cart.");
     }
   }
 

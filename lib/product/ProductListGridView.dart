@@ -66,6 +66,8 @@ class _ProductListGridViewState extends State<ProductListGridView> {
       // Handle the back button press using the current recommended API
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
+        //show bottom nav if hidden on screen close
+        NavigationExample.of(context)?.showBottomNav();
         if (didPop) return;
 
         NavigationExample.of(context)?.navigateToMenuPage();

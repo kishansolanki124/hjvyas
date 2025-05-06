@@ -217,7 +217,7 @@ class _ProductDetailState extends State<ProductDetail>
       final List<String> stringList =
           _cartItemList.map((item) => jsonEncode(item.toJson())).toList();
       await _prefs.setStringList("cart_list", stringList);
-      showSnackbar(context, "Product added to the basket.");
+      showSnackbar(context, "Product added to the Cart.");
     }
   }
 
