@@ -385,13 +385,9 @@ class _CartPageState extends State<CartPage>
                                   widget
                                       .paginationController
                                       .testerItemsLoading
-                                      .value)
-                                Container(
-                                  color: Color.fromARGB(255, 31, 47, 80),
-                                  child: Center(
-                                    child: CircularProgressIndicator(),
-                                  ),
-                                ),
+                                      .value) ...[
+                                getCommonProgressBar(),
+                              ],
 
                               //horizontal list of free products
                               if (!widget
