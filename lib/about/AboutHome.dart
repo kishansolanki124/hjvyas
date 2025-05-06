@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hjvyas/api/models/StaticPageResponse.dart';
+import 'package:hjvyas/utils/CommonAppProgress.dart';
 
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
@@ -104,16 +105,8 @@ class _AboutHomeState extends State<AboutHome> {
               _refreshData();
             },
           );
-          // if (snapshot.error.toString() == 'No internet connection') {
-          //   //todo: change this to common error page retry page
-          //   return Center(child: Text('Error: Internt issue vhala'));
-          // } else {
-          //   //todo: change this to common error page
-          //   return Center(child: Text('Error: ${snapshot.error}'));
-          // }
         }
-        //todo: change this to common progress
-        return Center(child: CircularProgressIndicator());
+        return getCommonProgressBarFullScreen();
       },
     );
   }
