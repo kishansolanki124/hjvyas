@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hjvyas/checkout/Checkout.dart';
+import 'package:hjvyas/utils/CommonAppProgress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/models/CartItemModel.dart';
@@ -16,6 +17,7 @@ import '../injection_container.dart';
 import '../product/ProductPaginationController.dart';
 import '../product_detail/FullWidthButton.dart';
 import '../product_detail/NetworkImageWithLoading.dart';
+import '../splash/NoIntternetScreen.dart';
 import 'CartItemWidget.dart';
 import 'EmptyCart.dart';
 
@@ -246,6 +248,14 @@ class _CartPageState extends State<CartPage> {
     return "₹ $price";
   }
 
+  Future<void> fetchData() async {
+    await loadCartProductsFromSharedPref();
+  }
+
+  void _refreshData() {
+    fetchData();
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -259,20 +269,17 @@ class _CartPageState extends State<CartPage> {
       },
       child: Scaffold(
         body: Obx(() {
-          if (widget.paginationController.cartItems.isEmpty &&
-              widget.paginationController.cartItemsLoading.value) {
-            //API called
-            //todo: change this
-            return Container(
-              color: Color.fromARGB(255, 31, 47, 80),
-              child: Center(child: CircularProgressIndicator()),
+          //internet or API issue
+          if (widget.paginationController.isError.value) {
+            return NoInternetScreen(
+              onRetry: () {
+                _refreshData();
+              },
             );
           }
 
           if (!widget.paginationController.cartItemsLoading.value &&
               widget.paginationController.cartItems.isEmpty) {
-            //todo: create a new UI for the same
-            //either no API called or no data exist
             return EmptyCart();
           }
 
@@ -311,6 +318,15 @@ class _CartPageState extends State<CartPage> {
                       ),
 
                       SizedBox(height: 10.0),
+
+                      if (widget.paginationController.cartItems.isEmpty &&
+                          widget
+                              .paginationController
+                              .cartItemsLoading
+                              .value) ...[
+                        //API called
+                        getCommonProgressBar(),
+                      ],
 
                       Expanded(
                         // Wrap the scrollable part in Expanded
@@ -425,26 +441,6 @@ class _CartPageState extends State<CartPage> {
                                   },
                                 ),
 
-                                // Text(
-                                //   "For our prestigious Customers :",
-                                //   style: TextStyle(
-                                //     color: Colors.white,
-                                //     fontSize: 14,
-                                //     fontWeight: FontWeight.w600,
-                                //     fontFamily: "Montserrat",
-                                //   ),
-                                // ),
-                                //
-                                // SizedBox(height: 5),
-                                //
-                                // Text(
-                                //   "Please Select Anyone Free Product Tester & Proceed To Checkout Below",
-                                //   style: TextStyle(
-                                //     color: Colors.white,
-                                //     fontSize: 14,
-                                //     fontFamily: "Montserrat",
-                                //   ),
-                                // ),
                                 SizedBox(height: 10),
 
                                 SizedBox(
@@ -612,12 +608,21 @@ class _CartPageState extends State<CartPage> {
 
                               SizedBox(height: 10),
 
-                              //proceed to checkout button
-                              proceedToCheckOutButtonFullWidth(
-                                proceedToCheckOutClicked,
-                              ),
+                              if (!widget
+                                      .paginationController
+                                      .cartItemsLoading
+                                      .value &&
+                                  widget
+                                      .paginationController
+                                      .cartItems
+                                      .isNotEmpty) ...[
+                                //proceed to checkout button
+                                proceedToCheckOutButtonFullWidth(
+                                  proceedToCheckOutClicked,
+                                ),
 
-                              SizedBox(height: 100),
+                                SizedBox(height: 100),
+                              ],
                             ],
                           ),
                         ),

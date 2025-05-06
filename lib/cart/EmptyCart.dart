@@ -109,6 +109,7 @@ class _EmptyCartState extends State<EmptyCart>
                 ),
                 FilledButton.tonal(
                   onPressed: () {
+                    //todo: not working when clicked from product details page
                     NavigationExample.of(context)?.navigateToMenuPage();
                   },
                   style: FilledButton.styleFrom(

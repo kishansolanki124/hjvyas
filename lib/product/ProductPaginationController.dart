@@ -32,6 +32,7 @@ class ProductPaginationController extends GetxController {
     String cartPackingId,
     String cartProductType,
   ) async {
+    isError(false);
     cartItemsLoading(true);
     try {
       final newItems = await _service.getProductCart(
@@ -40,6 +41,9 @@ class ProductPaginationController extends GetxController {
       );
       cartMaxQty = int.parse(newItems.productMaxQty);
       cartItems.assignAll(newItems.productCartList);
+    } catch (exception) {
+      isError(true);
+      exception.printError();
     } finally {
       cartItemsLoading(false);
     }
