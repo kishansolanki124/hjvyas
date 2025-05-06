@@ -79,7 +79,6 @@ class _AboutHomeState extends State<AboutHome> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _dataFuture = widget._userRepo.getStaticpage();
   }
@@ -121,96 +120,92 @@ Widget staticPageMainContent(
   _changeIndex,
   List<StaticpageListItem> staticpageList,
 ) {
-  return SafeArea(
-    child: Scaffold(
-      body: Stack(
-        children: <Widget>[
-          //Background Image
-          Image.asset(
-            'images/bg.jpg', // Replace with your image path
-            fit: BoxFit.cover, // Cover the entire screen
-            width: double.infinity,
-            height: double.infinity,
-          ),
+  return Scaffold(
+    body: Stack(
+      children: <Widget>[
+        //Background Image
+        Image.asset(
+          'images/bg.jpg', // Replace with your image path
+          fit: BoxFit.cover, // Cover the entire screen
+          width: double.infinity,
+          height: double.infinity,
+        ),
 
-          //square border on top
-          IgnorePointer(
-            child: Container(
-              height: 100,
-              margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 0),
-              decoration: BoxDecoration(
-                border: Border(
-                  left: BorderSide(
-                    color: Color.fromARGB(255, 123, 138, 195),
-                    width: 2.0,
-                  ),
-                  bottom: BorderSide(
-                    color: Color.fromARGB(255, 123, 138, 195),
-                    width: 2.0,
-                  ),
-                  right: BorderSide(
-                    color: Color.fromARGB(255, 123, 138, 195),
-                    width: 2.0,
-                  ),
+        //square border on top
+        IgnorePointer(
+          child: Container(
+            height: 100,
+            margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 0),
+            decoration: BoxDecoration(
+              border: Border(
+                left: BorderSide(
+                  color: Color.fromARGB(255, 123, 138, 195),
+                  width: 2.0,
                 ),
-                borderRadius: BorderRadius.all(Radius.circular(0)),
+                bottom: BorderSide(
+                  color: Color.fromARGB(255, 123, 138, 195),
+                  width: 2.0,
+                ),
+                right: BorderSide(
+                  color: Color.fromARGB(255, 123, 138, 195),
+                  width: 2.0,
+                ),
               ),
+              borderRadius: BorderRadius.all(Radius.circular(0)),
             ),
           ),
+        ),
 
-          //backButton(() => _onBackPressed(context)),
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 60.0),
+        //backButton(() => _onBackPressed(context)),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              SizedBox(height: 60.0),
 
-                  // Horizontal menu
-                  Center(
-                    child: Container(
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          // Distribute items evenly
-                          children: List.generate(_imagePaths.length, (index) {
-                            return _buildSelectItem(
-                              _tabNames,
-                              _imagePaths,
-                              _imagePathsSelected,
-                              index,
-                              _selectedIndex,
-                              _changeIndex,
-                            );
-                          }),
-                        ),
-                      ),
+              // Horizontal menu
+              Center(
+                child: Container(
+                  child: Padding(
+                    padding: EdgeInsets.fromLTRB(10, 0, 10, 10),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      // Distribute items evenly
+                      children: List.generate(_imagePaths.length, (index) {
+                        return _buildSelectItem(
+                          _tabNames,
+                          _imagePaths,
+                          _imagePathsSelected,
+                          index,
+                          _selectedIndex,
+                          _changeIndex,
+                        );
+                      }),
                     ),
                   ),
-
-                  if (_selectedIndex == 0)
-                    AboutUsContentWidget("About Us", staticpageList),
-
-                  if (_selectedIndex == 1)
-                    ContactUs(categoryController: categoryController),
-
-                  if (_selectedIndex == 2)
-                    AboutUsContentWidget("Refund Policy", staticpageList),
-
-                  if (_selectedIndex == 3)
-                    AboutUsContentWidget("Privacy Policy", staticpageList),
-
-                  if (_selectedIndex == 4)
-                    AboutUsContentWidget("Terms", staticpageList),
-                ],
+                ),
               ),
-            ),
+
+              if (_selectedIndex == 0)
+                AboutUsContentWidget("About Us", staticpageList),
+
+              if (_selectedIndex == 1)
+                ContactUs(categoryController: categoryController),
+
+              if (_selectedIndex == 2)
+                AboutUsContentWidget("Refund Policy", staticpageList),
+
+              if (_selectedIndex == 3)
+                AboutUsContentWidget("Privacy Policy", staticpageList),
+
+              if (_selectedIndex == 4)
+                AboutUsContentWidget("Terms", staticpageList),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 }
