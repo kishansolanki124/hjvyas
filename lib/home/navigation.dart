@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hjvyas/api/models/CategoryListResponse.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../about/AboutHome.dart';
 import '../cart/CartHome.dart';
@@ -54,6 +55,32 @@ class NavigationExample extends StatefulWidget {
 
 class _NavigationExampleState extends State<NavigationExample>
     with TickerProviderStateMixin {
+  int cartItemTotal = 0;
+
+  // Instance of SharedPreferences
+  late SharedPreferences _prefs;
+
+  // Initialize SharedPreferences
+  Future<void> _initPrefs() async {
+    _prefs = await SharedPreferences.getInstance();
+  }
+
+  void updateCartTotal(int total) {
+    setState(() {
+      cartItemTotal = total;
+    });
+  }
+
+  // Helper function to load the list from SharedPreferences
+  Future<void> loadSharedPrefItemsList() async {
+    final List<String>? stringList = _prefs.getStringList("cart_list");
+    if (stringList == null || stringList.isEmpty) {
+      updateCartTotal(0);
+      return;
+    }
+    updateCartTotal(stringList.length);
+  }
+
   int currentPageIndex = 0;
   bool _showBottomNavBar = true; //BottomNavigationBar visibility
   late AnimationController _controller;
@@ -69,6 +96,15 @@ class _NavigationExampleState extends State<NavigationExample>
           _controller.reverse();
         }
         _showBottomNavBar = !_showBottomNavBar;
+      });
+    }
+  }
+
+  void showBottomNav() {
+    if(!_showBottomNavBar) {
+      setState(() {
+        _showBottomNavBar = true;
+        _controller.reverse();
       });
     }
   }
@@ -126,6 +162,9 @@ class _NavigationExampleState extends State<NavigationExample>
   @override
   void initState() {
     super.initState();
+    _initPrefs();
+    loadSharedPrefItemsList();
+
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
@@ -135,6 +174,8 @@ class _NavigationExampleState extends State<NavigationExample>
       begin: Offset.zero,
       end: const Offset(0, 2), // Move down by 2x its height
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+
+    showBottomNav();
   }
 
   @override
@@ -197,9 +238,10 @@ class _NavigationExampleState extends State<NavigationExample>
                 BottomNavigationBarItem(
                   icon: Badge(
                     largeSize: 16,
-                    backgroundColor: Colors.red,
+                    backgroundColor:
+                        cartItemTotal > 0 ? Colors.red : Colors.transparent,
                     label: Text(
-                      "1",
+                      cartItemTotal > 0 ? cartItemTotal.toString() : "",
                       style: TextStyle(
                         fontSize: 10,
                         fontWeight: FontWeight.w700,
@@ -210,12 +252,13 @@ class _NavigationExampleState extends State<NavigationExample>
                     child: bottomNavIcon("icons/my_bag_icon.png"),
                   ),
                   activeIcon: Badge(
-                    largeSize: 20,
-                    backgroundColor: Colors.red,
+                    largeSize: 16,
+                    backgroundColor:
+                        cartItemTotal > 0 ? Colors.red : Colors.transparent,
                     label: Text(
-                      "1",
+                      cartItemTotal > 0 ? cartItemTotal.toString() : "",
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 10,
                         fontWeight: FontWeight.w700,
                         fontFamily: "Montserrat",
                       ),

@@ -47,7 +47,6 @@ class _ProductListGridViewState extends State<ProductListGridView> {
 
   @override
   void dispose() {
-    widget.updateBottomNavBarVisibility(true);
     super.dispose();
   }
 

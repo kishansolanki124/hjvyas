@@ -11,6 +11,7 @@ import '../api/models/CartItemModel.dart';
 import '../api/models/ProductCartResponse.dart';
 import '../api/models/ProductTesterResponse.dart';
 import '../api/services/HJVyasApiService.dart';
+import '../home/navigation.dart';
 import '../injection_container.dart';
 import '../product/ProductPaginationController.dart';
 import '../product_detail/FullWidthButton.dart';
@@ -235,6 +236,9 @@ class _CartPageState extends State<CartPage> {
     await getProductTester();
 
     showSnackbar("Basket updated."); // Show the message
+
+    //updating cart total
+    NavigationExample.of(context)?.loadSharedPrefItemsList();
   }
 
   // Function to format price
