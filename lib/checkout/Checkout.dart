@@ -19,6 +19,7 @@ import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product_detail/ProductDetailWidget.dart';
 import '../repositories/HJVyasRepository.dart';
+import '../utils/CommonAppProgress.dart';
 import 'CheckoutController.dart';
 import 'PayPalItem.dart';
 import 'TermsAndConditionPopup.dart';
@@ -1135,14 +1136,14 @@ class _CheckoutState extends State<Checkout> {
                                   //cart total
                                   CartTotalRow(
                                     "Cart Total",
-                                    "₹ ${widget.total}",
+                                    "₹ ${getTwoDecimalPrice(widget.total)}",
                                     10,
                                   ),
 
                                   //shipping charge
                                   CartTotalRow(
                                     "Shipping Charge",
-                                    "₹ $finalCharge",
+                                    "₹ ${getTwoDecimalPrice(finalCharge)}",
                                     10,
                                   ),
 
@@ -1168,8 +1169,8 @@ class _CheckoutState extends State<Checkout> {
                                       child: CartTotalRow(
                                         "Grand Total",
                                         finalAmount > 0
-                                            ? "₹ $finalAmount"
-                                            : "₹ ${widget.total + shippingCharge}",
+                                            ? "₹ ${getTwoDecimalPrice(finalAmount)}"
+                                            : "₹ ${getTwoDecimalPrice(widget.total + shippingCharge)}",
                                         0,
                                       ),
                                     ),
