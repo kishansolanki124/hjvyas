@@ -36,6 +36,7 @@ class CategoryController extends GetxController {
 
   Future<void> getContactus() async {
     try {
+      error("");
       isLoading(true);
       final response = await _service.getContactus();
       contactItem.assignAll(

@@ -3,11 +3,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:hjvyas/splash/NoIntternetScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 import '../api/models/ContactusResponse.dart';
 import '../menu/CategoryController.dart';
+import '../utils/CommonAppProgress.dart';
 import '../utils/NetworkImageWithProgress.dart';
 
 class ContactUs extends StatefulWidget {
@@ -20,6 +22,14 @@ class ContactUs extends StatefulWidget {
 }
 
 class _ContactUsState extends State<ContactUs> {
+  Future<void> fetchData() async {
+    await widget.categoryController.getContactus();
+  }
+
+  void _refreshData() {
+    fetchData();
+  }
+
   @override
   void initState() {
     super.initState();
@@ -96,15 +106,18 @@ class _ContactUsState extends State<ContactUs> {
 
   void onSubmitClick() {
     if (_validateName(_nameController.text) != null) {
-      showSnackbar(_validateName(_nameController.text).toString());
+      showSnackbar(context, _validateName(_nameController.text).toString());
     } else if (_validateEmail(_emailController.text) != null) {
-      showSnackbar(_validateEmail(_emailController.text).toString());
+      showSnackbar(context, _validateEmail(_emailController.text).toString());
     } else if (_validatePhone(_phoneController.text) != null) {
-      showSnackbar(_validatePhone(_phoneController.text).toString());
+      showSnackbar(context, _validatePhone(_phoneController.text).toString());
     } else if (_validateCity(_cityController.text) != null) {
-      showSnackbar(_validateCity(_cityController.text).toString());
+      showSnackbar(context, _validateCity(_cityController.text).toString());
     } else if (_validateMessage(_messageController.text) != null) {
-      showSnackbar(_validateMessage(_messageController.text).toString());
+      showSnackbar(
+        context,
+        _validateMessage(_messageController.text).toString(),
+      );
     } else {
       newFunction();
     }
@@ -220,13 +233,16 @@ class _ContactUsState extends State<ContactUs> {
   Widget build(BuildContext context) {
     return Obx(() {
       if (widget.categoryController.isLoading.value) {
-        //todo change this
-        return Center(child: CircularProgressIndicator());
+        return getCommonProgressBar();
       }
 
       if (widget.categoryController.error.isNotEmpty) {
-        //todo change this
-        return Center(child: Text('Error: ${widget.categoryController.error}'));
+        return NoInternetScreen(
+          showBackgroundImage: false,
+          onRetry: () {
+            _refreshData();
+          },
+        );
       }
 
       final cateogories = widget.categoryController.contactItem.elementAt(0);
@@ -491,6 +507,7 @@ class _ContactUsState extends State<ContactUs> {
 
                       //edittext name
                       TextField(
+                        textInputAction: TextInputAction.next,
                         controller: _nameController,
                         keyboardType: TextInputType.name,
                         textCapitalization: TextCapitalization.words,
@@ -536,6 +553,7 @@ class _ContactUsState extends State<ContactUs> {
 
                       //edittext email
                       TextField(
+                        textInputAction: TextInputAction.next,
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         style: TextStyle(
@@ -577,6 +595,7 @@ class _ContactUsState extends State<ContactUs> {
 
                       //contact no
                       TextField(
+                        textInputAction: TextInputAction.next,
                         controller: _phoneController,
                         keyboardType: TextInputType.number,
                         maxLength: 14,
@@ -623,6 +642,7 @@ class _ContactUsState extends State<ContactUs> {
 
                       //city
                       TextField(
+                        textInputAction: TextInputAction.next,
                         controller: _cityController,
                         keyboardType: TextInputType.streetAddress,
                         textCapitalization: TextCapitalization.words,
@@ -662,6 +682,7 @@ class _ContactUsState extends State<ContactUs> {
 
                       //message
                       TextField(
+                        textInputAction: TextInputAction.done,
                         controller: _messageController,
                         keyboardType: TextInputType.multiline,
                         // Use multiline input type
@@ -765,33 +786,7 @@ class _ContactUsState extends State<ContactUs> {
           ),
         ),
       );
-      // return contactUsContentWidget(
-      //   widget.categoryController,
-      //   cateogories,
-      //   _nameController,
-      //   _emailController,
-      //   _phoneController,
-      //   _cityController,
-      //   _messageController,
-      //   onSubmitClick,
-      //   selectedVariantInquiry,
-      // );
     });
-  }
-
-  void showSnackbar(String s) {
-    var snackBar = SnackBar(
-      backgroundColor: Colors.white,
-      content: Text(
-        s,
-        style: TextStyle(
-          fontSize: 14.0,
-          fontFamily: "Montserrat",
-          color: Color.fromARGB(255, 32, 47, 80),
-        ),
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   void newFunction() async {

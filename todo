@@ -1,41 +1,11 @@
 Static Pages:
-1. common error page retry page
-2. error page
-3. internet issue retry page
-4. call api only once on first load. currently on each tab its calling
 8. imoption option next and done for fields
+
 ====================================================
 To Nandish bhai:
-1. Product Details API:
--> Products you may like list ma out of stock products parameter missing. Add it.
--> Products you may like list ma price and weight missing che. E add krjo etle set kari dais.
-Design feedback ma evu lakhyu che k price add karvi so...
-
 2. Combo Detail API:
--> Terms missing in details.
--> Combo you may like list ma out of stock Combos parameter missing. Add it.
 -> combo_price parameter missing weight. In product detail API, product_price contains weight
 along with price.
--> max quantity variable not available in this API
-
-Cart Page:
-1. test with static price from shared pref and click on checkout to check values.
-
-
-dynamic view handle for payment
-
-read chat of Nandish bhai and do the needful changess.
-
-1. notification badge count
-2. badge count on bototm nav view Cart
-3. Cart badge selection/not selectioon badge position issue
-4. add if payment is  disabled then dont show it or if message is available then show that message
-5. on submit click of checkout, progress bar should be in at button positino, update it view
-
-[4:27 PM, 5/3/2025] Nandish Patel Rajkot: baki app ma checkout ma area sub area remove kari nakh jo ne address, email ma note ma apde vat thai e rite text web mathi lai le jo ne gift vadu text pan web mathi lai le jo
-[4:28 PM, 5/3/2025] Nandish Patel Rajkot: notification ma atyare number remove kari nakh jo
-
-ne add to cart ma kai biju logic male to jo le jo
 
 App Icon
 double tap to exit snackbar or toast
