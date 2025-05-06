@@ -1040,6 +1040,7 @@ Widget CheckoutAddressWidget(
               '(Terms & Conditions)',
               style: TextStyle(
                 decoration: TextDecoration.underline,
+                decorationColor: Color.fromARGB(255, 123, 138, 195),
                 color: Color.fromARGB(255, 123, 138, 195),
                 fontFamily: "Montserrat",
                 fontSize: 12,
