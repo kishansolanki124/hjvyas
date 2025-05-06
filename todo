@@ -1,18 +1,11 @@
-Static Pages:
-8. imoption option next and done for fields
-
-====================================================
+=====================================
 To Nandish bhai:
 2. Combo Detail API:
 -> combo_price parameter missing weight. In product detail API, product_price contains weight
 along with price.
-
-App Icon
-double tap to exit snackbar or toast
 =====================================
 Final stage:
 
-1. bottom nav is slightly moved to right issue.
 
 1. Common snackbar for all screens, available at utils folder
 
@@ -24,3 +17,6 @@ Product Details:
 
 5. Coming back from Product Details or Combo Details to Product List or Combo List, update
 cart total items. Currently its updated when user taps on any bottom nav item.
+=====================================
+App icon for iOS App
+Test internet permission iOS app

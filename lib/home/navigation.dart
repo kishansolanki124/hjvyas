@@ -204,7 +204,7 @@ class _NavigationExampleState extends State<NavigationExample>
       floatingActionButton: SlideTransition(
         position: _animation,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20.0, 0, 10.0, 0),
+          padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: Color.fromARGB(225, 255, 255, 255),
