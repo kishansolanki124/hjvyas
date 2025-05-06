@@ -15,6 +15,7 @@ import 'package:hjvyas/product_detail/ProductDetailController.dart';
 import 'package:hjvyas/splash/NoIntternetScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../about/AboutWidgets.dart';
 import '../api/models/CartItemModel.dart';
 import '../api/models/ProductDetailResponse.dart';
 import '../api/services/HJVyasApiService.dart';
@@ -775,31 +776,36 @@ class _ProductDetailState extends State<ProductDetail>
                                             CrossAxisAlignment.start,
                                         // Align text to the left
                                         children: <Widget>[
+                                          loadHTMLContent(
+                                            productDetailResponse!.productDetail
+                                                .elementAt(0)
+                                                .notifySorryMsg,
+                                          ),
+
                                           // 1. "We're Sorry!" text in bold
-                                          Text(
-                                            "We're Sorry!",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14.0,
-                                              // Adjust size as needed
-                                              fontWeight: FontWeight.w500,
-                                              fontFamily: "Montserrat",
-                                            ),
-                                          ),
-
-                                          SizedBox(height: 8.0),
-                                          // Add some vertical spacing
-                                          // 2. "This item has sold out" text in normal font
-                                          Text(
-                                            "This Item Has Sold Out. We Will Get Back Soon With This Product.",
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14.0,
-                                              // Adjust size as needed
-                                              fontFamily: "Montserrat",
-                                            ),
-                                          ),
-
+                                          // Text(
+                                          //   "We're Sorry!",
+                                          //   style: TextStyle(
+                                          //     color: Colors.white,
+                                          //     fontSize: 14.0,
+                                          //     // Adjust size as needed
+                                          //     fontWeight: FontWeight.w500,
+                                          //     fontFamily: "Montserrat",
+                                          //   ),
+                                          // ),
+                                          //
+                                          // SizedBox(height: 8.0),
+                                          // // Add some vertical spacing
+                                          // // 2. "This item has sold out" text in normal font
+                                          // Text(
+                                          //   "This Item Has Sold Out. We Will Get Back Soon With This Product.",
+                                          //   style: TextStyle(
+                                          //     color: Colors.white,
+                                          //     fontSize: 14.0,
+                                          //     // Adjust size as needed
+                                          //     fontFamily: "Montserrat",
+                                          //   ),
+                                          // ),
                                           SizedBox(height: 16.0),
 
                                           // 3. "Notify Me !" Text with leading email icon
@@ -830,7 +836,9 @@ class _ProductDetailState extends State<ProductDetail>
 
                                           // 4. Text "Notify me when Product is Available"
                                           Text(
-                                            "Notify Me When Product Is Available.",
+                                            productDetailResponse!.productDetail
+                                                .elementAt(0)
+                                                .notifyMeMsg,
                                             style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 14.0,

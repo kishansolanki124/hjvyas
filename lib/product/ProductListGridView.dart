@@ -45,6 +45,12 @@ class _ProductListGridViewState extends State<ProductListGridView> {
     ); // Explicit call
   }
 
+  @override
+  void dispose() {
+    widget.updateBottomNavBarVisibility(true);
+    super.dispose();
+  }
+
   void _refreshData() {
     fetchData();
   }

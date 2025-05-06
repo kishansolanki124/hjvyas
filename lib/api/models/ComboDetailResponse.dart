@@ -53,8 +53,11 @@ class ComboDetailItem {
   final String comboName;
   final String comboPrice;
   final String comboDescription;
+  final String comboTerms;
   final String comboImage;
   final String comboSoldout;
+  final String notifySorryMsg;
+  final String notifyMeMsg;
   final String comboMaxQty;
 
   ComboDetailItem({
@@ -63,8 +66,11 @@ class ComboDetailItem {
     this.comboName = "",
     this.comboPrice = "",
     this.comboDescription = "",
+    this.comboTerms = "",
     this.comboImage = "",
     this.comboSoldout = "",
+    this.notifySorryMsg = "",
+    this.notifyMeMsg = "",
     this.comboMaxQty = "",
   });
 
@@ -75,8 +81,11 @@ class ComboDetailItem {
         comboName: asString(json, 'combo_name'),
         comboPrice: asString(json, 'combo_price'),
         comboDescription: asString(json, 'combo_description'),
+        comboTerms: asString(json, 'combo_terms'),
         comboImage: asString(json, 'combo_image'),
         comboSoldout: asString(json, 'combo_soldout'),
+        notifySorryMsg: asString(json, 'notify_sorry_msg'),
+        notifyMeMsg: asString(json, 'notify_me_msg'),
         comboMaxQty: asString(json, 'combo_max_qty'),
       );
 
@@ -86,8 +95,11 @@ class ComboDetailItem {
     'combo_name': comboName,
     'combo_price': comboPrice,
     'combo_description': comboDescription,
+    'combo_terms': comboTerms,
     'combo_image': comboImage,
     'combo_soldout': comboSoldout,
+    'notify_sorry_msg': notifySorryMsg,
+    'notify_me_msg': notifyMeMsg,
     'combo_max_qty': comboMaxQty,
   };
 }

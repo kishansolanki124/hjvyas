@@ -124,6 +124,22 @@ Widget loadHTMLContent(String? stringData) {
         textAlign: TextAlign.justify,
         color: Colors.white,
       ),
+      "body": Style(
+        fontWeight: FontWeight.w400,
+        //fontSize: 14,
+        fontFamily: "Montserrat",
+        fontSize: FontSize.medium,
+        textAlign: TextAlign.justify,
+        color: Colors.white,
+      ),
+      "<br>": Style(
+        fontWeight: FontWeight.w400,
+        //fontSize: 14,
+        fontFamily: "Montserrat",
+        fontSize: FontSize.medium,
+        textAlign: TextAlign.justify,
+        color: Colors.white,
+      ),
       "strong": Style(
         fontWeight: FontWeight.w600,
         //fontSize: 14,

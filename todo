@@ -1,6 +1,3 @@
-Combo Details:
-4. hero widget for combo list and details
-
 Static Pages:
 1. common error page retry page
 2. error page
@@ -13,12 +10,6 @@ Cart page:
 2. two decimal points price
 If cart page is empty then remove all items even if its empty
 
-Checkout:
-1. india ->
-1.1 gujarat ->
-1.1.1. jamnagar
-1.1.2. other city
-1.2 out side gujarat ->
 
 General:
 1. keep only portrait mode app
