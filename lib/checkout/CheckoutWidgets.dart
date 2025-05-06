@@ -299,6 +299,7 @@ Widget CheckoutAddressWidget(
     children: [
       //edittext name
       TextField(
+        textInputAction: TextInputAction.next,
         controller: _nameController,
         keyboardType: TextInputType.name,
         textCapitalization: TextCapitalization.words,
@@ -341,6 +342,7 @@ Widget CheckoutAddressWidget(
 
       //edittext email
       TextField(
+        textInputAction: TextInputAction.next,
         controller: _emailController,
         keyboardType: TextInputType.emailAddress,
         style: TextStyle(
@@ -469,6 +471,7 @@ Widget CheckoutAddressWidget(
       //Delivery Address: (Enter Full Address With Street, Road, Building Name,No etc)
       //Delivery Address
       TextField(
+        textInputAction: TextInputAction.next,
         controller: _deliveryAddressController,
         keyboardType: TextInputType.multiline,
         // Use multiline input type
@@ -515,6 +518,7 @@ Widget CheckoutAddressWidget(
 
       //Zip Code
       TextField(
+        textInputAction: TextInputAction.done,
         controller: _zipcodeController,
         keyboardType: TextInputType.text,
         maxLength: 10,
@@ -558,6 +562,7 @@ Widget CheckoutAddressWidget(
           _selectedOptionState != "Gujarat" ||
           _selectedOptionCity != "Jamnagar") ...[
         TextField(
+          textInputAction: TextInputAction.next,
           controller: _cityController,
           keyboardType: TextInputType.streetAddress,
           textCapitalization: TextCapitalization.words,
@@ -659,6 +664,7 @@ Widget CheckoutAddressWidget(
       //state input field for out side india
       if (_selectedOptionCountry != "India") ...[
         TextField(
+          textInputAction: TextInputAction.next,
           controller: _stateController,
           keyboardType: TextInputType.streetAddress,
           textCapitalization: TextCapitalization.words,
@@ -698,6 +704,7 @@ Widget CheckoutAddressWidget(
 
       //Alternate Mobile no.
       TextField(
+        textInputAction: TextInputAction.next,
         controller: _alternatePhoneController,
         keyboardType: TextInputType.number,
         maxLength: 14,
@@ -741,6 +748,7 @@ Widget CheckoutAddressWidget(
 
       //Notes if any
       TextField(
+        textInputAction: TextInputAction.done,
         controller: _notesController,
         keyboardType: TextInputType.multiline,
         // Use multiline input type

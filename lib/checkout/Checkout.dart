@@ -688,6 +688,7 @@ class _CheckoutState extends State<Checkout> {
   }
 
   void onContinueClick() {
+    hideKeyboard(context);
     if (_validatePhone(_phoneController.text) != null) {
       showSnackbar(_validatePhone(_phoneController.text).toString());
     } else {

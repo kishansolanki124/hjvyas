@@ -4,10 +4,6 @@ Static Pages:
 3. internet issue retry page
 4. call api only once on first load. currently on each tab its calling
 8. imoption option next and done for fields
-
-General:
-1. keep only portrait mode app
-2. Scrolling animation for bottom nav hide/show
 ====================================================
 To Nandish bhai:
 1. Product Details API:
