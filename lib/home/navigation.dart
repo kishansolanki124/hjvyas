@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hjvyas/api/models/CategoryListResponse.dart';
@@ -58,7 +59,7 @@ class _NavigationExampleState extends State<NavigationExample>
   int cartItemTotal = 0;
 
   // Instance of SharedPreferences
-  late SharedPreferences _prefs;
+  SharedPreferences? _prefs;
 
   // Initialize SharedPreferences
   Future<void> _initPrefs() async {
@@ -68,12 +69,19 @@ class _NavigationExampleState extends State<NavigationExample>
   void updateCartTotal(int total) {
     setState(() {
       cartItemTotal = total;
+      if (kDebugMode) {
+        print('cartItemTotal is updated to $cartItemTotal');
+      }
     });
   }
 
   // Helper function to load the list from SharedPreferences
   Future<void> loadSharedPrefItemsList() async {
-    final List<String>? stringList = _prefs.getStringList("cart_list");
+    if (_prefs == null) {
+      await _initPrefs();
+    }
+
+    final List<String>? stringList = _prefs?.getStringList("cart_list");
     if (stringList == null || stringList.isEmpty) {
       updateCartTotal(0);
       return;
@@ -101,7 +109,7 @@ class _NavigationExampleState extends State<NavigationExample>
   }
 
   void showBottomNav() {
-    if(!_showBottomNavBar) {
+    if (!_showBottomNavBar) {
       setState(() {
         _showBottomNavBar = true;
         _controller.reverse();
