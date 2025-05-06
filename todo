@@ -60,3 +60,6 @@ Product List:
 
 Product Details:
 8. Test with smaller and larger devices.
+
+5. Coming back from Product Details or Combo Details to Product List or Combo List, update
+cart total items. Currently its updated when user taps on any bottom nav item.

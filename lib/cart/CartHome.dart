@@ -16,7 +16,7 @@ import '../injection_container.dart';
 import '../product/ProductPaginationController.dart';
 import '../product_detail/FullWidthButton.dart';
 import '../product_detail/NetworkImageWithLoading.dart';
-import 'CartWidget.dart';
+import 'CartItemWidget.dart';
 import 'EmptyCart.dart';
 
 class CartItem {
@@ -328,14 +328,15 @@ class _CartPageState extends State<CartPage> {
                                   final cartItem = _cartItems![index];
                                   final _cartItemShaaredPref =
                                       _cartItemShaaredPrefList[index];
+
                                   return CartItemWidget(
-                                    index,
-                                    cartItem,
-                                    _cartItemShaaredPref,
-                                    _formatPrice,
-                                    _decrementCount,
-                                    _incrementCount,
-                                    _removeItem,
+                                    index: index,
+                                    formatPrice: _formatPrice,
+                                    decrementCount: _decrementCount,
+                                    incrementCount: _incrementCount,
+                                    removeItem: _removeItem,
+                                    cartItem: cartItem,
+                                    cartItemModel: _cartItemShaaredPref,
                                   );
                                 },
                               ),
