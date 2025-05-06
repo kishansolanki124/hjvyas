@@ -16,6 +16,7 @@ import '../product/ProductPaginationController.dart';
 import '../product_detail/FullWidthButton.dart';
 import '../product_detail/NetworkImageWithLoading.dart';
 import 'CartWidget.dart';
+import 'EmptyCart.dart';
 
 class CartItem {
   String imageUrl;
@@ -268,7 +269,7 @@ class _CartPageState extends State<CartPage> {
               widget.paginationController.cartItems.isEmpty) {
             //todo: create a new UI for the same
             //either no API called or no data exist
-            return Center(child: Text("Empty Cart"));
+            return EmptyCart();
           }
 
           cartMaxQty = widget.paginationController.cartMaxQty;

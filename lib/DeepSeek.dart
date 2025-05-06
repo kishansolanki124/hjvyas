@@ -1,154 +1,147 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/animation.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Vertical PageView',
-      home: VerticalPageViewScreen(),
+      title: 'Empty Cart Demo',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: const Color.fromARGB(255, 31, 47, 80),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color.fromARGB(255, 31, 47, 80),
+          secondary: const Color.fromARGB(255, 123, 138, 195),
+        ),
+      ),
+      home: const EmptyCartScreen(),
     );
   }
 }
 
-class VerticalPageViewScreen extends StatefulWidget {
+class EmptyCartScreen extends StatefulWidget {
+  const EmptyCartScreen({Key? key}) : super(key: key);
+
   @override
-  _VerticalPageViewScreenState createState() => _VerticalPageViewScreenState();
+  _EmptyCartScreenState createState() => _EmptyCartScreenState();
 }
 
-class _VerticalPageViewScreenState extends State<VerticalPageViewScreen> {
-  final PageController _pageController = PageController(
-    viewportFraction: 0.8,
-  );
-  int _currentPage = 0;
-  bool _initialAnimationDone = false;
+class _EmptyCartScreenState extends State<EmptyCartScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
-    // Trigger initial animation after first frame is rendered
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _runInitialAnimation();
-    });
-  }
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    )..repeat(reverse: true);
 
-  void _runInitialAnimation() async {
-    // Start below the screen
-    _pageController.position.jumpTo(-MediaQuery.of(context).size.height * 0.2);
-    // Animate to first position
-    await _pageController.animateTo(
-      0,
-      duration: Duration(milliseconds: 800),
-      curve: Curves.easeOutQuart,
+    _animation = Tween<double>(begin: -0.1, end: 0.1).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeInOut,
+      ),
     );
-    setState(() {
-      _initialAnimationDone = true;
-    });
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Stack(
-        children: [
-          PageView.builder(
-            controller: _pageController,
-            scrollDirection: Axis.vertical,
-            onPageChanged: (index) {
-              setState(() {
-                _currentPage = index;
-              });
-            },
-            itemCount: 5,
-            itemBuilder: (context, index) {
-              return AnimatedBuilder(
-                animation: _pageController,
+      backgroundColor: const Color.fromARGB(255, 31, 47, 80),
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              AnimatedBuilder(
+                animation: _animation,
                 builder: (context, child) {
-                  double value = 0.0;
-                  if (_pageController.position.haveDimensions) {
-                    value = index - _pageController.page!;
-                    value = (value * 0.1).clamp(-1.0, 1.0);
-                  }
-
-                  // Initial animation state
-                  if (!_initialAnimationDone && index == 0) {
-                    return Transform.translate(
-                      offset: Offset(0, MediaQuery.of(context).size.height * 0.2),
-                      child: Opacity(
-                        opacity: 0.5,
-                        child: child,
-                      ),
-                    );
-                  }
-
-                  // Regular scroll animation
-                  return Transform(
-                    transform: Matrix4.identity()
-                      ..setEntry(3, 2, 0.001)
-                      ..translate(0.0, -value * MediaQuery.of(context).size.height * 0.4)
-                      ..scale(1.0 - value.abs() * 0.1),
-                    alignment: Alignment.bottomCenter,
-                    child: Opacity(
-                      opacity: 1.0 - value.abs() * 0.5,
-                      child: child,
-                    ),
+                  return Transform.rotate(
+                    angle: _animation.value,
+                    child: child,
                   );
                 },
                 child: Container(
+                  padding: const EdgeInsets.all(20),
                   decoration: BoxDecoration(
-                    color: Colors.primaries[index % Colors.primaries.length],
+                    color: const Color.fromARGB(255, 123, 138, 195),
+                    shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.5),
-                        blurRadius: 20,
-                        spreadRadius: 5,
-                      )
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 10,
+                        spreadRadius: 2,
+                        offset: const Offset(0, 5),
+                      ),
                     ],
                   ),
-                  child: Center(
-                    child: Text(
-                      'Page ${index + 1}',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 40,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                  child: const Icon(
+                    Icons.shopping_cart_outlined,
+                    size: 60,
+                    color: Colors.white,
                   ),
                 ),
-              );
-            },
-          ),
-          Positioned(
-            bottom: 20,
-            left: 0,
-            right: 0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(5, (index) {
-                return Container(
-                  width: 8,
-                  height: 8,
-                  margin: EdgeInsets.symmetric(horizontal: 4),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: _currentPage == index
-                        ? Colors.white
-                        : Colors.white.withOpacity(0.5),
+              ),
+              const SizedBox(height: 30),
+              const Text(
+                'Your Cart is Empty',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 15),
+              const Text(
+                'Looks like you haven\'t added\nany items to your cart yet',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 40),
+              ElevatedButton(
+                onPressed: () {
+                  // Navigate to products screen
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 123, 138, 195),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 40, vertical: 15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
                   ),
-                );
-              }),
-            ),
+                  elevation: 5,
+                ),
+                child: const Text(
+                  'Start Shopping',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

@@ -118,6 +118,7 @@ class _NavigationExampleState extends State<NavigationExample>
 
   void navigateToMenuPage() {
     setState(() {
+      currentPageIndex = 1;
       homeNavigationWidget = MenuScreen();
     });
   }
