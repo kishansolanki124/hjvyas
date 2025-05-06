@@ -27,6 +27,7 @@ class CheckoutController extends GetxController {
   //var productTesterList = <ProductTesterListItem>[].obs;
   //var items = <ProductListItem>[].obs;
   var isLoading = false.obs;
+  var isError = false.obs;
   var shippingChargesLoading = false.obs;
   var addRazorpayStatusLoading = false.obs;
   var addOrderResponseLoading = false.obs;
@@ -38,9 +39,13 @@ class CheckoutController extends GetxController {
 
   Future<void> getShippingStatus() async {
     isLoading(true);
+    isError(false);
     try {
       shippingStatusResponse.value = await _service.getShippingStatus();
       //cartItems.assignAll(newItems.productCartList);
+    } catch (exception) {
+      isError(true);
+      exception.printError();
     } finally {
       isLoading(false);
     }
@@ -71,9 +76,9 @@ class CheckoutController extends GetxController {
   }
 
   Future<void> addRazorpayStatus(
-      String order_no,
-      String razorpay_orderid,
-      String razorpay_paymentid
+    String order_no,
+    String razorpay_orderid,
+    String razorpay_paymentid,
   ) async {
     addRazorpayStatusLoading(true);
     try {

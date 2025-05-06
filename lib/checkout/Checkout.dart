@@ -6,6 +6,7 @@ import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hjvyas/checkout/CheckoutWidgets.dart';
 import 'package:hjvyas/checkout/PaymentSuccessPage.dart';
+import 'package:hjvyas/splash/NoIntternetScreen.dart';
 import 'package:intl/intl.dart'; // Import the intl package
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 
@@ -308,12 +309,20 @@ class _CheckoutState extends State<Checkout> {
     });
   }
 
+  void _refreshData() {
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    await widget.paginationController.getShippingStatus(); // Explicit call
+  }
+
   @override
   void initState() {
     super.initState();
-    widget.paginationController.getShippingStatus();
     //initialise Razorpay SDK
     _initializeRazorpay();
+    widget.paginationController.getShippingStatus();
   }
 
   void _startRazorPayPayment() {
@@ -507,7 +516,7 @@ class _CheckoutState extends State<Checkout> {
 
   Future<void> showTNC() async {
     await getStaticPage();
-    if(staticPageResponse != null){
+    if (staticPageResponse != null) {
       print('showTNC function called.');
       showGeneralDialog(
         context: context,
@@ -515,10 +524,14 @@ class _CheckoutState extends State<Checkout> {
         barrierLabel: "Terms and Conditions",
         transitionDuration: const Duration(milliseconds: 300),
         pageBuilder: (_, __, ___) {
-          return TermsAndConditionPopup(imageUrl: getItemByName(
-            staticPageResponse!.staticpageList,
-            "Terms",
-          )!.description, onClose: () => {});
+          return TermsAndConditionPopup(
+            imageUrl:
+                getItemByName(
+                  staticPageResponse!.staticpageList,
+                  "Terms",
+                )!.description,
+            onClose: () => {},
+          );
         },
         transitionBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
@@ -954,16 +967,18 @@ class _CheckoutState extends State<Checkout> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Obx(() {
-        if (widget.paginationController.isLoading.value &&
-            null == widget.paginationController.shippingStatusResponse.value) {
-          //API called
-          //todo: change this
-          return Container(
-            color: Color.fromARGB(255, 31, 47, 80),
-            child: Center(child: CircularProgressIndicator()),
-          );
-        }
+        // if (widget.paginationController.isError.value) {
+        //   return NoInternetScreen(
+        //     showBackgroundImage: true,
+        //     onRetry: () {
+        //       _refreshData();
+        //     },
+        //   );
+        // }
 
+        bool outSideIndia = false;
+        bool otherStateOn = false;
+        bool isGujaratOn = false;
         if (!widget.paginationController.isLoading.value &&
             null != widget.paginationController.shippingStatusResponse.value) {
           shippingStatusResponse =
@@ -1007,7 +1022,7 @@ class _CheckoutState extends State<Checkout> {
             );
           }
 
-          bool outSideIndia =
+          outSideIndia =
               (shippingStatusResponse!.shippingStatusList
                           .elementAt(0)
                           .outsideindiaStatus ==
@@ -1015,7 +1030,7 @@ class _CheckoutState extends State<Checkout> {
                   ? true
                   : false;
 
-          bool otherStateOn =
+          otherStateOn =
               (shippingStatusResponse!.shippingStatusList
                           .elementAt(0)
                           .outofgujaratStatus ==
@@ -1023,7 +1038,7 @@ class _CheckoutState extends State<Checkout> {
                   ? true
                   : false;
 
-          bool isGujaratOn =
+          isGujaratOn =
               (shippingStatusResponse!.shippingStatusList
                           .elementAt(0)
                           .gujaratStatus ==
@@ -1053,81 +1068,102 @@ class _CheckoutState extends State<Checkout> {
 
           countryListItem ??= shippingStatusResponse?.countryList.elementAt(0);
           stateListItem ??= shippingStatusResponse?.stateList.elementAt(0);
+        }
 
-          return SafeArea(
-            child: Scaffold(
-              body: Stack(
-                children: <Widget>[
-                  // 1. Background Image
-                  Image.asset(
-                    'images/bg.jpg', // Replace with your image path
-                    fit: BoxFit.cover, // Cover the entire screen
-                    width: double.infinity,
-                    height: double.infinity,
-                  ),
+        return SafeArea(
+          child: Scaffold(
+            body: Stack(
+              children: <Widget>[
+                // 1. Background Image
+                Image.asset(
+                  'images/bg.jpg', // Replace with your image path
+                  fit: BoxFit.cover, // Cover the entire screen
+                  width: double.infinity,
+                  height: double.infinity,
+                ),
 
-                  //square border app color
-                  IgnorePointer(
-                    child: Container(
-                      height: 100,
-                      margin: EdgeInsets.only(
-                        left: 16.0,
-                        right: 16.0,
-                        bottom: 0,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border(
-                          left: BorderSide(
-                            color: Color.fromARGB(255, 123, 138, 195),
-                            width: 2.0,
-                          ),
-                          bottom: BorderSide(
-                            color: Color.fromARGB(255, 123, 138, 195),
-                            width: 2.0,
-                          ),
-                          right: BorderSide(
-                            color: Color.fromARGB(255, 123, 138, 195),
-                            width: 2.0,
-                          ),
+                //square border app color
+                IgnorePointer(
+                  child: Container(
+                    height: 100,
+                    margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 0),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        left: BorderSide(
+                          color: Color.fromARGB(255, 123, 138, 195),
+                          width: 2.0,
                         ),
-                        borderRadius: BorderRadius.all(Radius.circular(0)),
+                        bottom: BorderSide(
+                          color: Color.fromARGB(255, 123, 138, 195),
+                          width: 2.0,
+                        ),
+                        right: BorderSide(
+                          color: Color.fromARGB(255, 123, 138, 195),
+                          width: 2.0,
+                        ),
                       ),
+                      borderRadius: BorderRadius.all(Radius.circular(0)),
                     ),
                   ),
+                ),
 
-                  backButton(() => _onBackPressed(context)),
+                backButton(() => _onBackPressed(context)),
 
-                  SafeArea(
-                    // Use SafeArea to avoid overlapping with system UI
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(height: 60.0),
+                SafeArea(
+                  // Use SafeArea to avoid overlapping with system UI
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        SizedBox(height: 60.0),
 
-                          // Title
-                          Center(
-                            child: Container(
-                              color: Color.fromARGB(255, 31, 47, 80),
-                              child: Padding(
-                                padding: EdgeInsets.all(10),
-                                child: Text(
-                                  'Checkout',
-                                  style: TextStyle(
-                                    fontSize: 18.0,
-                                    fontFamily: "Montserrat",
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.white,
-                                  ),
+                        // Title
+                        Center(
+                          child: Container(
+                            color: Color.fromARGB(255, 31, 47, 80),
+                            child: Padding(
+                              padding: EdgeInsets.all(10),
+                              child: Text(
+                                'Checkout',
+                                style: TextStyle(
+                                  fontSize: 18.0,
+                                  fontFamily: "Montserrat",
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
                                 ),
                               ),
                             ),
                           ),
+                        ),
 
-                          SizedBox(height: 8.0),
+                        SizedBox(height: 8.0),
 
-                          // Description
+                        if (widget.paginationController.isLoading.value &&
+                            null ==
+                                widget
+                                    .paginationController
+                                    .shippingStatusResponse
+                                    .value) ...[
+                          getCommonProgressBar(),
+                        ],
+
+                        if (widget.paginationController.isError.value) ...[
+                          NoInternetScreen(
+                            showBackgroundImage: false,
+                            onRetry: () {
+                              _refreshData();
+                            },
+                          ),
+                        ],
+
+                        if (!widget.paginationController.isLoading.value &&
+                            null !=
+                                widget
+                                    .paginationController
+                                    .shippingStatusResponse
+                                    .value) ...[
+                          // cart total
                           Expanded(
                             child: SingleChildScrollView(
                               child: Column(
@@ -1746,14 +1782,14 @@ class _CheckoutState extends State<Checkout> {
                             ),
                           ),
                         ],
-                      ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          );
-        }
+          ),
+        );
 
         return Center(child: Text("Empty"));
       }),
