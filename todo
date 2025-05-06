@@ -5,16 +5,5 @@ To Nandish bhai:
 along with price.
 -> Need App icon in square resolution
 =====================================
-Final stage:
-
-Product List:
-9. Test with smaller and larger devices.
-
-Product Details:
-8. Test with smaller and larger devices.
-
-5. Coming back from Product Details or Combo Details to Product List or Combo List, update
-cart total items. Currently its updated when user taps on any bottom nav item.
-=====================================
 App icon for iOS App
 Test internet permission iOS app

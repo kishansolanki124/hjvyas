@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hjvyas/combo/ComboDetail.dart';
 
 import '../api/models/ComboListResponse.dart';
+import '../home/navigation.dart';
 import 'ComboFirstItem.dart';
 import 'ComboFourthItem.dart';
 import 'ComboSecondItem.dart';
@@ -22,15 +23,28 @@ class _ComboListItemWidgetState extends State<ComboListItemWidget>
   late final AnimationController _animationController;
   late final Animation<Offset> _slideAnimation;
 
-  void navigateToDetails(int index, ComboListItem item) {
-    Navigator.push(
+  void navigateToDetails(int index, ComboListItem item) async {
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder:
+    //         (context) =>
+    //             ComboDetail(comboId: widget.item.comboId),
+    //   ),
+    // );
+
+    final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder:
-            (context) =>
-                ComboDetail(comboId: widget.item.comboId),
+        builder: (context) => ComboDetail(comboId: widget.item.comboId),
       ),
     );
+
+    // When returning from Widget2, this code will execute
+    if (result != null) {
+      //updating cart total
+      NavigationExample.of(context)?.loadSharedPrefItemsList();
+    }
   }
 
   @override

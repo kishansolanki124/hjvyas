@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hjvyas/api/models/ProductListResponse.dart';
 
+import '../home/navigation.dart';
 import '../product_detail/ProductDetail.dart';
 import 'ProductGridFirstItem.dart';
 import 'ProductGridFourthItem.dart';
@@ -22,15 +23,28 @@ class _ProductListItemState extends State<ProductListItemWidget>
   late final AnimationController _animationController;
   late final Animation<Offset> _slideAnimation;
 
-  void navigateToDetails(int index, ProductListItem item) {
-    Navigator.push(
+  void navigateToDetails(int index, ProductListItem item) async {
+    // Navigator.push(
+    //   context,
+    //   MaterialPageRoute(
+    //     builder:
+    //         (context) => ProductDetail(
+    //           productId: item.productId,),
+    //   ),
+    // );
+
+    final result = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder:
-            (context) => ProductDetail(
-              productId: item.productId,),
+        builder: (context) => ProductDetail(productId: item.productId),
       ),
     );
+
+    // When returning from Widget2, this code will execute
+    if (result != null) {
+      //updating cart total
+      NavigationExample.of(context)?.loadSharedPrefItemsList();
+    }
   }
 
   @override

@@ -543,7 +543,8 @@ class _ProductDetailState extends State<ComboDetail>
 
   void _onBackPressed() {
     setState(() {
-      Navigator.of(context).pop();
+      Navigator.pop(context, "text");
+      //Navigator.of(context).pop();
     });
   }
 
@@ -557,709 +558,770 @@ class _ProductDetailState extends State<ComboDetail>
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      if (widget.categoryController.error.value.isNotEmpty) {
-        return NoInternetScreen(
-          onRetry: () {
-            _refreshData();
-          },
-        );
-      }
-
-      comboDetailResponse ??=
-          widget.categoryController.comboDetailResponse.value;
-
-      if (comboDetailItem == null) {
-        comboDetailItem = comboDetailResponse?.comboDetail.elementAt(0);
-        if (comboDetailItem != null) {
-          initPriceAndQuantity();
-          if (kDebugMode) {
-            print('selectedItemQuantity is $selectedItemQuantity');
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        Navigator.pop(context, "text");
+        // Return false to prevent the default back button behavior
+        // since we've already handled the navigation
+        return;
+      },
+      child: Scaffold(
+        body: Obx(() {
+          if (widget.categoryController.error.value.isNotEmpty) {
+            return NoInternetScreen(
+              onRetry: () {
+                _refreshData();
+              },
+            );
           }
-        }
-      }
 
-      // if (floatingButtonPrice == 0) {
-      //   floatingButtonPrice = double.parse(comboDetailItem!.comboPrice);
-      // }
-      //_selectedVariantInquiry ??= cateogories.inquiryType.split(', ').first;
-      return Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage("images/bg.jpg"),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: SafeArea(
-            child: Stack(
-              children: [
-                SingleChildScrollView(
-                  child: Stack(
-                    children: [
-                      if (widget.categoryController.loading.value) ...[
-                        getCommonProgressBar(),
-                      ],
+          comboDetailResponse ??=
+              widget.categoryController.comboDetailResponse.value;
 
-                      if (!widget.categoryController.loading.value &&
-                          comboDetailResponse != null) ...[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            // 1. Image Carousel with Dots
-                            SlideTransition(
-                              position: _fromTopSlideAnimation,
-                              child: comboDetailViewpager(
-                                comboDetailResponse!.comboGalleryList,
-                                _onPageChange,
-                              ),
-                            ),
+          if (comboDetailItem == null) {
+            comboDetailItem = comboDetailResponse?.comboDetail.elementAt(0);
+            if (comboDetailItem != null) {
+              initPriceAndQuantity();
+              if (kDebugMode) {
+                print('selectedItemQuantity is $selectedItemQuantity');
+              }
+            }
+          }
 
-                            // 2. Image Carousel Dots and volume
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
+          // if (floatingButtonPrice == 0) {
+          //   floatingButtonPrice = double.parse(comboDetailItem!.comboPrice);
+          // }
+          //_selectedVariantInquiry ??= cateogories.inquiryType.split(', ').first;
+          return Scaffold(
+            body: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("images/bg.jpg"),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: SafeArea(
+                child: Stack(
+                  children: [
+                    SingleChildScrollView(
+                      child: Stack(
+                        children: [
+                          if (widget.categoryController.loading.value) ...[
+                            getCommonProgressBar(),
+                          ],
+
+                          if (!widget.categoryController.loading.value &&
+                              comboDetailResponse != null) ...[
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                // 1. Image Carousel with Dots
                                 SlideTransition(
-                                  position: _fromLeftSlideAnimation,
-                                  child: productDetailCorosoulDots(
+                                  position: _fromTopSlideAnimation,
+                                  child: comboDetailViewpager(
                                     comboDetailResponse!.comboGalleryList,
-                                    _currentImageIndex,
+                                    _onPageChange,
                                   ),
                                 ),
-                                // //volume or audio icon
-                                // if (comboDetailItem!
-                                //         .productAudioGujarati
-                                //         .isNotEmpty ||
-                                //     comboDetailItem!
-                                //         .productAudioHindi
-                                //         .isNotEmpty ||
-                                //     comboDetailItem!
-                                //         .productAudioEnglish
-                                //         .isNotEmpty)
-                                //   GestureDetector(
-                                //     onTap: () {
-                                //       showAudioFilesDialog(context);
-                                //     },
-                                //     child: Padding(
-                                //       padding: EdgeInsetsDirectional.fromSTEB(
-                                //         20,
-                                //         10,
-                                //         30,
-                                //         0,
-                                //       ),
-                                //       child: Image.asset(
-                                //         height: 30,
-                                //         width: 30,
-                                //         "images/audio_icon.png",
-                                //       ),
-                                //     ),
-                                //   ),
+
+                                // 2. Image Carousel Dots and volume
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    SlideTransition(
+                                      position: _fromLeftSlideAnimation,
+                                      child: productDetailCorosoulDots(
+                                        comboDetailResponse!.comboGalleryList,
+                                        _currentImageIndex,
+                                      ),
+                                    ),
+                                    // //volume or audio icon
+                                    // if (comboDetailItem!
+                                    //         .productAudioGujarati
+                                    //         .isNotEmpty ||
+                                    //     comboDetailItem!
+                                    //         .productAudioHindi
+                                    //         .isNotEmpty ||
+                                    //     comboDetailItem!
+                                    //         .productAudioEnglish
+                                    //         .isNotEmpty)
+                                    //   GestureDetector(
+                                    //     onTap: () {
+                                    //       showAudioFilesDialog(context);
+                                    //     },
+                                    //     child: Padding(
+                                    //       padding: EdgeInsetsDirectional.fromSTEB(
+                                    //         20,
+                                    //         10,
+                                    //         30,
+                                    //         0,
+                                    //       ),
+                                    //       child: Image.asset(
+                                    //         height: 30,
+                                    //         width: 30,
+                                    //         "images/audio_icon.png",
+                                    //       ),
+                                    //     ),
+                                    //   ),
+                                  ],
+                                ),
                               ],
                             ),
-                          ],
-                        ),
 
-                        //square border app color
-                        IgnorePointer(
-                          child: SlideTransition(
-                            position: _fromTopSlideAnimation,
-                            child: Container(
-                              height: 672,
-                              margin: EdgeInsets.only(
-                                left: 16.0,
-                                right: 16.0,
-                                bottom: 0,
-                              ),
-                              decoration: BoxDecoration(
-                                border: Border(
-                                  left: BorderSide(
-                                    color: Color.fromARGB(255, 123, 138, 195),
-                                    width: 2.0,
+                            //square border app color
+                            IgnorePointer(
+                              child: SlideTransition(
+                                position: _fromTopSlideAnimation,
+                                child: Container(
+                                  height: 672,
+                                  margin: EdgeInsets.only(
+                                    left: 16.0,
+                                    right: 16.0,
+                                    bottom: 0,
                                   ),
-                                  bottom: BorderSide(
-                                    color: Color.fromARGB(255, 123, 138, 195),
-                                    width: 2.0,
+                                  decoration: BoxDecoration(
+                                    border: Border(
+                                      left: BorderSide(
+                                        color: Color.fromARGB(
+                                          255,
+                                          123,
+                                          138,
+                                          195,
+                                        ),
+                                        width: 2.0,
+                                      ),
+                                      bottom: BorderSide(
+                                        color: Color.fromARGB(
+                                          255,
+                                          123,
+                                          138,
+                                          195,
+                                        ),
+                                        width: 2.0,
+                                      ),
+                                      right: BorderSide(
+                                        color: Color.fromARGB(
+                                          255,
+                                          123,
+                                          138,
+                                          195,
+                                        ),
+                                        width: 2.0,
+                                      ),
+                                    ),
+                                    borderRadius: BorderRadius.all(
+                                      Radius.circular(0),
+                                    ),
                                   ),
-                                  right: BorderSide(
-                                    color: Color.fromARGB(255, 123, 138, 195),
-                                    width: 2.0,
-                                  ),
-                                ),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(0),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
 
-                        Column(
-                          children: [
-                            SizedBox(height: 600),
+                            Column(
+                              children: [
+                                SizedBox(height: 600),
 
-                            //3. name and price
-                            // 4. Dropdown of variant and Counter (Horizontal)
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                vertical: 8.0,
-                                horizontal: 16,
-                              ),
-                              child: SlideTransition(
-                                position: _fromBottomSlideAnimation,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: <Widget>[
-                                    //3. name and price
-                                    productDetailNameAndPrice(
-                                      comboDetailResponse!.comboDetail
-                                          .elementAt(0)
-                                          .comboName,
-                                      comboDetailResponse!.comboDetail
-                                          .elementAt(0)
-                                          .comboPrice,
-                                      comboDetailResponse!.comboDetail
+                                //3. name and price
+                                // 4. Dropdown of variant and Counter (Horizontal)
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 8.0,
+                                    horizontal: 16,
+                                  ),
+                                  child: SlideTransition(
+                                    position: _fromBottomSlideAnimation,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        //3. name and price
+                                        productDetailNameAndPrice(
+                                          comboDetailResponse!.comboDetail
                                               .elementAt(0)
-                                              .comboSoldout ==
-                                          "yes",
-                                    ),
+                                              .comboName,
+                                          comboDetailResponse!.comboDetail
+                                              .elementAt(0)
+                                              .comboPrice,
+                                          comboDetailResponse!.comboDetail
+                                                  .elementAt(0)
+                                                  .comboSoldout ==
+                                              "yes",
+                                        ),
 
-                                    //out of stock
-                                    //notify me content
-                                    if (comboDetailResponse!.comboDetail
-                                            .elementAt(0)
-                                            .comboSoldout ==
-                                        "yes")
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        // Align text to the left
-                                        children: <Widget>[
-                                          loadHTMLContent(
-                                            comboDetailResponse!.comboDetail
+                                        //out of stock
+                                        //notify me content
+                                        if (comboDetailResponse!.comboDetail
                                                 .elementAt(0)
-                                                .notifySorryMsg,
-                                          ),
-
-                                          // 1. "We're Sorry!" text in bold
-                                          // Text(
-                                          //   "We're Sorry!",
-                                          //   style: TextStyle(
-                                          //     color: Colors.white,
-                                          //     fontSize: 14.0,
-                                          //     // Adjust size as needed
-                                          //     fontWeight: FontWeight.w500,
-                                          //     fontFamily: "Montserrat",
-                                          //   ),
-                                          // ),
-                                          //
-                                          // SizedBox(height: 8.0),
-                                          // // Add some vertical spacing
-                                          // // 2. "This item has sold out" text in normal font
-                                          // Text(
-                                          //   "This Item Has Sold Out. We Will Get Back Soon With This Product.",
-                                          //   style: TextStyle(
-                                          //     color: Colors.white,
-                                          //     fontSize: 14.0,
-                                          //     // Adjust size as needed
-                                          //     fontFamily: "Montserrat",
-                                          //   ),
-                                          // ),
-                                          SizedBox(height: 16.0),
-
-                                          // 3. "Notify Me !" Text with leading email icon
-                                          Row(
-                                            children: [
-                                              Image.asset(
-                                                width: 24,
-                                                height: 24,
-                                                "icons/notify_me_icon.png",
+                                                .comboSoldout ==
+                                            "yes")
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            // Align text to the left
+                                            children: <Widget>[
+                                              loadHTMLContent(
+                                                comboDetailResponse!.comboDetail
+                                                    .elementAt(0)
+                                                    .notifySorryMsg,
                                               ),
-                                              // Use the email icon
-                                              SizedBox(width: 8.0),
 
+                                              // 1. "We're Sorry!" text in bold
+                                              // Text(
+                                              //   "We're Sorry!",
+                                              //   style: TextStyle(
+                                              //     color: Colors.white,
+                                              //     fontSize: 14.0,
+                                              //     // Adjust size as needed
+                                              //     fontWeight: FontWeight.w500,
+                                              //     fontFamily: "Montserrat",
+                                              //   ),
+                                              // ),
+                                              //
+                                              // SizedBox(height: 8.0),
+                                              // // Add some vertical spacing
+                                              // // 2. "This item has sold out" text in normal font
+                                              // Text(
+                                              //   "This Item Has Sold Out. We Will Get Back Soon With This Product.",
+                                              //   style: TextStyle(
+                                              //     color: Colors.white,
+                                              //     fontSize: 14.0,
+                                              //     // Adjust size as needed
+                                              //     fontFamily: "Montserrat",
+                                              //   ),
+                                              // ),
+                                              SizedBox(height: 16.0),
+
+                                              // 3. "Notify Me !" Text with leading email icon
+                                              Row(
+                                                children: [
+                                                  Image.asset(
+                                                    width: 24,
+                                                    height: 24,
+                                                    "icons/notify_me_icon.png",
+                                                  ),
+                                                  // Use the email icon
+                                                  SizedBox(width: 8.0),
+
+                                                  Text(
+                                                    "Notify Me !",
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 16.0,
+                                                      // Adjust size as needed
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      fontFamily: "Montserrat",
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+
+                                              SizedBox(height: 8.0),
+
+                                              // 4. Text "Notify me when Product is Available"
                                               Text(
-                                                "Notify Me !",
+                                                comboDetailResponse!.comboDetail
+                                                    .elementAt(0)
+                                                    .notifyMeMsg,
                                                 style: TextStyle(
                                                   color: Colors.white,
-                                                  fontSize: 16.0,
+                                                  fontSize: 14.0,
                                                   // Adjust size as needed
-                                                  fontWeight: FontWeight.w500,
                                                   fontFamily: "Montserrat",
+                                                ),
+                                              ),
+
+                                              SizedBox(height: 8.0),
+
+                                              // 5. Input text or Edit text with hint "Enter your mobile no."
+                                              // with 10 digit max length and input type should be only numbers
+                                              TextField(
+                                                textInputAction:
+                                                    TextInputAction.next,
+                                                controller: _phoneController,
+                                                keyboardType:
+                                                    TextInputType.number,
+                                                maxLength: 14,
+                                                inputFormatters: <
+                                                  TextInputFormatter
+                                                >[
+                                                  FilteringTextInputFormatter
+                                                      .digitsOnly,
+                                                ],
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: "Montserrat",
+                                                  fontSize: 14,
+                                                ),
+                                                // Set text color to white
+                                                decoration: InputDecoration(
+                                                  hintText:
+                                                      "Enter Your Mobile No.",
+                                                  hintStyle: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: "Montserrat",
+                                                    fontSize: 14,
+                                                  ),
+
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                              Radius.circular(
+                                                                0,
+                                                              ),
+                                                            ),
+                                                        borderSide: BorderSide(
+                                                          width: 1,
+                                                          color: Color.fromARGB(
+                                                            255,
+                                                            123,
+                                                            138,
+                                                            195,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                  // disabledBorder: OutlineInputBorder(
+                                                  //   borderRadius: BorderRadius.all(Radius.circular(4)),
+                                                  //   borderSide: BorderSide(width: 1,color: Colors.orange),
+                                                  // ),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                              Radius.circular(
+                                                                0,
+                                                              ),
+                                                            ),
+                                                        borderSide: BorderSide(
+                                                          width: 1,
+                                                          color: Color.fromARGB(
+                                                            255,
+                                                            123,
+                                                            138,
+                                                            195,
+                                                          ),
+                                                        ),
+                                                      ),
+
+                                                  contentPadding:
+                                                      EdgeInsets.all(8),
+                                                  isDense:
+                                                      true, //make textfield compact
+                                                ),
+                                              ),
+
+                                              // 6. Input text or Edit text with hint "Enter your email id"
+                                              // with input type email
+                                              TextField(
+                                                textInputAction:
+                                                    TextInputAction.done,
+                                                controller: _emailController,
+                                                keyboardType:
+                                                    TextInputType.emailAddress,
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontFamily: "Montserrat",
+                                                  fontSize: 14,
+                                                ),
+                                                decoration: InputDecoration(
+                                                  hintText:
+                                                      "Enter your email id",
+                                                  hintStyle: TextStyle(
+                                                    color: Colors.white,
+                                                    fontFamily: "Montserrat",
+                                                    fontSize: 14,
+                                                  ),
+                                                  focusedBorder:
+                                                      OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                              Radius.circular(
+                                                                0,
+                                                              ),
+                                                            ),
+                                                        borderSide: BorderSide(
+                                                          width: 1,
+                                                          color: Color.fromARGB(
+                                                            255,
+                                                            123,
+                                                            138,
+                                                            195,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                  // disabledBorder: OutlineInputBorder(
+                                                  //   borderRadius: BorderRadius.all(Radius.circular(4)),
+                                                  //   borderSide: BorderSide(width: 1,color: Colors.orange),
+                                                  // ),
+                                                  enabledBorder:
+                                                      OutlineInputBorder(
+                                                        borderRadius:
+                                                            BorderRadius.all(
+                                                              Radius.circular(
+                                                                0,
+                                                              ),
+                                                            ),
+                                                        borderSide: BorderSide(
+                                                          width: 1,
+                                                          color: Color.fromARGB(
+                                                            255,
+                                                            123,
+                                                            138,
+                                                            195,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                  contentPadding:
+                                                      EdgeInsets.all(8),
+                                                  isDense:
+                                                      true, //make textfield compact
+                                                ),
+                                              ),
+
+                                              SizedBox(height: 18.0),
+
+                                              // 7. Notify Me square Button in black color text and sky color background
+                                              SizedBox(
+                                                child: ElevatedButton(
+                                                  onPressed: () {
+                                                    hideKeyboard(context);
+                                                    onNotifyMeClick();
+                                                  },
+                                                  style: ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Color.fromARGB(
+                                                          255,
+                                                          123,
+                                                          138,
+                                                          195,
+                                                        ),
+                                                    // Sky color
+                                                    //foregroundColor: Colors.black,
+                                                    // Black text color
+                                                    shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius
+                                                              .zero, // Square corners
+                                                    ),
+                                                    padding: EdgeInsets.symmetric(
+                                                      vertical: 10.0,
+                                                      horizontal: 12,
+                                                    ), // Add some vertical padding
+                                                  ),
+
+                                                  child: Obx(() {
+                                                    if (widget
+                                                        .categoryController
+                                                        .adInquiryLoading
+                                                        .value) {
+                                                      return SizedBox(
+                                                        width: 20,
+                                                        height: 20,
+                                                        child:
+                                                            CircularProgressIndicator(
+                                                              strokeWidth: 2,
+                                                              color:
+                                                                  Colors.white,
+                                                            ),
+                                                      );
+                                                    }
+                                                    return Text(
+                                                      "Notify Me",
+                                                      style: TextStyle(
+                                                        fontSize: 16.0,
+                                                        fontFamily:
+                                                            "Montserrat",
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color: Colors.black,
+                                                      ), // Adjust size
+                                                    );
+                                                  }),
                                                 ),
                                               ),
                                             ],
                                           ),
 
-                                          SizedBox(height: 8.0),
+                                        // 4. Dropdown of variant and Counter (Horizontal)
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            // if (!widget.isOutOfStock)
+                                            //   productDetailDropDown(
+                                            //     comboDetailResponse!
+                                            //         .productPackingList,
+                                            //     _selectedVariant,
+                                            //     _onChangedDropDownValue,
+                                            //   ),
+                                            if (comboDetailResponse!.comboDetail
+                                                    .elementAt(0)
+                                                    .comboSoldout !=
+                                                "yes")
+                                              productDetailItemCounter(
+                                                _decrementQuantity,
+                                                _incrementQuantity,
+                                                selectedItemQuantity,
+                                              ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
 
-                                          // 4. Text "Notify me when Product is Available"
-                                          Text(
+                                // // 5. Horizontal List of Square Images of Product Ingredients
+                                // if (comboDetailResponse!
+                                //     .productIngredientsList
+                                //     .isNotEmpty)
+                                //   productDetailIngredients(
+                                //     comboDetailResponse!.productIngredientsList,
+                                //   ),
+
+                                //Product Terms
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Html(
+                                        data:
                                             comboDetailResponse!.comboDetail
                                                 .elementAt(0)
-                                                .notifyMeMsg,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14.0,
-                                              // Adjust size as needed
-                                              fontFamily: "Montserrat",
-                                            ),
+                                                .comboDescription,
+                                        style: {
+                                          //"h1": Style(fontSize: FontSize.xxLarge),
+                                          "p": Style(
+                                            fontWeight: FontWeight.w400,
+                                            //fontSize: 14,
+                                            fontFamily: "Montserrat",
+                                            fontSize: FontSize.medium,
+                                            textAlign: TextAlign.justify,
+                                            color: Colors.white,
                                           ),
-
-                                          SizedBox(height: 8.0),
-
-                                          // 5. Input text or Edit text with hint "Enter your mobile no."
-                                          // with 10 digit max length and input type should be only numbers
-                                          TextField(
-                                            textInputAction:
-                                                TextInputAction.next,
-                                            controller: _phoneController,
-                                            keyboardType: TextInputType.number,
-                                            maxLength: 14,
-                                            inputFormatters:
-                                                <TextInputFormatter>[
-                                                  FilteringTextInputFormatter
-                                                      .digitsOnly,
-                                                ],
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: "Montserrat",
-                                              fontSize: 14,
-                                            ),
-                                            // Set text color to white
-                                            decoration: InputDecoration(
-                                              hintText: "Enter Your Mobile No.",
-                                              hintStyle: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: "Montserrat",
-                                                fontSize: 14,
-                                              ),
-
-                                              focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(0),
-                                                ),
-                                                borderSide: BorderSide(
-                                                  width: 1,
-                                                  color: Color.fromARGB(
-                                                    255,
-                                                    123,
-                                                    138,
-                                                    195,
-                                                  ),
-                                                ),
-                                              ),
-                                              // disabledBorder: OutlineInputBorder(
-                                              //   borderRadius: BorderRadius.all(Radius.circular(4)),
-                                              //   borderSide: BorderSide(width: 1,color: Colors.orange),
-                                              // ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(0),
-                                                ),
-                                                borderSide: BorderSide(
-                                                  width: 1,
-                                                  color: Color.fromARGB(
-                                                    255,
-                                                    123,
-                                                    138,
-                                                    195,
-                                                  ),
-                                                ),
-                                              ),
-
-                                              contentPadding: EdgeInsets.all(8),
-                                              isDense:
-                                                  true, //make textfield compact
-                                            ),
+                                          "li": Style(
+                                            fontWeight: FontWeight.w400,
+                                            //fontSize: 14,
+                                            fontFamily: "Montserrat",
+                                            fontSize: FontSize.medium,
+                                            textAlign: TextAlign.justify,
+                                            color: Colors.white,
                                           ),
-
-                                          // 6. Input text or Edit text with hint "Enter your email id"
-                                          // with input type email
-                                          TextField(
-                                            textInputAction:
-                                                TextInputAction.done,
-                                            controller: _emailController,
-                                            keyboardType:
-                                                TextInputType.emailAddress,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontFamily: "Montserrat",
-                                              fontSize: 14,
-                                            ),
-                                            decoration: InputDecoration(
-                                              hintText: "Enter your email id",
-                                              hintStyle: TextStyle(
-                                                color: Colors.white,
-                                                fontFamily: "Montserrat",
-                                                fontSize: 14,
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(0),
-                                                ),
-                                                borderSide: BorderSide(
-                                                  width: 1,
-                                                  color: Color.fromARGB(
-                                                    255,
-                                                    123,
-                                                    138,
-                                                    195,
-                                                  ),
-                                                ),
-                                              ),
-                                              // disabledBorder: OutlineInputBorder(
-                                              //   borderRadius: BorderRadius.all(Radius.circular(4)),
-                                              //   borderSide: BorderSide(width: 1,color: Colors.orange),
-                                              // ),
-                                              enabledBorder: OutlineInputBorder(
-                                                borderRadius: BorderRadius.all(
-                                                  Radius.circular(0),
-                                                ),
-                                                borderSide: BorderSide(
-                                                  width: 1,
-                                                  color: Color.fromARGB(
-                                                    255,
-                                                    123,
-                                                    138,
-                                                    195,
-                                                  ),
-                                                ),
-                                              ),
-                                              contentPadding: EdgeInsets.all(8),
-                                              isDense:
-                                                  true, //make textfield compact
-                                            ),
+                                          "strong": Style(
+                                            fontWeight: FontWeight.w600,
+                                            //fontSize: 14,
+                                            fontFamily: "Montserrat",
+                                            fontSize: FontSize.large,
+                                            textAlign: TextAlign.justify,
+                                            color: Colors.white,
                                           ),
-
-                                          SizedBox(height: 18.0),
-
-                                          // 7. Notify Me square Button in black color text and sky color background
-                                          SizedBox(
-                                            child: ElevatedButton(
-                                              onPressed: () {
-                                                hideKeyboard(context);
-                                                onNotifyMeClick();
-                                              },
-                                              style: ElevatedButton.styleFrom(
-                                                backgroundColor: Color.fromARGB(
-                                                  255,
-                                                  123,
-                                                  138,
-                                                  195,
-                                                ),
-                                                // Sky color
-                                                //foregroundColor: Colors.black,
-                                                // Black text color
-                                                shape: RoundedRectangleBorder(
-                                                  borderRadius:
-                                                      BorderRadius
-                                                          .zero, // Square corners
-                                                ),
-                                                padding: EdgeInsets.symmetric(
-                                                  vertical: 10.0,
-                                                  horizontal: 12,
-                                                ), // Add some vertical padding
-                                              ),
-
-                                              child: Obx(() {
-                                                if (widget
-                                                    .categoryController
-                                                    .adInquiryLoading
-                                                    .value) {
-                                                  return SizedBox(
-                                                    width: 20,
-                                                    height: 20,
-                                                    child:
-                                                        CircularProgressIndicator(
-                                                          strokeWidth: 2,
-                                                          color: Colors.white,
-                                                        ),
-                                                  );
-                                                }
-                                                return Text(
-                                                  "Notify Me",
-                                                  style: TextStyle(
-                                                    fontSize: 16.0,
-                                                    fontFamily: "Montserrat",
-                                                    fontWeight: FontWeight.w600,
-                                                    color: Colors.black,
-                                                  ), // Adjust size
-                                                );
-                                              }),
-                                            ),
-                                          ),
-                                        ],
+                                          //"a": Style(color: Colors.blue, decoration: TextDecoration.underline),
+                                          //"table": Style(border: Border.all(color: Colors.grey)),
+                                          //"th": Style(padding: EdgeInsets.all(8), backgroundColor: Colors.lightBlue),
+                                          //"td": Style(padding: EdgeInsets.all(8)),
+                                          //"div": Style(margin: EdgeInsets.only(bottom: 10)),
+                                          // "img": Style(
+                                          //   width: Width.percent(100), // Make images responsive.
+                                          //   height: Height.auto(),
+                                          // ),
+                                        },
                                       ),
 
-                                    // 4. Dropdown of variant and Counter (Horizontal)
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: <Widget>[
-                                        // if (!widget.isOutOfStock)
-                                        //   productDetailDropDown(
-                                        //     comboDetailResponse!
-                                        //         .productPackingList,
-                                        //     _selectedVariant,
-                                        //     _onChangedDropDownValue,
-                                        //   ),
-                                        if (comboDetailResponse!.comboDetail
-                                                .elementAt(0)
-                                                .comboSoldout !=
-                                            "yes")
-                                          productDetailItemCounter(
-                                            _decrementQuantity,
-                                            _incrementQuantity,
-                                            selectedItemQuantity,
+                                      Text(
+                                        'Terms :',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                          fontFamily: "Montserrat",
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                      SizedBox(height: 8),
+
+                                      Text(
+                                        comboDetailResponse!.comboDetail
+                                            .elementAt(0)
+                                            .comboTerms,
+                                        textAlign: TextAlign.justify,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.white,
+                                          fontFamily: "Montserrat",
+                                        ),
+                                      ),
+                                      SizedBox(height: 24),
+                                    ],
+                                  ),
+                                ),
+
+                                // 8. You May Also Like Product Listing Horizontally
+                                if (comboDetailResponse!
+                                    .comboMoreList
+                                    .isNotEmpty)
+                                  comboDetailYouMayLike(
+                                    comboDetailResponse!.comboMoreList,
+                                  ),
+
+                                SizedBox(height: 50),
+                              ],
+                            ),
+
+                            //product center image
+                            SlideTransition(
+                              position: _fromBottomSlideAnimation,
+                              child: productDetailCenterImageRound(
+                                comboDetailResponse!.comboDetail
+                                    .elementAt(0)
+                                    .comboImage,
+                                true,
+                              ),
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                    SlideTransition(
+                      position: _fromLeftSlideAnimation,
+                      child: backButton(_onBackPressed),
+                    ),
+
+                    // //cart icon with badge
+                    // GestureDetector(
+                    //   onTap: () {
+                    //     Navigator.push(
+                    //       context,
+                    //       MaterialPageRoute(
+                    //         builder:
+                    //             (context) => //ComboDetail(item: item),
+                    //                 CartPage(),
+                    //       ),
+                    //     );
+                    //   },
+                    //   child: Padding(
+                    //     padding: EdgeInsets.symmetric(
+                    //       horizontal: 20.0,
+                    //       vertical: 8.0,
+                    //     ),
+                    //     child: Align(
+                    //       alignment: Alignment.topRight,
+                    //       child: Badge(
+                    //         largeSize: 16,
+                    //         backgroundColor:
+                    //             _cartItemList.isEmpty
+                    //                 ? Colors.transparent
+                    //                 : Colors.red,
+                    //         label: Text(
+                    //           _cartItemList.isEmpty
+                    //               ? ""
+                    //               : _cartItemList.length.toString(),
+                    //           style: TextStyle(
+                    //             fontSize: 10,
+                    //             fontWeight: FontWeight.w700,
+                    //             fontFamily: "Montserrat",
+                    //           ),
+                    //         ),
+                    //         textStyle: TextStyle(fontSize: 16),
+                    //         child: SizedBox(
+                    //           width: 30,
+                    //           height: 30,
+                    //           child: Image.asset(
+                    //             "icons/my_bag_icon.png",
+                    //             color: Colors.white,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    SlideTransition(
+                      position: _fromRightSlideAnimation,
+                      child: GestureDetector(
+                        onTap: () {
+                          navigateToCartPage();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 20, 20, 0),
+                          child: Align(
+                            alignment: Alignment.topRight,
+                            child: AnimatedBuilder(
+                              animation: _cartIconAnimationController,
+                              builder: (context, child) {
+                                return Transform.translate(
+                                  offset: Offset(0, _bounceAnimation.value),
+                                  child: Transform.scale(
+                                    scale: _scaleAnimation.value,
+                                    child: Stack(
+                                      clipBehavior: Clip.none,
+                                      children: [
+                                        Icon(
+                                          Icons.shopping_cart,
+                                          size: 30,
+                                          color: Colors.white,
+                                        ),
+                                        if (_cartItemList.isNotEmpty)
+                                          Positioned(
+                                            right: -5,
+                                            top: -5,
+                                            child: Container(
+                                              padding: EdgeInsets.all(2),
+                                              decoration: BoxDecoration(
+                                                color: Colors.red,
+                                                shape: BoxShape.circle,
+                                              ),
+                                              constraints: BoxConstraints(
+                                                minWidth: 18,
+                                                minHeight: 18,
+                                              ),
+                                              child: Center(
+                                                child: Text(
+                                                  '${_cartItemList.length}',
+                                                  style: TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 10,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
                                           ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                              ),
+                                  ),
+                                );
+                              },
                             ),
-
-                            // // 5. Horizontal List of Square Images of Product Ingredients
-                            // if (comboDetailResponse!
-                            //     .productIngredientsList
-                            //     .isNotEmpty)
-                            //   productDetailIngredients(
-                            //     comboDetailResponse!.productIngredientsList,
-                            //   ),
-
-                            //Product Terms
-                            Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16.0,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: <Widget>[
-                                  Html(
-                                    data:
-                                        comboDetailResponse!.comboDetail
-                                            .elementAt(0)
-                                            .comboDescription,
-                                    style: {
-                                      //"h1": Style(fontSize: FontSize.xxLarge),
-                                      "p": Style(
-                                        fontWeight: FontWeight.w400,
-                                        //fontSize: 14,
-                                        fontFamily: "Montserrat",
-                                        fontSize: FontSize.medium,
-                                        textAlign: TextAlign.justify,
-                                        color: Colors.white,
-                                      ),
-                                      "li": Style(
-                                        fontWeight: FontWeight.w400,
-                                        //fontSize: 14,
-                                        fontFamily: "Montserrat",
-                                        fontSize: FontSize.medium,
-                                        textAlign: TextAlign.justify,
-                                        color: Colors.white,
-                                      ),
-                                      "strong": Style(
-                                        fontWeight: FontWeight.w600,
-                                        //fontSize: 14,
-                                        fontFamily: "Montserrat",
-                                        fontSize: FontSize.large,
-                                        textAlign: TextAlign.justify,
-                                        color: Colors.white,
-                                      ),
-                                      //"a": Style(color: Colors.blue, decoration: TextDecoration.underline),
-                                      //"table": Style(border: Border.all(color: Colors.grey)),
-                                      //"th": Style(padding: EdgeInsets.all(8), backgroundColor: Colors.lightBlue),
-                                      //"td": Style(padding: EdgeInsets.all(8)),
-                                      //"div": Style(margin: EdgeInsets.only(bottom: 10)),
-                                      // "img": Style(
-                                      //   width: Width.percent(100), // Make images responsive.
-                                      //   height: Height.auto(),
-                                      // ),
-                                    },
-                                  ),
-
-                                  Text(
-                                    'Terms :',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontFamily: "Montserrat",
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  SizedBox(height: 8),
-
-                                  Text(
-                                    comboDetailResponse!.comboDetail
-                                        .elementAt(0)
-                                        .comboTerms,
-                                    textAlign: TextAlign.justify,
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.white,
-                                      fontFamily: "Montserrat",
-                                    ),
-                                  ),
-                                  SizedBox(height: 24),
-                                ],
-                              ),
-                            ),
-
-                            // 8. You May Also Like Product Listing Horizontally
-                            if (comboDetailResponse!.comboMoreList.isNotEmpty)
-                              comboDetailYouMayLike(
-                                comboDetailResponse!.comboMoreList,
-                              ),
-
-                            SizedBox(height: 50),
-                          ],
-                        ),
-
-                        //product center image
-                        SlideTransition(
-                          position: _fromBottomSlideAnimation,
-                          child: productDetailCenterImageRound(
-                            comboDetailResponse!.comboDetail
-                                .elementAt(0)
-                                .comboImage,
-                            true,
                           ),
-                        ),
-                      ],
-                    ],
-                  ),
-                ),
-                SlideTransition(
-                  position: _fromLeftSlideAnimation,
-                  child: backButton(_onBackPressed),
-                ),
-
-                // //cart icon with badge
-                // GestureDetector(
-                //   onTap: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder:
-                //             (context) => //ComboDetail(item: item),
-                //                 CartPage(),
-                //       ),
-                //     );
-                //   },
-                //   child: Padding(
-                //     padding: EdgeInsets.symmetric(
-                //       horizontal: 20.0,
-                //       vertical: 8.0,
-                //     ),
-                //     child: Align(
-                //       alignment: Alignment.topRight,
-                //       child: Badge(
-                //         largeSize: 16,
-                //         backgroundColor:
-                //             _cartItemList.isEmpty
-                //                 ? Colors.transparent
-                //                 : Colors.red,
-                //         label: Text(
-                //           _cartItemList.isEmpty
-                //               ? ""
-                //               : _cartItemList.length.toString(),
-                //           style: TextStyle(
-                //             fontSize: 10,
-                //             fontWeight: FontWeight.w700,
-                //             fontFamily: "Montserrat",
-                //           ),
-                //         ),
-                //         textStyle: TextStyle(fontSize: 16),
-                //         child: SizedBox(
-                //           width: 30,
-                //           height: 30,
-                //           child: Image.asset(
-                //             "icons/my_bag_icon.png",
-                //             color: Colors.white,
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                SlideTransition(
-                  position: _fromRightSlideAnimation,
-                  child: GestureDetector(
-                    onTap: () {
-                      navigateToCartPage();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 20, 0),
-                      child: Align(
-                        alignment: Alignment.topRight,
-                        child: AnimatedBuilder(
-                          animation: _cartIconAnimationController,
-                          builder: (context, child) {
-                            return Transform.translate(
-                              offset: Offset(0, _bounceAnimation.value),
-                              child: Transform.scale(
-                                scale: _scaleAnimation.value,
-                                child: Stack(
-                                  clipBehavior: Clip.none,
-                                  children: [
-                                    Icon(
-                                      Icons.shopping_cart,
-                                      size: 30,
-                                      color: Colors.white,
-                                    ),
-                                    if (_cartItemList.isNotEmpty)
-                                      Positioned(
-                                        right: -5,
-                                        top: -5,
-                                        child: Container(
-                                          padding: EdgeInsets.all(2),
-                                          decoration: BoxDecoration(
-                                            color: Colors.red,
-                                            shape: BoxShape.circle,
-                                          ),
-                                          constraints: BoxConstraints(
-                                            minWidth: 18,
-                                            minHeight: 18,
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              '${_cartItemList.length}',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 10,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
                         ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        //add to cart button
-        floatingActionButton:
-            comboDetailResponse?.comboDetail.elementAt(0).comboSoldout != "yes"
-                ? SlideTransition(
-                  position: _fromBottomSlideAnimation,
-                  child: addToCartFullWidthButton(
-                    floatingButtonPrice,
-                    _onPressed,
-                    getCartText(),
-                  ),
-                )
-                : null,
-      );
-    });
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            //add to cart button
+            floatingActionButton:
+                comboDetailResponse?.comboDetail.elementAt(0).comboSoldout !=
+                        "yes"
+                    ? SlideTransition(
+                      position: _fromBottomSlideAnimation,
+                      child: addToCartFullWidthButton(
+                        floatingButtonPrice,
+                        _onPressed,
+                        getCartText(),
+                      ),
+                    )
+                    : null,
+          );
+        }),
+      ),
+    );
   }
 }
