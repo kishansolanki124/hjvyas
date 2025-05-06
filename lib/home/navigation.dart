@@ -134,6 +134,8 @@ class _NavigationExampleState extends State<NavigationExample>
   Widget homeNavigationWidget = HomeView();
 
   void _onItemTapped(int index) {
+    loadSharedPrefItemsList();
+
     if (index == currentPageIndex) {
       return;
     }
