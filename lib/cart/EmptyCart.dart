@@ -139,3 +139,6 @@ class _EmptyCartState extends State<EmptyCart>
     );
   }
 }
+
+//todo: back button visible when navigated from product/combo details and "Start Shopping"
+//should be hidden when back butotn enabled. Vice versa from navigation
