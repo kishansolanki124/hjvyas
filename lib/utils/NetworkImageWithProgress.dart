@@ -81,7 +81,6 @@ void showAlertWithCallback({
   required String message,
   VoidCallback? onOkPressed,
 }) {
-  //todo: optimise its design
   //todo: test in iOS
   showDialog(
     context: context,

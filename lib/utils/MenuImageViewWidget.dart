@@ -73,40 +73,38 @@ Widget errorImagePlaceholder() {
   );
 }
 
-void showAlertWithCallback({
-  required BuildContext context,
-  required String title,
-  required String message,
-  VoidCallback? onOkPressed,
-}) {
-  //todo: optimise its design
-  //todo: test in iOS
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder:
-        (_) => AlertDialog(
-          title: Text(title),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () {
-                onOkPressed?.call();
-                Navigator.of(context, rootNavigator: true).pop();
-              },
-              child: Text(
-                'OK',
-                style: TextStyle(
-                  color: Color.fromARGB(255, 31, 47, 80),
-                  fontWeight: FontWeight.w600,
-                  fontFamily: "Montserrat",
-                ),
-              ),
-            ),
-          ],
-        ),
-  );
-}
+// void showAlertWithCallback({
+//   required BuildContext context,
+//   required String title,
+//   required String message,
+//   VoidCallback? onOkPressed,
+// }) {
+//   showDialog(
+//     context: context,
+//     barrierDismissible: false,
+//     builder:
+//         (_) => AlertDialog(
+//           title: Text(title),
+//           content: Text(message),
+//           actions: [
+//             TextButton(
+//               onPressed: () {
+//                 onOkPressed?.call();
+//                 Navigator.of(context, rootNavigator: true).pop();
+//               },
+//               child: Text(
+//                 'OK',
+//                 style: TextStyle(
+//                   color: Color.fromARGB(255, 31, 47, 80),
+//                   fontWeight: FontWeight.w600,
+//                   fontFamily: "Montserrat",
+//                 ),
+//               ),
+//             ),
+//           ],
+//         ),
+//   );
+// }
 
 // Widget loadImageWithProgress(String imageUrl) {
 //   return Stack(
