@@ -171,26 +171,11 @@ class _CartPageState extends State<CartPage>
   int freeSelectedIndex = -1;
   String productTesterId = "";
 
-  void showSnackbar(String s) {
-    var snackBar = SnackBar(
-      backgroundColor: Colors.white,
-      content: Text(
-        s,
-        style: TextStyle(
-          fontSize: 14.0,
-          fontFamily: "Montserrat",
-          color: Color.fromARGB(255, 32, 47, 80),
-        ),
-      ),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
   // Function to increment item count
   void _incrementCount(int index) {
     if (cartMaxQty.toString() ==
         _cartItemShaaredPrefList.elementAt(index).quantity) {
-      showSnackbar("You have added max quantity.");
+      showSnackbar(context, "You have added max quantity.");
       return;
     }
     setState(() {
@@ -211,7 +196,7 @@ class _CartPageState extends State<CartPage>
 
   void proceedToCheckOutClicked() {
     if (freeSelectedIndex == -1) {
-      showSnackbar("Please Select Any One Free Product Tester");
+      showSnackbar(context, "Please Select Any One Free Product Tester");
       return;
     }
     double total = 0;
@@ -263,7 +248,7 @@ class _CartPageState extends State<CartPage>
 
     await getProductTester();
 
-    showSnackbar("Basket updated."); // Show the message
+    showSnackbar(context, "Cart updated."); // Show the message
 
     //updating cart total
     NavigationExample.of(context)?.loadSharedPrefItemsList();
@@ -271,7 +256,7 @@ class _CartPageState extends State<CartPage>
 
   // Function to format price
   String _formatPrice(String price) {
-    return "₹ $price";
+    return "₹ ${getTwoDecimalPrice(double.parse(price))}";
   }
 
   Future<void> fetchData() async {
