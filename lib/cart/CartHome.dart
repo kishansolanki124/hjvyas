@@ -169,6 +169,7 @@ class _CartPageState extends State<CartPage>
   }
 
   int freeSelectedIndex = -1;
+  bool isTesterEnabled = false;
   String productTesterId = "";
 
   // Function to increment item count
@@ -195,7 +196,7 @@ class _CartPageState extends State<CartPage>
   }
 
   void proceedToCheckOutClicked() {
-    if (freeSelectedIndex == -1) {
+    if (isTesterEnabled && freeSelectedIndex == -1) {
       showSnackbar(context, "Please Select Any One Free Product Tester");
       return;
     }
@@ -298,6 +299,15 @@ class _CartPageState extends State<CartPage>
           _cartItems = widget.paginationController.cartItems;
 
           _productTesterItems = widget.paginationController.productTesterList;
+          isTesterEnabled =
+              (widget
+                          .paginationController
+                          .productTesterResponse
+                          .value
+                          ?.productTesterStatus ==
+                      "on")
+                  ? true
+                  : false;
 
           return SafeArea(
             child: Scaffold(
