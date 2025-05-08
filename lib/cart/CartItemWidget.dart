@@ -32,6 +32,14 @@ class _CartItemWidgetState extends State<CartItemWidget>
   late final AnimationController _animationController;
   late final Animation<Offset> _slideAnimation;
 
+  bool isProductSoldOut(ProductCartListItem productCartListItem) {
+    if (productCartListItem.productSoldout == "yes") {
+      return true;
+    }
+
+    return false;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -146,107 +154,136 @@ class _CartItemWidgetState extends State<CartItemWidget>
                           ),
                         ),
 
-                        // 4. "+" and "-" Buttons with Count
-                        Wrap(
-                          children: [
-                            ColoredBox(
-                              color: Color.fromARGB(255, 31, 47, 80),
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(vertical: 6),
-                                child: Container(
-                                  height: 30,
-                                  width: 120,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Color.fromARGB(255, 123, 138, 195),
-                                    ),
-                                    borderRadius: BorderRadius.circular(0),
-                                    color: Color.fromARGB(
-                                      255,
-                                      31,
-                                      47,
-                                      80,
-                                    ), // Background color
-                                  ),
-                                  // Add some padding inside the border
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      IconButton(
-                                        iconSize: 16,
-                                        icon: Icon(Icons.remove),
-                                        color: Colors.white,
-                                        onPressed:
-                                            () => widget.decrementCount(
-                                              widget.index,
-                                            ),
-                                        padding: EdgeInsets.zero,
-                                        constraints: BoxConstraints(),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                          0,
-                                          0,
-                                          0,
-                                          0,
+                        if (isProductSoldOut(widget.cartItem)) ...[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              soldOutTextCart(),
+                              IconButton(
+                                icon: Image.asset(
+                                  "icons/delete_icon.png",
+                                  height: 24,
+                                  width: 24,
+                                ),
+                                onPressed:
+                                    () => widget.removeItem(widget.index),
+                                padding: EdgeInsets.zero,
+                                constraints: BoxConstraints(),
+                              ),
+                            ],
+                          ),
+                        ],
+
+                        if (!isProductSoldOut(widget.cartItem)) ...[
+                          // 4. "+" and "-" Buttons with Count
+                          Wrap(
+                            children: [
+                              ColoredBox(
+                                color: Color.fromARGB(255, 31, 47, 80),
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(vertical: 6),
+                                  child: Container(
+                                    height: 30,
+                                    width: 120,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Color.fromARGB(
+                                          255,
+                                          123,
+                                          138,
+                                          195,
                                         ),
-                                        child: Text(
-                                          widget.cartItemModel.quantity,
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.white,
-                                            fontFamily: "Montserrat",
+                                      ),
+                                      borderRadius: BorderRadius.circular(0),
+                                      color: Color.fromARGB(
+                                        255,
+                                        31,
+                                        47,
+                                        80,
+                                      ), // Background color
+                                    ),
+                                    // Add some padding inside the border
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: <Widget>[
+                                        IconButton(
+                                          iconSize: 16,
+                                          icon: Icon(Icons.remove),
+                                          color: Colors.white,
+                                          onPressed:
+                                              () => widget.decrementCount(
+                                                widget.index,
+                                              ),
+                                          padding: EdgeInsets.zero,
+                                          constraints: BoxConstraints(),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                0,
+                                                0,
+                                                0,
+                                                0,
+                                              ),
+                                          child: Text(
+                                            widget.cartItemModel.quantity,
+                                            style: TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.white,
+                                              fontFamily: "Montserrat",
+                                            ),
                                           ),
                                         ),
-                                      ),
 
-                                      IconButton(
-                                        iconSize: 16,
-                                        icon: Icon(Icons.add),
-                                        color: Colors.white,
-                                        onPressed:
-                                            () => widget.incrementCount(
-                                              widget.index,
-                                            ),
-                                        padding: EdgeInsets.zero,
-                                        constraints: BoxConstraints(),
-                                      ),
-                                    ],
+                                        IconButton(
+                                          iconSize: 16,
+                                          icon: Icon(Icons.add),
+                                          color: Colors.white,
+                                          onPressed:
+                                              () => widget.incrementCount(
+                                                widget.index,
+                                              ),
+                                          padding: EdgeInsets.zero,
+                                          constraints: BoxConstraints(),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
 
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: <Widget>[
-                            Padding(
-                              padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
-                              child: Text(
-                                '${widget.formatPrice((double.parse(widget.cartItem.packingPrice) * double.parse(widget.cartItemModel.quantity)).toString())}',
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  fontFamily: "Montserrat",
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Padding(
+                                padding: EdgeInsets.fromLTRB(4, 0, 4, 0),
+                                child: Text(
+                                  '${widget.formatPrice((double.parse(widget.cartItem.packingPrice) * double.parse(widget.cartItemModel.quantity)).toString())}',
+                                  style: TextStyle(
+                                    fontSize: 14.0,
+                                    fontFamily: "Montserrat",
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
-                            ),
-                            IconButton(
-                              icon: Image.asset(
-                                "icons/delete_icon.png",
-                                height: 24,
-                                width: 24,
+                              IconButton(
+                                icon: Image.asset(
+                                  "icons/delete_icon.png",
+                                  height: 24,
+                                  width: 24,
+                                ),
+                                onPressed:
+                                    () => widget.removeItem(widget.index),
+                                padding: EdgeInsets.zero,
+                                constraints: BoxConstraints(),
                               ),
-                              onPressed: () => widget.removeItem(widget.index),
-                              padding: EdgeInsets.zero,
-                              constraints: BoxConstraints(),
-                            ),
-                          ],
-                        ),
+                            ],
+                          ),
+                        ],
                       ],
                     ),
                   ),
@@ -258,4 +295,25 @@ class _CartItemWidgetState extends State<CartItemWidget>
       ),
     );
   }
+}
+
+Widget soldOutTextCart() {
+  return Padding(
+    padding: const EdgeInsets.only(left: 8.0),
+    child: Container(
+      color: Color.fromARGB(255, 123, 138, 195),
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
+        child: Text(
+          "Sold Out",
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 14,
+            fontFamily: "Montserrat",
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    ),
+  );
 }

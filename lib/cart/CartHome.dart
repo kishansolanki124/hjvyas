@@ -181,7 +181,22 @@ class _CartPageState extends State<CartPage>
     });
   }
 
+  bool isProductSoldOut(ProductCartListItem productCartListItem) {
+    if (productCartListItem.productSoldout == "yes") {
+      return true;
+    }
+    return false;
+  }
+
   void proceedToCheckOutClicked() {
+    //check soldout products available in cart or not
+    for (int i = 0; i < _cartItems!.length; i++) {
+      if (isProductSoldOut(_cartItems!.elementAt(i))) {
+        showSnackbar(context, "Product in your cart is soldout.");
+        return;
+      }
+    }
+
     if (isTesterEnabled && freeSelectedIndex == -1) {
       showSnackbar(context, "Please Select Any One Free Product Tester");
       return;
