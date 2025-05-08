@@ -380,7 +380,7 @@ Widget CheckoutAddressWidget(
         ),
       ),
       Text(
-        "(no spam, you get an email for your order details)",
+        "(No spam, you get an email for your order details)",
         style: TextStyle(
           fontSize: 12.0,
           fontFamily: "Montserrat",

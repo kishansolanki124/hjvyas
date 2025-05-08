@@ -11,6 +11,7 @@ import '../product_detail/ImageWithProgress.dart';
 import '../splash/NoIntternetScreen.dart';
 import '../utils/CommonAppProgress.dart';
 import '../utils/NetworkImageWithProgress.dart';
+import 'HomePopup.dart';
 import 'PaginationController.dart';
 
 class HomeView extends StatefulWidget {
@@ -54,11 +55,20 @@ class _HomeViewState extends State<HomeView>
       _animationController.forward();
     });
 
-    widget.paginationController.loadInitialData(); // Explicit call
+    fetchData();
+    //widget.paginationController.loadInitialData(); // Explicit call
   }
 
   Future<void> fetchData() async {
-    widget.paginationController.loadInitialData(); // Explicit call
+    await widget.paginationController.loadInitialData(); // Explicit call
+
+    print('initdata ${widget.paginationController.popupListItem}');
+    if (widget.paginationController.popupListItem.isNotEmpty) {
+      openPopup(
+        widget.paginationController.popupListItem.elementAt(0).image,
+        widget.paginationController.popupListItem.elementAt(0).description,
+      );
+    }
   }
 
   void _refreshData() {
@@ -67,6 +77,21 @@ class _HomeViewState extends State<HomeView>
 
   // Instance of SharedPreferences
   late SharedPreferences _prefs;
+
+  void openPopup(String imageUrl, String text) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: "Image Viewer",
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (_, __, ___) {
+        return HomePopup(imageUrl: imageUrl, text: text, onClose: () => {});
+      },
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(opacity: animation, child: child);
+      },
+    );
+  }
 
   @override
   void dispose() {

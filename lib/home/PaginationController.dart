@@ -15,6 +15,7 @@ class PaginationController extends GetxController {
   PaginationController(this._service);
 
   var items = <SliderListItem>[].obs;
+  var popupListItem = <PopupListItem>[].obs;
   var isLoading = false.obs;
   var isError = false.obs;
   var currentPage = 0;
@@ -35,6 +36,12 @@ class PaginationController extends GetxController {
         currentPage.toString(),
         itemsPerPage.toString(),
       );
+
+      if(newItems.popupList.isNotEmpty) {
+        popupListItem.clear();
+        popupListItem.assignAll(newItems.popupList);
+      }
+
       items.assignAll(newItems.sliderList);
       totalItems = newItems.totalRecords;
       currentPage += 10;

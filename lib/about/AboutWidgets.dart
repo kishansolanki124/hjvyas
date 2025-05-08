@@ -160,3 +160,53 @@ Widget loadHTMLContent(String? stringData) {
     },
   );
 }
+
+Widget loadHTMLContentPopup(String? stringData) {
+  return Html(
+    data: stringData,
+    style: {
+      //"h1": Style(fontSize: FontSize.xxLarge),
+      "p": Style(
+        fontWeight: FontWeight.w400,
+        //fontSize: 14,
+        textAlign: TextAlign.start,
+        fontFamily: "Montserrat",
+        fontSize: FontSize.xSmall,
+        color: Colors.black,
+      ),
+      "body": Style(
+        fontWeight: FontWeight.w400,
+        //fontSize: 14,
+        fontFamily: "Montserrat",
+        fontSize: FontSize.xSmall,
+        textAlign: TextAlign.start,
+        color: Colors.white,
+      ),
+      "<br>": Style(
+        fontWeight: FontWeight.w400,
+        //fontSize: 14,
+        fontFamily: "Montserrat",
+        textAlign: TextAlign.start,
+        fontSize: FontSize.xSmall,
+        color: Colors.white,
+      ),
+      "strong": Style(
+        fontWeight: FontWeight.w600,
+        //fontSize: 14,
+        fontFamily: "Montserrat",
+        fontSize: FontSize.xSmall,
+        textAlign: TextAlign.start,
+        color: Colors.black,
+      ),
+      //"a": Style(color: Colors.blue, decoration: TextDecoration.underline),
+      //"table": Style(border: Border.all(color: Colors.grey)),
+      //"th": Style(padding: EdgeInsets.all(8), backgroundColor: Colors.lightBlue),
+      //"td": Style(padding: EdgeInsets.all(8)),
+      //"div": Style(margin: EdgeInsets.only(bottom: 10)),
+      // "img": Style(
+      //   width: Width.percent(100), // Make images responsive.
+      //   height: Height.auto(),
+      // ),
+    },
+  );
+}
