@@ -311,8 +311,6 @@ class _CartPageState extends State<CartPage>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       // 1. Title
-                      SizedBox(height: 20.0),
-
                       //text my bag
                       Text(
                         "My Bag",
