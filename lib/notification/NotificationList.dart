@@ -63,7 +63,7 @@ class _NotificationListState extends State<NotificationList> {
                 //square border app color
                 IgnorePointer(
                   child: Container(
-                    height: 100,
+                    height: 80,
                     margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 0),
                     decoration: BoxDecoration(
                       border: Border(
@@ -92,7 +92,7 @@ class _NotificationListState extends State<NotificationList> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      SizedBox(height: 60.0),
+                      SizedBox(height: 40.0),
 
                       // Title
                       Center(
