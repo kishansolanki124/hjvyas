@@ -62,7 +62,7 @@ class _ProductDetailState extends State<ComboDetail>
   void navigateToCartPage() async {
     final result = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CartPage(showBackButton: true,)),
+      MaterialPageRoute(builder: (context) => CartPage(showBackButton: true)),
     );
 
     // When returning from Widget2, this code will execute
@@ -742,9 +742,7 @@ class _ProductDetailState extends State<ComboDetail>
                                           comboDetailResponse!.comboDetail
                                               .elementAt(0)
                                               .comboName,
-                                          comboDetailResponse!.comboDetail
-                                              .elementAt(0)
-                                              .comboPrice,
+                                          "${comboDetailResponse!.comboDetail.elementAt(0).comboPrice} (${comboDetailResponse!.comboDetail.elementAt(0).comboWeight} ${comboDetailResponse!.comboDetail.elementAt(0).comboWeightType})",
                                           comboDetailResponse!.comboDetail
                                                   .elementAt(0)
                                                   .comboSoldout ==

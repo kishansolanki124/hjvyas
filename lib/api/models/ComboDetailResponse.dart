@@ -52,6 +52,8 @@ class ComboDetailItem {
   final String comboType;
   final String comboName;
   final String comboPrice;
+  final String comboWeight;
+  final String comboWeightType;
   final String comboDescription;
   final String comboTerms;
   final String comboImage;
@@ -65,6 +67,8 @@ class ComboDetailItem {
     this.comboType = "",
     this.comboName = "",
     this.comboPrice = "",
+    this.comboWeight = "",
+    this.comboWeightType = "",
     this.comboDescription = "",
     this.comboTerms = "",
     this.comboImage = "",
@@ -80,6 +84,8 @@ class ComboDetailItem {
         comboType: asString(json, 'combo_type'),
         comboName: asString(json, 'combo_name'),
         comboPrice: asString(json, 'combo_price'),
+        comboWeight: asString(json, 'combo_weight'),
+        comboWeightType: asString(json, 'combo_weight_type'),
         comboDescription: asString(json, 'combo_description'),
         comboTerms: asString(json, 'combo_terms'),
         comboImage: asString(json, 'combo_image'),
@@ -94,6 +100,8 @@ class ComboDetailItem {
     'combo_type': comboType,
     'combo_name': comboName,
     'combo_price': comboPrice,
+    'combo_weight': comboWeight,
+    'combo_weight_type': comboWeightType,
     'combo_description': comboDescription,
     'combo_terms': comboTerms,
     'combo_image': comboImage,
