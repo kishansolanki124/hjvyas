@@ -133,8 +133,25 @@ class _NavigationExampleState extends State<NavigationExample>
 
   Widget homeNavigationWidget = HomeView();
 
+  void navigateToCartPage() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => CartPage(showBackButton: true)),
+    );
+
+    // When returning from Widget2, this code will execute
+    if (result != null) {
+      loadSharedPrefItemsList();
+    }
+  }
+
   void _onItemTapped(int index) {
     loadSharedPrefItemsList();
+
+    if(index == 3) {
+      navigateToCartPage();
+      return;
+    }
 
     if (index == currentPageIndex) {
       return;
