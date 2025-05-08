@@ -513,6 +513,14 @@ Widget CheckoutAddressWidget(
           isDense: true, //make textfield compact
         ),
       ),
+      Text(
+        "(Enter Full Address With Street, Road, Building Name, No etc)",
+        style: TextStyle(
+          fontSize: 12.0,
+          fontFamily: "Montserrat",
+          color: Color.fromARGB(255, 123, 138, 195),
+        ),
+      ),
 
       SizedBox(height: 20),
 
