@@ -5,6 +5,7 @@ import 'package:hjvyas/product_detail/ProductDetail.dart';
 
 import '../api/models/ComboDetailResponse.dart';
 import '../api/models/ProductDetailResponse.dart';
+import 'IngredientsImageWithLoading.dart';
 import 'NetworkImageWithLoading.dart';
 import 'ProductYouMayLikeItem.dart';
 
@@ -324,14 +325,14 @@ Widget productDetailIngredients(
               child: Column(
                 children: [
                   Container(
-                    width: 80,
-                    height: 80,
+                    width: 75,
+                    height: 75,
                     decoration: BoxDecoration(
                       border: Border.all(
                         color: Color.fromARGB(255, 123, 138, 195),
                       ),
                     ),
-                    child: NetworkImageWithLoading(
+                    child: IngredientsImageWithLoading(
                       imageUrl:
                           productIngredients
                               .elementAt(index)
@@ -341,7 +342,7 @@ Widget productDetailIngredients(
 
                   //Ingredient text name
                   SizedBox(
-                    width: 80,
+                    width: 75,
                     child: Center(
                       child: Text(
                         textAlign: TextAlign.center,
