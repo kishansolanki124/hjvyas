@@ -1297,17 +1297,23 @@ class _CheckoutState extends State<Checkout> {
 
                                   if (_selectedOptionCountry ==
                                           "Outside India" &&
-                                      !outSideIndia) ...[
-                                    //outside india not allowed
-                                    Text(
+                                      //!outSideIndia) ...[
                                       shippingStatusResponse!.shippingStatusList
                                           .elementAt(0)
-                                          .outsideindiaMsg,
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        fontFamily: "Montserrat",
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.w500,
+                                          .outsideindiaMsg.isNotEmpty) ...[
+                                    //outside india not allowed
+                                    Padding(
+                                      padding: const EdgeInsets.only(bottom: 8.0),
+                                      child: Text(
+                                        shippingStatusResponse!.shippingStatusList
+                                            .elementAt(0)
+                                            .outsideindiaMsg,
+                                        style: TextStyle(
+                                          fontSize: 14.0,
+                                          fontFamily: "Montserrat",
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -1341,7 +1347,10 @@ class _CheckoutState extends State<Checkout> {
                                         _selectedOptionState!.isNotEmpty) ...[
                                       if (_selectedOptionState ==
                                               "Outside Gujarat" &&
-                                          !otherStateOn) ...[
+                                          //!otherStateOn) ...[
+                                          shippingStatusResponse!.shippingStatusList
+                                              .elementAt(0)
+                                          .outofgujaratMsg.isNotEmpty) ...[
                                         //outside Gujarat not allowed
                                         Text(
                                           shippingStatusResponse!
@@ -1386,7 +1395,10 @@ class _CheckoutState extends State<Checkout> {
 
                                         if (_selectedOptionCity ==
                                                 "Other City" &&
-                                            !isGujaratOn) ...[
+                                            //!isGujaratOn) ...[
+                                            shippingStatusResponse!.shippingStatusList
+                                                .elementAt(0)
+                                                .gujaratMsg.isNotEmpty) ...[
                                           //within Gujarat only Jamnagar is allowed
                                           Text(
                                             shippingStatusResponse!
