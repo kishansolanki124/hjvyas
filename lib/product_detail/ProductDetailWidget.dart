@@ -189,8 +189,13 @@ Widget productDetailDropDown(
             return DropdownMenuItem<ProductPackingListItem>(
               value: variation,
               child: Text(
-                "${variation.productWeight} ${variation.productWeightType} "
-                "(₹${variation.productPackingPrice}) - ${variation.productPieces} Pieces",
+                variation.productPieces.isNotEmpty
+                    ? ("${variation.productWeight} ${variation.productWeightType} "
+                        "(₹${variation.productPackingPrice}) - ${variation.productPieces} Pieces")
+                    : ("${variation.productWeight} ${variation.productWeightType} "
+                        "(₹${variation.productPackingPrice})"),
+                // "${variation.productWeight} ${variation.productWeightType} "
+                // "(₹${variation.productPackingPrice}) - ${variation.productPieces} Pieces",
                 style: TextStyle(
                   backgroundColor: Color.fromARGB(255, 31, 47, 80),
                   fontSize: 12,
@@ -213,20 +218,27 @@ Widget productDetailDropDown(
         return productPackingList.map<Widget>((
           ProductPackingListItem variation,
         ) {
-          return Center(
-            child: Text(
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-              "${variation.productWeight} ${variation.productWeightType} "
-              "(₹${variation.productPackingPrice}) - ${variation.productPieces} Pieces",
-              style: TextStyle(
-                backgroundColor: Colors.transparent,
-                fontSize: 12,
-                color: Colors.white,
-                fontFamily: "Montserrat",
-                //fontWeight: FontWeight.w700,
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                textAlign: TextAlign.center,
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+                variation.productPieces.isNotEmpty
+                    ? ("${variation.productWeight} ${variation.productWeightType} "
+                        "(₹${variation.productPackingPrice}) - ${variation.productPieces} Pieces")
+                    : ("${variation.productWeight} ${variation.productWeightType} "
+                        "(₹${variation.productPackingPrice})"),
+                style: TextStyle(
+                  backgroundColor: Colors.transparent,
+                  fontSize: 12,
+                  color: Colors.white,
+                  fontFamily: "Montserrat",
+                  //fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
+            ],
           );
         }).toList();
       },
