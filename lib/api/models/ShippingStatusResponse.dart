@@ -8,7 +8,7 @@ class ShippingStatusResponse {
   final String message;
   final List<ShippingStatusListItem> shippingStatusList;
   final List<StateListItem> stateList;
-  final List<CountryListItem> countryList;
+  List<CountryListItem> countryList;
 
   ShippingStatusResponse({
     this.status = "",

@@ -705,6 +705,9 @@ class _CheckoutState extends State<Checkout> {
     hideKeyboard(context);
     if (_validatePhone(_phoneController.text) != null) {
       showSnackbar(context, _validatePhone(_phoneController.text).toString());
+    } else if (_selectedOptionCountry == "Outside India" &&
+        countryListItem!.countryName == "Select Country") {
+      showSnackbar(context, "Kindly select country.");
     } else {
       getShippingCharge();
     }
@@ -865,6 +868,9 @@ class _CheckoutState extends State<Checkout> {
       totalWeight.toString(),
       cartAmount,
     );
+
+    showSnackbar(context, "Shipping charges is updated.");
+
     _showCheckoutAddressWidget();
   }
 
@@ -998,6 +1004,17 @@ class _CheckoutState extends State<Checkout> {
             null != widget.paginationController.shippingStatusResponse.value) {
           shippingStatusResponse =
               widget.paginationController.shippingStatusResponse.value;
+
+          if (null != shippingStatusResponse &&
+              shippingStatusResponse!.countryList.isNotEmpty &&
+              shippingStatusResponse!.countryList.elementAt(0).countryName !=
+                  "Select Country") {
+            //adding default first option as select Country
+            shippingStatusResponse!.countryList.insert(
+              0,
+              CountryListItem(id: "-1", countryName: "Select Country"),
+            );
+          }
 
           usdPrice = double.parse(
             shippingStatusResponse!.shippingStatusList
