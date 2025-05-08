@@ -512,6 +512,9 @@ class _CheckoutState extends State<Checkout> {
       showSnackbar(context, "State name is required.");
     } else if (stateListItem == null) {
       showSnackbar(context, "State name is required.");
+    } else if (_selectedOptionState == "Outside Gujarat" &&
+        stateListItem!.stateName == "Select State") {
+      showSnackbar(context, "Kindly select State.");
     } else if (_alternatePhone(_alternatePhoneController.text) != null) {
       showSnackbar(
         context,
@@ -1013,6 +1016,17 @@ class _CheckoutState extends State<Checkout> {
             shippingStatusResponse!.countryList.insert(
               0,
               CountryListItem(id: "-1", countryName: "Select Country"),
+            );
+          }
+
+          if (null != shippingStatusResponse &&
+              shippingStatusResponse!.stateList.isNotEmpty &&
+              shippingStatusResponse!.stateList.elementAt(0).stateName !=
+                  "Select State") {
+            //adding default first option as select Country
+            shippingStatusResponse!.stateList.insert(
+              0,
+              StateListItem(id: "-1", stateName: "Select State"),
             );
           }
 

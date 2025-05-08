@@ -7,7 +7,7 @@ class ShippingStatusResponse {
   final String status;
   final String message;
   final List<ShippingStatusListItem> shippingStatusList;
-  final List<StateListItem> stateList;
+  List<StateListItem> stateList;
   List<CountryListItem> countryList;
 
   ShippingStatusResponse({
