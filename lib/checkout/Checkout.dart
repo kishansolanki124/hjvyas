@@ -1629,7 +1629,7 @@ class _CheckoutState extends State<Checkout> {
                                           ),
                                           padding: EdgeInsets.symmetric(
                                             vertical: 10.0,
-                                            horizontal: 12,
+                                            horizontal: 36,
                                           ), // Add some vertical padding
                                         ),
                                         child: Obx(() {
@@ -1754,11 +1754,11 @@ class _CheckoutState extends State<Checkout> {
                                                 ),
                                                 padding: EdgeInsets.symmetric(
                                                   vertical: 10.0,
-                                                  horizontal: 12,
+                                                  horizontal: 36,
                                                 ), // Add some vertical padding
                                               ),
                                               child: Text(
-                                                "Submit",
+                                                "Proceed To Pay",
                                                 style: TextStyle(
                                                   fontSize: 16.0,
                                                   fontFamily: "Montserrat",
