@@ -521,7 +521,7 @@ class _CheckoutState extends State<Checkout> {
         _alternatePhone(_alternatePhoneController.text).toString(),
       );
     } else if (!_tncChecked) {
-      showSnackbar(context, "Kindly click on I Agree to accept TNC.");
+      showSnackbar(context, "You Must Accept The Terms & Conditions.");
     } else if (null == _selectedPaymentMethod ||
         _selectedPaymentMethod!.isEmpty) {
       showSnackbar(context, "Kindly select any payment method.");
