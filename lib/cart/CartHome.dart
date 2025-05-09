@@ -579,7 +579,8 @@ class _CartPageState extends State<CartPage>
         }),
         floatingActionButton:
             showProceedToCheckout
-                ? CartPageCheckoutView(cartTotal: cartTotal)
+                ? CartPageCheckoutView(cartTotal: cartTotal,
+            onPressed: proceedToCheckOutClicked,)
                 : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
