@@ -312,8 +312,7 @@ Widget productDetailItemCounterNew(
   quantity,
 ) {
   return Container(
-    height: 40,
-    // Add some padding inside the border
+    height: 40, // Add some padding inside the border
     child: Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -322,7 +321,7 @@ Widget productDetailItemCounterNew(
           width: 40,
           height: 40,
           child: IconButton(
-            iconSize: 12,
+            iconSize: 16,
             padding: EdgeInsets.zero,
             color: Colors.white,
             icon: Icon(Icons.remove),
@@ -336,7 +335,7 @@ Widget productDetailItemCounterNew(
             child: Text(
               '$quantity',
               style: TextStyle(
-                fontSize: 12,
+                fontSize: 16,
                 color: Colors.white,
                 fontFamily: "Montserrat",
               ),
@@ -348,7 +347,7 @@ Widget productDetailItemCounterNew(
           width: 40,
           height: 40,
           child: IconButton(
-            iconSize: 12,
+            iconSize: 16,
             padding: EdgeInsets.zero,
             constraints: BoxConstraints(),
             color: Colors.white,

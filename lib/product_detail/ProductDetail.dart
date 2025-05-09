@@ -134,6 +134,11 @@ class _ProductDetailState extends State<ProductDetail>
     //});
   }
 
+  /// This function is used to update cart(top right corner)
+  Future<void> updateCartOnQuantityChange() async {
+    await _addToCart();
+  }
+
   Future<void> _addToCart() async {
     if (selectedItemQuantity == 0) {
       bool itemExist = false;
@@ -165,8 +170,8 @@ class _ProductDetailState extends State<ProductDetail>
         final List<String> stringList =
             _cartItemList.map((item) => jsonEncode(item.toJson())).toList();
         await _prefs.setStringList("cart_list", stringList);
-        addToCartText = "Add to Cart";
-        showSnackbar(context, "Item removed from the cart.");
+        //addToCartText = "Add to Cart";
+        //showSnackbar(context, "Item removed from the cart.");
       } else {
         showSnackbar(context, "Please update quantity to Add to Cart.");
       }
@@ -217,7 +222,7 @@ class _ProductDetailState extends State<ProductDetail>
       final List<String> stringList =
           _cartItemList.map((item) => jsonEncode(item.toJson())).toList();
       await _prefs.setStringList("cart_list", stringList);
-      showSnackbar(context, "Product added to the Cart.");
+      //showSnackbar(context, "Product added to the Cart.");
     }
   }
 
@@ -226,7 +231,7 @@ class _ProductDetailState extends State<ProductDetail>
   double floatingButtonPrice = 0;
   int selectedItemQuantity = 0;
 
-  String addToCartText = "Add to Cart";
+  //String addToCartText = "Add to Cart";
 
   ProductPackingListItem? _selectedVariant;
   ProductDetailResponse? productDetailResponse;
@@ -490,12 +495,18 @@ class _ProductDetailState extends State<ProductDetail>
       showSnackbar(context, "You have added max quantity.");
       return;
     }
+
     setState(() {
       selectedItemQuantity++;
       floatingButtonPrice =
           double.parse(_selectedVariant!.productPackingPrice) *
           selectedItemQuantity;
     });
+
+    print(
+      'selectedItemQuantity is $selectedItemQuantity from _incrementQuantity',
+    );
+    updateCartOnQuantityChange();
   }
 
   void _onChangedDropDownValue(ProductPackingListItem newValue) {
@@ -519,6 +530,8 @@ class _ProductDetailState extends State<ProductDetail>
             double.parse(_selectedVariant!.productPackingPrice) *
             selectedItemQuantity;
       });
+
+      updateCartOnQuantityChange();
     }
   }
 
@@ -528,26 +541,26 @@ class _ProductDetailState extends State<ProductDetail>
     });
   }
 
-  void _onPressed() {
-    setState(() {
-      if (_cartIconAnimationController.status == AnimationStatus.forward) {
-        _cartIconAnimationController.reset();
-      }
-      _cartIconAnimationController.forward();
-    });
+  // void _onPressed() {
+  //   setState(() {
+  //     if (_cartIconAnimationController.status == AnimationStatus.forward) {
+  //       _cartIconAnimationController.reset();
+  //     }
+  //     _cartIconAnimationController.forward();
+  //   });
+  //
+  //   setState(() {
+  //     //addToCartText = "Add to Cart";
+  //     _addToCart();
+  //     if (kDebugMode) {
+  //       print('Add to Cart button pressed!');
+  //     }
+  //   });
+  // }
 
-    setState(() {
-      addToCartText = "Add to Cart";
-      _addToCart();
-      if (kDebugMode) {
-        print('Add to Cart button pressed!');
-      }
-    });
-  }
-
-  String getCartText() {
-    return addToCartText;
-  }
+  // String getCartText() {
+  //   return addToCartText;
+  // }
 
   void _onBackPressed() {
     setState(() {
@@ -1401,15 +1414,19 @@ class _ProductDetailState extends State<ProductDetail>
                         "yes"
                     ? SlideTransition(
                       position: _fromBottomSlideAnimation,
-                      child: (null != _selectedVariant) ? AddToCartWidgetForDetail(
-                        productPrice: double.parse(
-                          _selectedVariant!.productPackingPrice,
-                        ),
-                        onPressed: _onPressed,
-                        decrementQuantity: _decrementQuantity,
-                        incrementQuantity: _incrementQuantity,
-                        selectedItemQuantity: selectedItemQuantity,
-                      ) : null,
+                      child:
+                          (null != _selectedVariant)
+                              ? AddToCartWidgetForDetail(
+                                productPrice: double.parse(
+                                  _selectedVariant!.productPackingPrice,
+                                ),
+                                //onPressed: _onPressed,
+                                onPressed: _incrementQuantity,
+                                decrementQuantity: _decrementQuantity,
+                                incrementQuantity: _incrementQuantity,
+                                selectedItemQuantity: selectedItemQuantity,
+                              )
+                              : null,
                     )
                     : null,
           );

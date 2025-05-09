@@ -66,7 +66,7 @@ class _AddToCartWidgetForDetailState extends State<AddToCartWidgetForDetail>
 
             if (widget.selectedItemQuantity > 0) ...[
               Container(
-                width: 150,
+                width: 160,
                 decoration: BoxDecoration(
                   color: Color.fromARGB(255, 123, 138, 195),
                   borderRadius: BorderRadius.circular(
@@ -87,7 +87,7 @@ class _AddToCartWidgetForDetailState extends State<AddToCartWidgetForDetail>
             if (widget.selectedItemQuantity == 0) ...[
               // Add some space between price and button
               Container(
-                width: 150,
+                width: 160,
                 child: ElevatedButton(
                   onPressed: () {
                     widget.onPressed!();
@@ -112,7 +112,7 @@ class _AddToCartWidgetForDetailState extends State<AddToCartWidgetForDetail>
                     style: TextStyle(
                       fontSize: 16,
                       fontFamily: "Montserrat",
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w600,
                       color: Colors.white,
                     ),
                   ),
