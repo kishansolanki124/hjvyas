@@ -17,7 +17,7 @@ import '../api/models/CartItemModel.dart';
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product/ProductListWidgets.dart';
-import '../product_detail/FullWidthButton.dart';
+import '../product_detail/AddToCartWidgetForDetail.dart';
 import '../product_detail/ProductDetailWidget.dart';
 import '../splash/NoIntternetScreen.dart';
 import '../utils/CommonAppProgress.dart';
@@ -67,7 +67,17 @@ class _ProductDetailState extends State<ComboDetail>
 
     // When returning from Widget2, this code will execute
     if (result != null) {
-      _loadList();
+      await _loadList();
+      if (null != comboDetailResponse) {
+        setState(() {
+          selectedItemQuantity = getQuantity();
+          if (kDebugMode) {
+            print('selectedItemQuantity is $selectedItemQuantity');
+          }
+          floatingButtonPrice =
+              double.parse(comboDetailItem!.comboPrice) * selectedItemQuantity;
+        });
+      }
     }
   }
 
@@ -192,7 +202,7 @@ class _ProductDetailState extends State<ComboDetail>
             _cartItemList.map((item) => jsonEncode(item.toJson())).toList();
         await _prefs.setStringList("cart_list", stringList);
         addToCartText = "Add to Cart";
-        showSnackbar(context, "Item removed from the cart.");
+        //showSnackbar(context, "Item removed from the cart.");
       } else {
         showSnackbar(context, "Please update quantity to Add to Cart.");
       }
@@ -242,7 +252,7 @@ class _ProductDetailState extends State<ComboDetail>
       final List<String> stringList =
           _cartItemList.map((item) => jsonEncode(item.toJson())).toList();
       await _prefs.setStringList("cart_list", stringList);
-      showSnackbar(context, "Product added to the Cart.");
+      //showSnackbar(context, "Product added to the Cart.");
     }
   }
 
@@ -495,6 +505,11 @@ class _ProductDetailState extends State<ComboDetail>
   //   );
   // }
 
+  /// This function is used to update cart(top right corner)
+  Future<void> updateCartOnQuantityChange() async {
+    await _addToCart();
+  }
+
   void _incrementQuantity() {
     if (int.parse(comboDetailItem!.comboMaxQty) == selectedItemQuantity) {
       showSnackbar(context, "You have added max quantity.");
@@ -505,6 +520,7 @@ class _ProductDetailState extends State<ComboDetail>
       floatingButtonPrice =
           double.parse(comboDetailItem!.comboPrice) * selectedItemQuantity;
     });
+    updateCartOnQuantityChange();
   }
 
   void _decrementQuantity() {
@@ -514,6 +530,8 @@ class _ProductDetailState extends State<ComboDetail>
         floatingButtonPrice =
             double.parse(comboDetailItem!.comboPrice) * selectedItemQuantity;
       });
+
+      updateCartOnQuantityChange();
     }
   }
 
@@ -523,18 +541,28 @@ class _ProductDetailState extends State<ComboDetail>
     });
   }
 
-  void _onPressed() {
+  // void _onPressed() {
+  //   setState(() {
+  //     if (_cartIconAnimationController.status == AnimationStatus.forward) {
+  //       _cartIconAnimationController.reset();
+  //     }
+  //     _cartIconAnimationController.forward();
+  //
+  //     _addToCart();
+  //     if (kDebugMode) {
+  //       print('Add to Cart button pressed!');
+  //     }
+  //   });
+  // }
+
+  void showCartAnimation() {
     setState(() {
       if (_cartIconAnimationController.status == AnimationStatus.forward) {
         _cartIconAnimationController.reset();
       }
       _cartIconAnimationController.forward();
-
-      _addToCart();
-      if (kDebugMode) {
-        print('Add to Cart button pressed!');
-      }
     });
+    _incrementQuantity();
   }
 
   String getCartText() {
@@ -1056,15 +1084,15 @@ class _ProductDetailState extends State<ComboDetail>
                                             //     _selectedVariant,
                                             //     _onChangedDropDownValue,
                                             //   ),
-                                            if (comboDetailResponse!.comboDetail
-                                                    .elementAt(0)
-                                                    .comboSoldout !=
-                                                "yes")
-                                              productDetailItemCounter(
-                                                _decrementQuantity,
-                                                _incrementQuantity,
-                                                selectedItemQuantity,
-                                              ),
+                                            // if (comboDetailResponse!.comboDetail
+                                            //         .elementAt(0)
+                                            //         .comboSoldout !=
+                                            //     "yes")
+                                            //   productDetailItemCounter(
+                                            //     _decrementQuantity,
+                                            //     _incrementQuantity,
+                                            //     selectedItemQuantity,
+                                            //   ),
                                           ],
                                         ),
                                       ],
@@ -1310,11 +1338,27 @@ class _ProductDetailState extends State<ComboDetail>
                         "yes"
                     ? SlideTransition(
                       position: _fromBottomSlideAnimation,
-                      child: addToCartFullWidthButton(
-                        floatingButtonPrice,
-                        _onPressed,
-                        getCartText(),
-                      ),
+                      child:
+                          (null != comboDetailResponse)
+                              ? AddToCartWidgetForDetail(
+                                productPrice: double.parse(
+                                  comboDetailResponse!.comboDetail
+                                      .elementAt(0)
+                                      .comboPrice,
+                                ),
+                                //onPressed: _onPressed,
+                                onPressed: showCartAnimation,
+                                decrementQuantity: _decrementQuantity,
+                                incrementQuantity: _incrementQuantity,
+                                selectedItemQuantity: selectedItemQuantity,
+                              )
+                              : null,
+
+                      // addToCartFullWidthButton(
+                      //   floatingButtonPrice,
+                      //   _onPressed,
+                      //   getCartText(),
+                      // ),
                     )
                     : null,
           );
