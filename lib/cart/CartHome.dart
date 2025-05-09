@@ -255,7 +255,7 @@ class _CartPageState extends State<CartPage>
 
     await getProductTester();
 
-    showSnackbar(context, "Cart updated."); // Show the message
+    //showSnackbar(context, "Cart updated."); // Show the message
 
     print(
       '_cartItemShaaredPrefList size is ${_cartItemShaaredPrefList.length}',
@@ -511,27 +511,30 @@ class _CartPageState extends State<CartPage>
 
                             SizedBox(height: 10),
 
-                            if (!widget
-                                    .paginationController
-                                    .cartItemsLoading
-                                    .value &&
-                                widget
-                                    .paginationController
-                                    .cartItems
-                                    .isNotEmpty) ...[
-                              //proceed to checkout button
-                              SlideTransition(
-                                position: _slideAnimation,
-                                child: FadeTransition(
-                                  opacity: _animationController,
-                                  child: proceedToCheckOutButtonFullWidth(
-                                    proceedToCheckOutClicked,
-                                  ),
-                                ),
-                              ),
+                            SizedBox(height: 120),
 
-                              SizedBox(height: 100),
-                            ],
+
+                            // if (!widget
+                            //         .paginationController
+                            //         .cartItemsLoading
+                            //         .value &&
+                            //     widget
+                            //         .paginationController
+                            //         .cartItems
+                            //         .isNotEmpty) ...[
+                            //   //proceed to checkout button
+                            //   SlideTransition(
+                            //     position: _slideAnimation,
+                            //     child: FadeTransition(
+                            //       opacity: _animationController,
+                            //       child: proceedToCheckOutButtonFullWidth(
+                            //         proceedToCheckOutClicked,
+                            //       ),
+                            //     ),
+                            //   ),
+                            //
+                            //   SizedBox(height: 100),
+                            // ],
                           ],
                         ),
                       ),

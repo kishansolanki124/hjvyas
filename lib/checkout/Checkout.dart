@@ -185,7 +185,7 @@ class _CheckoutState extends State<Checkout> {
                           "shipping_discount": 0,
                         },
                       },
-                      "description": "Payment for Premium Widget",
+                      "description": (orderNo != null) ? "HJVyas $orderNo" : "HJVyas",
                       "item_list": {
                         "items": items.map((item) => item.toJson()).toList(),
                       },

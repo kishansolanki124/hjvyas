@@ -23,7 +23,8 @@ class _CartPageCheckoutViewState extends State<CartPageCheckoutView>
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: Colors.white,
+        //color: Colors.white,
+        color: Color.fromARGB(255, 123, 138, 195),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -38,7 +39,7 @@ class _CartPageCheckoutViewState extends State<CartPageCheckoutView>
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        padding: const EdgeInsets.fromLTRB(16, 4, 16, 24),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           // Ensure the column takes up minimal space.
@@ -46,18 +47,18 @@ class _CartPageCheckoutViewState extends State<CartPageCheckoutView>
           // Stretch children horizontally.
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Align(
                     alignment: AlignmentDirectional.topStart,
                     child: const Text(
-                      'Total Price:',
+                      'Cart Total:',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black, // Set the color of the Total Price
+                          color: Color.fromARGB(255, 31, 47, 80),
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -65,11 +66,11 @@ class _CartPageCheckoutViewState extends State<CartPageCheckoutView>
                   Align(
                     alignment: AlignmentDirectional.topStart,
                     child: const Text(
-                      "₹ 500",
+                      "₹ 500.00",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,
-                        color: Colors.black, // Set the color of the Total Price
+                        color: Color.fromARGB(255, 31, 47, 80), // Set the color of the Total Price
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -80,17 +81,22 @@ class _CartPageCheckoutViewState extends State<CartPageCheckoutView>
             // Add some spacing
             ElevatedButton(
               onPressed: () {
-                //todo: here
+                // Handle checkout action
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text('Proceeding to Checkout...'),
+                    duration: Duration(seconds: 2),
+                  ),
+                );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 123, 138, 195),
-                // Button color
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                // Add vertical padding
+                backgroundColor: Colors.white,
+                padding:
+                const EdgeInsets.symmetric(vertical: 10, horizontal: 24), // Add horizontal padding
                 shape: RoundedRectangleBorder(
-                  // Apply rounded corners to the button
                   borderRadius: BorderRadius.circular(50),
                 ),
+                elevation: 2, // Add a small elevation
               ),
               child: const Text(
                 'Proceed to Checkout',
@@ -98,7 +104,7 @@ class _CartPageCheckoutViewState extends State<CartPageCheckoutView>
                   fontSize: 18,
                   fontWeight: FontWeight.w700,
                   fontFamily: "Montserrat",
-                  color: Colors.white, // Text color
+                  color: Color.fromARGB(255, 31, 47, 80),
                 ),
               ),
             ),
