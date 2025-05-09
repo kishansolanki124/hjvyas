@@ -541,6 +541,16 @@ class _ProductDetailState extends State<ProductDetail>
     });
   }
 
+  void showCartAnimation() {
+    setState(() {
+      if (_cartIconAnimationController.status == AnimationStatus.forward) {
+        _cartIconAnimationController.reset();
+      }
+      _cartIconAnimationController.forward();
+    });
+    _incrementQuantity();
+  }
+
   // void _onPressed() {
   //   setState(() {
   //     if (_cartIconAnimationController.status == AnimationStatus.forward) {
@@ -577,7 +587,12 @@ class _ProductDetailState extends State<ProductDetail>
 
     // When returning from Widget2, this code will execute
     if (result != null) {
-      _loadList();
+      print('return from cart page.');
+
+      await _loadList();
+      if (null != _selectedVariant) {
+        _onChangedDropDownValue(_selectedVariant!);
+      }
     }
   }
 
@@ -1124,7 +1139,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                 ),
                                               ),
 
-                                              SizedBox(width: 8),
+                                              // SizedBox(width: 8),
 
                                               // productDetailItemCounter(
                                               //   _decrementQuantity,
@@ -1421,7 +1436,7 @@ class _ProductDetailState extends State<ProductDetail>
                                   _selectedVariant!.productPackingPrice,
                                 ),
                                 //onPressed: _onPressed,
-                                onPressed: _incrementQuantity,
+                                onPressed: showCartAnimation,
                                 decrementQuantity: _decrementQuantity,
                                 incrementQuantity: _incrementQuantity,
                                 selectedItemQuantity: selectedItemQuantity,
