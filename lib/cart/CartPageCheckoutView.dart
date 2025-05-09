@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../utils/CommonAppProgress.dart';
+
 class CartPageCheckoutView extends StatefulWidget {
-  CartPageCheckoutView();
+  double cartTotal = 0;
+  CartPageCheckoutView({required this.cartTotal});
 
   @override
   _CartPageCheckoutViewState createState() => _CartPageCheckoutViewState();
@@ -65,8 +68,8 @@ class _CartPageCheckoutViewState extends State<CartPageCheckoutView>
                   ),
                   Align(
                     alignment: AlignmentDirectional.topStart,
-                    child: const Text(
-                      "₹ 500.00",
+                    child: Text(
+                      "₹ ${getTwoDecimalPrice(widget.cartTotal)}",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w500,

@@ -15,7 +15,6 @@ import '../api/services/HJVyasApiService.dart';
 import '../home/navigation.dart';
 import '../injection_container.dart';
 import '../product/ProductPaginationController.dart';
-import '../product_detail/FullWidthButton.dart';
 import '../splash/NoIntternetScreen.dart';
 import 'CartItemWidget.dart';
 import 'CartPageCheckoutView.dart';
@@ -36,6 +35,7 @@ class CartPage extends StatefulWidget {
 
 class _CartPageState extends State<CartPage>
     with SingleTickerProviderStateMixin {
+  double cartTotal = 0;
   late final AnimationController _animationController;
   late final Animation<Offset> _slideAnimation;
 
@@ -130,11 +130,32 @@ class _CartPageState extends State<CartPage>
         productType,
       ); // Explicit call
 
+      await doCartTotal();
+
       getProductTester();
 
       //cart is not empty
       updateCartItemStatus(true);
     }
+  }
+
+  Future<void> doCartTotal() async {
+    print(
+      'size of _cartItemShaaredPrefList is ${_cartItemShaaredPrefList.length}',
+    );
+    print(
+      'size of server cartItems is ${widget.paginationController.cartItems.length}',
+    );
+    cartTotal = 0;
+    for (int i = 0; i < _cartItemShaaredPrefList.length; i++) {
+      cartTotal +=
+          int.parse(_cartItemShaaredPrefList.elementAt(i).quantity) *
+          double.parse(
+            widget.paginationController.cartItems.elementAt(i).packingPrice,
+          );
+    }
+
+    print('cartTotal is $cartTotal');
   }
 
   Future<void> getProductTester() async {
@@ -175,6 +196,9 @@ class _CartPageState extends State<CartPage>
       _cartItemShaaredPrefList[index].quantity =
           (currentQuantity + 1).toString();
     });
+
+    //update cart total after an item is increased
+    doCartTotal();
   }
 
   // Function to increment item count
@@ -240,6 +264,9 @@ class _CartPageState extends State<CartPage>
                 .toString();
       });
     }
+
+    //update cart total after an item is increased
+    doCartTotal();
   }
 
   // Function to remove item from cart
@@ -260,7 +287,9 @@ class _CartPageState extends State<CartPage>
     print(
       '_cartItemShaaredPrefList size is ${_cartItemShaaredPrefList.length}',
     );
-    print('_cartItemShaaredPrefList size is ${_cartItemShaaredPrefList.length}');
+    print(
+      '_cartItemShaaredPrefList size is ${_cartItemShaaredPrefList.length}',
+    );
     print('_cartItems size is ${_cartItems?.length}');
 
     if (_cartItemShaaredPrefList.isEmpty) {
@@ -271,6 +300,10 @@ class _CartPageState extends State<CartPage>
 
     //updating cart total
     NavigationExample.of(context)?.loadSharedPrefItemsList();
+
+    //update cart total after an item is removed from cart
+    await doCartTotal();
+    setState(() {});
   }
 
   updateCartItemStatus(bool value) {
@@ -278,7 +311,7 @@ class _CartPageState extends State<CartPage>
       print('showProceedToCheckout visibility is $value');
     }
 
-    if(showProceedToCheckout == value){
+    if (showProceedToCheckout == value) {
       return;
     }
 
@@ -513,7 +546,6 @@ class _CartPageState extends State<CartPage>
 
                             SizedBox(height: 120),
 
-
                             // if (!widget
                             //         .paginationController
                             //         .cartItemsLoading
@@ -546,7 +578,9 @@ class _CartPageState extends State<CartPage>
           );
         }),
         floatingActionButton:
-            showProceedToCheckout ? CartPageCheckoutView() : null,
+            showProceedToCheckout
+                ? CartPageCheckoutView(cartTotal: cartTotal)
+                : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
