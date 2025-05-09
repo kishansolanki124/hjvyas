@@ -868,7 +868,7 @@ class _CheckoutState extends State<Checkout> {
       cityOther,
       stateOutofGujarat,
       countryOutside,
-      totalWeight.toString(),
+      getTwoDecimalPrice(totalWeight),
       cartAmount,
     );
 
