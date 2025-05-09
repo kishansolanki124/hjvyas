@@ -288,6 +288,9 @@ class _CartPageState extends State<CartPage>
 
   // Function to remove item from cart
   Future<void> _removeItem(int index) async {
+    //reset selection of free product on item removal
+    freeSelectedIndex = -1;
+
     _cartItems!.removeAt(index);
     _cartItemShaaredPrefList.removeAt(index);
 
