@@ -24,8 +24,8 @@ import '../product/ProductListWidgets.dart';
 import '../utils/CommonAppProgress.dart';
 import '../utils/FloatingImageViewer.dart';
 import '../utils/NetworkImageWithProgress.dart';
+import 'AddToCartWidgetForDetail.dart';
 import 'AudioFilesDialog.dart';
-import 'FullWidthButton.dart';
 import 'ProductDetailWidget.dart';
 
 class ProductDetail extends StatefulWidget {
@@ -1401,10 +1401,11 @@ class _ProductDetailState extends State<ProductDetail>
                         "yes"
                     ? SlideTransition(
                       position: _fromBottomSlideAnimation,
-                      child: addToCartFullWidthButton(
-                        floatingButtonPrice,
-                        _onPressed,
-                        getCartText(),
+                      child: AddToCartWidgetForDetail(
+                        productPrice: double.parse(
+                          _selectedVariant!.productPackingPrice,
+                        ),
+                        onPressed: _onPressed,
                       ),
                     )
                     : null,
