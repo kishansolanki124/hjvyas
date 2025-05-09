@@ -184,6 +184,22 @@ class _CartPageState extends State<CartPage>
   bool showProceedToCheckout = false;
   String productTesterId = "";
 
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _scrollToEnd() {
+    _scrollController.animateTo(
+      _scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 500),
+      curve: Curves.easeOut,
+    );
+  }
+
   // Function to increment item count
   void _incrementCount(int index) {
     if (cartMaxQty.toString() ==
@@ -227,6 +243,7 @@ class _CartPageState extends State<CartPage>
     }
 
     if (isTesterEnabled && freeSelectedIndex == -1) {
+      _scrollToEnd();
       showSnackbar(context, "Please Select Any One Free Product Tester");
       return;
     }
@@ -411,6 +428,7 @@ class _CartPageState extends State<CartPage>
                     Expanded(
                       // Wrap the scrollable part in Expanded
                       child: SingleChildScrollView(
+                        controller: _scrollController,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -579,8 +597,10 @@ class _CartPageState extends State<CartPage>
         }),
         floatingActionButton:
             showProceedToCheckout
-                ? CartPageCheckoutView(cartTotal: cartTotal,
-            onPressed: proceedToCheckOutClicked,)
+                ? CartPageCheckoutView(
+                  cartTotal: cartTotal,
+                  onPressed: proceedToCheckOutClicked,
+                )
                 : null,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),

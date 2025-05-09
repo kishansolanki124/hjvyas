@@ -65,7 +65,7 @@ class _CartPageCheckoutViewState extends State<CartPageCheckoutView>
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Color.fromARGB(255, 123, 138, 195),
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
+                    horizontal: 36,
                     vertical: 16,
                   ),
                   // Padding for the button
