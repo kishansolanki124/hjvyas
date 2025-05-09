@@ -18,6 +18,7 @@ import '../product/ProductPaginationController.dart';
 import '../product_detail/FullWidthButton.dart';
 import '../splash/NoIntternetScreen.dart';
 import 'CartItemWidget.dart';
+import 'CartPageCheckoutView.dart';
 import 'EmptyCart.dart';
 import 'TesterItemWidget.dart';
 
@@ -130,6 +131,9 @@ class _CartPageState extends State<CartPage>
       ); // Explicit call
 
       getProductTester();
+
+      //cart is not empty
+      updateCartItemStatus(true);
     }
   }
 
@@ -156,6 +160,7 @@ class _CartPageState extends State<CartPage>
 
   int freeSelectedIndex = -1;
   bool isTesterEnabled = false;
+  bool showProceedToCheckout = false;
   String productTesterId = "";
 
   // Function to increment item count
@@ -252,8 +257,34 @@ class _CartPageState extends State<CartPage>
 
     showSnackbar(context, "Cart updated."); // Show the message
 
+    print(
+      '_cartItemShaaredPrefList size is ${_cartItemShaaredPrefList.length}',
+    );
+    print('_cartItemShaaredPrefList size is ${_cartItemShaaredPrefList.length}');
+    print('_cartItems size is ${_cartItems?.length}');
+
+    if (_cartItemShaaredPrefList.isEmpty) {
+      updateCartItemStatus(false);
+    } else {
+      updateCartItemStatus(true);
+    }
+
     //updating cart total
     NavigationExample.of(context)?.loadSharedPrefItemsList();
+  }
+
+  updateCartItemStatus(bool value) {
+    if (kDebugMode) {
+      print('showProceedToCheckout visibility is $value');
+    }
+
+    if(showProceedToCheckout == value){
+      return;
+    }
+
+    setState(() {
+      showProceedToCheckout = value;
+    });
   }
 
   // Function to format price
@@ -310,212 +341,210 @@ class _CartPageState extends State<CartPage>
                   ? true
                   : false;
 
-          return SafeArea(
-            child: Scaffold(
-              body: Container(
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage("images/bg.jpg"),
-                    fit: BoxFit.cover,
-                  ),
+          return Scaffold(
+            body: Container(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage("images/bg.jpg"),
+                  fit: BoxFit.cover,
                 ),
-                child: Padding(
-                  // Remove SingleChildScrollView from the outermost level
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      // 1. Title
-                      //text my bag
-                      Text(
-                        "My Bag",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.white,
-                          fontFamily: "Montserrat",
-                        ),
+              ),
+              child: Padding(
+                // Remove SingleChildScrollView from the outermost level
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    // 1. Title
+                    //text my bag
+                    Text(
+                      "My Bag",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        fontFamily: "Montserrat",
                       ),
+                    ),
 
-                      SizedBox(height: 10.0),
+                    SizedBox(height: 10.0),
 
-                      if (widget.paginationController.cartItems.isEmpty &&
-                          widget
-                              .paginationController
-                              .cartItemsLoading
-                              .value) ...[
-                        //API called
-                        getCommonProgressBar(),
-                      ],
+                    if (widget.paginationController.cartItems.isEmpty &&
+                        widget.paginationController.cartItemsLoading.value) ...[
+                      //API called
+                      getCommonProgressBar(),
+                    ],
 
-                      Expanded(
-                        // Wrap the scrollable part in Expanded
-                        child: SingleChildScrollView(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // 3. Vertical List of cart items
-                              ListView.builder(
-                                shrinkWrap: true,
-                                physics: NeverScrollableScrollPhysics(),
-                                // Disable nested scrolling
-                                itemCount: _cartItems?.length,
-                                itemBuilder: (context, index) {
-                                  final cartItem = _cartItems![index];
-                                  final _cartItemShaaredPref =
-                                      _cartItemShaaredPrefList[index];
+                    Expanded(
+                      // Wrap the scrollable part in Expanded
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // 3. Vertical List of cart items
+                            ListView.builder(
+                              shrinkWrap: true,
+                              physics: NeverScrollableScrollPhysics(),
+                              // Disable nested scrolling
+                              itemCount: _cartItems?.length,
+                              itemBuilder: (context, index) {
+                                final cartItem = _cartItems![index];
+                                final _cartItemShaaredPref =
+                                    _cartItemShaaredPrefList[index];
 
-                                  return CartItemWidget(
-                                    index: index,
-                                    formatPrice: _formatPrice,
-                                    decrementCount: _decrementCount,
-                                    incrementCount: _incrementCount,
-                                    removeItem: _removeItem,
-                                    cartItem: cartItem,
-                                    cartItemModel: _cartItemShaaredPref,
-                                  );
+                                return CartItemWidget(
+                                  index: index,
+                                  formatPrice: _formatPrice,
+                                  decrementCount: _decrementCount,
+                                  incrementCount: _incrementCount,
+                                  removeItem: _removeItem,
+                                  cartItem: cartItem,
+                                  cartItemModel: _cartItemShaaredPref,
+                                );
+                              },
+                            ),
+
+                            if (widget
+                                    .paginationController
+                                    .productTesterList
+                                    .isEmpty &&
+                                widget
+                                    .paginationController
+                                    .testerItemsLoading
+                                    .value) ...[
+                              getCommonProgressBar(),
+                            ],
+
+                            //horizontal list of free products
+                            if (!widget
+                                    .paginationController
+                                    .testerItemsLoading
+                                    .value &&
+                                widget
+                                    .paginationController
+                                    .productTesterList
+                                    .isNotEmpty &&
+                                null !=
+                                    widget
+                                        .paginationController
+                                        .productTesterResponse
+                                        .value &&
+                                widget
+                                        .paginationController
+                                        .productTesterResponse
+                                        .value!
+                                        .productTesterStatus ==
+                                    "on") ...[
+                              SizedBox(height: 16.0),
+
+                              // 4. Horizontal List of Images
+                              //free product 2 text
+                              Html(
+                                data:
+                                    widget
+                                        .paginationController
+                                        .productTesterResponse
+                                        .value!
+                                        .productTesterMsg,
+                                style: {
+                                  "body": Style(
+                                    fontWeight: FontWeight.w400,
+                                    //fontSize: 14,
+                                    fontFamily: "Montserrat",
+                                    fontSize: FontSize.medium,
+                                    textAlign: TextAlign.justify,
+                                    color: Colors.white,
+                                  ),
+                                  //"h1": Style(fontSize: FontSize.xxLarge),
+                                  "p": Style(
+                                    fontWeight: FontWeight.w400,
+                                    //fontSize: 14,
+                                    fontFamily: "Montserrat",
+                                    fontSize: FontSize.medium,
+                                    textAlign: TextAlign.justify,
+                                    color: Colors.white,
+                                  ),
+                                  "strong": Style(
+                                    fontWeight: FontWeight.w600,
+                                    //fontSize: 14,
+                                    fontFamily: "Montserrat",
+                                    fontSize: FontSize.large,
+                                    textAlign: TextAlign.justify,
+                                    color: Colors.white,
+                                  ),
+                                  //"a": Style(color: Colors.blue, decoration: TextDecoration.underline),
+                                  //"table": Style(border: Border.all(color: Colors.grey)),
+                                  //"th": Style(padding: EdgeInsets.all(8), backgroundColor: Colors.lightBlue),
+                                  //"td": Style(padding: EdgeInsets.all(8)),
+                                  //"div": Style(margin: EdgeInsets.only(bottom: 10)),
+                                  // "img": Style(
+                                  //   width: Width.percent(100), // Make images responsive.
+                                  //   height: Height.auto(),
+                                  // ),
                                 },
                               ),
 
-                              if (widget
-                                      .paginationController
-                                      .productTesterList
-                                      .isEmpty &&
-                                  widget
-                                      .paginationController
-                                      .testerItemsLoading
-                                      .value) ...[
-                                getCommonProgressBar(),
-                              ],
-
-                              //horizontal list of free products
-                              if (!widget
-                                      .paginationController
-                                      .testerItemsLoading
-                                      .value &&
-                                  widget
-                                      .paginationController
-                                      .productTesterList
-                                      .isNotEmpty &&
-                                  null !=
-                                      widget
-                                          .paginationController
-                                          .productTesterResponse
-                                          .value &&
-                                  widget
-                                          .paginationController
-                                          .productTesterResponse
-                                          .value!
-                                          .productTesterStatus ==
-                                      "on") ...[
-                                SizedBox(height: 16.0),
-
-                                // 4. Horizontal List of Images
-                                //free product 2 text
-                                Html(
-                                  data:
-                                      widget
-                                          .paginationController
-                                          .productTesterResponse
-                                          .value!
-                                          .productTesterMsg,
-                                  style: {
-                                    "body": Style(
-                                      fontWeight: FontWeight.w400,
-                                      //fontSize: 14,
-                                      fontFamily: "Montserrat",
-                                      fontSize: FontSize.medium,
-                                      textAlign: TextAlign.justify,
-                                      color: Colors.white,
-                                    ),
-                                    //"h1": Style(fontSize: FontSize.xxLarge),
-                                    "p": Style(
-                                      fontWeight: FontWeight.w400,
-                                      //fontSize: 14,
-                                      fontFamily: "Montserrat",
-                                      fontSize: FontSize.medium,
-                                      textAlign: TextAlign.justify,
-                                      color: Colors.white,
-                                    ),
-                                    "strong": Style(
-                                      fontWeight: FontWeight.w600,
-                                      //fontSize: 14,
-                                      fontFamily: "Montserrat",
-                                      fontSize: FontSize.large,
-                                      textAlign: TextAlign.justify,
-                                      color: Colors.white,
-                                    ),
-                                    //"a": Style(color: Colors.blue, decoration: TextDecoration.underline),
-                                    //"table": Style(border: Border.all(color: Colors.grey)),
-                                    //"th": Style(padding: EdgeInsets.all(8), backgroundColor: Colors.lightBlue),
-                                    //"td": Style(padding: EdgeInsets.all(8)),
-                                    //"div": Style(margin: EdgeInsets.only(bottom: 10)),
-                                    // "img": Style(
-                                    //   width: Width.percent(100), // Make images responsive.
-                                    //   height: Height.auto(),
-                                    // ),
-                                  },
-                                ),
-
-                                SizedBox(height: 10),
-
-                                SizedBox(
-                                  height:
-                                      230, // Fixed height for the horizontal list
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    itemCount: _productTesterItems?.length,
-                                    itemBuilder: (context, index) {
-                                      return GestureDetector(
-                                        onTap: () {
-                                          _updateFreeSelectedIndex(index);
-                                        },
-                                        child: TesterItemWidget(
-                                          index: index,
-                                          productTesterListItem:
-                                              _productTesterItems![index],
-                                          freeSelectedIndex: freeSelectedIndex,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-
                               SizedBox(height: 10),
 
-                              if (!widget
-                                      .paginationController
-                                      .cartItemsLoading
-                                      .value &&
-                                  widget
-                                      .paginationController
-                                      .cartItems
-                                      .isNotEmpty) ...[
-                                //proceed to checkout button
-                                SlideTransition(
-                                  position: _slideAnimation,
-                                  child: FadeTransition(
-                                    opacity: _animationController,
-                                    child: proceedToCheckOutButtonFullWidth(
-                                      proceedToCheckOutClicked,
-                                    ),
+                              SizedBox(
+                                height:
+                                    230, // Fixed height for the horizontal list
+                                child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _productTesterItems?.length,
+                                  itemBuilder: (context, index) {
+                                    return GestureDetector(
+                                      onTap: () {
+                                        _updateFreeSelectedIndex(index);
+                                      },
+                                      child: TesterItemWidget(
+                                        index: index,
+                                        productTesterListItem:
+                                            _productTesterItems![index],
+                                        freeSelectedIndex: freeSelectedIndex,
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+
+                            SizedBox(height: 10),
+
+                            if (!widget
+                                    .paginationController
+                                    .cartItemsLoading
+                                    .value &&
+                                widget
+                                    .paginationController
+                                    .cartItems
+                                    .isNotEmpty) ...[
+                              //proceed to checkout button
+                              SlideTransition(
+                                position: _slideAnimation,
+                                child: FadeTransition(
+                                  opacity: _animationController,
+                                  child: proceedToCheckOutButtonFullWidth(
+                                    proceedToCheckOutClicked,
                                   ),
                                 ),
+                              ),
 
-                                SizedBox(height: 100),
-                              ],
+                              SizedBox(height: 100),
                             ],
-                          ),
+                          ],
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ),
           );
         }),
+        floatingActionButton:
+            showProceedToCheckout ? CartPageCheckoutView() : null,
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }
