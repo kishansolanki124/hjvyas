@@ -1113,11 +1113,11 @@ class _ProductDetailState extends State<ProductDetail>
 
                                               SizedBox(width: 8),
 
-                                              productDetailItemCounter(
-                                                _decrementQuantity,
-                                                _incrementQuantity,
-                                                selectedItemQuantity,
-                                              ),
+                                              // productDetailItemCounter(
+                                              //   _decrementQuantity,
+                                              //   _incrementQuantity,
+                                              //   selectedItemQuantity,
+                                              // ),
                                             ],
                                           ),
                                       ],
@@ -1401,12 +1401,15 @@ class _ProductDetailState extends State<ProductDetail>
                         "yes"
                     ? SlideTransition(
                       position: _fromBottomSlideAnimation,
-                      child: AddToCartWidgetForDetail(
+                      child: (null != _selectedVariant) ? AddToCartWidgetForDetail(
                         productPrice: double.parse(
                           _selectedVariant!.productPackingPrice,
                         ),
                         onPressed: _onPressed,
-                      ),
+                        decrementQuantity: _decrementQuantity,
+                        incrementQuantity: _incrementQuantity,
+                        selectedItemQuantity: selectedItemQuantity,
+                      ) : null,
                     )
                     : null,
           );

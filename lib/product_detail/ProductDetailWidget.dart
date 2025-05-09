@@ -306,6 +306,61 @@ Widget productDetailItemCounter(
   );
 }
 
+Widget productDetailItemCounterNew(
+  decrementQuantity,
+  incrementQuantity,
+  quantity,
+) {
+  return Container(
+    height: 40,
+    // Add some padding inside the border
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        //minus icon
+        SizedBox(
+          width: 40,
+          height: 40,
+          child: IconButton(
+            iconSize: 12,
+            padding: EdgeInsets.zero,
+            color: Colors.white,
+            icon: Icon(Icons.remove),
+            onPressed: decrementQuantity,
+          ),
+        ),
+        //counter text
+        SizedBox(
+          width: 30,
+          child: Center(
+            child: Text(
+              '$quantity',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.white,
+                fontFamily: "Montserrat",
+              ),
+            ),
+          ),
+        ),
+        //plus icon
+        SizedBox(
+          width: 40,
+          height: 40,
+          child: IconButton(
+            iconSize: 12,
+            padding: EdgeInsets.zero,
+            constraints: BoxConstraints(),
+            color: Colors.white,
+            icon: Icon(Icons.add),
+            onPressed: incrementQuantity,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
 Widget productDetailIngredients(
   List<ProductIngredientsListItem> productIngredients,
 ) {

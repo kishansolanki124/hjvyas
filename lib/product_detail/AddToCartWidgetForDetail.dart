@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 
 import '../utils/CommonAppProgress.dart';
+import 'ProductDetailWidget.dart';
 
 class AddToCartWidgetForDetail extends StatefulWidget {
-
   double productPrice;
+  int selectedItemQuantity;
   final VoidCallback? onPressed;
+  final VoidCallback? decrementQuantity;
+  final VoidCallback? incrementQuantity;
 
   AddToCartWidgetForDetail({
     super.key,
     required this.productPrice,
+    required this.selectedItemQuantity,
     required this.onPressed,
+    required this.decrementQuantity,
+    required this.incrementQuantity,
   });
 
   @override
@@ -23,6 +29,8 @@ class _AddToCartWidgetForDetailState extends State<AddToCartWidgetForDetail>
   @override
   void initState() {
     super.initState();
+
+    print('selectedItemQuantity is ${widget.selectedItemQuantity}');
   }
 
   @override
@@ -56,36 +64,61 @@ class _AddToCartWidgetForDetailState extends State<AddToCartWidgetForDetail>
               ),
             ),
 
-            // Add some space between price and button
-            ElevatedButton(
-              onPressed: () {
-                widget.onPressed!();
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 123, 138, 195),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 16,
-                ),
-                // Padding for the button
-                shape: RoundedRectangleBorder(
+            if (widget.selectedItemQuantity > 0) ...[
+              Container(
+                width: 150,
+                decoration: BoxDecoration(
+                  color: Color.fromARGB(255, 123, 138, 195),
                   borderRadius: BorderRadius.circular(
                     50,
-                  ), // Rounded corners for the button
+                  ), // Rounded corners for the container
                 ),
-                visualDensity:
-                    VisualDensity.compact, // Make button more compact
-              ),
-              child: const Text(
-                'Add To Cart',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontFamily: "Montserrat",
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: productDetailItemCounterNew(
+                    widget.decrementQuantity,
+                    widget.incrementQuantity,
+                    widget.selectedItemQuantity,
+                  ),
                 ),
               ),
-            ),
+            ],
+
+            if (widget.selectedItemQuantity == 0) ...[
+              // Add some space between price and button
+              Container(
+                width: 150,
+                child: ElevatedButton(
+                  onPressed: () {
+                    widget.onPressed!();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color.fromARGB(255, 123, 138, 195),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 16,
+                    ),
+                    // Padding for the button
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        50,
+                      ), // Rounded corners for the button
+                    ),
+                    visualDensity:
+                        VisualDensity.compact, // Make button more compact
+                  ),
+                  child: const Text(
+                    'Add To Cart',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontFamily: "Montserrat",
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ],
         ),
       ),
