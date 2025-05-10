@@ -36,12 +36,20 @@ class _EmptyCartState extends State<EmptyCart>
 
   // Keep track of the selected option
   void _onBackPressed(BuildContext context) {
-    Navigator.of(context).pop();
+    Navigator.pop(context, "text");
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (didPop) return;
+        Navigator.pop(context, "text");
+        // Return false to prevent the default back button behavior
+        // since we've already handled the navigation
+        return;
+      },
       child: Scaffold(
         body: Container(
           decoration: BoxDecoration(
