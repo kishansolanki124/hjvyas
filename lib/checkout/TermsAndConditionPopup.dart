@@ -50,40 +50,56 @@ class _TermsAndConditionPopupState extends State<TermsAndConditionPopup> {
     return Scaffold(
       body: Container(
         color: Color.fromARGB(255, 31, 47, 80),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  //top center title
-                  backButton(() => _onBackPressed(context)),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Align(
-                      alignment: Alignment.topCenter,
-                      child: Text(
-                        "Terms & Condition",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontFamily: "Montserrat",
-                          fontWeight: FontWeight.w600,
-                        ),
+        child: Column(
+          children: [
+            Stack(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: backButton(() => _onBackPressed(context)),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                Align(
+                  alignment: Alignment.center,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 12.0),
+                    child: Text(
+                      "Terms & Condition",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: "Montserrat",
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
+            ),
 
-              //html content
-              Expanded(
-                child: SingleChildScrollView(
+            //html content
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 8,
+                    horizontal: 16.0,
+                  ),
                   child: Column(children: [loadHTMLContent(widget.imageUrl)]),
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

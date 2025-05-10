@@ -416,7 +416,7 @@ class _CheckoutState extends State<Checkout> {
     });
 
     if (response.message!.toLowerCase().contains("undefined")) {
-      showSnackbar(context, "Payment Failed. Please try again!");
+      showSnackbar(context, "Payment Failed. Please Try Again!");
     } else {
       showSnackbar(context, "Payment Failed: ${response.message}");
     }
@@ -503,7 +503,7 @@ class _CheckoutState extends State<Checkout> {
     //   showSnackbar(context,"Sub Area field is required.");
     // }
     else if (_validateCity(_deliveryAddressController.text) != null) {
-      showSnackbar(context, "Delivery Address is required.");
+      showSnackbar(context, "Delivery Address Is Required.");
     } else if (_validateZipcode(_zipcodeController.text) != null) {
       showSnackbar(
         context,
@@ -513,9 +513,9 @@ class _CheckoutState extends State<Checkout> {
       showSnackbar(context, _validateCity(_cityController.text).toString());
     } else if (_selectedOptionCountry != "India" &&
         _validateState(_stateController.text) != null) {
-      showSnackbar(context, "State name is required.");
+      showSnackbar(context, "State Name Is Required.");
     } else if (stateListItem == null) {
-      showSnackbar(context, "State Name is required.");
+      showSnackbar(context, "State Name Is Required.");
     } else if (_selectedOptionState == "Outside Gujarat" &&
         stateListItem!.stateName == "Select State") {
       showSnackbar(context, "Kindly Select State.");
@@ -719,7 +719,7 @@ class _CheckoutState extends State<Checkout> {
       showSnackbar(context, _validatePhone(_phoneController.text).toString());
     } else if (_selectedOptionCountry == "Outside India" &&
         countryListItem!.countryName == "Select Country") {
-      showSnackbar(context, "Kindly select Country.");
+      showSnackbar(context, "Kindly Select Country.");
     } else {
       getShippingCharge();
     }
@@ -728,37 +728,37 @@ class _CheckoutState extends State<Checkout> {
   // Function to validate the form fields
   String? _validateName(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Name is required';
+      return 'Name Is Required.';
     }
     if (value.length < 3) {
-      return 'Name must be at least 3 characters long';
+      return 'Name Must Be At Least 3 Characters Long.';
     }
     return null; // Return null if the input is valid
   }
 
   String? _validateCity(String? value) {
     if (value == null || value.isEmpty) {
-      return 'City is required';
+      return 'City Is Required.';
     }
     if (value.length < 2) {
-      return 'City name is too short';
+      return 'City Name Is Too Short.';
     }
     return null;
   }
 
   String? _validateState(String? value) {
     if (value == null || value.isEmpty) {
-      return 'State is required';
+      return 'State Is Required.';
     }
     if (value.length < 2) {
-      return 'State name is too short';
+      return 'State Name Is Too Short.';
     }
     return null;
   }
 
   String? _validateZipcode(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Zipcode is required';
+      return 'Zipcode Is Required.';
     }
     // if (value.length < 6) {
     //   return 'Invalid Zipcode.';
@@ -768,27 +768,27 @@ class _CheckoutState extends State<Checkout> {
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Email is required';
+      return 'Email Is Required.';
     }
     if (!EmailValidator.validate(value)) {
-      return 'Invalid email address';
+      return 'Invalid Email Address.';
     }
     return null;
   }
 
   String? _validatePhone(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Contact number is required';
+      return 'Contact Number Is required.';
     }
     if (value.length < 10) {
-      return 'Contact number should be at least 10 digits';
+      return 'Contact No. Should Be At Least 10 digits.';
     }
     return null;
   }
 
   String? _alternatePhone(String? value) {
     if (value != null && value.isNotEmpty && value.length < 10) {
-      return 'Alternate mobile number must be 10 digits';
+      return 'Alternate Mobile No. Must Be At Least 10 Digits.';
     }
     return null;
   }

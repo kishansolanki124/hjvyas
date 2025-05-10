@@ -205,7 +205,7 @@ class _CartPageState extends State<CartPage>
   void _incrementCount(int index) {
     if (cartMaxQty.toString() ==
         _cartItemShaaredPrefList.elementAt(index).quantity) {
-      showSnackbar(context, "You have added max quantity.");
+      showSnackbar(context, "You Have Added Max Quantity.");
       return;
     }
     setState(() {
@@ -240,7 +240,7 @@ class _CartPageState extends State<CartPage>
       if (isProductSoldOut(_cartItems!.elementAt(i))) {
         showSnackbar(
           context,
-          "Product In Your Cart Is Soldout. Pleae Remove It.",
+          "Product In Your Cart Is Soldout. Please Remove It.",
         );
         return;
       }

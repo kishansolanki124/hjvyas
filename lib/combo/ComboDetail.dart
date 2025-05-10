@@ -204,7 +204,7 @@ class _ProductDetailState extends State<ComboDetail>
         addToCartText = "Add to Cart";
         //showSnackbar(context, "Item removed from the cart.");
       } else {
-        showSnackbar(context, "Please update quantity to Add to Cart.");
+        showSnackbar(context, "Please Update Quantity To Add To Cart.");
       }
     } else {
       // Convert each CustomObject in the list to a JSON map,
@@ -382,17 +382,17 @@ class _ProductDetailState extends State<ComboDetail>
       return 'Mobile No. is required';
     }
     if (value.length < 10) {
-      return 'Contact number should be at least 10 digits';
+      return 'Contact No. Should Be At Least 10 digits.';
     }
     return null;
   }
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Email is required';
+      return 'Email Is Required.';
     }
     if (!EmailValidator.validate(value)) {
-      return 'Invalid email address';
+      return 'Invalid Email Address.';
     }
     return null;
   }
@@ -512,7 +512,7 @@ class _ProductDetailState extends State<ComboDetail>
 
   void _incrementQuantity() {
     if (int.parse(comboDetailItem!.comboMaxQty) == selectedItemQuantity) {
-      showSnackbar(context, "You have added max quantity.");
+      showSnackbar(context, "You Have Added Max Quantity.");
       return;
     }
     setState(() {

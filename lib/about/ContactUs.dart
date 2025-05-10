@@ -168,50 +168,50 @@ class _ContactUsState extends State<ContactUs> {
   // Function to validate the form fields
   String? _validateName(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Name is required';
+      return 'Name Is Required.';
     }
     if (value.length < 3) {
-      return 'Name must be at least 3 characters long';
+      return 'Name Must Be At Least 3 Characters Long.';
     }
     return null; // Return null if the input is valid
   }
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Email is required';
+      return 'Email Is Required.';
     }
     if (!EmailValidator.validate(value)) {
-      return 'Invalid email address';
+      return 'Invalid Email Address.';
     }
     return null;
   }
 
   String? _validatePhone(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Contact number is required';
+      return 'Contact Number Is required.';
     }
     if (value.length < 10) {
-      return 'Contact number should be at least 10 digits';
+      return 'Contact No. Should Be At Least 10 digits.';
     }
     return null;
   }
 
   String? _validateCity(String? value) {
     if (value == null || value.isEmpty) {
-      return 'City is required';
+      return 'City Is Required.';
     }
     if (value.length < 2) {
-      return 'City name is too short';
+      return 'City Name Is Too Short.';
     }
     return null;
   }
 
   String? _validateMessage(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Message is required';
+      return 'Message Is Required.';
     }
     if (value.length < 3) {
-      return 'Message must be at least 3 characters long';
+      return 'Message Must Be At Least 3 Characters Long.';
     }
     return null;
   }

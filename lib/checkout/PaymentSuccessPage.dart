@@ -4,7 +4,7 @@ import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../home/navigation.dart';
+import '../splash/splash.dart';
 
 class PaymentSuccessPage extends StatefulWidget {
   String orderNo = "";
@@ -43,7 +43,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage>
   void openHomePageAndClearPreviousPages() {
     Navigator.of(context).pushAndRemoveUntil(
       // Create the new route for the destination page.
-      MaterialPageRoute(builder: (context) => const NavigationBarApp()),
+      MaterialPageRoute(builder: (context) => SplashScreen()),
       // A predicate that is always false removes all existing routes.
       (Route<dynamic> route) => false,
     );
@@ -156,18 +156,18 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage>
                             style: subtitleTextStyle, //use constant text style
                           ),
                           const SizedBox(height: 8),
-                          if(widget.orderNo.isNotEmpty)
-                          Text(
-                            textAlign: TextAlign.center,
-                            'Your order No. is ${widget.orderNo}',
-                            style: TextStyle(
-                              //constant text style
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: "Montserrat",
-                            ), //use constant text style
-                          ),
+                          if (widget.orderNo.isNotEmpty)
+                            Text(
+                              textAlign: TextAlign.center,
+                              'Your order No. is ${widget.orderNo}',
+                              style: TextStyle(
+                                //constant text style
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: "Montserrat",
+                              ), //use constant text style
+                            ),
                         ],
                       ),
                     ),

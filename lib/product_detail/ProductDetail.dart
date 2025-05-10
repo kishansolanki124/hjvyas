@@ -173,7 +173,7 @@ class _ProductDetailState extends State<ProductDetail>
         //addToCartText = "Add to Cart";
         //showSnackbar(context, "Item removed from the cart.");
       } else {
-        showSnackbar(context, "Please update quantity to Add to Cart.");
+        showSnackbar(context, "Please Update quantity to Add to Cart.");
       }
     } else {
       // Convert each CustomObject in the list to a JSON map,
@@ -374,10 +374,10 @@ class _ProductDetailState extends State<ProductDetail>
 
   String? _validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Email is required';
+      return 'Email Is Required.';
     }
     if (!EmailValidator.validate(value)) {
-      return 'Invalid email address';
+      return 'Invalid Email Address.';
     }
     return null;
   }
@@ -492,7 +492,7 @@ class _ProductDetailState extends State<ProductDetail>
 
   void _incrementQuantity() {
     if (int.parse(productDetailItem!.productMaxQty) == selectedItemQuantity) {
-      showSnackbar(context, "You have added max quantity.");
+      showSnackbar(context, "You Have Added Max Quantity.");
       return;
     }
 
