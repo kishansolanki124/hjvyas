@@ -7,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/models/LogoResponse.dart';
 import '../api/services/HJVyasApiService.dart';
-import '../checkout/PaymentSuccessPage.dart';
 import '../home/navigation.dart';
 import '../injection_container.dart';
 import '../product_detail/ImageWithProgress.dart';
@@ -58,7 +57,9 @@ class _SplashScreenState extends State<SplashScreen>
     // Configure the animation controller
     _animationController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 1),//todo: change this to 2 before release
+      duration: const Duration(
+        seconds: 1,
+      ), //todo: change this to 2 before release
     );
 
     // Create a scale animation that starts small and ends larger
@@ -81,8 +82,7 @@ class _SplashScreenState extends State<SplashScreen>
         Future.delayed(const Duration(seconds: 1), () {
           if (mounted) {
             Navigator.of(context).pushReplacement(
-              //MaterialPageRoute(builder: (context) => const NavigationBarApp()),
-              MaterialPageRoute(builder: (context) => PaymentSuccessPage(orderNo: "ORDER_12345")),
+              MaterialPageRoute(builder: (context) => const NavigationBarApp()),
             );
           }
         });

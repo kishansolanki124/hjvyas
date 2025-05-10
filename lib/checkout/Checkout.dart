@@ -185,7 +185,8 @@ class _CheckoutState extends State<Checkout> {
                           "shipping_discount": 0,
                         },
                       },
-                      "description": (orderNo != null) ? "HJVyas $orderNo" : "HJVyas",
+                      "description":
+                          (orderNo != null) ? "HJVyas $orderNo" : "HJVyas",
                       "item_list": {
                         "items": items.map((item) => item.toJson()).toList(),
                       },
@@ -205,7 +206,8 @@ class _CheckoutState extends State<Checkout> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PaymentSuccessPage(orderNo: orderNo!,),
+                        builder:
+                            (context) => PaymentSuccessPage(orderNo: orderNo!),
                       ),
                     );
                   },
@@ -438,7 +440,9 @@ class _CheckoutState extends State<Checkout> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => PaymentSuccessPage(orderNo: orderNo!)),
+      MaterialPageRoute(
+        builder: (context) => PaymentSuccessPage(orderNo: orderNo!),
+      ),
     );
   }
 
@@ -574,8 +578,12 @@ class _CheckoutState extends State<Checkout> {
 
   Future<void> placeOrder() async {
     String productIds = widget.cartItemShaaredPrefList
-        .map((cartItem) => (cartItem.productDetail.isNotEmpty) ? cartItem.productDetail.
-    elementAt(0).productId : cartItem.comboDetail.elementAt(0).comboId)
+        .map(
+          (cartItem) =>
+              (cartItem.productDetail.isNotEmpty)
+                  ? cartItem.productDetail.elementAt(0).productId
+                  : cartItem.comboDetail.elementAt(0).comboId,
+        )
         .join(',');
 
     String productType = widget.cartItemShaaredPrefList
@@ -639,9 +647,9 @@ class _CheckoutState extends State<Checkout> {
       _giftReceiverNameController.text.toString(),
       _giftReceiverMobileController.text.toString(),
       widget.productTesterId,
-      widget.total.toString(),
-      shippingCharge.toString(),
-      onlineCharge.toString(),
+      getTwoDecimalPrice(widget.total),
+      getTwoDecimalPrice(shippingCharge),
+      getTwoDecimalPrice(onlineCharge),
       payment_type,
       "android",
       //todo: value android, ios any one value
@@ -1297,16 +1305,19 @@ class _CheckoutState extends State<Checkout> {
                                   ),
 
                                   if (_selectedOptionCountry ==
-                                          "Outside India" &&
-                                      //!outSideIndia) ...[
+                                          "Outside India" && //!outSideIndia) ...[
                                       shippingStatusResponse!.shippingStatusList
                                           .elementAt(0)
-                                          .outsideindiaMsg.isNotEmpty) ...[
+                                          .outsideindiaMsg
+                                          .isNotEmpty) ...[
                                     //outside india not allowed
                                     Padding(
-                                      padding: const EdgeInsets.only(bottom: 8.0),
+                                      padding: const EdgeInsets.only(
+                                        bottom: 8.0,
+                                      ),
                                       child: Text(
-                                        shippingStatusResponse!.shippingStatusList
+                                        shippingStatusResponse!
+                                            .shippingStatusList
                                             .elementAt(0)
                                             .outsideindiaMsg,
                                         style: TextStyle(
@@ -1347,11 +1358,12 @@ class _CheckoutState extends State<Checkout> {
                                         _selectedOptionState != null &&
                                         _selectedOptionState!.isNotEmpty) ...[
                                       if (_selectedOptionState ==
-                                              "Outside Gujarat" &&
-                                          //!otherStateOn) ...[
-                                          shippingStatusResponse!.shippingStatusList
+                                              "Outside Gujarat" && //!otherStateOn) ...[
+                                          shippingStatusResponse!
+                                              .shippingStatusList
                                               .elementAt(0)
-                                          .outofgujaratMsg.isNotEmpty) ...[
+                                              .outofgujaratMsg
+                                              .isNotEmpty) ...[
                                         //outside Gujarat not allowed
                                         Text(
                                           shippingStatusResponse!
@@ -1395,11 +1407,12 @@ class _CheckoutState extends State<Checkout> {
                                         ],
 
                                         if (_selectedOptionCity ==
-                                                "Other City" &&
-                                            //!isGujaratOn) ...[
-                                            shippingStatusResponse!.shippingStatusList
+                                                "Other City" && //!isGujaratOn) ...[
+                                            shippingStatusResponse!
+                                                .shippingStatusList
                                                 .elementAt(0)
-                                                .gujaratMsg.isNotEmpty) ...[
+                                                .gujaratMsg
+                                                .isNotEmpty) ...[
                                           //within Gujarat only Jamnagar is allowed
                                           Text(
                                             shippingStatusResponse!
@@ -1717,27 +1730,16 @@ class _CheckoutState extends State<Checkout> {
                                         ),
                                       ],
 
-                                      //submit button
+                                      //submit button /Proceed To Pay button
                                       widget
                                               .paginationController
                                               .addOrderResponseLoading
                                               .value
-                                          ? Padding(
-                                            padding: EdgeInsets.symmetric(
-                                              vertical: 10.0,
-                                              horizontal: 12,
-                                            ),
-                                            child: SizedBox(
-                                              width: 20,
-                                              height: 20,
-                                              child: CircularProgressIndicator(
-                                                strokeWidth: 2,
-                                                color: Colors.white,
-                                              ),
-                                            ),
+                                          ? Center(
+                                            child: getCommonProgressBar(),
                                           )
                                           : SizedBox(
-                                        width: double.infinity,
+                                            width: double.infinity,
                                             child: ElevatedButton(
                                               onPressed: onOrderPlaced,
                                               style: ElevatedButton.styleFrom(
