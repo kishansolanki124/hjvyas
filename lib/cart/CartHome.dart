@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
 import 'package:hjvyas/checkout/Checkout.dart';
+import 'package:hjvyas/product_detail/ProductDetailWidget.dart';
 import 'package:hjvyas/utils/CommonAppProgress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -237,7 +238,10 @@ class _CartPageState extends State<CartPage>
     //check soldout products available in cart or not
     for (int i = 0; i < _cartItems!.length; i++) {
       if (isProductSoldOut(_cartItems!.elementAt(i))) {
-        showSnackbar(context, "Product In Your Cart Is Soldout. Pleae Remove It.");
+        showSnackbar(
+          context,
+          "Product In Your Cart Is Soldout. Pleae Remove It.",
+        );
         return;
       }
     }
@@ -353,6 +357,11 @@ class _CartPageState extends State<CartPage>
     fetchData();
   }
 
+  // Keep track of the selected option
+  void _onBackPressed(BuildContext context) {
+    Navigator.pop(context, "text");
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -395,6 +404,30 @@ class _CartPageState extends State<CartPage>
                   : false;
 
           return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Color.fromARGB(255, 31, 47, 80),
+              // Make the AppBar background transparent
+              elevation: 0,
+              // Remove shadow, so the background seamlessly blends with body
+              leading: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: backButton(() => _onBackPressed(context)),
+              ),
+              leadingWidth: 150,
+              title: const Text(
+                "My Bag",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                  fontFamily: "Montserrat",
+                ),
+              ),
+              centerTitle:
+                  true, // Centers the title.  Generally preferred on iOS.
+            ),
+            extendBodyBehindAppBar: true,
+            // Make the body extend behind the AppBar, so we see the background.
             body: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
@@ -410,16 +443,15 @@ class _CartPageState extends State<CartPage>
                   children: <Widget>[
                     // 1. Title
                     //text my bag
-                    Text(
-                      "My Bag",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                        fontFamily: "Montserrat",
-                      ),
-                    ),
-
+                    // Text(
+                    //   "My Bag",
+                    //   style: TextStyle(
+                    //     fontSize: 20,
+                    //     fontWeight: FontWeight.w700,
+                    //     color: Colors.white,
+                    //     fontFamily: "Montserrat",
+                    //   ),
+                    // ),
                     SizedBox(height: 10.0),
 
                     if (widget.paginationController.cartItems.isEmpty &&
