@@ -66,6 +66,7 @@ class _HomeViewState extends State<HomeView>
     if (widget.paginationController.popupListItem.isNotEmpty) {
       openPopup(
         widget.paginationController.popupListItem.elementAt(0).image,
+        widget.paginationController.popupListItem.elementAt(0).title,
         widget.paginationController.popupListItem.elementAt(0).description,
       );
     }
@@ -78,14 +79,14 @@ class _HomeViewState extends State<HomeView>
   // Instance of SharedPreferences
   late SharedPreferences _prefs;
 
-  void openPopup(String imageUrl, String text) {
+  void openPopup(String imageUrl, String title, String text) {
     showGeneralDialog(
       context: context,
       barrierDismissible: true,
       barrierLabel: "Image Viewer",
       transitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (_, __, ___) {
-        return HomePopup(imageUrl: imageUrl, text: text, onClose: () => {});
+        return HomePopup(imageUrl: imageUrl, title: title, text: text, onClose: () => {});
       },
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         return FadeTransition(opacity: animation, child: child);

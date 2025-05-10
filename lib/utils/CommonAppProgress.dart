@@ -58,9 +58,12 @@ String getTwoDecimalPrice(double doublePrice) {
 }
 
 void showSnackbar(BuildContext context, String s) {
+  //Hide the current SnackBar if showing
+  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
   hideKeyboard(context);
   var snackBar = SnackBar(
-    duration: const Duration(milliseconds: 1500),
+    duration: const Duration(seconds: 5), // Keep it visible for a while
     backgroundColor: Color.fromARGB(255, 123, 138, 195),
     content: Text(
       s,
@@ -70,6 +73,13 @@ void showSnackbar(BuildContext context, String s) {
         fontWeight: FontWeight.w600,
         color: Colors.white,
       ),
+    ),
+    action: SnackBarAction(
+      label: 'OK', // Label for the button
+      textColor: Color.fromARGB(255, 31, 47, 80),
+      onPressed: () {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      },
     ),
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);

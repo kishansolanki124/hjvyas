@@ -237,14 +237,14 @@ class _CartPageState extends State<CartPage>
     //check soldout products available in cart or not
     for (int i = 0; i < _cartItems!.length; i++) {
       if (isProductSoldOut(_cartItems!.elementAt(i))) {
-        showSnackbar(context, "Product in your cart is soldout.");
+        showSnackbar(context, "Product In Your Cart Is Soldout. Pleae Remove It.");
         return;
       }
     }
 
     if (isTesterEnabled && freeSelectedIndex == -1) {
       _scrollToEnd();
-      showSnackbar(context, "Please Select Any One Free Product Tester");
+      showSnackbar(context, "Please Select Any One Free Product Tester.");
       return;
     }
     double total = 0;

@@ -1195,7 +1195,7 @@ class _ProductDetailState extends State<ComboDetail>
                                     comboDetailResponse!.comboMoreList,
                                   ),
 
-                                SizedBox(height: 50),
+                                SizedBox(height: 100),
                               ],
                             ),
 

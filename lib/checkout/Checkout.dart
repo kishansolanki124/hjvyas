@@ -511,10 +511,10 @@ class _CheckoutState extends State<Checkout> {
         _validateState(_stateController.text) != null) {
       showSnackbar(context, "State name is required.");
     } else if (stateListItem == null) {
-      showSnackbar(context, "State name is required.");
+      showSnackbar(context, "State Name is required.");
     } else if (_selectedOptionState == "Outside Gujarat" &&
         stateListItem!.stateName == "Select State") {
-      showSnackbar(context, "Kindly select State.");
+      showSnackbar(context, "Kindly Select State.");
     } else if (_alternatePhone(_alternatePhoneController.text) != null) {
       showSnackbar(
         context,
@@ -524,10 +524,10 @@ class _CheckoutState extends State<Checkout> {
       showSnackbar(context, "You Must Accept The Terms & Conditions.");
     } else if (null == _selectedPaymentMethod ||
         _selectedPaymentMethod!.isEmpty) {
-      showSnackbar(context, "Kindly select any payment method.");
+      showSnackbar(context, "Kindly Select Any Payment Option.");
     } else if (_giftPacksChecked) {
       if (_validateName(_giftSenderNameController.text) != null) {
-        showSnackbar(context, "Gift Sender Name is required.");
+        showSnackbar(context, "Gift Sender Name Is Required.");
       } else if (_validateName(_giftReceiverNameController.text) != null) {
         showSnackbar(context, "Gift Receiver Name is required.");
       } else if (_validatePhone(_giftSenderMobileController.text) != null) {
@@ -574,7 +574,8 @@ class _CheckoutState extends State<Checkout> {
 
   Future<void> placeOrder() async {
     String productIds = widget.cartItemShaaredPrefList
-        .map((cartItem) => cartItem.productPackingId)
+        .map((cartItem) => (cartItem.productDetail.isNotEmpty) ? cartItem.productDetail.
+    elementAt(0).productId : cartItem.comboDetail.elementAt(0).comboId)
         .join(',');
 
     String productType = widget.cartItemShaaredPrefList
@@ -710,7 +711,7 @@ class _CheckoutState extends State<Checkout> {
       showSnackbar(context, _validatePhone(_phoneController.text).toString());
     } else if (_selectedOptionCountry == "Outside India" &&
         countryListItem!.countryName == "Select Country") {
-      showSnackbar(context, "Kindly select country.");
+      showSnackbar(context, "Kindly select Country.");
     } else {
       getShippingCharge();
     }
@@ -872,7 +873,7 @@ class _CheckoutState extends State<Checkout> {
       cartAmount,
     );
 
-    showSnackbar(context, "Shipping charges is updated.");
+    showSnackbar(context, "Shipping Charge Is Updated.");
 
     _showCheckoutAddressWidget();
   }
@@ -1608,6 +1609,7 @@ class _CheckoutState extends State<Checkout> {
 
                                     //Continue button
                                     SizedBox(
+                                      width: double.infinity,
                                       child: ElevatedButton(
                                         onPressed: () {
                                           onContinueClick();
@@ -1735,6 +1737,7 @@ class _CheckoutState extends State<Checkout> {
                                             ),
                                           )
                                           : SizedBox(
+                                        width: double.infinity,
                                             child: ElevatedButton(
                                               onPressed: onOrderPlaced,
                                               style: ElevatedButton.styleFrom(

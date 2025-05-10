@@ -6,12 +6,14 @@ import '../product_detail/ImageWithProgress.dart';
 class HomePopup extends StatelessWidget {
   final String imageUrl;
   final String text;
+  final String title;
   final Function() onClose;
 
   const HomePopup({
     super.key,
     required this.imageUrl,
     required this.text,
+    required this.title,
     required this.onClose,
   });
 
@@ -52,18 +54,34 @@ class HomePopup extends StatelessWidget {
                                 return SizedBox(
                                   width: screenWidth * 0.45,
                                   height: 300,
-                                  child: Stack(
-                                    // Use a Stack to position the close button
-                                    children: [
-                                      //text
-                                      Align(
-                                        alignment: Alignment.centerRight,
-                                        child: SizedBox(
-                                          //width: screenWidth * 0.5,
-                                          child: loadHTMLContentPopup(text),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      // Use a Stack to position the close button
+                                      children: [
+                                        Text(
+                                          title,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontFamily: "Montserrat",
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12,
+                                          ),
                                         ),
-                                      ),
-                                    ],
+
+                                        //text
+                                        Align(
+                                          alignment: Alignment.centerRight,
+                                          child: SizedBox(
+                                            //width: screenWidth * 0.5,
+                                            child: loadHTMLContentPopup(text),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 );
                               },
@@ -75,16 +93,21 @@ class HomePopup extends StatelessWidget {
                   ),
                 ),
               ),
+
               // Close button
               Positioned(
-                top: 5,
+                top: 16,
                 right: 5,
                 child: Container(
+                  width: 30,
+                  height: 30,
                   decoration: BoxDecoration(
                     color: Color.fromARGB(255, 31, 47, 80),
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
+                    padding: EdgeInsets.zero, // Remove default padding
+                    iconSize: 18,
                     icon: Icon(Icons.close, color: Colors.white),
                     onPressed: () {
                       Navigator.of(context, rootNavigator: true).pop();
