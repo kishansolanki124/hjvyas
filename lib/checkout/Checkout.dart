@@ -205,7 +205,7 @@ class _CheckoutState extends State<Checkout> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => PaymentSuccessPage(),
+                        builder: (context) => PaymentSuccessPage(orderNo: orderNo!,),
                       ),
                     );
                   },
@@ -438,7 +438,7 @@ class _CheckoutState extends State<Checkout> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => PaymentSuccessPage()),
+      MaterialPageRoute(builder: (context) => PaymentSuccessPage(orderNo: orderNo!)),
     );
   }
 
