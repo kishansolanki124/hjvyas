@@ -140,8 +140,8 @@ class _MenuScreenState extends State<MenuScreen> {
                 child: Hero(
                   tag: "app_logo",
                   child: SizedBox(
-                    width: 120,
-                    height: 120,
+                    width: 140,
+                    height: 140,
                     child: ImageWithProgress(imageURL: logoURL),
                   ),
                 ),

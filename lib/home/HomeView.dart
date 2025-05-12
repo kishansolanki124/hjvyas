@@ -212,8 +212,8 @@ class _HomeViewState extends State<HomeView>
                   Align(
                     alignment: Alignment.topCenter,
                     child: SizedBox(
-                      width: 120,
-                      height: 120,
+                      width: 140,
+                      height: 140,
                       child: ImageWithProgress(imageURL: logoURL),
                     ),
                   ),
