@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_state_manager/src/rx_flutter/rx_obx_widget.dart';
+import 'package:hjvyas/notification/EmptyNotification.dart';
 
 import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
@@ -131,6 +132,10 @@ class _NotificationListState extends State<NotificationList> {
                           ),
                         ),
                       ],
+
+                      if (!widget.paginationController.isLoading.value &&
+                          widget.paginationController.items.isEmpty)
+                        EmptyNotification(showBackButton: false),
 
                       if (widget.paginationController.items.isNotEmpty)
                         Expanded(

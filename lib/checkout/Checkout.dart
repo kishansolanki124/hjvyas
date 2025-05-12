@@ -1407,7 +1407,8 @@ class _CheckoutState extends State<Checkout> {
                                           ),
                                         ],
 
-                                        if (_selectedOptionCity ==
+                                        if (_selectedOptionState == "Gujarat"
+                                            && _selectedOptionCity ==
                                                 "Other City" && //!isGujaratOn) ...[
                                             shippingStatusResponse!
                                                 .shippingStatusList
