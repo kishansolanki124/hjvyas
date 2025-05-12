@@ -89,7 +89,7 @@ void showAlertWithCallback({
         (_) => AlertDialog(
           title: Text(title,
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 22,
               color: Color.fromARGB(255, 31, 47, 80),
               fontWeight: FontWeight.w700,
               fontFamily: "Montserrat",

@@ -95,7 +95,7 @@ class _AddToCartWidgetForDetailState extends State<AddToCartWidgetForDetail>
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color.fromARGB(255, 123, 138, 195),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
+                      horizontal: 20,
                       vertical: 16,
                     ),
                     // Padding for the button
@@ -110,7 +110,7 @@ class _AddToCartWidgetForDetailState extends State<AddToCartWidgetForDetail>
                   child: const Text(
                     'Add To Cart',
                     style: TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontFamily: "Montserrat",
                       fontWeight: FontWeight.w600,
                       color: Colors.white,

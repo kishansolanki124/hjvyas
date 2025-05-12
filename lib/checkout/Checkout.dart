@@ -262,7 +262,7 @@ class _CheckoutState extends State<Checkout> {
           title: Text(
             "Alert",
             style: TextStyle(
-              fontSize: 24,
+              fontSize: 22,
               color: Color.fromARGB(255, 31, 47, 80),
               fontWeight: FontWeight.w700,
               fontFamily: "Montserrat",
@@ -516,7 +516,8 @@ class _CheckoutState extends State<Checkout> {
       showSnackbar(context, "State Name Is Required.");
     } else if (stateListItem == null) {
       showSnackbar(context, "State Name Is Required.");
-    } else if (_selectedOptionState == "Outside Gujarat" &&
+    } else if (_selectedOptionCountry == "India" &&
+        _selectedOptionState == "Outside Gujarat" &&
         stateListItem!.stateName == "Select State") {
       showSnackbar(context, "Kindly Select State.");
     } else if (_alternatePhone(_alternatePhoneController.text) != null) {

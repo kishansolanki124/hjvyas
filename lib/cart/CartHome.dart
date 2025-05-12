@@ -87,6 +87,57 @@ class _CartPageState extends State<CartPage>
     setState(() {}); //update
   }
 
+  void _showDeleteConfirmationDialog(int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Confirm Delete',
+            style: TextStyle(
+              fontSize: 22,
+              color: Color.fromARGB(255, 31, 47, 80),
+              fontWeight: FontWeight.w700,
+              fontFamily: "Montserrat",
+            ),),
+          content: Text('Are You Sure Want To Delete This Product From Cart?',
+            style: TextStyle(
+              color: Color.fromARGB(255, 31, 47, 80),
+              fontFamily: "Montserrat",
+            ),),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 31, 47, 80),
+                  fontWeight: FontWeight.w600,
+                  fontFamily: "Montserrat",
+                ),),
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+            ),
+            TextButton(
+              child: Text(
+                'Delete',
+                style: TextStyle(
+                  color: Color.fromARGB(255, 31, 47, 80),
+                  fontWeight: FontWeight.w600,
+                  fontFamily: "Montserrat",
+                ),
+              ),
+              onPressed: () {
+                _removeItem(index);
+                // Perform delete action here
+                Navigator.of(context).pop(); // Close the dialog
+                // Add your delete logic here
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void initAnimation() {
     _animationController = AnimationController(
       vsync: this,
@@ -483,7 +534,7 @@ class _CartPageState extends State<CartPage>
                                   formatPrice: _formatPrice,
                                   decrementCount: _decrementCount,
                                   incrementCount: _incrementCount,
-                                  removeItem: _removeItem,
+                                  removeItem: _showDeleteConfirmationDialog,
                                   cartItem: cartItem,
                                   cartItemModel: _cartItemShaaredPref,
                                 );
