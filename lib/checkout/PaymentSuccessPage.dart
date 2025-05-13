@@ -151,7 +151,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage>
                           const SizedBox(height: 16),
                           const Text(
                             textAlign: TextAlign.center,
-                            'Dear Customer,\n Thank you for your purchase with HJVyas Mithaiwala.'
+                            'Dear Customer,\n Thank you for your purchase with H.J.Vyas Mithaiwala.'
                             '\nPlease check your email for the order details.',
                             style: subtitleTextStyle, //use constant text style
                           ),
