@@ -148,7 +148,7 @@ class _NavigationExampleState extends State<NavigationExample>
   void _onItemTapped(int index) {
     loadSharedPrefItemsList();
 
-    if(index == 3) {
+    if (index == 3) {
       navigateToCartPage();
       return;
     }
@@ -167,11 +167,13 @@ class _NavigationExampleState extends State<NavigationExample>
   }
 
   void navigateToProductList(
+    List<CategoryListItem> categoryList,
     CategoryListItem categoryListItem,
     String logoURL,
   ) {
     setState(() {
       homeNavigationWidget = ProductListGridView(
+        categoryList: categoryList,
         categoryListItem: categoryListItem,
         logoURL: logoURL,
         updateBottomNavBarVisibility: _updateBottomNavBarVisibility,

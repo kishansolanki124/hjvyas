@@ -4,12 +4,14 @@ import '../api/models/CategoryListResponse.dart';
 import '../home/navigation.dart';
 
 class MenuListItem extends StatelessWidget {
+  final List<CategoryListItem> categoryList;
   final String logoURL;
   final String states;
   final CategoryListItem categoryListItem;
   final Color selectedColor;
 
   const MenuListItem(
+    this.categoryList,
     this.logoURL,
     this.categoryListItem,
     this.selectedColor,
@@ -32,9 +34,11 @@ class MenuListItem extends StatelessWidget {
                 // final homeState =
                 // context.findAncestorStateOfType<_NavigationExampleState>();
                 // homeState?._navigateToWidget(1);
-                NavigationExample.of(
-                  context,
-                )?.navigateToProductList(categoryListItem, logoURL);
+                NavigationExample.of(context)?.navigateToProductList(
+                  categoryList,
+                  categoryListItem,
+                  logoURL,
+                );
 
                 // Navigator.of(context).push(
                 //   MaterialPageRoute(

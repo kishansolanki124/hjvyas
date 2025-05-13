@@ -121,6 +121,7 @@ class _MenuScreenState extends State<MenuScreen> {
                 childCount: categoryList.length,
                 builder: (context, index) {
                   return MenuListItem(
+                    categoryList,
                     logoURL,
                     categoryList.elementAt(selectedIndex),
                     _selectedIndex == index

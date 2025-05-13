@@ -65,6 +65,11 @@ class ProductPaginationController extends GetxController {
   }
 
   Future<void> loadInitialData(int categoryId) async {
+    if(items.value.isNotEmpty) {
+      items.value.clear();
+    }
+
+    currentPage = 0;
     isError(false);
     isLoading(true);
     try {

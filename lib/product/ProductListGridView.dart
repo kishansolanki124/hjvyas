@@ -16,6 +16,7 @@ class ProductListGridView extends StatefulWidget {
   final ProductPaginationController paginationController =
       ProductPaginationController(getIt<HJVyasApiService>());
 
+  List<CategoryListItem> categoryList;
   CategoryListItem categoryListItem;
   String logoURL;
 
@@ -23,6 +24,7 @@ class ProductListGridView extends StatefulWidget {
 
   ProductListGridView({
     super.key,
+    required this.categoryList,
     required this.categoryListItem,
     required this.logoURL,
     required this.updateBottomNavBarVisibility,
@@ -284,8 +286,7 @@ class _ProductListGridViewState extends State<ProductListGridView>
             padding: const EdgeInsets.only(bottom: 60),
             child: FloatingActionButton(
               onPressed: () {
-                //todo here
-                //_showCategoryMenu(context);
+                _showCategoryMenu(context);
               },
               tooltip: 'View Categories',
               backgroundColor: Color.fromARGB(255, 123, 138, 195),
@@ -303,6 +304,108 @@ class _ProductListGridViewState extends State<ProductListGridView>
           ),
         ),
       ),
+    );
+  }
+
+  void _showCategoryMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return AnimatedContainer(
+          // Wrap with AnimatedContainer
+          duration: const Duration(milliseconds: 300),
+          // Add animation duration
+          curve: Curves.easeInOut,
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+          margin: const EdgeInsets.only(top: 20),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 31, 47, 80),
+            // Darker background for bottom sheet
+            borderRadius: BorderRadius.circular(20), // More rounded corners
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Text(
+                'Categories',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w700,
+                  fontFamily: "Montserrat",
+                  color: Colors.white,
+                ), // White text
+              ),
+              const SizedBox(height: 15),
+
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children:
+                    widget.categoryList.map((category) {
+                      return InkWell(
+                        onTap: () {
+                          widget.categoryListItem = category;
+                          _refreshData();
+                          Navigator.pop(context);
+                        },
+                        borderRadius: BorderRadius.circular(12),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 10,
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  category.categoryName,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontFamily: "Montserrat",
+                                    color: Colors.white,
+                                  ), // White text
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    }).toList(), // Convert the iterable to a list
+              ),
+
+              const SizedBox(height: 15),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color.fromARGB(255, 123, 138, 195),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 50,
+                    vertical: 12,
+                  ),
+                ),
+                child: const Text(
+                  'Close',
+                  style: TextStyle(
+                    fontFamily: "Montserrat",
+                    fontWeight: FontWeight.w500,
+                    fontSize: 18,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      backgroundColor: Colors.transparent,
+      // Make the background transparent to see the AnimatedContainer
+      isScrollControlled:
+          true, // Make the bottom sheet take up more space if needed.
     );
   }
 }
