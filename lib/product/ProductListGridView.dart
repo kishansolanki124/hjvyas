@@ -32,10 +32,27 @@ class ProductListGridView extends StatefulWidget {
   State<ProductListGridView> createState() => _ProductListGridViewState();
 }
 
-class _ProductListGridViewState extends State<ProductListGridView> {
+class _ProductListGridViewState extends State<ProductListGridView>
+    with TickerProviderStateMixin {
   String logoURL = "";
 
   bool scrollBarShowing = true;
+
+  late AnimationController _controller;
+  late Animation<Offset> _animation;
+
+  // This method will be called by ScrollWidget when the user scrolls
+  void updateMenuVisibility(bool show) {
+    if (mounted) {
+      setState(() {
+        if (!scrollBarShowing) {
+          _controller.forward();
+        } else {
+          _controller.reverse();
+        }
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -43,10 +60,21 @@ class _ProductListGridViewState extends State<ProductListGridView> {
     widget.paginationController.loadInitialData(
       int.parse(widget.categoryListItem.categoryId),
     ); // Explicit call
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    _animation = Tween<Offset>(
+      begin: Offset.zero,
+      end: const Offset(0, 2), // Move down by 2x its height
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
   }
 
   @override
   void dispose() {
+    _controller.dispose();
     super.dispose();
   }
 
@@ -87,12 +115,14 @@ class _ProductListGridViewState extends State<ProductListGridView> {
                   setState(() {
                     scrollBarShowing = false;
                     widget.updateBottomNavBarVisibility(false);
+                    updateMenuVisibility(false);
                   });
                 } else if (notification.scrollDelta! < 0 && !scrollBarShowing) {
                   // Scrolling up, show the bottom bar
                   setState(() {
                     scrollBarShowing = true;
                     widget.updateBottomNavBarVisibility(true);
+                    updateMenuVisibility(true);
                   });
                 }
               }
@@ -247,6 +277,31 @@ class _ProductListGridViewState extends State<ProductListGridView> {
             ),
           );
         }),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        floatingActionButton: SlideTransition(
+          position: _animation,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 60),
+            child: FloatingActionButton(
+              onPressed: () {
+                //todo here
+                //_showCategoryMenu(context);
+              },
+              tooltip: 'View Categories',
+              backgroundColor: Color.fromARGB(255, 123, 138, 195),
+              elevation: 8,
+              // Add elevation for a shadow
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(50), // Make it more rounded
+              ),
+              child: const Icon(
+                Icons.menu,
+                color: Colors.white,
+                size: 30,
+              ), // Increased size
+            ),
+          ),
+        ),
       ),
     );
   }

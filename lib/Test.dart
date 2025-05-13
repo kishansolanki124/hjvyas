@@ -1,118 +1,153 @@
 import 'package:flutter/material.dart';
-import 'package:hjvyas/product_detail/ImageWithProgress.dart';
 
-class ImageWithTextPopup extends StatelessWidget {
-  final String imageUrl;
-  final String text;
-  final TextStyle? textStyle;
-  final VoidCallback? onClose; // Add an optional onClose callback
+void main() {
+  runApp(const MyApp());
+}
 
-  const ImageWithTextPopup({
-    super.key,
-    required this.imageUrl,
-    required this.text,
-    this.textStyle,
-    this.onClose, // Make onClose optional
-  });
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Shopping Categories App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+        fontFamily: 'Inter',
+      ),
+      home: const HomeScreen(),
+    );
+  }
+}
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.transparent,
-      body: Stack(
-        children: <Widget>[
-          // 1. Background Image
-          Positioned.fill(child: ImageWithProgress(imageURL: imageUrl)),
-          // 2. Popup-like Container with Text
-          Center(
-            child: LayoutBuilder(
-              builder: (context, constraints) {
-                final screenWidth = MediaQuery.of(context).size.width;
-                final screenHeight = MediaQuery.of(context).size.height;
+      appBar: AppBar(
+        title: const Text('Shopping Categories'),
+        centerTitle: true,
+      ),
+      body: const Center(
+        child: Text(
+          'Welcome to our Shopping App!\nTap the button below to see categories.',
+          style: TextStyle(fontSize: 16),
+          textAlign: TextAlign.center,
+        ),
+      ),
+      floatingActionButton: const CategoryMenuButton(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
+  }
+}
 
-                return Container(
-                  width: screenWidth,
-                  height: screenHeight,
-                  color: Colors.transparent,
-                  child: Stack(
-                    // Use a Stack to position the close button
-                    children: [
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: SizedBox(
-                          width: screenWidth * 0.5,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Text(
-                              text,
-                              style:
-                                  textStyle ??
-                                  const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.white,
-                                  ),
-                              textAlign: TextAlign.left,
-                            ),
-                          ),
-                        ),
-                      ),
-                      // 3. Close Button
-                      Positioned(
-                        top: 10, // Position from the top
-                        right: 10, // Position from the right
-                        child: GestureDetector(
-                          onTap: () {
-                            // Use the provided onClose callback, or just pop the route.
-                            if (onClose != null) {
-                              onClose!(); // Call the custom callback if provided
-                            } else {
-                              Navigator.of(
-                                context,
-                              ).pop(); // Default close behavior
-                            }
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.all(8),
-                            // Add padding around the icon
-                            decoration: BoxDecoration(
-                              //shape: BoxShape.circle, // Make it a circle
-                              color: Colors.black.withOpacity(0.5),
-                              // Optional: Background for better visibility
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                            child: IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed:
-                                  () => Navigator.pop(context, {
-                                    'status': 'cancelled',
-                                  }),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
+class CategoryMenuButton extends StatelessWidget {
+  const CategoryMenuButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingActionButton(
+      onPressed: () {
+        _showCategoryMenu(context);
+      },
+      tooltip: 'View Categories',
+      backgroundColor: Colors.blue,
+      child: const Icon(Icons.category),
+    );
+  }
+
+  void _showCategoryMenu(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+          // Added padding for better visual appearance
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Text(
+                'Categories',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 10), // Added spacing
+              ListTile(
+                leading: const Icon(Icons.male),
+                title: const Text("Men's Shopping"),
+                onTap: () {
+                  _navigateToCategory(context, "Men's Shopping");
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.female),
+                title: const Text("Women's Shopping"),
+                onTap: () {
+                  _navigateToCategory(context, "Women's Shopping");
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.child_care),
+                title: const Text("Kids' Shopping"),
+                onTap: () {
+                  _navigateToCategory(context, "Kids' Shopping");
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.shopping_bag),
+                title: const Text("Other Items"),
+                onTap: () {
+                  _navigateToCategory(context, "Other Items");
+                },
+              ),
+              const SizedBox(height: 10), // Added spacing
+              ElevatedButton(
+                //Added an elevated button
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: const Text('Close'),
+              )
+            ],
           ),
-        ],
+        );
+      },
+      shape:
+      RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)), //Added rounded corners
+    );
+  }
+
+  void _navigateToCategory(BuildContext context, String category) {
+    Navigator.pop(context); // Close the bottom sheet
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CategoryPage(category: category),
       ),
     );
   }
 }
 
-void main() {
-  runApp(
-    const MaterialApp(
-      home: ImageWithTextPopup(
-        imageUrl:
-            'https://www.mithaiwalahjvyas.com/uploads/app_popup_img/1-2-1-1-diwali-01.jpg',
-        text:
-            'This is the text description, positioned on the right side.  A close icon is in the top right.',
-        textStyle: TextStyle(fontSize: 18, color: Colors.white),
+class CategoryPage extends StatelessWidget {
+  final String category;
+
+  const CategoryPage({super.key, required this.category});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(category),
+        centerTitle: true,
       ),
-    ),
-  );
+      body: Center(
+        child: Text(
+          'This is the page for $category',
+          style: const TextStyle(fontSize: 18),
+        ),
+      ),
+    );
+  }
 }
