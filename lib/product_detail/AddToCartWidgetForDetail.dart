@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../utils/AppColors.dart';
 import '../utils/CommonAppProgress.dart';
 import 'ProductDetailWidget.dart';
 
@@ -59,7 +60,7 @@ class _AddToCartWidgetForDetailState extends State<AddToCartWidgetForDetail>
                   fontFamily: "Montserrat",
                   fontWeight: FontWeight.w500,
                   fontSize: 18,
-                  color: Color.fromARGB(255, 31, 47, 80),
+                  color: AppColors.background,
                 ),
               ),
             ),
@@ -68,7 +69,7 @@ class _AddToCartWidgetForDetailState extends State<AddToCartWidgetForDetail>
               Container(
                 width: 160,
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 123, 138, 195),
+                  color: AppColors.secondary,
                   borderRadius: BorderRadius.circular(
                     50,
                   ), // Rounded corners for the container
@@ -93,7 +94,7 @@ class _AddToCartWidgetForDetailState extends State<AddToCartWidgetForDetail>
                     widget.onPressed!();
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Color.fromARGB(255, 123, 138, 195),
+                    backgroundColor: AppColors.secondary,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 16,

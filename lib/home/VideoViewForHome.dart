@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:video_player/video_player.dart';
 
+import '../utils/AppColors.dart';
+
 class VideoViewForHome extends StatefulWidget {
   final String videoUrl;
 
@@ -42,7 +44,7 @@ class _VideoViewForHomeState extends State<VideoViewForHome> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 32, 47, 80), // Black background
+      backgroundColor: AppColors.background, // Black background
       body: Center(
         child: FutureBuilder(
           future: _initializeVideoPlayerFuture,

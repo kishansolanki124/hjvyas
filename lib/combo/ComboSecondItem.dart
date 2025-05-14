@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../product/ProductListWidgets.dart';
+import '../utils/AppColors.dart';
 
 class ComboSecondItem extends StatelessWidget {
   final String imageUrl;
@@ -30,7 +31,7 @@ class ComboSecondItem extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            productListImage(imageUrl, Color.fromARGB(255, 123, 138, 195)),
+            productListImage(imageUrl, AppColors.secondary),
 
             SizedBox(height: 10),
 
@@ -43,14 +44,12 @@ class ComboSecondItem extends StatelessWidget {
               productListVariationWidget(
                 price,
                 comboWeight,
-                //Color.fromARGB(255, 1, 1, 1),
               ),
 
             //"Calories: 470"
             if (comboSoldout.isEmpty)
               productComboSpecification(
                 comboSpecification,
-                //Color.fromARGB(255, 139, 139, 139),
               ),
 
             if (comboSoldout.isNotEmpty) soldOutText(),

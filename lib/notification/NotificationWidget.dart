@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hjvyas/about/AboutWidgets.dart';
 
+import '../utils/AppColors.dart';
+
 Widget notificationDesc(String description) {
   return loadHTMLContent(description);
   // Text(
@@ -37,7 +39,7 @@ Widget dateOrTime(String dateOrTime) {
       dateOrTime,
       style: TextStyle(
         fontFamily: "Montserrat",
-        color: Color.fromARGB(255, 123, 138, 195),
+        color: AppColors.secondary,
         fontSize: 14.0,
       ),
     ),

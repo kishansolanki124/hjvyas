@@ -20,6 +20,7 @@ import '../product/ProductListWidgets.dart';
 import '../product_detail/AddToCartWidgetForDetail.dart';
 import '../product_detail/ProductDetailWidget.dart';
 import '../splash/NoIntternetScreen.dart';
+import '../utils/AppColors.dart';
 import '../utils/CommonAppProgress.dart';
 import '../utils/FloatingImageViewer.dart';
 import '../utils/NetworkImageWithProgress.dart';
@@ -713,30 +714,15 @@ class _ProductDetailState extends State<ComboDetail>
                                   decoration: BoxDecoration(
                                     border: Border(
                                       left: BorderSide(
-                                        color: Color.fromARGB(
-                                          255,
-                                          123,
-                                          138,
-                                          195,
-                                        ),
+                                        color: AppColors.secondary,
                                         width: 2.0,
                                       ),
                                       bottom: BorderSide(
-                                        color: Color.fromARGB(
-                                          255,
-                                          123,
-                                          138,
-                                          195,
-                                        ),
+                                        color: AppColors.secondary,
                                         width: 2.0,
                                       ),
                                       right: BorderSide(
-                                        color: Color.fromARGB(
-                                          255,
-                                          123,
-                                          138,
-                                          195,
-                                        ),
+                                        color: AppColors.secondary,
                                         width: 2.0,
                                       ),
                                     ),
@@ -902,12 +888,7 @@ class _ProductDetailState extends State<ComboDetail>
                                                             ),
                                                         borderSide: BorderSide(
                                                           width: 1,
-                                                          color: Color.fromARGB(
-                                                            255,
-                                                            123,
-                                                            138,
-                                                            195,
-                                                          ),
+                                                          color: AppColors.secondary,
                                                         ),
                                                       ),
                                                   // disabledBorder: OutlineInputBorder(
@@ -924,12 +905,7 @@ class _ProductDetailState extends State<ComboDetail>
                                                             ),
                                                         borderSide: BorderSide(
                                                           width: 1,
-                                                          color: Color.fromARGB(
-                                                            255,
-                                                            123,
-                                                            138,
-                                                            195,
-                                                          ),
+                                                          color: AppColors.secondary,
                                                         ),
                                                       ),
 
@@ -971,12 +947,7 @@ class _ProductDetailState extends State<ComboDetail>
                                                             ),
                                                         borderSide: BorderSide(
                                                           width: 1,
-                                                          color: Color.fromARGB(
-                                                            255,
-                                                            123,
-                                                            138,
-                                                            195,
-                                                          ),
+                                                          color: AppColors.secondary,
                                                         ),
                                                       ),
                                                   // disabledBorder: OutlineInputBorder(
@@ -993,12 +964,7 @@ class _ProductDetailState extends State<ComboDetail>
                                                             ),
                                                         borderSide: BorderSide(
                                                           width: 1,
-                                                          color: Color.fromARGB(
-                                                            255,
-                                                            123,
-                                                            138,
-                                                            195,
-                                                          ),
+                                                          color: AppColors.secondary,
                                                         ),
                                                       ),
                                                   contentPadding:
@@ -1019,12 +985,7 @@ class _ProductDetailState extends State<ComboDetail>
                                                   },
                                                   style: ElevatedButton.styleFrom(
                                                     backgroundColor:
-                                                        Color.fromARGB(
-                                                          255,
-                                                          123,
-                                                          138,
-                                                          195,
-                                                        ),
+                                                    AppColors.secondary,
                                                     // Sky color
                                                     //foregroundColor: Colors.black,
                                                     // Black text color

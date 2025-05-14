@@ -5,6 +5,7 @@ import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../splash/splash.dart';
+import '../utils/AppColors.dart';
 
 class PaymentSuccessPage extends StatefulWidget {
   String orderNo = "";
@@ -20,12 +21,7 @@ class _PaymentSuccessPageState extends State<PaymentSuccessPage>
   bool _isDelayedAnimationPlaying = false;
   late AnimationController _animationController; // Combine controllers
   late Animation<double> _fadeAnimation;
-  static const Color backgroundColor = Color.fromARGB(
-    255,
-    31,
-    47,
-    80,
-  ); //constant color
+  static Color backgroundColor = AppColors.background; //constant color
   static const TextStyle titleTextStyle = TextStyle(
     //constant text style
     color: Colors.white,

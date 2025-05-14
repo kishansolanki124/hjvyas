@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../product/ProductListWidgets.dart';
+import '../utils/AppColors.dart';
 
 class ComboFirstItem extends StatelessWidget {
   final String imageUrl;
@@ -42,7 +43,7 @@ class ComboFirstItem extends StatelessWidget {
 
             if (comboSoldout.isNotEmpty) soldOutText(),
 
-            productListImage(imageUrl, Color.fromARGB(255, 123, 138, 195)),
+            productListImage(imageUrl, AppColors.secondary),
           ],
         ),
       ],

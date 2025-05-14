@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../utils/AppColors.dart';
 import 'NotificationWidget.dart';
 
 class NotificationListItemWdiget extends StatefulWidget {
@@ -93,7 +94,7 @@ class _NotificationListItemWdigetState extends State<NotificationListItemWdiget>
               Container(
                 height: 1.0,
                 // Thickness of the divider
-                color: Color.fromARGB(255, 123, 138, 195),
+                color: AppColors.secondary,
                 // Color of the divider
                 width: double.infinity, // Make it span the entire width
               ),

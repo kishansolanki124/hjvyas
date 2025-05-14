@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:photo_view/photo_view.dart';
 
+import 'AppColors.dart';
+
 class FloatingImageViewer extends StatelessWidget {
   final String imageUrl;
   final Function() onClose;
@@ -16,7 +18,7 @@ class FloatingImageViewer extends StatelessWidget {
     return GestureDetector(
       onTap: onClose,
       child: Container(
-        color: Color.fromARGB(175, 31, 47, 80),
+        color: AppColors.background,
         child: Stack(
           children: [
             // Center image with zoom functionality
@@ -69,7 +71,7 @@ class FloatingImageViewer extends StatelessWidget {
               right: 20,
               child: Container(
                 decoration: BoxDecoration(
-                  color: Color.fromARGB(175, 31, 47, 80),
+                  color: AppColors.background,
                   shape: BoxShape.circle,
                 ),
                 child: IconButton(

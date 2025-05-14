@@ -42,7 +42,6 @@ class _ProductGridThirdItemState extends State<ProductGridThirdItem> {
             children: <Widget>[
               productListTitleWidget(
                 widget.title,
-                //Color.fromARGB(255, 1, 1, 1)
               ),
 
               //"₹ 900.00 - 300 grams"
@@ -51,7 +50,6 @@ class _ProductGridThirdItemState extends State<ProductGridThirdItem> {
                   widget.price,
                   widget.productWeight,
                 ), //,
-              //Color.fromARGB(255, 1, 1, 1),),
 
               //"Product life: 300 days"
               if (widget.productSoldout.isEmpty)

@@ -7,6 +7,7 @@ import '../injection_container.dart';
 import '../menu/CategoryController.dart';
 import '../repositories/HJVyasRepository.dart';
 import '../splash/NoIntternetScreen.dart';
+import '../utils/AppColors.dart';
 import 'AboutWidgets.dart';
 import 'ContactUs.dart';
 
@@ -176,18 +177,9 @@ Widget staticPageMainContent(
                 margin: EdgeInsets.only(left: 16.0, right: 16.0, bottom: 0),
                 decoration: BoxDecoration(
                   border: Border(
-                    left: BorderSide(
-                      color: Color.fromARGB(255, 123, 138, 195),
-                      width: 2.0,
-                    ),
-                    bottom: BorderSide(
-                      color: Color.fromARGB(255, 123, 138, 195),
-                      width: 2.0,
-                    ),
-                    right: BorderSide(
-                      color: Color.fromARGB(255, 123, 138, 195),
-                      width: 2.0,
-                    ),
+                    left: BorderSide(color: AppColors.secondary, width: 2.0),
+                    bottom: BorderSide(color: AppColors.secondary, width: 2.0),
+                    right: BorderSide(color: AppColors.secondary, width: 2.0),
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(0)),
                 ),
@@ -279,18 +271,13 @@ Widget _buildSelectItem(
           decoration: BoxDecoration(
             color:
                 isSelected
-                    ? Color.fromARGB(225, 255, 255, 255)
-                    : Color.fromARGB(
-                      255,
-                      31,
-                      47,
-                      80,
-                    ), // Change background color
+                    ? AppColors.semiTransWhite
+                    : AppColors.background, // Change background color
             border: Border.all(
               color:
                   isSelected
-                      ? Color.fromARGB(225, 255, 255, 255)
-                      : Color.fromARGB(255, 123, 138, 195), // Square border
+                      ? AppColors.semiTransWhite
+                      : AppColors.secondary, // Square border
               width: 1.0,
             ),
           ),

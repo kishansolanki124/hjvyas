@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../product_detail/ProductDetailWidget.dart';
+import '../utils/AppColors.dart';
 
 class EmptyNotification extends StatefulWidget {
   bool showBackButton = false;
@@ -78,7 +79,7 @@ class _EmptyNotificationState extends State<EmptyNotification>
                           decoration: BoxDecoration(
                             gradient: LinearGradient(
                               colors: [
-                                const Color.fromARGB(255, 123, 138, 195),
+                                AppColors.secondary,
                                 //Colors.white.withOpacity(0.7),
                                 Color.fromARGB(200, 255, 255, 255),
                               ],
@@ -122,40 +123,6 @@ class _EmptyNotificationState extends State<EmptyNotification>
                           ),
                         ),
                       ),
-
-                      // FilledButton.tonal(
-                      //   onPressed: () {
-                      //     if (widget.showBackButton) {
-                      //       print('back button pressed');
-                      //       Navigator.of(context).pop();
-                      //     } else {
-                      //       NavigationExample.of(context)?.navigateToMenuPage();
-                      //     }
-                      //   },
-                      //   style: FilledButton.styleFrom(
-                      //     backgroundColor: const Color.fromARGB(
-                      //       255,
-                      //       123,
-                      //       138,
-                      //       195,
-                      //     ),
-                      //     foregroundColor: Colors.white,
-                      //     shape: StadiumBorder(),
-                      //     padding: const EdgeInsets.symmetric(
-                      //       horizontal: 36,
-                      //       vertical: 16,
-                      //     ),
-                      //   ),
-                      //   child: const Text(
-                      //     'Start Shopping',
-                      //     style: TextStyle(
-                      //       color: Colors.white,
-                      //       fontFamily: "Montserrat",
-                      //       fontWeight: FontWeight.w500,
-                      //       fontSize: 16,
-                      //     ),
-                      //   ),
-                      // ),
                     ],
                   ),
                 ),

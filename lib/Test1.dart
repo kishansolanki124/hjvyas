@@ -1,206 +1,191 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Shopping Categories App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        fontFamily: 'Inter',
-        scaffoldBackgroundColor:
-        const Color.fromARGB(255, 31, 47, 80), // Dark background for Scaffold
-      ),
-      home: const HomeScreen(),
+      debugShowCheckedModeBanner: false,
+      home: SplashScreen(),
     );
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+// 1. Splash Screen with Animated Logo
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 1500),
+    );
+    _animation = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+
+    _controller.forward();
+
+    Future.delayed(Duration(seconds: 2), () {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MainWrapper(),
+          settings: RouteSettings(name: '/main'),
+        ),
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(
+          child: FadeTransition(
+            opacity: _animation,
+            child: Hero(
+              tag: 'appLogo',
+              child: Image.asset(
+                'images/logo.png', // Replace with your asset
+                width: 200,
+                height: 200,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// 2. Main Wrapper with Bottom Navigation
+class MainWrapper extends StatefulWidget {
+  @override
+  _MainWrapperState createState() => _MainWrapperState();
+}
+
+class _MainWrapperState extends State<MainWrapper> {
+  int _currentIndex = 0;
+  final GlobalKey<NavigatorState> _homeNavigatorKey = GlobalKey<NavigatorState>();
+
+  final List<Widget> _pages = [
+    HomeNavigator(key: GlobalKey()), // Special nested navigator for Home
+    SearchPage(),
+    ProfilePage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Shopping Categories'),
-        centerTitle: true,
-        backgroundColor:
-        const Color.fromARGB(255, 31, 47, 80), // Dark background for AppBar
-        foregroundColor: Colors.white,
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _pages,
       ),
-      body: const Center(
-        child: Text(
-          'Welcome to our Shopping App!\nTap the button below to see categories.',
-          style: TextStyle(fontSize: 16, color: Colors.white), // White text
-          textAlign: TextAlign.center,
-        ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        onTap: (index) => setState(() => _currentIndex = index),
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: 'Search'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
+        ],
       ),
-      floatingActionButton: const CategoryMenuButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
 
-class CategoryMenuButton extends StatelessWidget {
-  const CategoryMenuButton({super.key});
+// 3. Special Home Navigator to preserve Hero animation
+class HomeNavigator extends StatelessWidget {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+  HomeNavigator({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      onPressed: () {
-        _showCategoryMenu(context);
-      },
-      tooltip: 'View Categories',
-      backgroundColor: Colors.blue,
-      elevation: 8, // Add elevation for a shadow
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(25), // Make it more rounded
-      ),
-      child: const Icon(Icons.category, size: 30), // Increased size
-    );
-  }
-
-  void _showCategoryMenu(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return AnimatedContainer( // Wrap with AnimatedContainer
-          duration: const Duration(milliseconds: 300), // Add animation duration
-          curve: Curves.easeInOut,
-          padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-          margin: const EdgeInsets.only(top: 20),
-          decoration: BoxDecoration(
-            color: const Color.fromARGB(
-                255, 50, 65, 100), // Darker background for bottom sheet
-            borderRadius: BorderRadius.circular(20), // More rounded corners
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const Text(
-                'Categories',
-                style: TextStyle(
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white), // White text
-              ),
-              const SizedBox(height: 15),
-              _buildCategoryListItem(context, "Men's Shopping"),
-              _buildCategoryListItem(context, "Women's Shopping"),
-              _buildCategoryListItem(context, "Kids' Shopping"),
-              _buildCategoryListItem(context, "Other Items"),
-              const SizedBox(height: 15),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-                ),
-                child: const Text('Close', style: TextStyle(fontSize: 18)),
-              )
-            ],
-          ),
+    return Navigator(
+      key: navigatorKey,
+      onGenerateRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) => HomePage(),
+          settings: settings,
         );
       },
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20.0),
-      ),
-      backgroundColor:
-      Colors.transparent, // Make the background transparent to see the AnimatedContainer
-      isScrollControlled:
-      true, // Make the bottom sheet take up more space if needed.
     );
   }
+}
 
-  static Widget _buildCategoryListItem(BuildContext context, String category) {
-    return InkWell(
-      onTap: () {
-        _navigateToCategory(context, category);
-      },
-      borderRadius: BorderRadius.circular(12),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
-        child: Row(
-          children: [
-            Expanded(
-              child: Text(
-                category,
-                style: const TextStyle(fontSize: 18, color: Colors.white), // White text
+// 4. Home Page with Hero Logo
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              expandedHeight: 200,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Hero(
+                  tag: 'appLogo',
+                  child: Image.asset(
+                    'images/logo.png', // Same asset as splash screen
+                    fit: BoxFit.cover,
+                  ),
+                ),
               ),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                Padding(
+                  padding: EdgeInsets.all(20),
+                  child: Column(
+                    children: [
+                      Text('Welcome!',
+                      ),
+                      SizedBox(height: 20),
+                      Text('Your app content goes here...'),
+                    ],
+                  ),
+                ),
+              ]),
             ),
           ],
         ),
       ),
     );
   }
-
-  static void _navigateToCategory(BuildContext context, String category) {
-    Navigator.pop(context);
-    Navigator.push(
-      context,
-      PageRouteBuilder(
-        // Use PageRouteBuilder for custom transition
-        pageBuilder: (context, animation, secondaryAnimation) =>
-            CategoryPage(category: category),
-        transitionsBuilder: (context, animation, secondaryAnimation, child) {
-          const begin = Offset(0.0, 1.0);
-          const end = Offset.zero;
-          const curve = Curves.easeInOut;
-          var tween =
-          Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-          var offsetAnimation = animation.drive(tween);
-
-          return SlideTransition(
-            position: offsetAnimation,
-            child: child,
-          );
-        },
-        transitionDuration:
-        const Duration(milliseconds: 300), // Match bottom sheet duration
-      ),
-    );
-  }
 }
 
-class CategoryPage extends StatelessWidget {
-  final String category;
-
-  const CategoryPage({super.key, required this.category});
-
+// Placeholder pages
+class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(category, style: const TextStyle(color: Colors.white)),
-        centerTitle: true,
-        backgroundColor:
-        const Color.fromARGB(255, 31, 47, 80), // Dark background for AppBar
-        foregroundColor: Colors.white,
-      ),
-      body: Center(
-        child: Text(
-          'This is the page for $category',
-          style: const TextStyle(fontSize: 18, color: Colors.white), // White text
-        ),
-      ),
-      backgroundColor:
-      const Color.fromARGB(255, 31, 47, 80), // Dark background for CategoryPage
-    );
+    return Center(child: Text('Search Page'));
   }
 }
 
+class ProfilePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(child: Text('Profile Page'));
+  }
+}

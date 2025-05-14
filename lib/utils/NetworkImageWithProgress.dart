@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+import 'AppColors.dart';
+
 class NetworkImageWithProgress extends StatefulWidget {
   final String imageUrl;
 
@@ -19,12 +21,7 @@ class _NetworkImageWithProgressState extends State<NetworkImageWithProgress> {
       children: <Widget>[
         // Background Color using Container
         Container(
-          color: Color.fromARGB(
-            255,
-            32,
-            47,
-            80,
-          ), // Replace with your desired color
+          color: AppColors.background, // Replace with your desired color
         ),
 
         //actual image
@@ -90,14 +87,14 @@ void showAlertWithCallback({
           title: Text(title,
             style: TextStyle(
               fontSize: 22,
-              color: Color.fromARGB(255, 31, 47, 80),
+              color: AppColors.background,
               fontWeight: FontWeight.w700,
               fontFamily: "Montserrat",
             ),
             ),
           content: Text(message,
             style: TextStyle(
-              color: Color.fromARGB(255, 31, 47, 80),
+              color: AppColors.background,
               fontFamily: "Montserrat",
             ),),
           actions: [
@@ -108,7 +105,7 @@ void showAlertWithCallback({
               },
               child: Text('OK',
                 style: TextStyle(
-                  color: Color.fromARGB(255, 31, 47, 80),
+                  color: AppColors.background,
                   fontWeight: FontWeight.w600,
                   fontFamily: "Montserrat",
                 ),),
@@ -117,67 +114,3 @@ void showAlertWithCallback({
         ),
   );
 }
-
-// Widget loadImageWithProgress(String imageUrl) {
-//   return Stack(
-//     fit: StackFit.expand, // Make the Stack fill the screen
-//     children: <Widget>[
-//       // Background Color using Container
-//       Container(
-//         color: Color.fromARGB(
-//           255,
-//           32,
-//           47,
-//           80,
-//         ), // Replace with your desired color
-//       ), //
-//       // //Background Image
-//       // ColorFiltered(
-//       //   colorFilter: ColorFilter.mode(
-//       //     Color.fromARGB(150, 0, 0, 0),
-//       //     BlendMode.darken,
-//       //   ),
-//       //
-//       //
-//       //   child:
-//       Image.network(
-//         imageUrl,
-//         fit: BoxFit.cover,
-//         // Cover the entire screen
-//         loadingBuilder: (
-//           BuildContext context,
-//           Widget child,
-//           ImageChunkEvent? loadingProgress,
-//         ) {
-//           if (loadingProgress == null) {
-//             return child; // Image is fully loaded
-//           }
-//           // _progress =
-//           //     loadingProgress.cumulativeBytesLoaded /
-//           //         (loadingProgress.expectedTotalBytes ?? 1); // Calculate progress
-//           return Align(
-//             alignment: Alignment.topCenter,
-//             child: Padding(
-//               padding: EdgeInsets.all(50),
-//               child:
-//               //CircularProgressIndicator(value: _progress)
-//               LoadingAnimationWidget.fourRotatingDots(
-//                 color: Colors.white,
-//                 size: 20,
-//               ),
-//             ),
-//           );
-//         },
-//         errorBuilder: (
-//           BuildContext context,
-//           Object exception,
-//           StackTrace? stackTrace,
-//         ) {
-//           // Handle image loading errors
-//           return errorImagePlaceholder();
-//         },
-//       ), //),
-//       //), //),
-//     ],
-//   );
-// }

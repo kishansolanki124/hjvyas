@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../about/AboutWidgets.dart';
 import '../product_detail/ImageWithProgress.dart';
+import '../utils/AppColors.dart';
 
 class HomePopup extends StatelessWidget {
   final String imageUrl;
@@ -102,7 +103,7 @@ class HomePopup extends StatelessWidget {
                   width: 30,
                   height: 30,
                   decoration: BoxDecoration(
-                    color: Color.fromARGB(255, 31, 47, 80),
+                    color: AppColors.background,
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(

@@ -5,6 +5,7 @@ import 'package:hjvyas/product_detail/ProductDetail.dart';
 
 import '../api/models/ComboDetailResponse.dart';
 import '../api/models/ProductDetailResponse.dart';
+import '../utils/AppColors.dart';
 import 'IngredientsImageWithLoading.dart';
 import 'NetworkImageWithLoading.dart';
 import 'ProductYouMayLikeItem.dart';
@@ -121,13 +122,13 @@ Widget productDetailNameAndPrice(String name, String price, bool isOutOfStock) {
 
       //product name
       Container(
-        color: Color.fromARGB(255, 31, 47, 80),
+        color: AppColors.background,
         child: Padding(
           padding: EdgeInsetsDirectional.fromSTEB(20, 0, 20, 0),
           child: Text(
             name,
             style: TextStyle(
-              backgroundColor: Color.fromARGB(255, 31, 47, 80),
+              backgroundColor: AppColors.background,
               fontSize: 18,
               color: Colors.white,
               fontFamily: "Montserrat",
@@ -165,7 +166,7 @@ Widget productDetailDropDown(
   return Container(
     height: 35,
     decoration: BoxDecoration(
-      border: Border.all(color: Color.fromARGB(255, 123, 138, 195)),
+      border: Border.all(color: AppColors.secondary),
       borderRadius: BorderRadius.circular(0),
       color: Colors.transparent, // Background color
     ),
@@ -182,7 +183,7 @@ Widget productDetailDropDown(
       // Custom icon
       value: _selectedVariant,
       underline: SizedBox(),
-      dropdownColor: Color.fromARGB(255, 31, 47, 80),
+      dropdownColor: AppColors.background,
       // This line hides the bottom line
       items:
           productPackingList.map((ProductPackingListItem variation) {
@@ -197,7 +198,7 @@ Widget productDetailDropDown(
                 // "${variation.productWeight} ${variation.productWeightType} "
                 // "(₹${variation.productPackingPrice}) - ${variation.productPieces} Pieces",
                 style: TextStyle(
-                  backgroundColor: Color.fromARGB(255, 31, 47, 80),
+                  backgroundColor: AppColors.background,
                   fontSize: 12,
                   color: Colors.white,
                   fontFamily: "Montserrat",
@@ -254,7 +255,7 @@ Widget productDetailItemCounter(
   return Container(
     height: 35,
     decoration: BoxDecoration(
-      border: Border.all(color: Color.fromARGB(255, 123, 138, 195)),
+      border: Border.all(color: AppColors.secondary),
       borderRadius: BorderRadius.circular(0),
       color: Colors.transparent, // Background color
     ),
@@ -395,7 +396,7 @@ Widget productDetailIngredients(
                     height: 75,
                     decoration: BoxDecoration(
                       border: Border.all(
-                        color: Color.fromARGB(255, 123, 138, 195),
+                        color: AppColors.secondary,
                       ),
                     ),
                     child: IngredientsImageWithLoading(
@@ -514,7 +515,7 @@ Widget comboDetailYouMayLike(List<ComboMoreListItem> moreItemList) {
               child: Container(
                 width: 120,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Color.fromARGB(255, 123, 138, 195)),
+                  border: Border.all(color: AppColors.secondary),
                 ),
                 child: Column(
                   children: [
@@ -591,15 +592,15 @@ Widget productDetailTabs(tabController, activeTabIndex) {
       indicator: BoxDecoration(
         border: Border(
           top: BorderSide(
-            color: Color.fromARGB(255, 123, 138, 195),
+            color: AppColors.secondary,
             width: 6.0,
           ),
           left: BorderSide(
-            color: Color.fromARGB(255, 123, 138, 195),
+            color: AppColors.secondary,
             width: 1.0,
           ),
           right: BorderSide(
-            color: Color.fromARGB(255, 123, 138, 195),
+            color: AppColors.secondary,
             width: 1.0,
           ),
         ),
@@ -619,7 +620,7 @@ Widget productDetailTabs(tabController, activeTabIndex) {
                   color:
                       activeTabIndex == 0
                           ? Colors.transparent
-                          : Color.fromARGB(255, 123, 138, 195),
+                          : AppColors.secondary,
                   width: 1.0,
                 ),
               ),
@@ -647,7 +648,7 @@ Widget productDetailTabs(tabController, activeTabIndex) {
                   color:
                       activeTabIndex == 1
                           ? Colors.transparent
-                          : Color.fromARGB(255, 123, 138, 195),
+                          : AppColors.secondary,
                   width: 1.0,
                 ),
               ),
@@ -681,15 +682,15 @@ Widget comboDetailTabs(tabController, activeTabIndex) {
       indicator: BoxDecoration(
         border: Border(
           top: BorderSide(
-            color: Color.fromARGB(255, 123, 138, 195),
+            color: AppColors.secondary,
             width: 6.0,
           ),
           left: BorderSide(
-            color: Color.fromARGB(255, 123, 138, 195),
+            color: AppColors.secondary,
             width: 1.0,
           ),
           right: BorderSide(
-            color: Color.fromARGB(255, 123, 138, 195),
+            color: AppColors.secondary,
             width: 1.0,
           ),
         ),
@@ -709,7 +710,7 @@ Widget comboDetailTabs(tabController, activeTabIndex) {
                   color:
                       activeTabIndex == 0
                           ? Colors.transparent
-                          : Color.fromARGB(255, 123, 138, 195),
+                          : AppColors.secondary,
                   width: 1.0,
                 ),
               ),

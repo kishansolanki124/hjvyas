@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hjvyas/splash/splash.dart';
+import 'package:hjvyas/utils/AppColors.dart';
 
 import 'injection_container.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
 
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: Color.fromARGB(255, 32, 47, 80),
+        statusBarColor: AppColors.background,
         statusBarIconBrightness:
         Brightness.light, // For dark icons, use Brightness.dark
       ),

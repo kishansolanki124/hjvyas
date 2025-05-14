@@ -17,6 +17,7 @@ import '../home/navigation.dart';
 import '../injection_container.dart';
 import '../product/ProductPaginationController.dart';
 import '../splash/NoIntternetScreen.dart';
+import '../utils/AppColors.dart';
 import 'CartItemWidget.dart';
 import 'CartPageCheckoutView.dart';
 import 'EmptyCart.dart';
@@ -95,20 +96,20 @@ class _CartPageState extends State<CartPage>
           title: Text('Confirm Delete',
             style: TextStyle(
               fontSize: 22,
-              color: Color.fromARGB(255, 31, 47, 80),
+              color: AppColors.background,
               fontWeight: FontWeight.w700,
               fontFamily: "Montserrat",
             ),),
           content: Text('Are You Sure Want To Delete This Product From Cart?',
             style: TextStyle(
-              color: Color.fromARGB(255, 31, 47, 80),
+              color: AppColors.background,
               fontFamily: "Montserrat",
             ),),
           actions: <Widget>[
             TextButton(
               child: Text('Cancel',
                 style: TextStyle(
-                  color: Color.fromARGB(255, 31, 47, 80),
+                  color: AppColors.background,
                   fontWeight: FontWeight.w600,
                   fontFamily: "Montserrat",
                 ),),
@@ -120,7 +121,7 @@ class _CartPageState extends State<CartPage>
               child: Text(
                 'Delete',
                 style: TextStyle(
-                  color: Color.fromARGB(255, 31, 47, 80),
+                  color: AppColors.background,
                   fontWeight: FontWeight.w600,
                   fontFamily: "Montserrat",
                 ),
@@ -456,7 +457,7 @@ class _CartPageState extends State<CartPage>
 
           return Scaffold(
             appBar: AppBar(
-              backgroundColor: Color.fromARGB(255, 31, 47, 80),
+              backgroundColor: AppColors.background,
               // Make the AppBar background transparent
               elevation: 0,
               // Remove shadow, so the background seamlessly blends with body

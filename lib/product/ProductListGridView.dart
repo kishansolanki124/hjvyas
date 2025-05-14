@@ -9,6 +9,7 @@ import '../home/navigation.dart';
 import '../injection_container.dart';
 import '../product_detail/ImageWithProgress.dart';
 import '../splash/NoIntternetScreen.dart';
+import '../utils/AppColors.dart';
 import '../utils/CommonAppProgress.dart';
 import 'ProductListItemWidget.dart';
 
@@ -289,7 +290,7 @@ class _ProductListGridViewState extends State<ProductListGridView>
                 _showCategoryMenu(context);
               },
               tooltip: 'View Categories',
-              backgroundColor: Color.fromARGB(255, 123, 138, 195),
+              backgroundColor: AppColors.secondary,
               elevation: 8,
               // Add elevation for a shadow
               shape: RoundedRectangleBorder(
@@ -319,7 +320,7 @@ class _ProductListGridViewState extends State<ProductListGridView>
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           margin: const EdgeInsets.only(top: 20),
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 31, 47, 80),
+            color: AppColors.background,
             // Darker background for bottom sheet
             borderRadius: BorderRadius.circular(20), // More rounded corners
           ),
@@ -378,7 +379,7 @@ class _ProductListGridViewState extends State<ProductListGridView>
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Color.fromARGB(255, 123, 138, 195),
+                  backgroundColor: AppColors.secondary,
                   foregroundColor: Colors.white,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),

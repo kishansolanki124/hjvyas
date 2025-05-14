@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../utils/AppColors.dart';
+
 class NoInternetScreen extends StatelessWidget {
   final VoidCallback onRetry;
   bool showBackgroundImage = true;
@@ -42,7 +44,7 @@ class NoInternetScreen extends StatelessWidget {
                         return Icon(
                           Icons.signal_wifi_off_rounded,
                           size: 120,
-                          color: Color.fromARGB(255, 123, 138, 195),
+                          color: AppColors.secondary,
                         );
                       },
                     ),
@@ -77,7 +79,7 @@ class NoInternetScreen extends StatelessWidget {
                     ElevatedButton(
                       onPressed: onRetry,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 123, 138, 195),
+                        backgroundColor: AppColors.secondary,
                         foregroundColor: Colors.white,
                         minimumSize: const Size(180, 48),
                         shape: RoundedRectangleBorder(
@@ -124,7 +126,7 @@ class NoInternetScreen extends StatelessWidget {
                 return Icon(
                   Icons.signal_wifi_off_rounded,
                   size: 120,
-                  color: Color.fromARGB(255, 123, 138, 195),
+                  color: AppColors.secondary,
                 );
               },
             ),
@@ -159,7 +161,7 @@ class NoInternetScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: onRetry,
               style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 123, 138, 195),
+                backgroundColor: AppColors.secondary,
                 foregroundColor: Colors.white,
                 minimumSize: const Size(180, 48),
                 shape: RoundedRectangleBorder(

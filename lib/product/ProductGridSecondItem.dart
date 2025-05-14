@@ -51,19 +51,16 @@ class _ProductGridSecondItemState extends State<ProductGridSecondItem> {
                 productListVariationWidget(
                   widget.price,
                   widget.productWeight,
-                  //Color.fromARGB(255, 1, 1, 1),
                 ),
 
               //"Product life: 300 days"
               if (widget.productSoldout.isEmpty)
                 productListLife(widget.productLife,
-                    //Color.fromARGB(255, 139, 139, 139)
                 ),
 
               //"Calories: 470"
               if (widget.productSoldout.isEmpty)
                 productListCalories(widget.calories,
-                    //Color.fromARGB(255, 139, 139, 139)
                     ),
 
               if (widget.productSoldout.isNotEmpty) soldOutText(),

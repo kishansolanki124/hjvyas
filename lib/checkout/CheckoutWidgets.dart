@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../api/models/ShippingStatusResponse.dart';
+import '../utils/AppColors.dart';
 
 Widget CartTotalRow(String title, String value, double bottomPadding) {
   return Padding(
@@ -183,7 +184,7 @@ Widget paymentOptions(
             style: TextStyle(
               fontSize: 12.0,
               fontFamily: "Montserrat",
-              color: Color.fromARGB(255, 123, 138, 195),
+              color: AppColors.secondary,
             ),
           ),
         ),
@@ -321,7 +322,7 @@ Widget CheckoutAddressWidget(
             borderRadius: BorderRadius.all(Radius.circular(0)),
             borderSide: BorderSide(
               width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+              color: AppColors.secondary,
             ),
           ),
 
@@ -329,7 +330,7 @@ Widget CheckoutAddressWidget(
             borderRadius: BorderRadius.all(Radius.circular(0)),
             borderSide: BorderSide(
               width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+              color: AppColors.secondary,
             ),
           ),
 
@@ -363,7 +364,7 @@ Widget CheckoutAddressWidget(
             borderRadius: BorderRadius.all(Radius.circular(0)),
             borderSide: BorderSide(
               width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+              color: AppColors.secondary,
             ),
           ),
 
@@ -371,7 +372,7 @@ Widget CheckoutAddressWidget(
             borderRadius: BorderRadius.all(Radius.circular(0)),
             borderSide: BorderSide(
               width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+              color: AppColors.secondary,
             ),
           ),
 
@@ -384,7 +385,7 @@ Widget CheckoutAddressWidget(
         style: TextStyle(
           fontSize: 12.0,
           fontFamily: "Montserrat",
-          color: Color.fromARGB(255, 123, 138, 195),
+          color: AppColors.secondary,
         ),
       ),
 
@@ -412,14 +413,14 @@ Widget CheckoutAddressWidget(
       //       borderRadius: BorderRadius.all(Radius.circular(0)),
       //       borderSide: BorderSide(
       //         width: 1,
-      //         color: Color.fromARGB(255, 123, 138, 195),
+      //         color: AppColors.secondary,
       //       ),
       //     ),
       //     enabledBorder: OutlineInputBorder(
       //       borderRadius: BorderRadius.all(Radius.circular(0)),
       //       borderSide: BorderSide(
       //         width: 1,
-      //         color: Color.fromARGB(255, 123, 138, 195),
+      //         color: AppColors.secondary,
       //       ),
       //     ),
       //     contentPadding: EdgeInsets.all(8),
@@ -451,14 +452,14 @@ Widget CheckoutAddressWidget(
       //       borderRadius: BorderRadius.all(Radius.circular(0)),
       //       borderSide: BorderSide(
       //         width: 1,
-      //         color: Color.fromARGB(255, 123, 138, 195),
+      //         color: AppColors.secondary,
       //       ),
       //     ),
       //     enabledBorder: OutlineInputBorder(
       //       borderRadius: BorderRadius.all(Radius.circular(0)),
       //       borderSide: BorderSide(
       //         width: 1,
-      //         color: Color.fromARGB(255, 123, 138, 195),
+      //         color: AppColors.secondary,
       //       ),
       //     ),
       //     contentPadding: EdgeInsets.all(8),
@@ -497,7 +498,7 @@ Widget CheckoutAddressWidget(
             borderRadius: BorderRadius.all(Radius.circular(0)),
             borderSide: BorderSide(
               width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+              color: AppColors.secondary,
             ),
           ),
 
@@ -505,7 +506,7 @@ Widget CheckoutAddressWidget(
             borderRadius: BorderRadius.all(Radius.circular(0)),
             borderSide: BorderSide(
               width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+              color: AppColors.secondary,
             ),
           ),
 
@@ -518,7 +519,7 @@ Widget CheckoutAddressWidget(
         style: TextStyle(
           fontSize: 12.0,
           fontFamily: "Montserrat",
-          color: Color.fromARGB(255, 123, 138, 195),
+          color: AppColors.secondary,
         ),
       ),
 
@@ -550,14 +551,14 @@ Widget CheckoutAddressWidget(
             borderRadius: BorderRadius.all(Radius.circular(0)),
             borderSide: BorderSide(
               width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+              color: AppColors.secondary,
             ),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(0)),
             borderSide: BorderSide(
               width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+              color: AppColors.secondary,
             ),
           ),
           contentPadding: EdgeInsets.all(8),
@@ -591,14 +592,14 @@ Widget CheckoutAddressWidget(
               borderRadius: BorderRadius.all(Radius.circular(0)),
               borderSide: BorderSide(
                 width: 1,
-                color: Color.fromARGB(255, 123, 138, 195),
+                color: AppColors.secondary,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(0)),
               borderSide: BorderSide(
                 width: 1,
-                color: Color.fromARGB(255, 123, 138, 195),
+                color: AppColors.secondary,
               ),
             ),
             contentPadding: EdgeInsets.all(8),
@@ -618,7 +619,7 @@ Widget CheckoutAddressWidget(
           //height: 40,
           // Fixed height
           decoration: BoxDecoration(
-            border: Border.all(color: Color.fromARGB(255, 123, 138, 195)),
+            border: Border.all(color: AppColors.secondary),
             borderRadius: BorderRadius.circular(0),
             color: Colors.transparent, // Background color
           ),
@@ -642,7 +643,7 @@ Widget CheckoutAddressWidget(
                     child: Text(
                       item.stateName,
                       style: TextStyle(
-                        backgroundColor: Color.fromARGB(255, 31, 47, 80),
+                        backgroundColor: AppColors.background,
                         fontSize: 14,
                         color: Colors.white,
                         fontFamily: "Montserrat",
@@ -661,7 +662,7 @@ Widget CheckoutAddressWidget(
               //   'icons/dropdown_icon.png',
               // ),
             ),
-            dropdownColor: Color.fromARGB(255, 31, 47, 80),
+            dropdownColor: AppColors.background,
             //underline: SizedBox(),
           ),
         ),
@@ -693,14 +694,14 @@ Widget CheckoutAddressWidget(
               borderRadius: BorderRadius.all(Radius.circular(0)),
               borderSide: BorderSide(
                 width: 1,
-                color: Color.fromARGB(255, 123, 138, 195),
+                color: AppColors.secondary,
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(0)),
               borderSide: BorderSide(
                 width: 1,
-                color: Color.fromARGB(255, 123, 138, 195),
+                color: AppColors.secondary,
               ),
             ),
             contentPadding: EdgeInsets.all(8),
@@ -737,7 +738,7 @@ Widget CheckoutAddressWidget(
             borderRadius: BorderRadius.all(Radius.circular(0)),
             borderSide: BorderSide(
               width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+              color: AppColors.secondary,
             ),
           ),
 
@@ -745,7 +746,7 @@ Widget CheckoutAddressWidget(
             borderRadius: BorderRadius.all(Radius.circular(0)),
             borderSide: BorderSide(
               width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+              color: AppColors.secondary,
             ),
           ),
 
@@ -782,7 +783,7 @@ Widget CheckoutAddressWidget(
             borderRadius: BorderRadius.all(Radius.circular(0)),
             borderSide: BorderSide(
               width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+              color: AppColors.secondary,
             ),
           ),
 
@@ -790,7 +791,7 @@ Widget CheckoutAddressWidget(
             borderRadius: BorderRadius.all(Radius.circular(0)),
             borderSide: BorderSide(
               width: 1,
-              color: Color.fromARGB(255, 123, 138, 195),
+              color: AppColors.secondary,
             ),
           ),
 
@@ -812,7 +813,7 @@ Widget CheckoutAddressWidget(
             //remove padding
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             //remove padding
-            checkColor: Color.fromARGB(255, 123, 138, 195),
+            checkColor: AppColors.secondary,
             // Color of the tick
             fillColor: WidgetStatePropertyAll(Colors.white),
           ),
@@ -860,7 +861,7 @@ Widget CheckoutAddressWidget(
               borderRadius: BorderRadius.all(Radius.circular(0)),
               borderSide: BorderSide(
                 width: 1,
-                color: Color.fromARGB(255, 123, 138, 195),
+                color: AppColors.secondary,
               ),
             ),
 
@@ -868,7 +869,7 @@ Widget CheckoutAddressWidget(
               borderRadius: BorderRadius.all(Radius.circular(0)),
               borderSide: BorderSide(
                 width: 1,
-                color: Color.fromARGB(255, 123, 138, 195),
+                color: AppColors.secondary,
               ),
             ),
 
@@ -903,7 +904,7 @@ Widget CheckoutAddressWidget(
               borderRadius: BorderRadius.all(Radius.circular(0)),
               borderSide: BorderSide(
                 width: 1,
-                color: Color.fromARGB(255, 123, 138, 195),
+                color: AppColors.secondary,
               ),
             ),
 
@@ -911,7 +912,7 @@ Widget CheckoutAddressWidget(
               borderRadius: BorderRadius.all(Radius.circular(0)),
               borderSide: BorderSide(
                 width: 1,
-                color: Color.fromARGB(255, 123, 138, 195),
+                color: AppColors.secondary,
               ),
             ),
 
@@ -945,7 +946,7 @@ Widget CheckoutAddressWidget(
               borderRadius: BorderRadius.all(Radius.circular(0)),
               borderSide: BorderSide(
                 width: 1,
-                color: Color.fromARGB(255, 123, 138, 195),
+                color: AppColors.secondary,
               ),
             ),
 
@@ -953,7 +954,7 @@ Widget CheckoutAddressWidget(
               borderRadius: BorderRadius.all(Radius.circular(0)),
               borderSide: BorderSide(
                 width: 1,
-                color: Color.fromARGB(255, 123, 138, 195),
+                color: AppColors.secondary,
               ),
             ),
 
@@ -990,7 +991,7 @@ Widget CheckoutAddressWidget(
               borderRadius: BorderRadius.all(Radius.circular(0)),
               borderSide: BorderSide(
                 width: 1,
-                color: Color.fromARGB(255, 123, 138, 195),
+                color: AppColors.secondary,
               ),
             ),
 
@@ -998,7 +999,7 @@ Widget CheckoutAddressWidget(
               borderRadius: BorderRadius.all(Radius.circular(0)),
               borderSide: BorderSide(
                 width: 1,
-                color: Color.fromARGB(255, 123, 138, 195),
+                color: AppColors.secondary,
               ),
             ),
 
@@ -1021,7 +1022,7 @@ Widget CheckoutAddressWidget(
             //remove padding
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             //remove padding
-            checkColor: Color.fromARGB(255, 123, 138, 195),
+            checkColor: AppColors.secondary,
             // Color of the tick
             fillColor: WidgetStatePropertyAll(Colors.white),
           ),
@@ -1048,8 +1049,8 @@ Widget CheckoutAddressWidget(
               '(Terms & Conditions)',
               style: TextStyle(
                 decoration: TextDecoration.underline,
-                decorationColor: Color.fromARGB(255, 123, 138, 195),
-                color: Color.fromARGB(255, 123, 138, 195),
+                decorationColor: AppColors.secondary,
+                color: AppColors.secondary,
                 fontFamily: "Montserrat",
                 fontSize: 12,
               ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 import '../api/models/StaticPageResponse.dart';
+import '../utils/AppColors.dart';
 
 Widget AboutUsContentWidget(
   String webpageTitle,
@@ -21,7 +22,7 @@ Widget AboutUsContentWidget(
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Color.fromARGB(255, 123, 138, 195),
+                      color: AppColors.secondary,
                       width: 2.0,
                     ),
                     borderRadius: BorderRadius.circular(0),
@@ -80,7 +81,7 @@ Widget AboutUsContentWidget(
           children: [
             Center(
               child: Container(
-                color: Color.fromARGB(255, 31, 47, 80),
+                color: AppColors.background,
                 child: Padding(
                   padding: EdgeInsets.all(8),
                   child: Text(

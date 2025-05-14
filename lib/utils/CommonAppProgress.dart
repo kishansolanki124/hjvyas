@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 
+import 'AppColors.dart';
+
 Widget getCommonProgressBarFullScreen() {
   return Scaffold(
     body: Container(
@@ -64,7 +66,7 @@ void showSnackbar(BuildContext context, String s) {
   hideKeyboard(context);
   var snackBar = SnackBar(
     duration: const Duration(seconds: 5), // Keep it visible for a while
-    backgroundColor: Color.fromARGB(255, 123, 138, 195),
+    backgroundColor: AppColors.secondary,
     content: Text(
       s,
       style: TextStyle(
@@ -76,7 +78,7 @@ void showSnackbar(BuildContext context, String s) {
     ),
     action: SnackBarAction(
       label: 'OK', // Label for the button
-      textColor: Color.fromARGB(255, 31, 47, 80),
+      textColor: AppColors.background,
       onPressed: () {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
       },

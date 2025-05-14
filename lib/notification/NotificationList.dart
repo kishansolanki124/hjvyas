@@ -6,6 +6,7 @@ import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product_detail/ProductDetailWidget.dart';
 import '../splash/NoIntternetScreen.dart';
+import '../utils/AppColors.dart';
 import '../utils/CommonAppProgress.dart';
 import 'NotificationListItemWdiget.dart';
 import 'NotificationPaginationController.dart';
@@ -69,15 +70,15 @@ class _NotificationListState extends State<NotificationList> {
                     decoration: BoxDecoration(
                       border: Border(
                         left: BorderSide(
-                          color: Color.fromARGB(255, 123, 138, 195),
+                          color: AppColors.secondary,
                           width: 2.0,
                         ),
                         bottom: BorderSide(
-                          color: Color.fromARGB(255, 123, 138, 195),
+                          color: AppColors.secondary,
                           width: 2.0,
                         ),
                         right: BorderSide(
-                          color: Color.fromARGB(255, 123, 138, 195),
+                          color: AppColors.secondary,
                           width: 2.0,
                         ),
                       ),
@@ -98,7 +99,7 @@ class _NotificationListState extends State<NotificationList> {
                       // Title
                       Center(
                         child: Container(
-                          color: Color.fromARGB(255, 31, 47, 80),
+                          color: AppColors.background,
                           child: Padding(
                             padding: EdgeInsets.all(10),
                             child: Text(

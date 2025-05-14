@@ -9,6 +9,7 @@ import '../cart/CartHome.dart';
 import '../combo/Combo.dart';
 import '../menu/MenuScreen.dart';
 import '../product/ProductListGridView.dart';
+import '../utils/AppColors.dart';
 import 'HomeView.dart';
 
 class NavigationBarApp extends StatefulWidget {
@@ -23,7 +24,7 @@ class _NavigationBarAppState extends State<NavigationBarApp> {
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
-        statusBarColor: Color.fromARGB(255, 32, 47, 80),
+        statusBarColor: AppColors.background,
         statusBarIconBrightness:
             Brightness.light, // For dark icons, use Brightness.dark
       ),
@@ -34,7 +35,7 @@ class _NavigationBarAppState extends State<NavigationBarApp> {
       theme: ThemeData(
         useMaterial3: true,
         textSelectionTheme: TextSelectionThemeData(
-          cursorColor: Color.fromARGB(255, 123, 138, 195), //cursor color
+          cursorColor: AppColors.secondary, //cursor color
         ),
       ),
       home: const NavigationExample(),
@@ -217,7 +218,7 @@ class _NavigationExampleState extends State<NavigationExample>
   Widget build(BuildContext context) {
     //final ThemeData theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 32, 47, 80),
+      backgroundColor: AppColors.background,
       body: homeNavigationWidget,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: SlideTransition(
@@ -226,7 +227,7 @@ class _NavigationExampleState extends State<NavigationExample>
           padding: const EdgeInsets.fromLTRB(10.0, 0, 10.0, 0),
           child: DecoratedBox(
             decoration: BoxDecoration(
-              color: Color.fromARGB(225, 255, 255, 255),
+              color: AppColors.semiTransWhite,
               borderRadius: BorderRadius.circular(20),
             ),
             child: BottomNavigationBar(
@@ -239,7 +240,7 @@ class _NavigationExampleState extends State<NavigationExample>
               selectedLabelStyle: TextStyle(
                 fontSize: 10.0,
                 fontFamily: "Montserrat",
-                color: Color.fromARGB(255, 101, 115, 169),
+                color: AppColors.secondary,
                 fontWeight: FontWeight.w700,
               ),
               type: BottomNavigationBarType.fixed,
@@ -304,7 +305,7 @@ class _NavigationExampleState extends State<NavigationExample>
                 ),
               ],
               currentIndex: currentPageIndex,
-              selectedItemColor: Color.fromARGB(255, 101, 115, 169),
+              selectedItemColor: AppColors.secondary,
               onTap: _onItemTapped,
             ),
           ),

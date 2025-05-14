@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../home/navigation.dart';
 import '../product_detail/ProductDetailWidget.dart';
+import '../utils/AppColors.dart';
 
 class EmptyCart extends StatefulWidget {
   bool showBackButton = false;
@@ -81,7 +82,7 @@ class _EmptyCartState extends State<EmptyCart>
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
                             colors: [
-                              const Color.fromARGB(255, 123, 138, 195),
+                              AppColors.secondary,
                               //Colors.white.withOpacity(0.7),
                               Color.fromARGB(200, 255, 255, 255),
                             ],
@@ -137,12 +138,7 @@ class _EmptyCartState extends State<EmptyCart>
                         }
                       },
                       style: FilledButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(
-                          255,
-                          123,
-                          138,
-                          195,
-                        ),
+                        backgroundColor: AppColors.secondary,
                         foregroundColor: Colors.white,
                         shape: StadiumBorder(),
                         padding: const EdgeInsets.symmetric(

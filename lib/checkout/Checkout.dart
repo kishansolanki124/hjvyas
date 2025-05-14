@@ -20,6 +20,7 @@ import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../product_detail/ProductDetailWidget.dart';
 import '../repositories/HJVyasRepository.dart';
+import '../utils/AppColors.dart';
 import '../utils/CommonAppProgress.dart';
 import 'CheckoutController.dart';
 import 'PayPalItem.dart';
@@ -263,7 +264,7 @@ class _CheckoutState extends State<Checkout> {
             "Alert",
             style: TextStyle(
               fontSize: 22,
-              color: Color.fromARGB(255, 31, 47, 80),
+              color: AppColors.background,
               fontWeight: FontWeight.w700,
               fontFamily: "Montserrat",
             ),
@@ -275,7 +276,7 @@ class _CheckoutState extends State<Checkout> {
               Text(
                 errorMessage,
                 style: TextStyle(
-                  color: Color.fromARGB(255, 31, 47, 80),
+                  color: AppColors.background,
                   fontFamily: "Montserrat",
                 ),
               ),
@@ -287,7 +288,7 @@ class _CheckoutState extends State<Checkout> {
               child: const Text(
                 "OK",
                 style: TextStyle(
-                  color: Color.fromARGB(255, 31, 47, 80),
+                  color: AppColors.background,
                   fontWeight: FontWeight.w600,
                   fontFamily: "Montserrat",
                 ),
@@ -1146,15 +1147,15 @@ class _CheckoutState extends State<Checkout> {
                     decoration: BoxDecoration(
                       border: Border(
                         left: BorderSide(
-                          color: Color.fromARGB(255, 123, 138, 195),
+                          color: AppColors.secondary,
                           width: 2.0,
                         ),
                         bottom: BorderSide(
-                          color: Color.fromARGB(255, 123, 138, 195),
+                          color: AppColors.secondary,
                           width: 2.0,
                         ),
                         right: BorderSide(
-                          color: Color.fromARGB(255, 123, 138, 195),
+                          color: AppColors.secondary,
                           width: 2.0,
                         ),
                       ),
@@ -1177,7 +1178,7 @@ class _CheckoutState extends State<Checkout> {
                         // Title
                         Center(
                           child: Container(
-                            color: Color.fromARGB(255, 31, 47, 80),
+                            color: AppColors.background,
                             child: Padding(
                               padding: EdgeInsets.all(10),
                               child: Text(
@@ -1245,12 +1246,7 @@ class _CheckoutState extends State<Checkout> {
                                     margin: EdgeInsets.only(top: 20),
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: Color.fromARGB(
-                                          255,
-                                          123,
-                                          138,
-                                          195,
-                                        ),
+                                        color: AppColors.secondary,
                                       ),
                                       borderRadius: BorderRadius.circular(0),
                                     ),
@@ -1450,12 +1446,7 @@ class _CheckoutState extends State<Checkout> {
                                       // Fixed height
                                       decoration: BoxDecoration(
                                         border: Border.all(
-                                          color: Color.fromARGB(
-                                            255,
-                                            123,
-                                            138,
-                                            195,
-                                          ),
+                                          color: AppColors.secondary,
                                         ),
                                         borderRadius: BorderRadius.circular(0),
                                         color:
@@ -1506,12 +1497,7 @@ class _CheckoutState extends State<Checkout> {
                                                       item.countryName,
                                                       style: TextStyle(
                                                         backgroundColor:
-                                                            Color.fromARGB(
-                                                              255,
-                                                              31,
-                                                              47,
-                                                              80,
-                                                            ),
+                                                        AppColors.background,
                                                         fontSize: 14,
                                                         color: Colors.white,
                                                         fontFamily:
@@ -1534,12 +1520,7 @@ class _CheckoutState extends State<Checkout> {
                                           //   'icons/dropdown_icon.png',
                                           // ),
                                         ),
-                                        dropdownColor: Color.fromARGB(
-                                          255,
-                                          31,
-                                          47,
-                                          80,
-                                        ),
+                                        dropdownColor: AppColors.background,
                                         //underline: SizedBox(),
                                       ),
                                     ),
@@ -1590,12 +1571,7 @@ class _CheckoutState extends State<Checkout> {
                                           ),
                                           borderSide: BorderSide(
                                             width: 1,
-                                            color: Color.fromARGB(
-                                              255,
-                                              123,
-                                              138,
-                                              195,
-                                            ),
+                                            color: AppColors.secondary,
                                           ),
                                         ),
                                         // disabledBorder: OutlineInputBorder(
@@ -1608,12 +1584,7 @@ class _CheckoutState extends State<Checkout> {
                                           ),
                                           borderSide: BorderSide(
                                             width: 1,
-                                            color: Color.fromARGB(
-                                              255,
-                                              123,
-                                              138,
-                                              195,
-                                            ),
+                                            color: AppColors.secondary,
                                           ),
                                         ),
 
@@ -1630,12 +1601,7 @@ class _CheckoutState extends State<Checkout> {
                                           onContinueClick();
                                         },
                                         style: ElevatedButton.styleFrom(
-                                          backgroundColor: Color.fromARGB(
-                                            255,
-                                            123,
-                                            138,
-                                            195,
-                                          ),
+                                          backgroundColor: AppColors.secondary,
                                           // Sky color
                                           //foregroundColor: Colors.black,
                                           // Black text color
@@ -1745,12 +1711,7 @@ class _CheckoutState extends State<Checkout> {
                                             child: ElevatedButton(
                                               onPressed: onOrderPlaced,
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor: Color.fromARGB(
-                                                  255,
-                                                  123,
-                                                  138,
-                                                  195,
-                                                ),
+                                                backgroundColor: AppColors.secondary,
                                                 // Sky color
                                                 //foregroundColor: Colors.black,
                                                 // Black text color
@@ -1795,12 +1756,7 @@ class _CheckoutState extends State<Checkout> {
                                             .elementAt(0)
                                             .shippingTerms,
                                         style: TextStyle(
-                                          color: Color.fromARGB(
-                                            255,
-                                            123,
-                                            138,
-                                            195,
-                                          ),
+                                          color: AppColors.secondary,
                                           fontSize: 10.0,
                                           fontFamily: "Montserrat",
                                         ),

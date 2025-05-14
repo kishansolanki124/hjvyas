@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../api/models/ProductTesterResponse.dart';
 import '../product_detail/NetworkImageWithLoading.dart';
+import '../utils/AppColors.dart';
 
 class TesterItemWidget extends StatefulWidget {
   ProductTesterListItem productTesterListItem;
@@ -108,7 +109,7 @@ class _TesterItemWidgetState extends State<TesterItemWidget>
                 child: Container(
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Color.fromARGB(255, 123, 138, 195),
+                      color: AppColors.secondary,
                       width: 1.0,
                     ),
                     borderRadius: BorderRadius.circular(0),
@@ -127,7 +128,7 @@ class _TesterItemWidgetState extends State<TesterItemWidget>
                     height: 35,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Color.fromARGB(255, 31, 47, 80),
+                      color: AppColors.background,
                     ),
                     child: Container(
                       width: 30,
@@ -137,7 +138,7 @@ class _TesterItemWidgetState extends State<TesterItemWidget>
                         color: Colors.white,
                         border: Border.all(
                           width: 5,
-                          color: Color.fromARGB(255, 31, 47, 80),
+                          color: AppColors.background,
                         ),
                       ),
                     ),
@@ -160,7 +161,7 @@ class _TesterItemWidgetState extends State<TesterItemWidget>
                       height: 30,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Color.fromARGB(255, 31, 47, 80),
+                        color: AppColors.background,
                         border: Border.all(width: 2, color: Colors.white),
                       ),
                     ),

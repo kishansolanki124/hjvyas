@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hjvyas/product_detail/ImageWithProgress.dart';
 
+import '../utils/AppColors.dart';
+
 Widget productListTitleWidget(String title, [Color? color, double? topMargin]) {
   color ??= Colors.white;
   topMargin ??= 10.0;
@@ -14,7 +16,6 @@ Widget productListTitleWidget(String title, [Color? color, double? topMargin]) {
       style: TextStyle(
         height: 1.2,
         color: color,
-        //color: Color.fromARGB(255, 255, 255, 254),
         fontSize: 16,
         fontFamily: "Montserrat",
         fontWeight: FontWeight.w700,
@@ -45,7 +46,7 @@ Widget productListVariationWidget(
 }
 
 Widget productListLife(String life, [Color? color]) {
-  color ??= Color.fromARGB(255, 123, 138, 195);
+  color ??= AppColors.secondary;
 
   return Padding(
     padding: const EdgeInsets.fromLTRB(30.0, 5, 30, 0),
@@ -57,7 +58,7 @@ Widget productListLife(String life, [Color? color]) {
 }
 
 Widget productListCalories(String calories, [Color? color]) {
-  color ??= Color.fromARGB(255, 123, 138, 195);
+  color ??= AppColors.secondary;
 
   return Padding(
     padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 10),
@@ -69,7 +70,7 @@ Widget productListCalories(String calories, [Color? color]) {
 }
 
 Widget productComboSpecification(String calories, [Color? color]) {
-  color ??= Color.fromARGB(255, 123, 138, 195);
+  color ??= AppColors.secondary;
 
   return Padding(
     padding: const EdgeInsets.fromLTRB(30.0, 0, 30, 10),
@@ -81,7 +82,7 @@ Widget productComboSpecification(String calories, [Color? color]) {
 }
 
 Widget productListImage(String url, [Color? color]) {
-  //color ??= Color.fromARGB(255, 123, 138, 195);
+  //color ??= AppColors.secondary;
   color ??= Colors.transparent;
 
   // return Card(
@@ -185,7 +186,7 @@ Widget productListColoredBorderBox(double marginTop, double marginBottom) {
       top: marginTop,
     ),
     decoration: BoxDecoration(
-      border: Border.all(color: Color.fromARGB(255, 123, 138, 195), width: 2),
+      border: Border.all(color: AppColors.secondary, width: 2),
       borderRadius: BorderRadius.all(Radius.circular(0)),
     ),
   );
@@ -234,7 +235,7 @@ Widget soldOutText() {
       Padding(
         padding: EdgeInsets.fromLTRB(32, 16, 16, 16),
         child: Container(
-          color: Color.fromARGB(255, 123, 138, 195),
+          color: AppColors.secondary,
           child: Padding(
             padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
             child: Text(

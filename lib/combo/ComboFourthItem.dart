@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hjvyas/product/ProductListWidgets.dart';
+import 'package:hjvyas/utils/AppColors.dart';
 
 class ComboFourthItem extends StatelessWidget {
   final String imageUrl;
@@ -29,7 +30,7 @@ class ComboFourthItem extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            productListImage(imageUrl, Color.fromARGB(255, 123, 138, 195)),
+            productListImage(imageUrl, AppColors.secondary),
 
             productListTitleWidget(title),
 

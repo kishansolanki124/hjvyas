@@ -7,6 +7,7 @@ import '../api/services/HJVyasApiService.dart';
 import '../injection_container.dart';
 import '../menu/CategoryController.dart';
 import '../repositories/HJVyasRepository.dart';
+import '../utils/AppColors.dart';
 
 class TermsAndConditionPopup extends StatefulWidget {
   final CategoryController categoryController = CategoryController(
@@ -49,7 +50,7 @@ class _TermsAndConditionPopupState extends State<TermsAndConditionPopup> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Color.fromARGB(255, 31, 47, 80),
+        color: AppColors.background,
         child: Column(
           children: [
             Stack(

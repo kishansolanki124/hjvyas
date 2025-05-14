@@ -9,6 +9,7 @@ import 'package:url_launcher/url_launcher_string.dart';
 
 import '../api/models/ContactusResponse.dart';
 import '../menu/CategoryController.dart';
+import '../utils/AppColors.dart';
 import '../utils/CommonAppProgress.dart';
 import '../utils/NetworkImageWithProgress.dart';
 
@@ -139,7 +140,7 @@ class _ContactUsState extends State<ContactUs> {
               child: Text(
                 phoneNumber1,
                 style: TextStyle(
-                  color: Color.fromARGB(255, 31, 47, 80),
+                  color: AppColors.background,
                   fontWeight: FontWeight.w600,
                   fontFamily: "Montserrat",
                 ),
@@ -153,7 +154,7 @@ class _ContactUsState extends State<ContactUs> {
               child: Text(
                 phoneNumber2,
                 style: TextStyle(
-                  color: Color.fromARGB(255, 31, 47, 80),
+                  color: AppColors.background,
                   fontWeight: FontWeight.w600,
                   fontFamily: "Montserrat",
                 ),
@@ -261,7 +262,7 @@ class _ContactUsState extends State<ContactUs> {
                         margin: EdgeInsets.only(top: 20),
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Color.fromARGB(255, 123, 138, 195),
+                            color: AppColors.secondary,
                           ),
                           borderRadius: BorderRadius.circular(0),
                         ),
@@ -390,7 +391,7 @@ class _ContactUsState extends State<ContactUs> {
                         children: [
                           Center(
                             child: Container(
-                              color: Color.fromARGB(255, 31, 47, 80),
+                              color: AppColors.background,
                               child: Padding(
                                 padding: EdgeInsets.all(8),
                                 child: Text(
@@ -436,7 +437,7 @@ class _ContactUsState extends State<ContactUs> {
                         // Fixed height
                         decoration: BoxDecoration(
                           border: Border.all(
-                            color: Color.fromARGB(255, 123, 138, 195),
+                            color: AppColors.secondary,
                           ),
                           borderRadius: BorderRadius.circular(0),
                           color: Colors.transparent, // Background color
@@ -471,12 +472,7 @@ class _ContactUsState extends State<ContactUs> {
                                   child: Text(
                                     item,
                                     style: TextStyle(
-                                      backgroundColor: Color.fromARGB(
-                                        255,
-                                        31,
-                                        47,
-                                        80,
-                                      ),
+                                      backgroundColor: AppColors.background,
                                       fontSize: 14,
                                       color: Colors.white,
                                       fontFamily: "Montserrat",
@@ -495,7 +491,7 @@ class _ContactUsState extends State<ContactUs> {
                             //   'icons/dropdown_icon.png',
                             // ),
                           ),
-                          dropdownColor: Color.fromARGB(255, 31, 47, 80),
+                          dropdownColor: AppColors.background,
                           //underline: SizedBox(),
                         ),
                       ), // inquiryDropdown(
@@ -529,7 +525,7 @@ class _ContactUsState extends State<ContactUs> {
                             borderRadius: BorderRadius.all(Radius.circular(0)),
                             borderSide: BorderSide(
                               width: 1,
-                              color: Color.fromARGB(255, 123, 138, 195),
+                              color: AppColors.secondary,
                             ),
                           ),
                           // disabledBorder: OutlineInputBorder(
@@ -540,7 +536,7 @@ class _ContactUsState extends State<ContactUs> {
                             borderRadius: BorderRadius.all(Radius.circular(0)),
                             borderSide: BorderSide(
                               width: 1,
-                              color: Color.fromARGB(255, 123, 138, 195),
+                              color: AppColors.secondary,
                             ),
                           ),
 
@@ -574,7 +570,7 @@ class _ContactUsState extends State<ContactUs> {
                             borderRadius: BorderRadius.all(Radius.circular(0)),
                             borderSide: BorderSide(
                               width: 1,
-                              color: Color.fromARGB(255, 123, 138, 195),
+                              color: AppColors.secondary,
                             ),
                           ),
 
@@ -582,7 +578,7 @@ class _ContactUsState extends State<ContactUs> {
                             borderRadius: BorderRadius.all(Radius.circular(0)),
                             borderSide: BorderSide(
                               width: 1,
-                              color: Color.fromARGB(255, 123, 138, 195),
+                              color: AppColors.secondary,
                             ),
                           ),
 
@@ -621,7 +617,7 @@ class _ContactUsState extends State<ContactUs> {
                             borderRadius: BorderRadius.all(Radius.circular(0)),
                             borderSide: BorderSide(
                               width: 1,
-                              color: Color.fromARGB(255, 123, 138, 195),
+                              color: AppColors.secondary,
                             ),
                           ),
 
@@ -629,7 +625,7 @@ class _ContactUsState extends State<ContactUs> {
                             borderRadius: BorderRadius.all(Radius.circular(0)),
                             borderSide: BorderSide(
                               width: 1,
-                              color: Color.fromARGB(255, 123, 138, 195),
+                              color: AppColors.secondary,
                             ),
                           ),
 
@@ -663,14 +659,14 @@ class _ContactUsState extends State<ContactUs> {
                             borderRadius: BorderRadius.all(Radius.circular(0)),
                             borderSide: BorderSide(
                               width: 1,
-                              color: Color.fromARGB(255, 123, 138, 195),
+                              color: AppColors.secondary,
                             ),
                           ),
                           enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.all(Radius.circular(0)),
                             borderSide: BorderSide(
                               width: 1,
-                              color: Color.fromARGB(255, 123, 138, 195),
+                              color: AppColors.secondary,
                             ),
                           ),
                           contentPadding: EdgeInsets.all(8),
@@ -708,7 +704,7 @@ class _ContactUsState extends State<ContactUs> {
                             borderRadius: BorderRadius.all(Radius.circular(0)),
                             borderSide: BorderSide(
                               width: 1,
-                              color: Color.fromARGB(255, 123, 138, 195),
+                              color: AppColors.secondary,
                             ),
                           ),
 
@@ -716,7 +712,7 @@ class _ContactUsState extends State<ContactUs> {
                             borderRadius: BorderRadius.all(Radius.circular(0)),
                             borderSide: BorderSide(
                               width: 1,
-                              color: Color.fromARGB(255, 123, 138, 195),
+                              color: AppColors.secondary,
                             ),
                           ),
 
@@ -738,7 +734,7 @@ class _ContactUsState extends State<ContactUs> {
                             }
                           },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromARGB(255, 123, 138, 195),
+                            backgroundColor: AppColors.secondary,
                             // Sky color
                             //foregroundColor: Colors.black,
                             // Black text color

@@ -13,6 +13,7 @@ import 'package:hjvyas/cart/CartHome.dart';
 import 'package:hjvyas/product_detail/ImageWithProgress.dart';
 import 'package:hjvyas/product_detail/ProductDetailController.dart';
 import 'package:hjvyas/splash/NoIntternetScreen.dart';
+import 'package:hjvyas/utils/AppColors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../about/AboutWidgets.dart';
@@ -626,6 +627,7 @@ class _ProductDetailState extends State<ProductDetail>
         return;
       },
       child: Scaffold(
+        backgroundColor: AppColors.background,
         body: Obx(() {
           if (widget.categoryController.error.value.isNotEmpty) {
             return NoInternetScreen(
@@ -758,30 +760,15 @@ class _ProductDetailState extends State<ProductDetail>
                                   decoration: BoxDecoration(
                                     border: Border(
                                       left: BorderSide(
-                                        color: Color.fromARGB(
-                                          255,
-                                          123,
-                                          138,
-                                          195,
-                                        ),
+                                        color: AppColors.secondary,
                                         width: 2.0,
                                       ),
                                       bottom: BorderSide(
-                                        color: Color.fromARGB(
-                                          255,
-                                          123,
-                                          138,
-                                          195,
-                                        ),
+                                        color: AppColors.secondary,
                                         width: 2.0,
                                       ),
                                       right: BorderSide(
-                                        color: Color.fromARGB(
-                                          255,
-                                          123,
-                                          138,
-                                          195,
-                                        ),
+                                        color: AppColors.secondary,
                                         width: 2.0,
                                       ),
                                     ),
@@ -951,12 +938,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                             ),
                                                         borderSide: BorderSide(
                                                           width: 1,
-                                                          color: Color.fromARGB(
-                                                            255,
-                                                            123,
-                                                            138,
-                                                            195,
-                                                          ),
+                                                          color: AppColors.secondary,
                                                         ),
                                                       ),
                                                   // disabledBorder: OutlineInputBorder(
@@ -973,12 +955,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                             ),
                                                         borderSide: BorderSide(
                                                           width: 1,
-                                                          color: Color.fromARGB(
-                                                            255,
-                                                            123,
-                                                            138,
-                                                            195,
-                                                          ),
+                                                          color: AppColors.secondary,
                                                         ),
                                                       ),
 
@@ -1020,12 +997,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                             ),
                                                         borderSide: BorderSide(
                                                           width: 1,
-                                                          color: Color.fromARGB(
-                                                            255,
-                                                            123,
-                                                            138,
-                                                            195,
-                                                          ),
+                                                          color: AppColors.secondary,
                                                         ),
                                                       ),
                                                   // disabledBorder: OutlineInputBorder(
@@ -1042,12 +1014,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                             ),
                                                         borderSide: BorderSide(
                                                           width: 1,
-                                                          color: Color.fromARGB(
-                                                            255,
-                                                            123,
-                                                            138,
-                                                            195,
-                                                          ),
+                                                          color: AppColors.secondary,
                                                         ),
                                                       ),
                                                   contentPadding:
@@ -1068,12 +1035,7 @@ class _ProductDetailState extends State<ProductDetail>
                                                   },
                                                   style: ElevatedButton.styleFrom(
                                                     backgroundColor:
-                                                        Color.fromARGB(
-                                                          255,
-                                                          123,
-                                                          138,
-                                                          195,
-                                                        ),
+                                                    AppColors.secondary,
                                                     // Sky color
                                                     //foregroundColor: Colors.black,
                                                     // Black text color

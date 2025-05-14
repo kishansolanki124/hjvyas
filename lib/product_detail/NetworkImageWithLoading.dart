@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
+import '../utils/AppColors.dart';
+
 class NetworkImageWithLoading extends StatefulWidget {
   final String imageUrl;
 
@@ -21,12 +23,7 @@ class _NetworkImageWithLoadingState extends State<NetworkImageWithLoading> {
       children: <Widget>[
         // Background Color using Container
         Container(
-          color: Color.fromARGB(
-            255,
-            32,
-            47,
-            80,
-          ), // Replace with your desired color
+          color: AppColors.background, // Replace with your desired color
         ),
 
         Image.network(

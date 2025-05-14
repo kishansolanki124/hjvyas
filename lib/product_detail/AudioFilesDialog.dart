@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 
+import '../utils/AppColors.dart';
+
 class AudioFilesDialog extends StatefulWidget {
   final List<String> audioFiles;
   final List<String> audioTitles;
@@ -128,7 +130,7 @@ class _AudioFilesDialogState extends State<AudioFilesDialog> {
         "Audio Files",
         style: TextStyle(
           fontSize: 24,
-          color: Color.fromARGB(255, 31, 47, 80),
+          color: AppColors.background,
           fontWeight: FontWeight.w700,
           fontFamily: "Montserrat",
         ),
@@ -150,7 +152,7 @@ class _AudioFilesDialogState extends State<AudioFilesDialog> {
                   widget.audioTitles[index],
                   style: TextStyle(
                     fontSize: 14,
-                    color: Color.fromARGB(255, 31, 47, 80),
+                    color: AppColors.background,
                     fontWeight: FontWeight.w500,
                     fontFamily: "Montserrat",
                   ),
@@ -168,7 +170,7 @@ class _AudioFilesDialogState extends State<AudioFilesDialog> {
                                 193,
                                 222,
                               ),
-                              color: Color.fromARGB(255, 31, 47, 80),
+                              color: AppColors.background,
                               value:
                                   _duration.inMilliseconds > 0
                                       ? _position.inMilliseconds /
@@ -179,7 +181,7 @@ class _AudioFilesDialogState extends State<AudioFilesDialog> {
                             Text(
                               "${_formatDuration(_position)} / ${_getDurationText()}",
                               style: const TextStyle(
-                                color: Color.fromARGB(255, 31, 47, 80),
+                                color: AppColors.background,
                                 fontFamily: "Montserrat",
                                 fontSize: 12,
                               ),
@@ -190,7 +192,7 @@ class _AudioFilesDialogState extends State<AudioFilesDialog> {
                 trailing: IconButton(
                   icon: Icon(
                     isCurrentlyPlaying ? Icons.pause : Icons.play_arrow,
-                    color: Color.fromARGB(255, 31, 47, 80),
+                    color: AppColors.background,
                   ),
                   onPressed: () => _playAudio(index),
                 ),
@@ -208,7 +210,7 @@ class _AudioFilesDialogState extends State<AudioFilesDialog> {
           child: const Text(
             "Close",
             style: TextStyle(
-              color: Color.fromARGB(255, 31, 47, 80),
+              color: AppColors.background,
               fontWeight: FontWeight.w600,
               fontFamily: "Montserrat",
             ),

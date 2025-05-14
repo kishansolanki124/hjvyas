@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../api/models/ProductDetailResponse.dart';
+import '../utils/AppColors.dart';
 
 class ProductYouMayLikeItem extends StatefulWidget {
   final ProductMoreListItem productMoreListItem;
@@ -62,7 +63,7 @@ class _ProductYouMayLikeItemState extends State<ProductYouMayLikeItem>
           child: Container(
             width: 120,
             decoration: BoxDecoration(
-              border: Border.all(color: Color.fromARGB(255, 123, 138, 195)),
+              border: Border.all(color: AppColors.secondary),
             ),
             child: Column(
               children: [

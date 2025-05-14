@@ -32,7 +32,7 @@
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
-//       backgroundColor: const Color.fromARGB(255, 31, 47, 80),
+//       backgroundColor: const AppColors.background,
 //       body: SafeArea(
 //         child: Center(
 //           child: Column(
@@ -53,7 +53,7 @@
 //                   decoration: BoxDecoration(
 //                     gradient: LinearGradient(
 //                       colors: [
-//                         const Color.fromARGB(255, 123, 138, 195),
+//                         const AppColors.secondary,
 //                         Colors.white.withOpacity(0.7),
 //                       ],
 //                       begin: Alignment.topLeft,
@@ -89,7 +89,7 @@
 //               FilledButton.tonal(
 //                 onPressed: () {},
 //                 style: FilledButton.styleFrom(
-//                   backgroundColor: const Color.fromARGB(255, 123, 138, 195),
+//                   backgroundColor: const AppColors.secondary,
 //                   foregroundColor: Colors.white,
 //                   shape: StadiumBorder(),
 //                   padding: const EdgeInsets.symmetric(

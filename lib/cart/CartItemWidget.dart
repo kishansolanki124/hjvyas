@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../api/models/CartItemModel.dart';
 import '../api/models/ProductCartResponse.dart';
 import '../product_detail/NetworkImageWithLoading.dart';
+import '../utils/AppColors.dart';
 
 class CartItemWidget extends StatefulWidget {
   int index;
@@ -105,7 +106,7 @@ class _CartItemWidgetState extends State<CartItemWidget>
                   height: 170,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: Color.fromARGB(255, 123, 138, 195),
+                      color: AppColors.secondary,
                       width: 1,
                     ),
                     borderRadius: BorderRadius.all(Radius.circular(0)),
@@ -133,7 +134,7 @@ class _CartItemWidgetState extends State<CartItemWidget>
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                              backgroundColor: Color.fromARGB(255, 31, 47, 80),
+                              backgroundColor: AppColors.background,
                               fontSize: 14.0,
                               fontFamily: "Montserrat",
                               color: Colors.white,
@@ -147,7 +148,7 @@ class _CartItemWidgetState extends State<CartItemWidget>
                           '${widget.formatPrice(widget.cartItem.packingPrice)} (${widget.cartItem.packingWeight})',
                           textAlign: TextAlign.right,
                           style: TextStyle(
-                            backgroundColor: Color.fromARGB(255, 31, 47, 80),
+                            backgroundColor: AppColors.background,
                             fontSize: 12.0,
                             fontFamily: "Montserrat",
                             color: Colors.white,
@@ -179,7 +180,7 @@ class _CartItemWidgetState extends State<CartItemWidget>
                           Wrap(
                             children: [
                               ColoredBox(
-                                color: Color.fromARGB(255, 31, 47, 80),
+                                color: AppColors.background,
                                 child: Padding(
                                   padding: EdgeInsets.symmetric(vertical: 6),
                                   child: Container(
@@ -187,20 +188,10 @@ class _CartItemWidgetState extends State<CartItemWidget>
                                     width: 120,
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: Color.fromARGB(
-                                          255,
-                                          123,
-                                          138,
-                                          195,
-                                        ),
+                                        color: AppColors.secondary,
                                       ),
                                       borderRadius: BorderRadius.circular(0),
-                                      color: Color.fromARGB(
-                                        255,
-                                        31,
-                                        47,
-                                        80,
-                                      ), // Background color
+                                      color: AppColors.background, // Background color
                                     ),
                                     // Add some padding inside the border
                                     child: Row(
@@ -301,7 +292,7 @@ Widget soldOutTextCart() {
   return Padding(
     padding: const EdgeInsets.only(left: 8.0),
     child: Container(
-      color: Color.fromARGB(255, 123, 138, 195),
+      color: AppColors.secondary,
       child: Padding(
         padding: EdgeInsets.fromLTRB(12, 8, 12, 8),
         child: Text(

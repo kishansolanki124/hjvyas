@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hjvyas/product/ProductListWidgets.dart';
 
+import '../utils/AppColors.dart';
+
 class ComboThirdItem extends StatelessWidget {
   final String imageUrl;
   final String title;
@@ -30,13 +32,11 @@ class ComboThirdItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             productListTitleWidget(title,
-                //Color.fromARGB(255, 1, 1, 1)
                 ),
 
             //"₹ 900.00 - 300 grams"
             if (comboSoldout.isEmpty)
               productListVariationWidget(price, comboWeight,
-                  //Color.fromARGB(255, 1, 1, 1)
                   ),
 
 
@@ -45,7 +45,8 @@ class ComboThirdItem extends StatelessWidget {
 
             if (comboSoldout.isNotEmpty) soldOutText(),
 
-            productListImage(imageUrl, Color.fromARGB(255, 123, 138, 195)),
+            productListImage(imageUrl,
+                AppColors.secondary),
           ],
         ),
       ],

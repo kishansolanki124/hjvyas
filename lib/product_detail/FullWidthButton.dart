@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../api/models/ProductDetailResponse.dart';
+import '../utils/AppColors.dart';
 import '../utils/CommonAppProgress.dart';
 
 Widget addToCartFullWidthButton(double price, _onPressed, String cartText) {
@@ -12,7 +13,7 @@ Widget addToCartFullWidthButton(double price, _onPressed, String cartText) {
       child: ElevatedButton(
         onPressed: _onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(225, 255, 255, 255),
+          backgroundColor: AppColors.semiTransWhite,
           // Semi-transparent white
           padding: EdgeInsets.symmetric(vertical: 12.0),
           shape: RoundedRectangleBorder(
@@ -61,7 +62,7 @@ Widget proceedToCheckOutButtonFullWidth(proceedToCheckOutClicked) {
       child: ElevatedButton(
         onPressed: proceedToCheckOutClicked,
         style: ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(225, 255, 255, 255),
+          backgroundColor: AppColors.semiTransWhite,
           // Semi-transparent white
           padding: EdgeInsets.symmetric(vertical: 12.0),
           shape: RoundedRectangleBorder(
