@@ -43,6 +43,9 @@ class _SplashScreenAnimationState extends State<SplashScreenAnimation>
   late Animation<double> _radiusAnimation;
   late Animation<double> _iconAnimation;
 
+  // Add this variable for fade-out control
+  double _opacity = 1.0;
+
   late Animation<Offset> _fromTopSlideAnimation;
   late Animation<Offset> _fromBottomSlideAnimation;
   late Animation<Offset> _fromBottomSlideAnimation2;
@@ -155,10 +158,35 @@ class _SplashScreenAnimationState extends State<SplashScreenAnimation>
       ),
     );
 
-    _controller.forward().then((_) {
-      Navigator.of(
-        context,
-      ).pushReplacement(MaterialPageRoute(builder: (_) => widget.nextScreen));
+    // _controller.forward().then((_) {
+    //   Navigator.of(
+    //     context,
+    //   ).pushReplacement(MaterialPageRoute(builder: (_) => widget.nextScreen));
+    // });
+
+    _controller.forward().then((_) async {
+      // First fade out the current screen
+      setState(() => _opacity = 0.0);
+      await Future.delayed(const Duration(milliseconds: 200));
+
+      // Then navigate with a fade-in to the next screen
+      if (mounted) {
+        Navigator.of(context).pushReplacement(
+          PageRouteBuilder(
+            pageBuilder:
+                (context, animation, secondaryAnimation) => widget.nextScreen,
+            transitionsBuilder: (
+              context,
+              animation,
+              secondaryAnimation,
+              child,
+            ) {
+              return FadeTransition(opacity: animation, child: child);
+            },
+            transitionDuration: const Duration(milliseconds: 200),
+          ),
+        );
+      }
     });
   }
 
@@ -201,181 +229,185 @@ class _SplashScreenAnimationState extends State<SplashScreenAnimation>
 
         return Scaffold(
           backgroundColor: Colors.white,
-          body: Stack(
-            children: [
-              // Initial white screen is handled by Scaffold background
+          body: AnimatedOpacity(
+            opacity: _opacity,
+            duration: const Duration(milliseconds: 200),
+            child: Stack(
+              children: [
+                // Initial white screen is handled by Scaffold background
 
-              // Circular fill animation
-              Center(
-                child: AnimatedBuilder(
-                  animation: _radiusAnimation,
-                  builder: (context, child) {
-                    return ClipPath(
-                      clipper: CircleRevealClipper(_radiusAnimation.value),
-                      child: Container(
-                        // decoration: BoxDecoration(
-                        //   image: DecorationImage(
-                        //     image: AssetImage("images/bg.jpg"),
-                        //     fit: BoxFit.cover,
-                        //   ),
-                        // ),
-                        color: const Color.fromARGB(255, 31, 47, 80),
-                        width: double.infinity,
-                        height: double.infinity,
-                      ),
-                    );
-                  },
-                ),
-              ),
-
-              //top left
-              Align(
-                alignment: AlignmentDirectional.topStart,
-                child: SlideTransition(
-                  position: _fromTopSlideAnimation,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 32, 0, 0),
-                    child: Image.asset(
-                      width: 151,
-                      height: 112,
-                      "images/bg_icon1.png",
-                    ),
-                  ),
-                ),
-              ),
-
-              //top right
-              Align(
-                alignment: AlignmentDirectional.topEnd,
-                child: SlideTransition(
-                  position: _fromTopSlideAnimation,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 75, 75, 0),
-                    child: Image.asset(
-                      width: 58,
-                      height: 58,
-                      "images/bg_icon2.png",
-                    ),
-                  ),
-                ),
-              ),
-
-              // center below app icon
-              Align(
-                alignment: AlignmentDirectional.center,
-                child: SlideTransition(
-                  position: _fromBottomSlideAnimation2,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 250.0),
-                    child: Image.asset(
-                      width: 58,
-                      height: 58,
-                      "images/bg_icon2.png",
-                    ),
-                  ),
-                ),
-              ),
-
-              //bottom center
-              Align(
-                alignment: AlignmentDirectional.bottomCenter,
-                child: SlideTransition(
-                  position: _fromBottomSlideAnimation,
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 24.0),
-                    child: Image.asset(
-                      width: 169,
-                      height: 106,
-                      "images/bg_icon7.png",
-                    ),
-                  ),
-                ),
-              ),
-
-              //left side item 1
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: SlideTransition(
-                  position: _fromLeftSlideAnimation,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(32.0, 16, 16, 300),
-                    child: Image.asset(
-                      width: 141,
-                      height: 117,
-                      "images/bg_icon3.png",
-                    ),
-                  ),
-                ),
-              ),
-
-              //left side item 2
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: SlideTransition(
-                  position: _fromLeftSlideAnimation,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(40.0, 300, 16, 16),
-                    child: Image.asset(
-                      width: 73,
-                      height: 172,
-                      "images/bg_icon5.png",
-                    ),
-                  ),
-                ),
-              ),
-
-              //right side item 1
-              Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: SlideTransition(
-                  position: _fromRightSlideAnimation,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 16, 32, 300),
-                    child: Image.asset(
-                      width: 130,
-                      height: 118,
-                      "images/bg_icon4.png",
-                    ),
-                  ),
-                ),
-              ),
-
-              //right side item 2
-              Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: SlideTransition(
-                  position: _fromRightSlideAnimation,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16.0, 300, 32, 16),
-                    child: Image.asset(
-                      width: 73,
-                      height: 133,
-                      "images/bg_icon6.png",
-                    ),
-                  ),
-                ),
-              ),
-
-              // App icon animation
-              Center(
-                child: AnimatedBuilder(
-                  animation: _iconAnimation,
-                  builder: (context, child) {
-                    return Opacity(
-                      opacity: _iconAnimation.value,
-                      child: Transform.scale(
-                        scale: _iconAnimation.value,
-                        child: Image.asset(
-                          widget.appIconPath,
-                          width: 180,
-                          height: 180,
+                // Circular fill animation
+                Center(
+                  child: AnimatedBuilder(
+                    animation: _radiusAnimation,
+                    builder: (context, child) {
+                      return ClipPath(
+                        clipper: CircleRevealClipper(_radiusAnimation.value),
+                        child: Container(
+                          // decoration: BoxDecoration(
+                          //   image: DecorationImage(
+                          //     image: AssetImage("images/bg.jpg"),
+                          //     fit: BoxFit.cover,
+                          //   ),
+                          // ),
+                          color: const Color.fromARGB(255, 31, 47, 80),
+                          width: double.infinity,
+                          height: double.infinity,
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
+
+                //top left
+                Align(
+                  alignment: AlignmentDirectional.topStart,
+                  child: SlideTransition(
+                    position: _fromTopSlideAnimation,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 32, 0, 0),
+                      child: Image.asset(
+                        width: 151,
+                        height: 112,
+                        "images/bg_icon1.png",
+                      ),
+                    ),
+                  ),
+                ),
+
+                //top right
+                Align(
+                  alignment: AlignmentDirectional.topEnd,
+                  child: SlideTransition(
+                    position: _fromTopSlideAnimation,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 75, 75, 0),
+                      child: Image.asset(
+                        width: 58,
+                        height: 58,
+                        "images/bg_icon2.png",
+                      ),
+                    ),
+                  ),
+                ),
+
+                // center below app icon
+                Align(
+                  alignment: AlignmentDirectional.center,
+                  child: SlideTransition(
+                    position: _fromBottomSlideAnimation2,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 250.0),
+                      child: Image.asset(
+                        width: 58,
+                        height: 58,
+                        "images/bg_icon2.png",
+                      ),
+                    ),
+                  ),
+                ),
+
+                //bottom center
+                Align(
+                  alignment: AlignmentDirectional.bottomCenter,
+                  child: SlideTransition(
+                    position: _fromBottomSlideAnimation,
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 24.0),
+                      child: Image.asset(
+                        width: 169,
+                        height: 106,
+                        "images/bg_icon7.png",
+                      ),
+                    ),
+                  ),
+                ),
+
+                //left side item 1
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: SlideTransition(
+                    position: _fromLeftSlideAnimation,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(32.0, 16, 16, 300),
+                      child: Image.asset(
+                        width: 141,
+                        height: 117,
+                        "images/bg_icon3.png",
+                      ),
+                    ),
+                  ),
+                ),
+
+                //left side item 2
+                Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: SlideTransition(
+                    position: _fromLeftSlideAnimation,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(40.0, 300, 16, 16),
+                      child: Image.asset(
+                        width: 73,
+                        height: 172,
+                        "images/bg_icon5.png",
+                      ),
+                    ),
+                  ),
+                ),
+
+                //right side item 1
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: SlideTransition(
+                    position: _fromRightSlideAnimation,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 16, 32, 300),
+                      child: Image.asset(
+                        width: 130,
+                        height: 118,
+                        "images/bg_icon4.png",
+                      ),
+                    ),
+                  ),
+                ),
+
+                //right side item 2
+                Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: SlideTransition(
+                    position: _fromRightSlideAnimation,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(16.0, 300, 32, 16),
+                      child: Image.asset(
+                        width: 73,
+                        height: 133,
+                        "images/bg_icon6.png",
+                      ),
+                    ),
+                  ),
+                ),
+
+                // App icon animation
+                Center(
+                  child: AnimatedBuilder(
+                    animation: _iconAnimation,
+                    builder: (context, child) {
+                      return Opacity(
+                        opacity: _iconAnimation.value,
+                        child: Transform.scale(
+                          scale: _iconAnimation.value,
+                          child: Image.asset(
+                            widget.appIconPath,
+                            width: 180,
+                            height: 180,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },
