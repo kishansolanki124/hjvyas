@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:hjvyas/splash/AnimatedSplash.dart';
 import 'package:hjvyas/splash/splash.dart';
 import 'package:hjvyas/utils/AppColors.dart';
 
@@ -50,7 +51,7 @@ class MyApp extends StatelessWidget {
         //home: const MyHomePage(title: 'Flutter Demo Home Page'),
         //home: const SplashPage(),
         home: Scaffold(
-          body: SplashScreen(
+          body: SplashScreenAnimation(
             // backgroundImagePath: 'images/bg.jpg', // Replace with your background image path
             // logoImagePath: 'images/logo.png', // Replace with your logo image path
             // logoWidth: 200, // Optional: customize the logo size
