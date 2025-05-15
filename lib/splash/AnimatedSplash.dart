@@ -43,6 +43,15 @@ class _SplashScreenAnimationState extends State<SplashScreenAnimation>
   late Animation<double> _radiusAnimation;
   late Animation<double> _iconAnimation;
 
+  late Animation<Offset> _fromTopSlideAnimation;
+  late Animation<Offset> _fromBottomSlideAnimation;
+  late Animation<Offset> _fromBottomSlideAnimation2;
+  late Animation<Offset> _fromLeftSlideAnimation;
+  late Animation<Offset> _fromRightSlideAnimation;
+
+  static const double startTimeForSlide = 0.5;
+  static const double endTimeForSlide = 0.7;
+
   @override
   void initState() {
     super.initState();
@@ -54,6 +63,80 @@ class _SplashScreenAnimationState extends State<SplashScreenAnimation>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 6000), // Total animation duration
+    );
+
+    // Animation starts completely off-screen (offset much larger than -1.0)
+    _fromBottomSlideAnimation = Tween<Offset>(
+      begin: const Offset(0, 1), // Much higher above the screen
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(
+          startTimeForSlide,
+          endTimeForSlide,
+          curve: Curves.easeOutQuart,
+        ),
+      ),
+    );
+
+    _fromBottomSlideAnimation2 = Tween<Offset>(
+      begin: const Offset(0, 4), // Much higher above the screen
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(
+          startTimeForSlide,
+          endTimeForSlide,
+          curve: Curves.easeOutQuart,
+        ),
+      ),
+    );
+
+    // Animation starts completely off-screen (offset much larger than -1.0)
+    _fromLeftSlideAnimation = Tween<Offset>(
+      begin: const Offset(-3.0, 0.0), // Start from far left, outside
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(
+          startTimeForSlide,
+          endTimeForSlide,
+          curve: Curves.easeOutQuart,
+        ),
+      ),
+    );
+
+    // Animation starts completely off-screen (offset much larger than -1.0)
+    _fromRightSlideAnimation = Tween<Offset>(
+      begin: const Offset(3.0, 0.0), // Start from far right, outside
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(
+          startTimeForSlide,
+          endTimeForSlide,
+          curve: Curves.easeOutQuart,
+        ),
+      ),
+    );
+
+    // Animation starts completely off-screen (offset much larger than -1.0)
+    _fromTopSlideAnimation = Tween<Offset>(
+      begin: const Offset(0.0, -3.0), // Much higher above the screen
+      end: Offset.zero,
+    ).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: const Interval(
+          startTimeForSlide,
+          endTimeForSlide,
+          curve: Curves.easeOutCubic,
+        ),
+      ),
     );
 
     // Animation for the circular fill (starts after 0.5s, lasts 1s)
@@ -130,18 +213,146 @@ class _SplashScreenAnimationState extends State<SplashScreenAnimation>
                     return ClipPath(
                       clipper: CircleRevealClipper(_radiusAnimation.value),
                       child: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage("images/bg.jpg"),
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        //color: const Color.fromARGB(255, 31, 47, 80),
+                        // decoration: BoxDecoration(
+                        //   image: DecorationImage(
+                        //     image: AssetImage("images/bg.jpg"),
+                        //     fit: BoxFit.cover,
+                        //   ),
+                        // ),
+                        color: const Color.fromARGB(255, 31, 47, 80),
                         width: double.infinity,
                         height: double.infinity,
                       ),
                     );
                   },
+                ),
+              ),
+
+              //top left
+              Align(
+                alignment: AlignmentDirectional.topStart,
+                child: SlideTransition(
+                  position: _fromTopSlideAnimation,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 32, 0, 0),
+                    child: Image.asset(
+                      width: 151,
+                      height: 112,
+                      "images/bg_icon1.png",
+                    ),
+                  ),
+                ),
+              ),
+
+              //top right
+              Align(
+                alignment: AlignmentDirectional.topEnd,
+                child: SlideTransition(
+                  position: _fromTopSlideAnimation,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 75, 75, 0),
+                    child: Image.asset(
+                      width: 58,
+                      height: 58,
+                      "images/bg_icon2.png",
+                    ),
+                  ),
+                ),
+              ),
+
+              // center below app icon
+              Align(
+                alignment: AlignmentDirectional.center,
+                child: SlideTransition(
+                  position: _fromBottomSlideAnimation2,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 250.0),
+                    child: Image.asset(
+                      width: 58,
+                      height: 58,
+                      "images/bg_icon2.png",
+                    ),
+                  ),
+                ),
+              ),
+
+              //bottom center
+              Align(
+                alignment: AlignmentDirectional.bottomCenter,
+                child: SlideTransition(
+                  position: _fromBottomSlideAnimation,
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 24.0),
+                    child: Image.asset(
+                      width: 169,
+                      height: 106,
+                      "images/bg_icon7.png",
+                    ),
+                  ),
+                ),
+              ),
+
+              //left side item 1
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: SlideTransition(
+                  position: _fromLeftSlideAnimation,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(32.0, 16, 16, 300),
+                    child: Image.asset(
+                      width: 141,
+                      height: 117,
+                      "images/bg_icon3.png",
+                    ),
+                  ),
+                ),
+              ),
+
+              //left side item 2
+              Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: SlideTransition(
+                  position: _fromLeftSlideAnimation,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(40.0, 300, 16, 16),
+                    child: Image.asset(
+                      width: 73,
+                      height: 172,
+                      "images/bg_icon5.png",
+                    ),
+                  ),
+                ),
+              ),
+
+              //right side item 1
+              Align(
+                alignment: AlignmentDirectional.centerEnd,
+                child: SlideTransition(
+                  position: _fromRightSlideAnimation,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 16, 32, 300),
+                    child: Image.asset(
+                      width: 130,
+                      height: 118,
+                      "images/bg_icon4.png",
+                    ),
+                  ),
+                ),
+              ),
+
+              //right side item 2
+              Align(
+                alignment: AlignmentDirectional.centerEnd,
+                child: SlideTransition(
+                  position: _fromRightSlideAnimation,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16.0, 300, 32, 16),
+                    child: Image.asset(
+                      width: 73,
+                      height: 133,
+                      "images/bg_icon6.png",
+                    ),
+                  ),
                 ),
               ),
 
@@ -156,8 +367,8 @@ class _SplashScreenAnimationState extends State<SplashScreenAnimation>
                         scale: _iconAnimation.value,
                         child: Image.asset(
                           widget.appIconPath,
-                          width: 120,
-                          height: 120,
+                          width: 180,
+                          height: 180,
                         ),
                       ),
                     );
