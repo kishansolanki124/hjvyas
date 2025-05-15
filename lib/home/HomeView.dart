@@ -11,7 +11,7 @@ import '../product_detail/ImageWithProgress.dart';
 import '../splash/NoIntternetScreen.dart';
 import '../utils/CommonAppProgress.dart';
 import '../utils/NetworkImageWithProgress.dart';
-import 'HomePopup.dart';
+import 'HomePopup2.dart';
 import 'PaginationController.dart';
 
 class HomeView extends StatefulWidget {
@@ -80,17 +80,28 @@ class _HomeViewState extends State<HomeView>
   late SharedPreferences _prefs;
 
   void openPopup(String imageUrl, String title, String text) {
-    showGeneralDialog(
+    // showGeneralDialog(
+    //   context: context,
+    //   barrierDismissible: true,
+    //   barrierLabel: "Image Viewer",
+    //   transitionDuration: const Duration(milliseconds: 300),
+    //   pageBuilder: (_, __, ___) {
+    //     return HomePopup(imageUrl: imageUrl, title: title, text: text, onClose: () => {});
+    //   },
+    //   transitionBuilder: (context, animation, secondaryAnimation, child) {
+    //     return FadeTransition(opacity: animation, child: child);
+    //   },
+    // );
+
+    showDialog(
       context: context,
-      barrierDismissible: true,
-      barrierLabel: "Image Viewer",
-      transitionDuration: const Duration(milliseconds: 300),
-      pageBuilder: (_, __, ___) {
-        return HomePopup(imageUrl: imageUrl, title: title, text: text, onClose: () => {});
-      },
-      transitionBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(opacity: animation, child: child);
-      },
+      builder:
+          (context) => HomePopup2(
+            imageUrl: imageUrl,
+            title: title,
+            text: text,
+            onClose: () => {},
+          ),
     );
   }
 

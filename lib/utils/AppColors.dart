@@ -9,4 +9,5 @@ class AppColors {
   static const Color background = Color.fromARGB(255, 31, 47, 80);
   static const Color secondary = Color.fromARGB(255, 123, 138, 195);
   static const Color semiTransWhite = Color.fromARGB(225, 255, 255, 255);
+  static const Color semiTransBlack = Color.fromARGB(225, 31, 47, 80);
 }
