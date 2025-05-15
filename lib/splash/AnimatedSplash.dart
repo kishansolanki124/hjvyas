@@ -53,14 +53,14 @@ class _SplashScreenAnimationState extends State<SplashScreenAnimation>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 4000), // Total animation duration
+      duration: const Duration(milliseconds: 6000), // Total animation duration
     );
 
     // Animation for the circular fill (starts after 0.5s, lasts 1s)
     _radiusAnimation = Tween<double>(begin: 0, end: 1).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: const Interval(0.2, 0.5, curve: Curves.easeInOut),
+        curve: const Interval(0.3, 0.5, curve: Curves.easeInOut),
       ),
     );
 
@@ -130,7 +130,13 @@ class _SplashScreenAnimationState extends State<SplashScreenAnimation>
                     return ClipPath(
                       clipper: CircleRevealClipper(_radiusAnimation.value),
                       child: Container(
-                        color: const Color.fromARGB(255, 31, 47, 80),
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage("images/bg.jpg"),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        //color: const Color.fromARGB(255, 31, 47, 80),
                         width: double.infinity,
                         height: double.infinity,
                       ),
