@@ -137,11 +137,15 @@ class ComboMoreListItem {
   final String comboId;
   final String comboName;
   final String productImage;
+  final String comboPrice;
+  final String comboWeight;
 
   ComboMoreListItem({
     this.comboId = "",
     this.comboName = "",
     this.productImage = "",
+    this.comboPrice = "",
+    this.comboWeight = "",
   });
 
   factory ComboMoreListItem.fromJson(Map<String, dynamic>? json) =>
@@ -149,11 +153,15 @@ class ComboMoreListItem {
         comboId: asString(json, 'combo_id'),
         comboName: asString(json, 'combo_name'),
         productImage: asString(json, 'product_image'),
+        comboPrice: asString(json, 'combo_price'),
+        comboWeight: asString(json, 'combo_weight'),
       );
 
   Map<String, dynamic> toJson() => {
     'combo_id': comboId,
     'combo_name': comboName,
     'product_image': productImage,
+    'combo_price': comboPrice,
+    'combo_weight': comboWeight,
   };
 }

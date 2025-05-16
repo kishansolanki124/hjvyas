@@ -503,7 +503,7 @@ Widget comboDetailYouMayLike(List<ComboMoreListItem> moreItemList) {
       ),
       SizedBox(height: 8),
       SizedBox(
-        height: 160, // Adjust height as needed
+        height: 180, // Adjust height as needed
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -554,6 +554,21 @@ Widget comboDetailYouMayLike(List<ComboMoreListItem> moreItemList) {
                           fontFamily: "Montserrat",
                           fontWeight: FontWeight.w500,
                           fontSize: 12,
+                        ),
+                      ),
+                    ),
+
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 1),
+                      child: Text(
+                        "₹ ${product.comboPrice ?? ''} -  ${product.comboWeight}",
+                        textAlign: TextAlign.center,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontFamily: "Montserrat",
+                          fontSize: 10,
                         ),
                       ),
                     ),
