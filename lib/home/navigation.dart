@@ -10,6 +10,7 @@ import '../combo/Combo.dart';
 import '../menu/MenuScreen.dart';
 import '../product/ProductListGridView.dart';
 import '../utils/AppColors.dart';
+import 'CustomFixedBottomNavigationBar.dart';
 import 'HomeView.dart';
 
 class NavigationBarApp extends StatefulWidget {
@@ -230,12 +231,12 @@ class _NavigationExampleState extends State<NavigationExample>
               color: AppColors.semiTransWhite,
               borderRadius: BorderRadius.circular(20),
             ),
-            child: BottomNavigationBar(
+            child: CustomFixedBottomNavigationBar(
               unselectedLabelStyle: TextStyle(
                 fontSize: 10.0,
                 fontFamily: "Montserrat",
+                fontWeight: FontWeight.w500,
                 color: Colors.black,
-                fontWeight: FontWeight.w700,
               ),
               selectedLabelStyle: TextStyle(
                 fontSize: 10.0,
@@ -243,26 +244,25 @@ class _NavigationExampleState extends State<NavigationExample>
                 color: AppColors.secondary,
                 fontWeight: FontWeight.w700,
               ),
-              type: BottomNavigationBarType.fixed,
-              iconSize: 12.0,
-              selectedFontSize: 10.0,
-              unselectedFontSize: 10.0,
-              elevation: 0,
-              backgroundColor: Colors.transparent,
+              //type: BottomNavigationBarType.fixed,
+              //selectedFontSize: 10.0,
+              //unselectedFontSize: 10.0,
+              //elevation: 0,
+              //backgroundColor: Colors.transparent,
               items: <BottomNavigationBarItem>[
                 BottomNavigationBarItem(
                   icon: bottomNavIcon("icons/home_icon.png"),
-                  activeIcon: bottomNavIcon("icons/home_icon_a.png"),
+                  activeIcon: bottomNavIcon("icons/home_icon_b.png"),
                   label: "HOME",
                 ),
                 BottomNavigationBarItem(
                   icon: bottomNavIcon("icons/product_icon.png"),
                   activeIcon: bottomNavIcon("icons/product_icon_a.png"),
-                  label: "PROUDUCTS",
+                  label: "PRODUCTS",
                 ),
                 BottomNavigationBarItem(
                   icon: bottomNavIcon("icons/combo_icon.png"),
-                  activeIcon: bottomNavIcon("icons/combo_icon_a.png"),
+                  activeIcon: bottomNavIcon("icons/combo_icon_b.png"),
                   label: "COMBO",
                 ),
                 BottomNavigationBarItem(
@@ -294,13 +294,13 @@ class _NavigationExampleState extends State<NavigationExample>
                       ),
                     ),
                     textStyle: TextStyle(fontSize: 16),
-                    child: bottomNavIcon("icons/my_bag_icon_a.png"),
+                    child: bottomNavIcon("icons/my_bag_icon_b.png"),
                   ),
                   label: "MY BAG",
                 ),
                 BottomNavigationBarItem(
                   icon: bottomNavIcon("icons/about_icon.png"),
-                  activeIcon: bottomNavIcon("icons/about_icon_a.png"),
+                  activeIcon: bottomNavIcon("icons/about_icon_b.png"),
                   label: "ABOUT",
                 ),
               ],

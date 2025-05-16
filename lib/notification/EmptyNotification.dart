@@ -98,7 +98,7 @@ class _EmptyNotificationState extends State<EmptyNotification>
                       ),
                       const SizedBox(height: 40),
                       Text(
-                        'No New notification!',
+                        'No New Notification!',
                         style: Theme.of(
                           context,
                         ).textTheme.headlineSmall?.copyWith(
