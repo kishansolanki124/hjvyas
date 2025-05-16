@@ -161,7 +161,7 @@ class _TesterItemWidgetState extends State<TesterItemWidget>
                       height: 30,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: AppColors.background,
+                        color: Colors.green,
                         border: Border.all(width: 2, color: Colors.white),
                       ),
                     ),
