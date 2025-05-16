@@ -320,8 +320,7 @@ class _ProductListGridViewState extends State<ProductListGridView>
           padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
           margin: const EdgeInsets.only(top: 20),
           decoration: BoxDecoration(
-            color: AppColors.background,
-            // Darker background for bottom sheet
+            color: AppColors.background, // Darker background for bottom sheet
             borderRadius: BorderRadius.circular(20), // More rounded corners
           ),
           child: Column(
@@ -331,7 +330,7 @@ class _ProductListGridViewState extends State<ProductListGridView>
                 'Categories',
                 style: TextStyle(
                   fontSize: 20,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   fontFamily: "Montserrat",
                   color: Colors.white,
                 ), // White text
@@ -356,15 +355,29 @@ class _ProductListGridViewState extends State<ProductListGridView>
                           ),
                           child: Row(
                             children: [
-                              Expanded(
-                                child: Text(
-                                  category.categoryName,
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontFamily: "Montserrat",
-                                    color: Colors.white,
-                                  ), // White text
+                              //ImageWithProgress(imageURL: category.categoryIcon),
+                              Padding(
+                                padding: const EdgeInsets.only(right: 16.0),
+                                child: SizedBox(
+                                  height: 30,
+                                  width: 30,
+                                  child: ImageWithProgress(
+                                    imageURL: category.categoryIcon,
+                                  ),
                                 ),
+                              ),
+
+                              Text(
+                                category.categoryName,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontFamily: "Montserrat",
+                                  fontWeight:
+                                      widget.categoryListItem == category
+                                          ? FontWeight.w700
+                                          : FontWeight.w400,
+                                  color: Colors.white,
+                                ), // White text
                               ),
                             ],
                           ),
