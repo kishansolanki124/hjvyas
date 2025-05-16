@@ -1403,8 +1403,8 @@ class _CheckoutState extends State<Checkout> {
                                           ),
                                         ],
 
-                                        if (_selectedOptionState == "Gujarat"
-                                            && _selectedOptionCity ==
+                                        if (_selectedOptionState == "Gujarat" &&
+                                            _selectedOptionCity ==
                                                 "Other City" && //!isGujaratOn) ...[
                                             shippingStatusResponse!
                                                 .shippingStatusList
@@ -1466,9 +1466,12 @@ class _CheckoutState extends State<Checkout> {
                                           0,
                                           8,
                                         ),
-                                        value: shippingStatusResponse!
-                                            .countryList
-                                            .elementAt(0),
+                                        value:
+                                            (null != countryListItem)
+                                                ? countryListItem
+                                                : shippingStatusResponse!
+                                                    .countryList
+                                                    .elementAt(0),
                                         icon: Image.asset(
                                           'icons/dropdown_icon.png',
                                           // Replace with your icon path
@@ -1497,7 +1500,8 @@ class _CheckoutState extends State<Checkout> {
                                                       item.countryName,
                                                       style: TextStyle(
                                                         backgroundColor:
-                                                        AppColors.background,
+                                                            AppColors
+                                                                .background,
                                                         fontSize: 14,
                                                         color: Colors.white,
                                                         fontFamily:
@@ -1711,7 +1715,8 @@ class _CheckoutState extends State<Checkout> {
                                             child: ElevatedButton(
                                               onPressed: onOrderPlaced,
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor: AppColors.secondary,
+                                                backgroundColor:
+                                                    AppColors.secondary,
                                                 // Sky color
                                                 //foregroundColor: Colors.black,
                                                 // Black text color
