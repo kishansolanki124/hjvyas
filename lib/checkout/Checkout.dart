@@ -968,6 +968,8 @@ class _CheckoutState extends State<Checkout> {
     }
 
     setState(() {
+      _cityController.text = "";
+
       _selectedOptionCountry = value;
       _hideCheckoutAddressWidget();
     });
@@ -993,6 +995,7 @@ class _CheckoutState extends State<Checkout> {
       return;
     }
     setState(() {
+      _cityController.text = "";
       _selectedOptionState = value;
       _hideCheckoutAddressWidget();
     });

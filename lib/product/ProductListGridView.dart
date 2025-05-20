@@ -327,7 +327,7 @@ class _ProductListGridViewState extends State<ProductListGridView>
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               const Text(
-                'Categories',
+                'CATEGORIES',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
@@ -343,6 +343,10 @@ class _ProductListGridViewState extends State<ProductListGridView>
                     widget.categoryList.map((category) {
                       return InkWell(
                         onTap: () {
+                          if (category == widget.categoryListItem) {
+                            Navigator.pop(context);
+                            return;
+                          }
                           widget.categoryListItem = category;
                           _refreshData();
                           Navigator.pop(context);

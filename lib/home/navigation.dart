@@ -35,6 +35,7 @@ class _NavigationBarAppState extends State<NavigationBarApp> {
       debugShowCheckedModeBanner: false, // Remove the debug banner
       theme: ThemeData(
         useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.secondary),
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: AppColors.secondary, //cursor color
         ),
