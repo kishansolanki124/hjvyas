@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1012470363041",
+    "project_id": "hj-vyas-app",
+    "storage_bucket": "hj-vyas-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1012470363041:android:9b6bda21fca3cb2e7551e0",
+        "android_client_info": {
+          "package_name": "com.app.hjvyasapp.hjvyas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBsaAI7b-uoMOqiUVPTx2c0dH58cOv5Z18"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
