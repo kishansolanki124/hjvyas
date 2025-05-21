@@ -661,7 +661,7 @@ class _CheckoutState extends State<Checkout> {
       getTwoDecimalPrice(shippingCharge),
       getTwoDecimalPrice(onlineCharge),
       payment_type,
-      "android",
+      "ios",
       //todo: value android, ios any one value
       productIds.replaceAll("combo_", ""),
       productType,
