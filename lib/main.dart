@@ -1,11 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hjvyas/splash/AnimatedSplash.dart';
-import 'package:hjvyas/splash/splash.dart';
 import 'package:hjvyas/utils/AppColors.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 
 import 'injection_container.dart';
+import 'notification/NotificationList.dart';
 
 void main() {
   setupDependencies(); // Initialize GetIt
@@ -16,9 +17,25 @@ void main() {
   // Initialize with your OneSignal App ID
   OneSignal.initialize("5ad91476-e571-4235-92ce-6a0453e16415");
   // Use this method to prompt for push notifications.
-  // We recommend removing this method after testing and instead use In-App Messages to prompt for notification permission.
-  OneSignal.Notifications.requestPermission(false);
+  // We recommend removing this method after testing and instead use In-App
+  // Messages to prompt for notification permission.
+  OneSignal.Notifications.requestPermission(false); //todo: change this to true
+  // for permission
+
+  // Handle notification click with navigation
+  OneSignal.Notifications.addClickListener((OSNotificationClickEvent event) {
+    if (kDebugMode) {
+      print("Clicked notification: ${event.notification.title}");
+    }
+
+    navigatorKey.currentState?.push(
+      MaterialPageRoute(builder: (context) => NotificationList()),
+    );
+  });
 }
+
+// Global navigator key to access navigation from anywhere
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -26,18 +43,20 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setSystemUIOverlayStyle(
       SystemUiOverlayStyle(
         statusBarColor: AppColors.background,
         statusBarIconBrightness:
-        Brightness.light, // For dark icons, use Brightness.dark
+            Brightness.light, // For dark icons, use Brightness.dark
       ),
     );
 
     return SafeArea(
       child: MaterialApp(
-        debugShowCheckedModeBanner: false, // Remove the debug banner
+        navigatorKey: navigatorKey,
+        // Set navigator key here
+        debugShowCheckedModeBanner: false,
+        // Remove the debug banner
         title: 'HJ Vyas App',
         theme: ThemeData(
           // This is the theme of your application.
