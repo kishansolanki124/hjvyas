@@ -16,6 +16,7 @@ class PaginationController extends GetxController {
 
   var items = <SliderListItem>[].obs;
   var popupListItem = <PopupListItem>[].obs;
+  var appVersionList = <AppVersionListItem>[].obs;
   var isLoading = false.obs;
   var isError = false.obs;
   var currentPage = 0;
@@ -40,6 +41,11 @@ class PaginationController extends GetxController {
       if(newItems.popupList.isNotEmpty) {
         popupListItem.clear();
         popupListItem.assignAll(newItems.popupList);
+      }
+
+      if(newItems.appVersionList.isNotEmpty) {
+        appVersionList.clear();
+        appVersionList.assignAll(newItems.appVersionList);
       }
 
       items.assignAll(newItems.sliderList);

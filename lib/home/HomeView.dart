@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hjvyas/home/VideoViewForHome.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:version/version.dart';
 
 import '../api/models/HomeMediaResponse.dart';
 import '../api/services/HJVyasApiService.dart';
+import '../app_updater/AppUpdateBottomSheet.dart';
 import '../injection_container.dart';
 import '../notification/NotificationList.dart';
 import '../product_detail/ImageWithProgress.dart';
@@ -70,10 +75,59 @@ class _HomeViewState extends State<HomeView>
         widget.paginationController.popupListItem.elementAt(0).description,
       );
     }
+
+    final packageInfo = await PackageInfo.fromPlatform();
+    final currentAppVersion = Version.parse(packageInfo.version);
+
+
+    if (widget.paginationController.appVersionList.isNotEmpty) {
+      //app update code
+      String latestVersionString = "";
+
+      if (Platform.isAndroid) {
+        latestVersionString =
+            widget.paginationController.appVersionList.elementAt(0).android;
+      } else {
+        latestVersionString =
+            widget.paginationController.appVersionList.elementAt(0).ios;
+      }
+
+      print('latestVersionString is $latestVersionString and currentAppVersion is $currentAppVersion');
+      final latestAppVersion = Version.parse(latestVersionString);
+      print('latestAppVersion is $latestAppVersion');
+
+      // Check if the current version is older than the latest version
+      if (currentAppVersion < latestAppVersion) {
+        showAppUpdaterBottomSheet();
+      }
+    }
   }
 
   void _refreshData() {
     fetchData();
+  }
+
+  void showAppUpdaterBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isDismissible: true,
+      enableDrag: true,
+      // Prevent dragging down for mandatory updates
+      builder: (BuildContext context) {
+        if (Platform.isAndroid) {
+          return AppUpdateBottomSheet(
+            updateUrl:
+                "https://play.google.com/store/apps/details?id=com.app.hjvyasapp.hjvyas",
+          );
+        } else {
+          //(Platform.isIOS)
+          return AppUpdateBottomSheet(
+            updateUrl:
+                "https://apps.apple.com/in/app/hj-vyas-mithaiwala/id954580484",
+          );
+        }
+      },
+    );
   }
 
   // Instance of SharedPreferences
