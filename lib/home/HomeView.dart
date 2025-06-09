@@ -92,9 +92,7 @@ class _HomeViewState extends State<HomeView>
             widget.paginationController.appVersionList.elementAt(0).ios;
       }
 
-      print('latestVersionString is $latestVersionString and currentAppVersion is $currentAppVersion');
       final latestAppVersion = Version.parse(latestVersionString);
-      print('latestAppVersion is $latestAppVersion');
 
       // Check if the current version is older than the latest version
       if (currentAppVersion < latestAppVersion) {

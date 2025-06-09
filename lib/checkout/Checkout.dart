@@ -55,18 +55,18 @@ class Checkout extends StatefulWidget {
 class _CheckoutState extends State<Checkout> {
   //paypal stuff
   //todo: change this to production from sandbox creds
-  //sandbox
-  final String payPalClientId =
-      'AXYh1f38rSBrHwVZlhNMrybwLoa4xrLUnjW-g-G92ZH-Uu1c13caF-tlc7KNykAuz3YfPD9bD0W0_U0r';
-  //sandbox
-  final String payPalSecretKey =
-      'EAI55p1vNOqaUkdUEbaaGUnV3x0_W3yTo1Fv4ZWY4W4IwcBa1NXdqtCcIPyM30-aDJR8m6_pldyvDa5u';
-  //prod
+  // //sandbox
   // final String payPalClientId =
-  //     'AbG87vjmM-W9zV3fp_iop_IW9FneCkhV0mF18Ppk81Pxk1AKKToZHIAy9HX9OAvQX0-3rH0dR-BCmiB2';
-  // //prod
+  //     'AXYh1f38rSBrHwVZlhNMrybwLoa4xrLUnjW-g-G92ZH-Uu1c13caF-tlc7KNykAuz3YfPD9bD0W0_U0r';
+  // //sandbox
   // final String payPalSecretKey =
-  //     'EEgKoKiZYrCIrNUnfs8fIlj2gkDkqHEjo_aDSUarw24ttgdlDVZ1DiHaDu6M0Ef6YALexfZ7SOTEKOsT';
+  //     'EAI55p1vNOqaUkdUEbaaGUnV3x0_W3yTo1Fv4ZWY4W4IwcBa1NXdqtCcIPyM30-aDJR8m6_pldyvDa5u';
+  //prod
+  final String payPalClientId =
+      'AbG87vjmM-W9zV3fp_iop_IW9FneCkhV0mF18Ppk81Pxk1AKKToZHIAy9HX9OAvQX0-3rH0dR-BCmiB2';
+  //prod
+  final String payPalSecretKey =
+      'EEgKoKiZYrCIrNUnfs8fIlj2gkDkqHEjo_aDSUarw24ttgdlDVZ1DiHaDu6M0Ef6YALexfZ7SOTEKOsT';
 
   String razorPayKey = "";
   String razorpayOrderid = "";
@@ -180,7 +180,7 @@ class _CheckoutState extends State<Checkout> {
                 },
                 child: PaypalCheckoutView(
                   //todo: change this to false for prod
-                  sandboxMode: true,
+                  sandboxMode: false,
                   clientId: payPalClientId,
                   secretKey: payPalSecretKey,
                   transactions: [
