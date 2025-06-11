@@ -440,7 +440,6 @@ class _CheckoutState extends State<Checkout> {
   }
 
   Future<void> updateRazorPayOrderStatus(String? razorPayPaymentId) async {
-    //todo: test this with prod
     await widget.paginationController.addRazorpayStatus(
       orderNo!,
       razorpayOrderid,
